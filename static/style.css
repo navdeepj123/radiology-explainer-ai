@@ -1,0 +1,111 @@
+body {
+    margin: 0;
+    background: #f5f7fb;
+    color: #1e293b;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 30px 0;
+}
+
+header {
+    background: linear-gradient(135deg, #0f766e, #0891b2);
+    color: white;
+    padding: 35px;
+    border-radius: 18px;
+    margin-bottom: 25px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 36px;
+}
+
+header p {
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 25px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    margin-bottom: 25px;
+}
+
+textarea {
+    width: 100%;
+    height: 260px;
+    resize: vertical;
+    padding: 18px;
+    border: 1px solid #cbd5e1;
+    border-radius: 14px;
+    font-size: 15px;
+    outline: none;
+}
+
+textarea:focus {
+    border-color: #0891b2;
+}
+
+button {
+    width: 100%;
+    margin-top: 18px;
+    padding: 15px;
+    border: none;
+    border-radius: 14px;
+    background: #0f766e;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #115e59;
+}
+
+.term-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.term-card {
+    background: #ecfeff;
+    border-left: 6px solid #0891b2;
+    padding: 18px;
+    border-radius: 14px;
+}
+
+.term-card h3 {
+    margin-top: 0;
+    color: #0f766e;
+}
+
+footer {
+    margin-top: 25px;
+    background: #fff7ed;
+    border-left: 6px solid #f97316;
+    color: #7c2d12;
+    padding: 18px;
+    border-radius: 14px;
+}
+
+@media (max-width: 800px) {
+    .grid,
+    .term-grid {
+        grid-template-columns: 1fr;
+    }
+}

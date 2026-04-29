@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Radiology Report Explanation Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🩺 Radiology Report Explanation Tool</h1>
+        <p>Convert complex radiology report text into patient-friendly explanations.</p>
+    </header>
+
+    <main class="grid">
+        <section class="card">
+            <h2>📄 Report Input</h2>
+
+            <form method="POST">
+                <textarea name="report_text" placeholder="Paste radiology report here...">{{ report_text }}</textarea>
+                <button type="submit">Generate Explanation</button>
+            </form>
+        </section>
+
+        <section class="card">
+            <h2>📌 Project Status</h2>
+            <p><strong>Current Phase:</strong> Week 2 Frontend Prototype</p>
+            <ul>
+                <li>✅ Frontend UI completed</li>
+                <li>✅ Text input section added</li>
+                <li>✅ Output layout designed</li>
+                <li>🚧 Backend integration in progress</li>
+            </ul>
+
+            <h2>⚙️ System Pipeline</h2>
+            <ol>
+                <li>Input report</li>
+                <li>Text preprocessing</li>
+                <li>Term extraction</li>
+                <li>Explanation retrieval</li>
+                <li>Output generation</li>
+            </ol>
+        </section>
+    </main>
+
+    {% if results %}
+    <section class="results">
+        <div class="card">
+            <h2>📝 Original Report</h2>
+            <p>{{ report_text }}</p>
+        </div>
+
+        <div class="card">
+            <h2>📌 Basic Summary</h2>
+            <p>{{ results.summary }}</p>
+        </div>
+
+        <div class="card">
+            <h2>🔑 Detected Medical Terms</h2>
+
+            <div class="term-grid">
+                {% for item in results.terms %}
+                <div class="term-card">
+                    <h3>{{ item.term }}</h3>
+                    <p>{{ item.meaning }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <footer>
+        <strong>Disclaimer:</strong> This tool is for educational purposes only and does not provide medical diagnosis or medical advice.
+    </footer>
+</div>
+
+</body>
+</html>
