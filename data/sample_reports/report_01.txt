@@ -1,0 +1,7 @@
+Chest X-ray Report
+
+Findings:
+Mild cardiomegaly is seen. No pneumothorax is identified. Small pleural effusion is present on the left side.
+
+Impression:
+Mild cardiomegaly with small left pleural effusion.
