@@ -1,0 +1,42 @@
+[
+  {
+    "term": "cardiomegaly",
+    "definition": "Enlargement of the heart",
+    "patient_explanation": "The heart appears larger than normal on the scan. A doctor may compare this with symptoms and other tests."
+  },
+  {
+    "term": "lesion",
+    "definition": "An abnormal area of tissue",
+    "patient_explanation": "This means the scan found an area that looks different from normal tissue. It does not always mean cancer."
+  },
+  {
+    "term": "fracture",
+    "definition": "A broken or cracked bone",
+    "patient_explanation": "This means there is a break or crack in the bone."
+  },
+  {
+    "term": "effusion",
+    "definition": "Extra fluid in a body space",
+    "patient_explanation": "This means fluid has collected where it is not usually expected."
+  },
+  {
+    "term": "pneumonia",
+    "definition": "Infection or inflammation in the lungs",
+    "patient_explanation": "This means there may be infection or inflammation in the lung area."
+  },
+  {
+    "term": "atelectasis",
+    "definition": "Partial collapse of part of the lung",
+    "patient_explanation": "This means a small part of the lung may not be fully inflated."
+  },
+  {
+    "term": "nodule",
+    "definition": "A small rounded growth or spot",
+    "patient_explanation": "This means a small spot was seen on the scan. It may need follow-up depending on its size and appearance."
+  },
+  {
+    "term": "edema",
+    "definition": "Swelling caused by fluid build-up",
+    "patient_explanation": "This means there is extra fluid causing swelling in the tissue."
+  }
+]

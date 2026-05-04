@@ -1,0 +1,57 @@
+[
+  {
+    "term": "cardiomegaly",
+    "simple_meaning": "Enlarged heart",
+    "patient_explanation": "The heart appears larger than normal on the scan.",
+    "clinical_context": "This can be seen on chest X-rays and may be related to heart strain or heart disease.",
+    "body_system": "Heart",
+    "severity": "Medium",
+    "related_terms": ["heart enlargement", "cardiac enlargement"],
+    "found_in": ["Chest X-ray", "CT Chest"],
+    "action_note": "Discuss this finding with a healthcare professional."
+  },
+  {
+    "term": "pneumothorax",
+    "simple_meaning": "Collapsed lung",
+    "patient_explanation": "Air is trapped around the lung, which can cause part of the lung to collapse.",
+    "clinical_context": "This may require urgent medical attention depending on the size and symptoms.",
+    "body_system": "Lung",
+    "severity": "High",
+    "related_terms": ["collapsed lung", "air in pleural space"],
+    "found_in": ["Chest X-ray", "CT Chest"],
+    "action_note": "This should be reviewed by a healthcare professional."
+  },
+  {
+    "term": "pleural effusion",
+    "simple_meaning": "Fluid around the lungs",
+    "patient_explanation": "There is extra fluid in the space around the lungs.",
+    "clinical_context": "This can happen with infection, heart problems, or inflammation.",
+    "body_system": "Lung",
+    "severity": "Medium",
+    "related_terms": ["fluid around lung", "pleural fluid"],
+    "found_in": ["Chest X-ray", "CT Chest"],
+    "action_note": "A doctor can explain the cause and next steps."
+  },
+  {
+    "term": "atelectasis",
+    "simple_meaning": "Part of the lung is not fully open",
+    "patient_explanation": "A small part of the lung is partly collapsed or not fully expanded.",
+    "clinical_context": "This is commonly seen on chest imaging and may be mild or temporary.",
+    "body_system": "Lung",
+    "severity": "Low",
+    "related_terms": ["partial lung collapse", "lung under-expansion"],
+    "found_in": ["Chest X-ray", "CT Chest"],
+    "action_note": "This should be interpreted with symptoms and doctor advice."
+  },
+  {
+    "term": "fracture",
+    "simple_meaning": "Broken bone",
+    "patient_explanation": "A bone is cracked or broken.",
+    "clinical_context": "This is commonly seen on X-rays after injury or trauma.",
+    "body_system": "Bone",
+    "severity": "High",
+    "related_terms": ["broken bone", "bone break"],
+    "found_in": ["X-ray", "CT Scan"],
+    "action_note": "Medical review is needed to decide treatment."
+  }
+]
