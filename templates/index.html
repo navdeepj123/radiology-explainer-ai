@@ -2,62 +2,95 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Radiology Report Explanation Tool</title>
+    <title>Radiology and Health Reports Advisor</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
 <div class="container">
-    <header>
-        <h1>🩺 Radiology Report Explanation Tool</h1>
-        <p>Convert complex radiology report text into patient-friendly explanations.</p>
+
+    <header class="hero">
+        <div>
+            <h1>🩺 Radiology and Health Reports Advisor</h1>
+            <p>Frontend interface for AI and RAG based patient-friendly medical explanations.</p>
+        </div>
+        <span class="badge">Local Llama + RAG Ready</span>
     </header>
 
-    <main class="grid">
-        <section class="card">
+    <section class="grid">
+
+        <div class="card">
             <h2>📄 Report Input</h2>
 
-            <form method="POST">
-                <textarea name="report_text" placeholder="Paste radiology report here...">{{ report_text }}</textarea>
-                <button type="submit">Generate Explanation</button>
-            </form>
-        </section>
+            <form method="POST" enctype="multipart/form-data" onsubmit="showLoading()">
 
-        <section class="card">
+                <label>Paste Radiology / Health Report</label>
+                <textarea id="reportBox" name="report_text" placeholder="Paste report text here...">{{ report_text }}</textarea>
+
+                <div class="button-row">
+                    <button type="button" class="secondary-btn" onclick="loadSample()">Load Sample Report</button>
+                    <button type="reset" class="clear-btn">Clear</button>
+                </div>
+
+                <label>Upload Report File</label>
+                <input type="file" name="report_file">
+
+                <label>Ask a Health Question</label>
+                <input type="text" name="question" placeholder="Example: What does cardiomegaly mean?" value="{{ question }}">
+
+                <button type="submit" class="main-btn">Generate AI Explanation</button>
+
+                <p id="loadingText" class="loading-text">Processing report... please wait</p>
+            </form>
+        </div>
+
+        <div class="card">
             <h2>📌 Project Status</h2>
-            <p><strong>Current Phase:</strong> Week 2 Frontend Prototype</p>
             <ul>
                 <li>✅ Frontend UI completed</li>
-                <li>✅ Text input section added</li>
-                <li>✅ Output layout designed</li>
+                <li>✅ Report input section added</li>
+                <li>✅ Upload file UI added</li>
+                <li>✅ Question input added</li>
+                <li>✅ AI/RAG output layout prepared</li>
                 <li>🚧 Backend integration in progress</li>
             </ul>
 
-            <h2>⚙️ System Pipeline</h2>
-            <ol>
-                <li>Input report</li>
-                <li>Text preprocessing</li>
-                <li>Term extraction</li>
-                <li>Explanation retrieval</li>
-                <li>Output generation</li>
+            <h2>⚙️ System Workflow</h2>
+            <ol class="steps">
+                <li>User enters report or question</li>
+                <li>Backend preprocesses text</li>
+                <li>RAG searches knowledge base</li>
+                <li>Local Llama generates explanation</li>
+                <li>Frontend displays simplified output</li>
             </ol>
-        </section>
-    </main>
+        </div>
+
+    </section>
 
     {% if results %}
     <section class="results">
+
         <div class="card">
             <h2>📝 Original Report</h2>
-            <p>{{ report_text }}</p>
+            <p class="report-preview">{{ report_text }}</p>
+        </div>
+
+        <div class="card highlight-card">
+            <h2>✅ Patient-Friendly Explanation</h2>
+            <p>{{ results.explanation }}</p>
         </div>
 
         <div class="card">
-            <h2>📌 Basic Summary</h2>
-            <p>{{ results.summary }}</p>
+            <h2>🔍 Key Findings</h2>
+            <ul>
+                {% for finding in results.findings %}
+                <li>{{ finding }}</li>
+                {% endfor %}
+            </ul>
         </div>
 
         <div class="card">
-            <h2>🔑 Detected Medical Terms</h2>
+            <h2>🧠 Detected Medical Terms</h2>
 
             <div class="term-grid">
                 {% for item in results.terms %}
@@ -68,13 +101,36 @@
                 {% endfor %}
             </div>
         </div>
+
+        <div class="card">
+            <h2>📚 Retrieved Medical Context</h2>
+
+            {% for item in results.context %}
+            <div class="context-box">
+                {{ item }}
+            </div>
+            {% endfor %}
+        </div>
+
     </section>
     {% endif %}
 
     <footer>
-        <strong>Disclaimer:</strong> This tool is for educational purposes only and does not provide medical diagnosis or medical advice.
+        <strong>Disclaimer:</strong> This tool is for educational purposes only. It does not provide medical diagnosis, treatment, or professional medical advice.
     </footer>
+
 </div>
+
+<script>
+function loadSample() {
+    document.getElementById("reportBox").value =
+    "Mild cardiomegaly is noted. No hemorrhage or fracture is seen. Small pleural effusion is present.";
+}
+
+function showLoading() {
+    document.getElementById("loadingText").style.display = "block";
+}
+</script>
 
 </body>
 </html>
