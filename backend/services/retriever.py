@@ -1,24 +1,30 @@
 import json
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-DATA_PATH = os.path.join(BASE_DIR, "data", "knowledge_base.json")
-
-
-def load_knowledge_base():
-    with open(DATA_PATH, "r", encoding="utf-8") as file:
-        return json.load(file)
-
-
 def retrieve_relevant_info(report_text):
-    knowledge_base = load_knowledge_base()
-    report_text_lower = report_text.lower()
-    results = []
+
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+
+    data_path = os.path.join(base_dir, "data", "knowledge_base.json")
+
+    with open(data_path, "r", encoding="utf-8") as file:
+        knowledge_base = json.load(file)
+
+    found_terms = []
+
+    report_lower = report_text.lower()
 
     for item in knowledge_base:
-        term = item["term"].lower()
 
-        if term in report_text_lower:
-            results.append(item)
+        term = item.get("term", "")
 
-    return results
+        meaning = item.get("patient_explanation", "")
+
+        if term.lower() in report_lower:
+
+            found_terms.append({
+                "term": term,
+                "meaning": meaning
+            })
+
+    return found_terms

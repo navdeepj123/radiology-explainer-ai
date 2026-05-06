@@ -1,58 +1,40 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
+import os
+
 from services.rag_service import generate_explanation
 
-app = Flask(__name__)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+app = Flask(
+    __name__,
+    template_folder=os.path.join(BASE_DIR, "frontend", "templates"),
+    static_folder=os.path.join(BASE_DIR, "frontend", "static")
+)
+
 CORS(app)
 
-
-@app.route("/", methods=["GET"])
+@app.route("/", methods=["GET", "POST"])
 def home():
-    return jsonify({
-        "message": "Radiology Report Explanation Backend is running",
-        "routes": ["/api/test", "/api/test-rag", "/api/explain"]
-    })
 
+    results = None
+    report_text = ""
+    question = ""
 
-@app.route("/api/test", methods=["GET"])
-def test():
-    return jsonify({"message": "Backend is working"})
+    if request.method == "POST":
 
+        report_text = request.form.get("report_text", "")
+        question = request.form.get("question", "")
 
-@app.route("/api/test-rag", methods=["GET"])
-def test_rag():
-    sample_report = "The scan shows mild cardiomegaly and a lesion. No fracture is seen."
-    result = generate_explanation(sample_report)
+        if report_text:
+            results = generate_explanation(report_text)
 
-    return jsonify({
-        "original_report": sample_report,
-        "summary": result["summary"],
-        "explanations": result["explanations"],
-        "disclaimer": "This tool is for educational purposes only and does not replace professional medical advice."
-    })
-
-
-@app.route("/api/explain", methods=["POST"])
-def explain_report():
-    data = request.get_json()
-
-    if not data:
-        return jsonify({"error": "JSON body is required"}), 400
-
-    report = data.get("report", "")
-
-    if not report.strip():
-        return jsonify({"error": "Report text is required"}), 400
-
-    result = generate_explanation(report)
-
-    return jsonify({
-        "original_report": report,
-        "summary": result["summary"],
-        "explanations": result["explanations"],
-        "disclaimer": "This tool is for educational purposes only and does not replace professional medical advice."
-    })
-
+    return render_template(
+        "index.html",
+        results=results,
+        report_text=report_text,
+        question=question
+    )
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
