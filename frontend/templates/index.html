@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Radiology Health Advisor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">Radiology Health Advisor</div>
+    <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#report">Explain Report</a>
+        <a href="#safety">Safety</a>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="hero-content">
+        <span class="eyebrow">Patient-friendly medical explanations</span>
+        <h1>Understand your radiology report in simple language.</h1>
+        <p>
+            Paste or upload a radiology report and receive a clear, easy-to-read explanation
+            of medical terms, findings, and important points.
+        </p>
+        <a href="#report" class="hero-btn">Explain a Report</a>
+    </div>
+
+    <div class="hero-preview">
+        <div class="preview-header">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <h3>Report Summary</h3>
+        <p>No urgent abnormality detected. Mild heart enlargement is noted.</p>
+
+        <div class="preview-card">
+            <strong>Cardiomegaly</strong>
+            <small>Enlarged heart</small>
+        </div>
+
+        <div class="preview-card">
+            <strong>Effusion</strong>
+            <small>Fluid collection</small>
+        </div>
+    </div>
+</section>
+
+<section class="features" id="features">
+    <div class="feature-card">
+        <h3>Clear summaries</h3>
+        <p>Complex clinical language is presented in simple patient-friendly wording.</p>
+    </div>
+
+    <div class="feature-card">
+        <h3>Medical terms explained</h3>
+        <p>Important radiology terms are identified and explained clearly.</p>
+    </div>
+
+    <div class="feature-card">
+        <h3>Safe by design</h3>
+        <p>The tool supports understanding only and does not replace professional advice.</p>
+    </div>
+</section>
+
+<main class="app-section" id="report">
+
+    <div class="form-panel">
+        <h2>Explain your report</h2>
+        <p class="muted">Enter report text or upload a file to view a simplified explanation.</p>
+
+        <form method="POST" enctype="multipart/form-data" onsubmit="showLoading()">
+            <label>Paste report text</label>
+            <textarea id="reportBox" name="report_text" placeholder="Paste radiology report here...">{{ report_text }}</textarea>
+
+            <div class="button-row">
+                <button type="button" class="light-btn" onclick="loadSample()">Use sample report</button>
+                <button type="reset" class="outline-btn">Clear</button>
+            </div>
+
+            <label>Upload report file</label>
+            <input type="file" name="report_file">
+
+            <label>Ask a question</label>
+            <input type="text" name="question" placeholder="Example: What does cardiomegaly mean?" value="{{ question }}">
+
+            <button type="submit" class="main-btn">Generate Explanation</button>
+            <p id="loadingText" class="loading">Processing report...</p>
+        </form>
+    </div>
+
+    <div class="info-panel">
+        <h2>What you will receive</h2>
+
+        <div class="info-item">
+            <span>01</span>
+            <div>
+                <h4>Patient-friendly summary</h4>
+                <p>A simplified explanation of the report.</p>
+            </div>
+        </div>
+
+        <div class="info-item">
+            <span>02</span>
+            <div>
+                <h4>Key findings</h4>
+                <p>Important observations from the report.</p>
+            </div>
+        </div>
+
+        <div class="info-item">
+            <span>03</span>
+            <div>
+                <h4>Term explanations</h4>
+                <p>Medical words explained in plain language.</p>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+{% if results %}
+<section class="results-section">
+
+    <div class="result-large">
+        <span class="pill">Simplified result</span>
+        <h2>Patient-friendly summary</h2>
+        <p>{{ results.summary }}</p>
+    </div>
+
+    <div class="result-grid">
+        <div class="result-card">
+            <h3>Key findings</h3>
+            <ul>
+                {% for item in results.findings %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="result-card">
+            <h3>Medical terms</h3>
+            {% for item in results.terms %}
+            <div class="term-row">
+                <strong>{{ item.term }}</strong>
+                <span>{{ item.meaning }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</section>
+{% endif %}
+
+<section class="safety" id="safety">
+    <h2>Important safety note</h2>
+    <p>
+        This tool is for educational purposes only. It does not provide diagnosis,
+        treatment, or professional medical advice. Always speak with a qualified healthcare professional.
+    </p>
+</section>
+
+<script>
+function loadSample() {
+    document.getElementById("reportBox").value =
+    "Mild cardiomegaly is noted. No hemorrhage or fracture is seen. Small pleural effusion is present.";
+}
+
+function showLoading() {
+    document.getElementById("loadingText").style.display = "block";
+}
+</script>
+
+</body>
+</html>

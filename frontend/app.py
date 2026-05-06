@@ -13,20 +13,19 @@ def home():
         question = request.form.get("question", "")
 
         results = {
-            "explanation": "This section is prepared for AI-generated patient-friendly explanation. Backend will connect this UI with Local Llama and RAG.",
+            "summary": "This area is prepared for patient-friendly explanation generated using Local Llama and RAG.",
             "findings": [
-                "Medical report text received successfully.",
-                "Interface is ready to display key findings.",
-                "RAG context section is prepared for retrieved medical information."
+                "Key findings from the report will appear here.",
+                "Important terms will be explained in simple language.",
+                "Retrieved context will support the explanation."
             ],
             "terms": [
                 {"term": "Cardiomegaly", "meaning": "Enlarged heart"},
                 {"term": "Hemorrhage", "meaning": "Bleeding inside the body"},
-                {"term": "Fracture", "meaning": "Break or crack in a bone"}
+                {"term": "Effusion", "meaning": "Fluid collection"}
             ],
             "context": [
-                "Retrieved medical context will appear here from WHO, NIH, or local medical knowledge base.",
-                "This section will support the backend RAG output."
+                "Relevant medical context from WHO, NIH, Red Cross, or local knowledge base will appear here."
             ]
         }
 
