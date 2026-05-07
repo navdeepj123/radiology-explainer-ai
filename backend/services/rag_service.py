@@ -1,36 +1,47 @@
 from services.retriever import retrieve_relevant_info
+from services.ollama_service import generate_with_ollama
 
 def generate_explanation(report_text):
+
     retrieved_terms = retrieve_relevant_info(report_text)
 
     findings = []
-    terms = []
-    explanation_lines = []
+    context_lines = []
 
     for item in retrieved_terms:
+
         term = item["term"]
         meaning = item["meaning"]
 
         findings.append(f"{term} detected in report")
-        terms.append({
-            "term": term,
-            "meaning": meaning
-        })
-        explanation_lines.append(f"{term} means {meaning}")
 
-    if explanation_lines:
-        summary = (
-            "In simple words, this report mentions: "
-            + " ".join(explanation_lines)
+        context_lines.append(
+            f"{term}: {meaning}"
         )
-    else:
-        summary = (
-            "No matching medical terms were found in the current knowledge base. "
-            "Please consult a healthcare professional for proper interpretation."
-        )
+
+    context = "\n".join(context_lines)
+
+    prompt = f"""
+    You are a medical assistant.
+
+    Explain this radiology report in simple language for a patient.
+
+    Report:
+    {report_text}
+
+    Medical Information:
+    {context}
+
+    Keep explanation:
+    - short
+    - easy to understand
+    - non-technical
+    """
+
+    ai_summary = generate_with_ollama(prompt)
 
     return {
-        "summary": summary,
+        "summary": ai_summary,
         "findings": findings,
-        "terms": terms
+        "terms": retrieved_terms
     }
