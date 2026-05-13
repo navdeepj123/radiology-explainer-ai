@@ -1,7 +1,7 @@
 from services.retriever import retrieve_relevant_info
-from services.ollama_service import generate_with_ollama
+from services.llm_router import generate_with_provider
 
-def generate_explanation(report_text):
+def generate_explanation(report_text, provider="ollama"):
 
     retrieved_terms = retrieve_relevant_info(report_text)
 
@@ -9,39 +9,56 @@ def generate_explanation(report_text):
     context_lines = []
 
     for item in retrieved_terms:
-
         term = item["term"]
         meaning = item["meaning"]
 
         findings.append(f"{term} detected in report")
-
-        context_lines.append(
-            f"{term}: {meaning}"
-        )
+        context_lines.append(f"{term}: {meaning}")
 
     context = "\n".join(context_lines)
 
     prompt = f"""
-    You are a medical assistant.
+Explain this radiology report for a normal patient.
 
-    Explain this radiology report in simple language for a patient.
+Rules:
+- Use simple English
+- Use headings
+- Do not diagnose
+- Do not exaggerate
+- Avoid scary wording
+- Avoid email format
+- Use only the report and retrieved context
+- If something is normal, say it is reassuring
+- End with doctor consultation advice
 
-    Report:
-    {report_text}
+Radiology Report:
+{report_text}
 
-    Medical Information:
-    {context}
+Retrieved Medical Context:
+{context}
 
-    Keep explanation:
-    - short
-    - easy to understand
-    - non-technical
-    """
+Return exactly in this format:
 
-    ai_summary = generate_with_ollama(prompt)
+Simple Summary:
+...
+
+Important Findings:
+- ...
+- ...
+
+Medical Terms Explained:
+- ...
+- ...
+
+Safety Advice:
+...
+"""
+
+    ai_summary = generate_with_provider(prompt, provider)
 
     return {
         "summary": ai_summary,
         "findings": findings,
-        "terms": retrieved_terms
+        "terms": retrieved_terms,
+        "provider": provider
     }
