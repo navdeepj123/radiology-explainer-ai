@@ -86,6 +86,13 @@
             <label>Ask a question</label>
             <input type="text" name="question" placeholder="Example: What does cardiomegaly mean?" value="{{ question }}">
 
+            <label>Select AI Model</label>
+
+<select name="provider" id="provider">
+    <option value="ollama">Ollama Local</option>
+    <option value="groq">Groq Cloud</option>
+</select>
+
             <button type="submit" class="main-btn">Generate Explanation</button>
             <p id="loadingText" class="loading">Processing report...</p>
         </form>
@@ -127,6 +134,7 @@
     <div class="result-large">
         <span class="pill">Simplified result</span>
         <h2>Patient-friendly summary</h2>
+        <p><strong>AI Model Used:</strong> {{ provider }}</p>
         <p>{{ results.summary }}</p>
     </div>
 
