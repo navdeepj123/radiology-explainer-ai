@@ -20,20 +20,25 @@ def home():
     results = None
     report_text = ""
     question = ""
+    provider = "ollama"
+
 
     if request.method == "POST":
 
         report_text = request.form.get("report_text", "")
         question = request.form.get("question", "")
-
+        provider = request.form.get("provider", "ollama")
+        
         if report_text:
-            results = generate_explanation(report_text)
+            results = generate_explanation(report_text, provider)
 
     return render_template(
         "index.html",
         results=results,
         report_text=report_text,
-        question=question
+        question=question,
+        provider=provider
+
     )
 
 if __name__ == "__main__":

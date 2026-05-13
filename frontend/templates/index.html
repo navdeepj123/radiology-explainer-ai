@@ -177,6 +177,23 @@
                 </button>
             </form>
         </div>
+            <label>Upload report file</label>
+            <input type="file" name="report_file">
+
+            <label>Ask a question</label>
+            <input type="text" name="question" placeholder="Example: What does cardiomegaly mean?" value="{{ question }}">
+
+            <label>Select AI Model</label>
+
+<select name="provider" id="provider">
+    <option value="ollama">Ollama Local</option>
+    <option value="groq">Groq Cloud</option>
+</select>
+
+            <button type="submit" class="main-btn">Generate Explanation</button>
+            <p id="loadingText" class="loading">Processing report...</p>
+        </form>
+    </div>
 
         <div class="side-col">
             <div class="info-card">
@@ -224,6 +241,12 @@
     <div class="result-summary-card">
         <div class="result-summary-label">PATIENT-FRIENDLY SUMMARY</div>
         <p class="result-summary-text">{{ results.summary }}</p>
+
+    <div class="result-large">
+        <span class="pill">Simplified result</span>
+        <h2>Patient-friendly summary</h2>
+        <p><strong>AI Model Used:</strong> {{ provider }}</p>
+        <p>{{ results.summary }}</p>
     </div>
 
     <div class="result-two-col">
