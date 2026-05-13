@@ -2,84 +2,181 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Radiology Health Advisor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClearScan — AI Radiology Explainer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=IBM+Plex+Mono:wght@400;500&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
+<div class="grid-bg"></div>
+<div class="glow-orb glow-1"></div>
+<div class="glow-orb glow-2"></div>
+
 <nav class="navbar">
-    <div class="logo">Radiology Health Advisor</div>
-    <div class="nav-links">
-        <a href="#features">Features</a>
-        <a href="#report">Explain Report</a>
-        <a href="#safety">Safety</a>
+    <div class="logo">
+        <div class="logo-pulse"></div>
+        <span class="logo-text">Clear<span class="accent">Scan</span></span>
+        <span class="logo-tag">AI Medical</span>
+    </div>
+    <div class="nav-center">
+        <a href="#" class="nav-link active">Dashboard</a>
+        <a href="#report" class="nav-link">Analyze</a>
+        <a href="#safety" class="nav-link">Safety</a>
+    </div>
+    <div class="nav-right">
+        <span class="status-dot"></span>
+        <span class="status-text">System Online</span>
     </div>
 </nav>
 
 <section class="hero">
-    <div class="hero-content">
-        <span class="eyebrow">Patient-friendly medical explanations</span>
-        <h1>Understand your radiology report in simple language.</h1>
-        <p>
-            Paste or upload a radiology report and receive a clear, easy-to-read explanation
-            of medical terms, findings, and important points.
-        </p>
-        <a href="#report" class="hero-btn">Explain a Report</a>
+    <div class="hero-left">
+        <div class="hero-eyebrow">
+            <span class="eyebrow-dot"></span>
+            AI-Powered Patient Education
+        </div>
+        <h1 class="hero-title">
+            Understand your<br>
+            <span class="title-accent">Radiology Report</span><br>
+            in plain language.
+        </h1>
+        <p class="hero-sub">Paste any radiology report and get an instant, human-friendly breakdown — findings, medical terms, and what it all means for you.</p>
+        <div class="hero-actions">
+            <a href="#report" class="btn-primary">Analyze Report →</a>
+            <a href="#how" class="btn-ghost">How it works</a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat">
+                <span class="stat-num">100%</span>
+                <span class="stat-label">Private</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-num">AI</span>
+                <span class="stat-label">Powered</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-num">Free</span>
+                <span class="stat-label">To Use</span>
+            </div>
+        </div>
     </div>
-
-    <div class="hero-preview">
-        <div class="preview-header">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        <h3>Report Summary</h3>
-        <p>No urgent abnormality detected. Mild heart enlargement is noted.</p>
-
-        <div class="preview-card">
-            <strong>Cardiomegaly</strong>
-            <small>Enlarged heart</small>
-        </div>
-
-        <div class="preview-card">
-            <strong>Effusion</strong>
-            <small>Fluid collection</small>
+    <div class="hero-right">
+        <div class="preview-panel">
+            <div class="panel-topbar">
+                <div class="panel-dots"><span></span><span></span><span></span></div>
+                <span class="panel-title-bar">LIVE PREVIEW</span>
+                <span class="panel-badge-tag">SAMPLE</span>
+            </div>
+            <div class="panel-body">
+                <div class="score-block">
+                    <div class="score-label">REPORT STATUS</div>
+                    <div class="score-value">Non-Critical</div>
+                    <div class="score-bar-wrap">
+                        <div class="score-bar-fill" style="width:28%"></div>
+                    </div>
+                    <div class="score-range">Normal &nbsp;→&nbsp; Critical</div>
+                </div>
+                <div class="preview-finding">
+                    <span class="fdot green"></span>
+                    No hemorrhage or fracture detected
+                </div>
+                <div class="preview-finding">
+                    <span class="fdot yellow"></span>
+                    Mild cardiomegaly noted
+                </div>
+                <div class="preview-finding">
+                    <span class="fdot yellow"></span>
+                    Small pleural effusion present
+                </div>
+                <div class="preview-terms-row">
+                    <div class="mini-term-chip">
+                        <strong>Cardiomegaly</strong>
+                        <span>Enlarged heart</span>
+                    </div>
+                    <div class="mini-term-chip">
+                        <strong>Effusion</strong>
+                        <span>Fluid collection</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
-<section class="features" id="features">
-    <div class="feature-card">
-        <h3>Clear summaries</h3>
-        <p>Complex clinical language is presented in simple patient-friendly wording.</p>
-    </div>
-
-    <div class="feature-card">
-        <h3>Medical terms explained</h3>
-        <p>Important radiology terms are identified and explained clearly.</p>
-    </div>
-
-    <div class="feature-card">
-        <h3>Safe by design</h3>
-        <p>The tool supports understanding only and does not replace professional advice.</p>
+<section class="how-section" id="how">
+    <div class="section-eyebrow">How it works</div>
+    <div class="how-grid">
+        <div class="how-card">
+            <div class="how-num">01</div>
+            <div class="how-icon-wrap">📋</div>
+            <h3>Paste or Upload</h3>
+            <p>Enter your radiology report text or upload the file directly.</p>
+        </div>
+        <div class="how-arrow">⟶</div>
+        <div class="how-card">
+            <div class="how-num">02</div>
+            <div class="how-icon-wrap">🧠</div>
+            <h3>AI Analysis</h3>
+            <p>Our AI reads clinical terms and identifies all key findings.</p>
+        </div>
+        <div class="how-arrow">⟶</div>
+        <div class="how-card">
+            <div class="how-num">03</div>
+            <div class="how-icon-wrap">✦</div>
+            <h3>Clear Results</h3>
+            <p>Get a simple summary, findings list, and every term explained.</p>
+        </div>
     </div>
 </section>
 
-<main class="app-section" id="report">
-
-    <div class="form-panel">
-        <h2>Explain your report</h2>
-        <p class="muted">Enter report text or upload a file to view a simplified explanation.</p>
-
-        <form method="POST" enctype="multipart/form-data" onsubmit="showLoading()">
-            <label>Paste report text</label>
-            <textarea id="reportBox" name="report_text" placeholder="Paste radiology report here...">{{ report_text }}</textarea>
-
-            <div class="button-row">
-                <button type="button" class="light-btn" onclick="loadSample()">Use sample report</button>
-                <button type="reset" class="outline-btn">Clear</button>
+<main class="main-section" id="report">
+    <div class="main-grid">
+        <div class="form-panel">
+            <div class="form-panel-header">
+                <div class="form-panel-icon">⬡</div>
+                <div>
+                    <h2>Analyze Your Report</h2>
+                    <p class="form-panel-sub">Your data is never stored or shared.</p>
+                </div>
             </div>
 
+            <form method="POST" enctype="multipart/form-data" onsubmit="showLoading()">
+                <div class="field">
+                    <label><span class="label-num">01</span> Paste Report Text</label>
+                    <textarea id="reportBox" name="report_text" placeholder="Paste your radiology report text here…">{{ report_text }}</textarea>
+                    <div class="field-footer">
+                        <button type="button" class="link-btn" onclick="loadSample()">↺ Load sample report</button>
+                        <button type="reset" class="link-btn danger">✕ Clear</button>
+                    </div>
+                </div>
+
+                <div class="or-row"><span>or upload a file</span></div>
+
+                <div class="field">
+                    <label><span class="label-num">02</span> Upload File</label>
+                    <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+                        <div class="upload-arrow-icon">↑</div>
+                        <p>Click to choose a file <span id="fileName" class="file-name-tag"></span></p>
+                        <small>PDF or plain text accepted</small>
+                        <input type="file" id="fileInput" name="report_file" style="display:none" onchange="showFile(this)">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label><span class="label-num">03</span> Ask a Question <span class="opt-badge">optional</span></label>
+                    <input type="text" name="question" placeholder="E.g. What does cardiomegaly mean for me?" value="{{ question }}">
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span id="btnText">Generate Explanation</span>
+                    <span id="loadingText" style="display:none">⟳ Analyzing report…</span>
+                </button>
+            </form>
+        </div>
             <label>Upload report file</label>
             <input type="file" name="report_file">
 
@@ -98,38 +195,52 @@
         </form>
     </div>
 
-    <div class="info-panel">
-        <h2>What you will receive</h2>
-
-        <div class="info-item">
-            <span>01</span>
-            <div>
-                <h4>Patient-friendly summary</h4>
-                <p>A simplified explanation of the report.</p>
+        <div class="side-col">
+            <div class="info-card">
+                <div class="info-card-title">What you'll receive</div>
+                <div class="info-item-row">
+                    <span class="info-num-badge">01</span>
+                    <div>
+                        <strong>Plain-language summary</strong>
+                        <p>A clear, jargon-free overview.</p>
+                    </div>
+                </div>
+                <div class="info-item-row">
+                    <span class="info-num-badge">02</span>
+                    <div>
+                        <strong>Key findings</strong>
+                        <p>Important observations listed simply.</p>
+                    </div>
+                </div>
+                <div class="info-item-row">
+                    <span class="info-num-badge">03</span>
+                    <div>
+                        <strong>Medical terms decoded</strong>
+                        <p>Every term in plain language.</p>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div class="info-item">
-            <span>02</span>
-            <div>
-                <h4>Key findings</h4>
-                <p>Important observations from the report.</p>
-            </div>
-        </div>
-
-        <div class="info-item">
-            <span>03</span>
-            <div>
-                <h4>Term explanations</h4>
-                <p>Medical words explained in plain language.</p>
+            <div class="privacy-card">
+                <span>🔒</span>
+                <div>
+                    <strong>Your data is private</strong>
+                    <p>Reports are never stored or shared with anyone.</p>
+                </div>
             </div>
         </div>
     </div>
-
 </main>
 
 {% if results %}
 <section class="results-section">
+    <div class="results-top">
+        <div class="results-eyebrow"><span class="eyebrow-dot"></span> Analysis Complete</div>
+        <h2 class="results-title">Your Report Explained</h2>
+    </div>
+
+    <div class="result-summary-card">
+        <div class="result-summary-label">PATIENT-FRIENDLY SUMMARY</div>
+        <p class="result-summary-text">{{ results.summary }}</p>
 
     <div class="result-large">
         <span class="pill">Simplified result</span>
@@ -138,48 +249,59 @@
         <p>{{ results.summary }}</p>
     </div>
 
-    <div class="result-grid">
-        <div class="result-card">
-            <h3>Key findings</h3>
-            <ul>
+    <div class="result-two-col">
+        <div class="result-card-block">
+            <div class="result-card-title"><span class="card-indicator green"></span> Key Findings</div>
+            <ul class="findings-list">
                 {% for item in results.findings %}
-                <li>{{ item }}</li>
+                <li><span class="find-dash">—</span> {{ item }}</li>
                 {% endfor %}
             </ul>
         </div>
-
-        <div class="result-card">
-            <h3>Medical terms</h3>
-            {% for item in results.terms %}
-            <div class="term-row">
-                <strong>{{ item.term }}</strong>
-                <span>{{ item.meaning }}</span>
+        <div class="result-card-block">
+            <div class="result-card-title"><span class="card-indicator teal"></span> Medical Terms Decoded</div>
+            <div class="terms-deck">
+                {% for item in results.terms %}
+                <div class="term-row-item">
+                    <strong>{{ item.term }}</strong>
+                    <span>{{ item.meaning }}</span>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </div>
-
 </section>
 {% endif %}
 
-<section class="safety" id="safety">
-    <h2>Important safety note</h2>
-    <p>
-        This tool is for educational purposes only. It does not provide diagnosis,
-        treatment, or professional medical advice. Always speak with a qualified healthcare professional.
-    </p>
+<section class="safety-bar" id="safety">
+    <span>⚠</span>
+    <div>
+        <strong>Important Notice</strong>
+        <p>ClearScan is for educational purposes only. It does not provide diagnosis, treatment, or professional medical advice. Always consult a qualified healthcare professional about your results.</p>
+    </div>
 </section>
+
+<footer class="footer">
+    <div class="footer-logo">Clear<span class="accent">Scan</span></div>
+    <span class="footer-mid">Built for patients, powered by AI.</span>
+    <span class="footer-right">© 2025 ClearScan</span>
+</footer>
 
 <script>
 function loadSample() {
     document.getElementById("reportBox").value =
-    "Mild cardiomegaly is noted. No hemorrhage or fracture is seen. Small pleural effusion is present.";
+        "Mild cardiomegaly is noted. No hemorrhage or fracture is seen. Small pleural effusion is present on the left side. Mild atelectasis in the right lower lobe. No acute pulmonary consolidation identified.";
 }
-
 function showLoading() {
-    document.getElementById("loadingText").style.display = "block";
+    document.getElementById("btnText").style.display = "none";
+    document.getElementById("loadingText").style.display = "inline";
+    document.getElementById("submitBtn").disabled = true;
+}
+function showFile(input) {
+    if (input.files.length > 0) {
+        document.getElementById("fileName").textContent = "— " + input.files[0].name;
+    }
 }
 </script>
-
 </body>
 </html>
