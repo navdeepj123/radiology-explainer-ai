@@ -7,6 +7,52 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=IBM+Plex+Mono:wght@400;500&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Provider selector styling to match existing design */
+        .provider-select {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--panel2, #152030);
+            border: 1px solid var(--border2, rgba(0,200,200,0.22));
+            border-radius: 10px;
+            color: var(--white, #E8F4F4);
+            font-size: 15px;
+            font-family: 'Nunito', sans-serif;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2300C8C8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            transition: border-color 0.2s;
+        }
+        .provider-select:focus {
+            outline: none;
+            border-color: var(--teal, #00C8C8);
+            box-shadow: 0 0 0 3px rgba(0,200,200,0.12);
+        }
+        .provider-select option {
+            background: #0D1621;
+            color: #E8F4F4;
+            padding: 8px;
+        }
+        .provider-badges {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .provider-badge {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(0,200,200,0.2);
+            color: rgba(232,244,244,0.6);
+            background: rgba(0,200,200,0.05);
+        }
+        .provider-badge.cloud { border-color: rgba(100,180,255,0.3); color: rgba(100,180,255,0.8); }
+        .provider-badge.local { border-color: rgba(0,200,100,0.3); color: rgba(0,200,100,0.8); }
+    </style>
 </head>
 <body>
 
@@ -144,7 +190,10 @@
                 </div>
             </div>
 
+            <!-- ✅ ONE single form — everything inside here gets sent to Flask -->
             <form method="POST" enctype="multipart/form-data" onsubmit="showLoading()">
+
+                <!-- STEP 01: Paste text -->
                 <div class="field">
                     <label><span class="label-num">01</span> Paste Report Text</label>
                     <textarea id="reportBox" name="report_text" placeholder="Paste your radiology report text here…">{{ report_text }}</textarea>
@@ -156,6 +205,7 @@
 
                 <div class="or-row"><span>or upload a file</span></div>
 
+                <!-- STEP 02: Upload file -->
                 <div class="field">
                     <label><span class="label-num">02</span> Upload File</label>
                     <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
@@ -166,34 +216,36 @@
                     </div>
                 </div>
 
+                <!-- STEP 03: Optional question -->
                 <div class="field">
                     <label><span class="label-num">03</span> Ask a Question <span class="opt-badge">optional</span></label>
                     <input type="text" name="question" placeholder="E.g. What does cardiomegaly mean for me?" value="{{ question }}">
                 </div>
 
+                <!-- STEP 04: Select AI Provider -->
+                <div class="field">
+                    <label><span class="label-num">04</span> Select AI Model</label>
+                    <select name="provider" id="provider" class="provider-select">
+                        <option value="ollama"  {% if provider == "ollama"  %}selected{% endif %}>🖥️  Ollama  — Local (needs Ollama running)</option>
+                        <option value="groq"    {% if provider == "groq"    %}selected{% endif %}>⚡  Groq   — Cloud (fast, free tier)</option>
+                        <option value="gemini"  {% if provider == "gemini"  %}selected{% endif %}>✨  Gemini — Google AI (cloud)</option>
+                    </select>
+                    <div class="provider-badges">
+                        <span class="provider-badge local">🖥️ Ollama = runs on your PC</span>
+                        <span class="provider-badge cloud">☁️ Groq &amp; Gemini = cloud, needs API key</span>
+                    </div>
+                </div>
+
+                <!-- Submit -->
                 <button type="submit" class="submit-btn" id="submitBtn">
                     <span id="btnText">Generate Explanation</span>
-                    <span id="loadingText" style="display:none">⟳ Analyzing report…</span>
+                    <span id="loadingSpinner" style="display:none">⟳ Analyzing report…</span>
                 </button>
+
             </form>
+            <!-- ✅ Form ends here -->
+
         </div>
-            <label>Upload report file</label>
-            <input type="file" name="report_file">
-
-            <label>Ask a question</label>
-            <input type="text" name="question" placeholder="Example: What does cardiomegaly mean?" value="{{ question }}">
-
-            <label>Select AI Model</label>
-
-<select name="provider" id="provider">
-    <option value="ollama">Ollama Local</option>
-    <option value="groq">Groq Cloud</option>
-</select>
-
-            <button type="submit" class="main-btn">Generate Explanation</button>
-            <p id="loadingText" class="loading">Processing report...</p>
-        </form>
-    </div>
 
         <div class="side-col">
             <div class="info-card">
@@ -228,6 +280,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </main>
 
@@ -236,17 +289,20 @@
     <div class="results-top">
         <div class="results-eyebrow"><span class="eyebrow-dot"></span> Analysis Complete</div>
         <h2 class="results-title">Your Report Explained</h2>
+        <p style="color: rgba(232,244,244,0.5); font-size:13px; margin-top:6px;">
+            Generated using:
+            <strong style="color: #00C8C8;">
+                {% if results.provider == "gemini" %}✨ Google Gemini
+                {% elif results.provider == "groq" %}⚡ Groq Cloud
+                {% else %}🖥️ Ollama Local
+                {% endif %}
+            </strong>
+        </p>
     </div>
 
     <div class="result-summary-card">
         <div class="result-summary-label">PATIENT-FRIENDLY SUMMARY</div>
         <p class="result-summary-text">{{ results.summary }}</p>
-
-    <div class="result-large">
-        <span class="pill">Simplified result</span>
-        <h2>Patient-friendly summary</h2>
-        <p><strong>AI Model Used:</strong> {{ provider }}</p>
-        <p>{{ results.summary }}</p>
     </div>
 
     <div class="result-two-col">
@@ -294,7 +350,7 @@ function loadSample() {
 }
 function showLoading() {
     document.getElementById("btnText").style.display = "none";
-    document.getElementById("loadingText").style.display = "inline";
+    document.getElementById("loadingSpinner").style.display = "inline";
     document.getElementById("submitBtn").disabled = true;
 }
 function showFile(input) {
