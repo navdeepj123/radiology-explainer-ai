@@ -1,37 +1,43 @@
-import os
 from openai import OpenAI
+import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
 client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY")
+    api_key=os.getenv("OPENROUTER_API_KEY"),
+    base_url="https://openrouter.ai/api/v1"
 )
 
-def generate_with_openai(report_text, context="", language="English"):
+def generate_with_openai(prompt):
 
-    prompt = f"""
-You are a medical report explanation assistant.
+    response = client.chat.completions.create(
 
-Explain the radiology report in simple patient-friendly language.
+        model="openrouter/free",
+
+        messages=[
+            {
+                "role": "system",
+                "content": """
+You are a professional radiology explanation assistant for patients.
 
 Rules:
+- Use simple English
+- Use bullet points
+- Use headings
 - Do not diagnose
-- Do not provide treatment advice
-- Use simple wording
-- Mention doctor consultation
-- Also provide translated explanation in {language}
-
-Report:
-{report_text}
-
-Retrieved Context:
-{context}
+- Do not give treatment advice
+- Be patient friendly
 """
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
 
-    response = client.responses.create(
-        model="gpt-4.1-mini",
-        input=prompt
+        temperature=0.2,
+        max_tokens=900
     )
 
-    return response.output_text
+    return response.choices[0].message.content

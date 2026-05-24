@@ -1,15 +1,16 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ClearScan — Understand Your Radiology Report</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
     <style>
-        /* Provider selector styling to match existing design */
         .provider-select {
             width: 100%;
             padding: 12px 16px;
@@ -18,31 +19,32 @@
             border-radius: 10px;
             color: var(--white, #E8F4F4);
             font-size: 15px;
-            font-family: 'Nunito', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             cursor: pointer;
             appearance: none;
             -webkit-appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2300C8C8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 14px center;
             transition: border-color 0.2s;
         }
+
         .provider-select:focus {
             outline: none;
             border-color: var(--teal, #00C8C8);
             box-shadow: 0 0 0 3px rgba(0,200,200,0.12);
         }
+
         .provider-select option {
             background: #0D1621;
             color: #E8F4F4;
             padding: 8px;
         }
+
         .provider-badges {
             display: flex;
             gap: 8px;
             margin-top: 10px;
             flex-wrap: wrap;
         }
+
         .provider-badge {
             font-size: 11px;
             padding: 4px 10px;
@@ -51,18 +53,25 @@
             color: rgba(232,244,244,0.6);
             background: rgba(0,200,200,0.05);
         }
-        .provider-badge.cloud { border-color: rgba(100,180,255,0.3); color: rgba(100,180,255,0.8); }
-        .provider-badge.local { border-color: rgba(0,200,100,0.3); color: rgba(0,200,100,0.8); }
+
+        .provider-badge.cloud {
+            border-color: rgba(100,180,255,0.3);
+            color: rgba(100,180,255,0.8);
+        }
+
+        .provider-badge.local {
+            border-color: rgba(0,200,100,0.3);
+            color: rgba(0,200,100,0.8);
+        }
     </style>
 </head>
+
 <body>
 
-<!-- Decorative blobs -->
 <div class="blob blob-1"></div>
 <div class="blob blob-2"></div>
 <div class="blob blob-3"></div>
 
-<!-- ═══════════════════════════════ NAVBAR ═══ -->
 <nav class="navbar">
     <div class="logo">
         <div class="logo-mark">
@@ -73,45 +82,41 @@
         </div>
         <span>Clear<span class="logo-accent">Scan</span></span>
     </div>
+
     <div class="nav-links">
         <a href="#how" class="nav-link">How It Works</a>
         <a href="#report" class="nav-link">Analyze Report</a>
         <a href="#safety" class="nav-link">Safety</a>
     </div>
+
     <a href="#report" class="nav-cta">Get Started</a>
 </nav>
 
-<!-- ═══════════════════════════════ HERO ═══ -->
 <section class="hero">
     <div class="hero-left">
         <div class="hero-badge">
             <span class="badge-dot"></span>
             Free · Private · AI-Powered
         </div>
+
         <h1 class="hero-title">
             Your radiology report,<br>
             <em>explained simply.</em>
         </h1>
+
         <p class="hero-desc">
             Medical reports can feel overwhelming. ClearScan reads your radiology report and explains it in clear, everyday language — so you actually understand what's going on.
         </p>
+
         <div class="hero-btns">
             <a href="#report" class="btn-main">Analyze My Report</a>
             <a href="#how" class="btn-soft">See how it works ↓</a>
         </div>
+
         <div class="hero-trust">
-            <div class="trust-item">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#0D9488" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#0D9488" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Never stores your data
-            </div>
-            <div class="trust-item">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#0D9488" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#0D9488" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Works for all ages
-            </div>
-            <div class="trust-item">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#0D9488" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#0D9488" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Plain language results
-            </div>
+            <div class="trust-item">✓ Never stores your data</div>
+            <div class="trust-item">✓ Works for all ages</div>
+            <div class="trust-item">✓ Plain language results</div>
         </div>
     </div>
 
@@ -121,28 +126,34 @@
                 <span class="sample-chip">Sample Output</span>
                 <span class="sample-status good">✓ Non-Critical</span>
             </div>
+
             <div class="sample-summary">
-                <p>"Your scan shows no emergency findings. There is mild heart enlargement and a small amount of fluid near the left lung — both are common and manageable conditions."</p>
+                <p>"Your scan shows no emergency findings. There is mild heart enlargement and a small amount of fluid near the left lung."</p>
             </div>
+
             <div class="sample-findings">
                 <div class="sf-row green">
                     <span class="sf-dot"></span>
                     No fracture or bleeding found
                 </div>
+
                 <div class="sf-row amber">
                     <span class="sf-dot"></span>
                     Mild heart enlargement noted
                 </div>
+
                 <div class="sf-row amber">
                     <span class="sf-dot"></span>
                     Small fluid near left lung
                 </div>
             </div>
+
             <div class="sample-terms">
                 <div class="st-pill">
                     <strong>Cardiomegaly</strong>
                     <span>Enlarged heart</span>
                 </div>
+
                 <div class="st-pill">
                     <strong>Effusion</strong>
                     <span>Fluid buildup</span>
@@ -152,12 +163,12 @@
     </div>
 </section>
 
-<!-- ═══════════════════════════════ HOW IT WORKS ═══ -->
 <section class="how-section" id="how">
     <div class="section-header">
         <p class="section-eyebrow">Simple 3-step process</p>
         <h2 class="section-title">How ClearScan Works</h2>
     </div>
+
     <div class="how-steps">
         <div class="how-step">
             <div class="step-icon-wrap">
@@ -167,10 +178,12 @@
             <h3>Paste or Upload</h3>
             <p>Copy your radiology report text or upload the document file.</p>
         </div>
+
         <div class="how-connector">
             <div class="connector-line"></div>
             <span class="connector-arrow">→</span>
         </div>
+
         <div class="how-step">
             <div class="step-icon-wrap">
                 <span class="step-icon">🧠</span>
@@ -179,10 +192,12 @@
             <h3>AI Reads It</h3>
             <p>Our AI identifies all medical terms, findings, and key observations.</p>
         </div>
+
         <div class="how-connector">
             <div class="connector-line"></div>
             <span class="connector-arrow">→</span>
         </div>
+
         <div class="how-step">
             <div class="step-icon-wrap">
                 <span class="step-icon">💬</span>
@@ -194,11 +209,9 @@
     </div>
 </section>
 
-<!-- ═══════════════════════════════ MAIN FORM ═══ -->
 <main class="form-section" id="report">
     <div class="form-layout">
 
-        <!-- FORM -->
         <div class="form-box">
             <div class="form-box-header">
                 <div class="form-box-icon">
@@ -207,6 +220,7 @@
                         <path d="M8 8h8M8 12h8M8 16h5" stroke="#0D9488" stroke-width="1.8" stroke-linecap="round"/>
                     </svg>
                 </div>
+
                 <div>
                     <h2>Analyze Your Report</h2>
                     <p>Your information is private and never saved.</p>
@@ -215,24 +229,21 @@
 
             <form method="POST" enctype="multipart/form-data" onsubmit="handleSubmit()">
 
-                <!-- STEP 1: Text -->
                 <div class="form-field">
                     <label class="field-label">
                         <span class="field-step">Step 1</span>
                         Paste your report text
                     </label>
+
                     <textarea
                         id="reportBox"
                         name="report_text"
                         placeholder="Paste your radiology report here. For example: 'Mild cardiomegaly is noted. No hemorrhage or fracture seen…'"
                     >{{ report_text }}</textarea>
+
                     <div class="field-actions">
-                        <button type="button" class="text-btn" onclick="loadSample()">
-                            ↺ Use a sample report
-                        </button>
-                        <button type="reset" class="text-btn muted" onclick="clearFile()">
-                            ✕ Clear all
-                        </button>
+                        <button type="button" class="text-btn" onclick="loadSample()">↺ Use a sample report</button>
+                        <button type="reset" class="text-btn muted" onclick="clearFile()">✕ Clear all</button>
                     </div>
                 </div>
 
@@ -240,13 +251,13 @@
                     <span>or upload a file instead</span>
                 </div>
 
-                <!-- STEP 2: Upload -->
                 <div class="form-field">
                     <label class="field-label">
                         <span class="field-step">Step 2</span>
                         Upload report file
                         <span class="optional-tag">optional</span>
                     </label>
+
                     <div class="upload-box" id="uploadBox" onclick="document.getElementById('fileInput').click()">
                         <div class="upload-icon">
                             <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
@@ -254,35 +265,47 @@
                                 <path d="M8 26h16" stroke="#0D9488" stroke-width="1.8" stroke-linecap="round"/>
                             </svg>
                         </div>
+
                         <p class="upload-text">Click to select a file</p>
                         <p class="upload-sub" id="uploadSub">PDF or plain text — max 10MB</p>
-                        <input type="file" id="fileInput" name="report_file" style="display:none" onchange="handleFile(this)" accept=".pdf,.txt,.doc,.docx">
+
+                        <input
+                            type="file"
+                            id="fileInput"
+                            name="report_file"
+                            style="display:none"
+                            onchange="handleFile(this)"
+                            accept=".pdf,.txt,.doc,.docx"
+                        >
                     </div>
                 </div>
 
-                <!-- STEP 3: AI Model -->
                 <div class="form-field">
                     <label class="field-label">
                         <span class="field-step">Step 3</span>
                         Choose AI Model
                     </label>
-                    <div class="select-wrap">
-                        <select name="provider" id="provider">
-                            <option value="ollama">🖥️ Ollama (Local — fully private)</option>
-                            <option value="groq">☁️ Groq Cloud — fast online AI</option>
-                            <option value="openai">✨ OpenAI GPT — advanced explanation AI</option>
-                            </select>
-                        <span class="select-arrow">▾</span>
+
+                    <select name="provider" id="provider" class="provider-select">
+                        <option value="ollama" {% if provider == "ollama" %}selected{% endif %}>🖥️ Ollama — Local, fully private</option>
+                        <option value="groq" {% if provider == "groq" %}selected{% endif %}>⚡ Groq — Fast cloud AI</option>
+                        <option value="openai" {% if provider == "openai" %}selected{% endif %}>✨ OpenAI — Advanced explanation AI</option>
+                        <option value="gemini" {% if provider == "gemini" %}selected{% endif %}>💎 Gemini — Google cloud AI</option>
+                    </select>
+
+                    <div class="provider-badges">
+                        <span class="provider-badge local">🖥️ Ollama = runs on your PC</span>
+                        <span class="provider-badge cloud">☁️ Groq, OpenAI & Gemini = needs API key</span>
                     </div>
                 </div>
 
-                <!-- STEP 4: Question -->
                 <div class="form-field">
                     <label class="field-label">
                         <span class="field-step">Step 4</span>
                         Your question
                         <span class="optional-tag">optional</span>
                     </label>
+
                     <input
                         type="text"
                         name="question"
@@ -291,39 +314,23 @@
                     >
                 </div>
 
-                <!-- STEP 04: Select AI Provider -->
-                <div class="field">
-                    <label><span class="label-num">04</span> Select AI Model</label>
-                    <select name="provider" id="provider" class="provider-select">
-                        <option value="ollama"  {% if provider == "ollama"  %}selected{% endif %}>🖥️  Ollama  — Local (needs Ollama running)</option>
-                        <option value="groq"    {% if provider == "groq"    %}selected{% endif %}>⚡  Groq   — Cloud (fast, free tier)</option>
-                        <option value="gemini"  {% if provider == "gemini"  %}selected{% endif %}>✨  Gemini — Google AI (cloud)</option>
-                    </select>
-                    <div class="provider-badges">
-                        <span class="provider-badge local">🖥️ Ollama = runs on your PC</span>
-                        <span class="provider-badge cloud">☁️ Groq &amp; Gemini = cloud, needs API key</span>
-                    </div>
-                </div>
-
-                <!-- Submit -->
                 <button type="submit" class="submit-btn" id="submitBtn">
                     <span id="btnText">
-                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style="margin-right:8px;vertical-align:middle"><path d="M9 2L9 16M9 2L5 6M9 2L13 6" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         Generate Explanation
                     </span>
+
                     <span id="loadingText" style="display:none">
                         <span class="spinner"></span> Analyzing your report…
                     </span>
                 </button>
 
-
             </form>
         </div>
 
-        <!-- SIDEBAR -->
         <div class="form-sidebar">
             <div class="sidebar-card">
                 <h4>What you'll get</h4>
+
                 <div class="sidebar-item">
                     <div class="sidebar-item-icon">💬</div>
                     <div>
@@ -331,6 +338,7 @@
                         <p>A clear, friendly overview of your report.</p>
                     </div>
                 </div>
+
                 <div class="sidebar-item">
                     <div class="sidebar-item-icon">🔍</div>
                     <div>
@@ -338,6 +346,7 @@
                         <p>Important observations explained simply.</p>
                     </div>
                 </div>
+
                 <div class="sidebar-item">
                     <div class="sidebar-item-icon">📖</div>
                     <div>
@@ -365,38 +374,38 @@
             </div>
         </div>
 
-
     </div>
 </main>
 
-<!-- ═══════════════════════════════ RESULTS ═══ -->
 {% if results %}
 <section class="results-section">
 
     <div class="results-heading">
         <div class="results-badge">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#0D9488" stroke-width="1.5"/><path d="M4.5 7l2 2 3-3" stroke="#0D9488" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Analysis Complete
+            ✓ Analysis Complete
         </div>
+
         <h2>Your Report, Explained</h2>
+
         {% if provider %}
         <p class="results-model">Analyzed using: <strong>{{ provider }}</strong></p>
         {% endif %}
     </div>
 
-    <!-- Summary -->
-    <div class="result-summary">
-        <div class="result-summary-label">Plain-Language Summary</div>
-        <p>{{ results.summary }}</p>
-    </div>
+   <div class="result-summary">
+    <div class="result-summary-label">Plain-Language Summary</div>
 
-    <!-- Findings + Terms -->
+    <div class="ai-formatted-output">
+        {{ results.summary | safe }}
+    </div>
+</div>
     <div class="results-grid">
         <div class="result-card">
             <div class="result-card-head green">
                 <span class="rch-dot"></span>
                 Key Findings
             </div>
+
             <ul class="findings-ul">
                 {% for item in results.findings %}
                 <li>
@@ -412,6 +421,7 @@
                 <span class="rch-dot"></span>
                 Medical Terms Explained
             </div>
+
             <div class="terms-list">
                 {% for item in results.terms %}
                 <div class="term-item">
@@ -426,18 +436,21 @@
 </section>
 {% endif %}
 
-<!-- ═══════════════════════════════ SAFETY ═══ -->
 <section class="safety-section" id="safety">
     <div class="safety-inner">
         <div class="safety-icon-wrap">⚠️</div>
+
         <div>
             <h3>Important Notice</h3>
-            <p>ClearScan is an educational tool only. It does not provide medical diagnosis, treatment advice, or replace a qualified doctor. Always discuss your radiology results with your healthcare provider.</p>
+            <p>
+                ClearScan is an educational tool only. It does not provide medical diagnosis,
+                treatment advice, or replace a qualified doctor. Always discuss your radiology
+                results with your healthcare provider.
+            </p>
         </div>
     </div>
 </section>
 
-<!-- ═══════════════════════════════ FOOTER ═══ -->
 <footer class="footer">
     <div class="footer-logo">Clear<span>Scan</span></div>
     <p class="footer-tagline">Helping patients understand their health, one report at a time.</p>
@@ -470,7 +483,6 @@ function clearFile() {
     document.getElementById("uploadBox").classList.remove("file-selected");
 }
 
-// Scroll reveal animation
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
         if (e.isIntersecting) {
