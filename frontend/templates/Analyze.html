@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClearScan — Analyze Report</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a href="/" class="logo" style="text-decoration:none;">
+        <div class="logo-mark">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <circle cx="11" cy="11" r="10" stroke="#0D9488" stroke-width="2"/>
+                <path d="M7 11L10 14L15 8" stroke="#0D9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <span>Clear<span class="logo-accent">Scan</span></span>
+    </a>
+    <div class="nav-links">
+        <a href="/" class="nav-link">← Home</a>
+    </div>
+    <div class="page-indicator">Step 1 of 2 — Submit Report</div>
+</nav>
+
+<main class="analyze-page">
+    <div class="analyze-header">
+        <p class="section-eyebrow">Report Analysis</p>
+        <h1 class="analyze-title">Analyze Your Radiology Report</h1>
+        <p class="analyze-sub">Paste your report below or upload a file. Your data is private and never saved.</p>
+    </div>
+
+    {% if error %}
+    <div class="error-banner">⚠ {{ error }}</div>
+    {% endif %}
+
+    <div class="form-layout">
+        <!-- FORM -->
+        <div class="form-box">
+            <div class="form-box-header">
+                <div class="form-box-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <rect x="3" y="3" width="18" height="18" rx="4" stroke="#0D9488" stroke-width="1.8"/>
+                        <path d="M8 8h8M8 12h8M8 16h5" stroke="#0D9488" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2>Enter Your Report</h2>
+                    <p>Your information is private and never saved.</p>
+                </div>
+            </div>
+
+            <form method="POST" action="/analyze" enctype="multipart/form-data" onsubmit="handleSubmit()">
+
+                <!-- Step 1: Text -->
+                <div class="form-field">
+                    <label class="field-label">
+                        <span class="field-step">Step 1</span>
+                        Paste your report text
+                    </label>
+                    <textarea id="reportBox" name="report_text"
+                        placeholder="Paste your radiology report here.&#10;&#10;Example: Mild cardiomegaly is noted. No hemorrhage or fracture is seen. Small pleural effusion is present on the left side..."></textarea>
+                    <div class="field-actions">
+                        <button type="button" class="text-btn" onclick="loadSample()">↺ Load sample report</button>
+                        <button type="reset" class="text-btn muted" onclick="clearFile()">✕ Clear all</button>
+                    </div>
+                </div>
+
+                <div class="or-divider"><span>or upload a file</span></div>
+
+                <!-- Step 2: Upload -->
+                <div class="form-field">
+                    <label class="field-label">
+                        <span class="field-step">Step 2</span>
+                        Upload report file
+                        <span class="optional-tag">optional</span>
+                    </label>
+                    <div class="upload-box" id="uploadBox" onclick="document.getElementById('fileInput').click()">
+                        <div class="upload-icon">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                <path d="M16 22V10M16 10L12 14M16 10L20 14" stroke="#0D9488" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8 26h16" stroke="#0D9488" stroke-width="1.8" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <p class="upload-text">Click to select a file</p>
+                        <p class="upload-sub" id="uploadSub">PDF or plain text — max 10MB</p>
+                        <input type="file" id="fileInput" name="report_file" style="display:none"
+                               onchange="handleFile(this)" accept=".pdf,.txt,.doc,.docx">
+                    </div>
+                </div>
+
+                <!-- Step 3: AI Model -->
+                <div class="form-field">
+                    <label class="field-label">
+                        <span class="field-step">Step 3</span>
+                        Choose AI Model
+                    </label>
+                    <div class="select-wrap">
+                        <select name="provider" id="provider" onchange="updateProviderHint(this.value)">
+                            <option value="groq">⚡ Groq — Fast, free tier, chatbot enabled</option>
+                            <option value="gemini">✨ Gemini — Free via OpenRouter, chatbot enabled</option>
+                            <option value="openai">🤖 OpenAI — GPT-4o-mini, chatbot enabled</option>
+                            <option value="ollama">🖥️ Ollama — Local, fully private, no chatbot</option>
+                        </select>
+                        <span class="select-arrow">▾</span>
+                    </div>
+                    <div class="provider-hint" id="providerHint">
+                        <span id="hintIcon">⚡</span>
+                        <span id="hintText">Groq is fast and free. Your report is sent to Groq's servers. The AI chatbot will be available on the results page.</span>
+                    </div>
+                </div>
+
+                <!-- Step 4: Question -->
+                <div class="form-field">
+                    <label class="field-label">
+                        <span class="field-step">Step 4</span>
+                        Your question
+                        <span class="optional-tag">optional</span>
+                    </label>
+                    <input type="text" name="question"
+                           placeholder="E.g. What does cardiomegaly mean for me?">
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span id="btnText">Generate Explanation →</span>
+                    <span id="loadingText" style="display:none">
+                        <span class="spinner"></span> Analyzing your report…
+                    </span>
+                </button>
+
+                <p class="form-disclaimer">
+                    🔒 Your report is processed securely and never stored. This is for educational purposes only.
+                </p>
+            </form>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div class="form-sidebar">
+            <div class="sidebar-card revealed">
+                <h4>What you'll get</h4>
+                <div class="sidebar-item">
+                    <div class="sidebar-item-icon">📊</div>
+                    <div><strong>Risk level</strong><p>HIGH, MEDIUM, or LOW with reason</p></div>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-item-icon">💬</div>
+                    <div><strong>Plain-language summary</strong><p>Clear, friendly overview of your report</p></div>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-item-icon">🔍</div>
+                    <div><strong>Key findings</strong><p>Each finding explained in simple words</p></div>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-item-icon">📖</div>
+                    <div><strong>Medical terms decoded</strong><p>Every term in everyday language</p></div>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-item-icon">🤖</div>
+                    <div><strong>AI Chatbot</strong><p>Ask anything about your report (cloud AI only)</p></div>
+                </div>
+            </div>
+
+            <div class="privacy-notice">
+                <div class="privacy-icon">🔒</div>
+                <div>
+                    <strong>100% Private</strong>
+                    <p>Your report is never stored or shared with anyone.</p>
+                </div>
+            </div>
+
+            <div class="ai-table-card">
+                <h4>Which AI to use?</h4>
+                <table class="ai-compare-table">
+                    <tr><th>Model</th><th>Cost</th><th>Chatbot</th></tr>
+                    <tr><td>⚡ Groq</td><td class="c-free">Free</td><td class="c-yes">✓</td></tr>
+                    <tr><td>✨ Gemini</td><td class="c-free">Free</td><td class="c-yes">✓</td></tr>
+                    <tr><td>🤖 OpenAI</td><td class="c-paid">Paid</td><td class="c-yes">✓</td></tr>
+                    <tr><td>🖥️ Ollama</td><td class="c-free">Local</td><td class="c-no">✗</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+function loadSample() {
+    document.getElementById("reportBox").value =
+        "Mild cardiomegaly is noted. No hemorrhage or fracture is seen. Small pleural effusion is present on the left side. Mild atelectasis in the right lower lobe. No acute pulmonary consolidation identified. The bony structures appear intact.";
+}
+function handleSubmit() {
+    document.getElementById("btnText").style.display = "none";
+    document.getElementById("loadingText").style.display = "flex";
+    document.getElementById("submitBtn").disabled = true;
+}
+function handleFile(input) {
+    if (input.files.length > 0) {
+        document.getElementById("uploadSub").textContent = "✓ " + input.files[0].name;
+        document.getElementById("uploadBox").classList.add("file-selected");
+    }
+}
+function clearFile() {
+    document.getElementById("fileInput").value = "";
+    document.getElementById("uploadSub").textContent = "PDF or plain text — max 10MB";
+    document.getElementById("uploadBox").classList.remove("file-selected");
+}
+const hints = {
+    groq:   { icon:"⚡", text:"Groq is fast and free. Your report is sent to Groq's servers. The AI chatbot will be available on the results page." },
+    gemini: { icon:"✨", text:"Gemini via OpenRouter is free. Your report is sent to Google's servers. The AI chatbot will be available on the results page." },
+    openai: { icon:"🤖", text:"OpenAI GPT-4o-mini is highly capable but requires a paid API key. The AI chatbot will be available on the results page." },
+    ollama: { icon:"🖥️", text:"Ollama runs fully on your computer. Your report never leaves your device. Note: the chatbot is not available in local mode." }
+};
+function updateProviderHint(val) {
+    const h = hints[val];
+    if (h) {
+        document.getElementById("hintIcon").textContent = h.icon;
+        document.getElementById("hintText").textContent = h.text;
+    }
+}
+</script>
+</body>
+</html>

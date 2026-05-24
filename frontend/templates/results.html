@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClearScan — Your Report Explained</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="results-body">
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a href="/" class="logo" style="text-decoration:none;">
+        <div class="logo-mark">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <circle cx="11" cy="11" r="10" stroke="#0D9488" stroke-width="2"/>
+                <path d="M7 11L10 14L15 8" stroke="#0D9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <span>Clear<span class="logo-accent">Scan</span></span>
+    </a>
+    <div class="nav-links">
+        <a href="/analyze" class="nav-link">← Analyze another</a>
+    </div>
+    <div class="page-indicator">
+        AI: <strong>{{ provider|upper }}</strong>
+        {% if show_chatbot %}<span class="chat-live-dot">● Chat Active</span>{% endif %}
+    </div>
+</nav>
+
+<!-- RESULTS SPLIT LAYOUT -->
+<div class="results-layout {{ 'with-chat' if show_chatbot else '' }}">
+
+    <!-- ══ LEFT: EXPLANATION ══ -->
+    <div class="explanation-panel">
+
+        <!-- Risk Banner -->
+        {% set risk = results.risk_level | upper if results.risk_level else 'UNKNOWN' %}
+        <div class="risk-banner {{ risk | lower }}">
+            <div class="risk-banner-left">
+                <div class="risk-banner-label">Risk Level</div>
+                <div class="risk-banner-value">
+                    {% if risk == 'HIGH' %}🔴 HIGH
+                    {% elif risk == 'MEDIUM' %}🟡 MEDIUM
+                    {% elif risk == 'LOW' %}🟢 LOW
+                    {% else %}⚪ UNKNOWN{% endif %}
+                </div>
+            </div>
+            <div class="risk-banner-reason">
+                {{ results.risk_reason if results.risk_reason else 'See summary below for details.' }}
+            </div>
+        </div>
+
+        <!-- AI Summary (HTML output from your existing rag_service) -->
+        <div class="result-block">
+            <div class="result-block-title">
+                <span class="rbt-dot teal"></span>
+                Patient-Friendly Explanation
+            </div>
+            <div class="ai-formatted-output">
+                {{ results.summary | safe }}
+            </div>
+        </div>
+
+        <!-- Key Findings from retriever -->
+        {% if results.findings %}
+        <div class="result-block">
+            <div class="result-block-title">
+                <span class="rbt-dot green"></span>
+                Detected Terms in Your Report
+            </div>
+            <ul class="findings-ul">
+                {% for item in results.findings %}
+                <li><span class="fi-dash">—</span><span>{{ item }}</span></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Medical Terms from knowledge base -->
+        {% if results.terms %}
+        <div class="result-block">
+            <div class="result-block-title">
+                <span class="rbt-dot purple"></span>
+                Medical Terms Decoded
+            </div>
+            <div class="terms-list">
+                {% for item in results.terms %}
+                <div class="term-item">
+                    <strong>{{ item.term }}</strong>
+                    <span>{{ item.meaning }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Safety + actions -->
+        <div class="result-safety-inline">
+            <span>⚠️</span>
+            <p>This explanation is for educational purposes only. Always discuss results with your doctor before making any health decisions.</p>
+        </div>
+
+        <div class="result-actions">
+            <a href="/analyze" class="btn-main">Analyze Another Report</a>
+            <button class="btn-print" onclick="window.print()">🖨 Print Results</button>
+        </div>
+    </div>
+
+    <!-- ══ RIGHT: CHATBOT ══ -->
+    {% if show_chatbot %}
+    <div class="chatbot-panel">
+        <div class="chatbot-header">
+            <div class="chatbot-header-left">
+                <div class="chat-avatar">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <circle cx="9" cy="9" r="8" stroke="#0D9488" stroke-width="1.5"/>
+                        <path d="M5.5 9l2.5 2.5 4.5-4.5" stroke="#0D9488" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="chat-name">ClearScan Assistant</div>
+                    <div class="chat-status"><span class="chat-status-dot"></span>Online · Report-aware</div>
+                </div>
+            </div>
+            <span class="chat-provider-tag">{{ provider | upper }}</span>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-msg bot">
+                <div class="chat-bubble bot">
+                    <p>Hi! I've read your radiology report and I'm here to help you understand it. 😊</p>
+                    <p style="margin-top:8px; font-size:13px; color:var(--text-soft);">Try asking me:</p>
+                    <div class="chat-suggestions">
+                        <div class="chat-suggestion" onclick="useSuggestion(this)">What does the risk level mean for me?</div>
+                        <div class="chat-suggestion" onclick="useSuggestion(this)">Is this something I should worry about?</div>
+                        <div class="chat-suggestion" onclick="useSuggestion(this)">What questions should I ask my doctor?</div>
+                        <div class="chat-suggestion" onclick="useSuggestion(this)">Explain the most important finding simply</div>
+                    </div>
+                    <div class="chat-time">ClearScan Assistant</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <div class="chat-limit-note">🔒 Only answers questions about your report</div>
+            <div class="chat-input-row">
+                <textarea id="chatInput" class="chat-textarea"
+                    placeholder="Ask something about your report…"
+                    rows="1"
+                    onkeydown="handleKey(event)"
+                    oninput="autoGrow(this)"></textarea>
+                <button class="chat-send-btn" id="sendBtn" onclick="sendMessage()">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 8h12M9 3l5 5-5 5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <!-- Ollama: no chatbot -->
+    <div class="no-chat-panel">
+        <div class="no-chat-icon">🖥️</div>
+        <h3>Local Mode Active</h3>
+        <p>You chose <strong>Ollama</strong>, which processes your report entirely on your computer for maximum privacy.</p>
+        <p style="margin-top:12px; color:var(--text-soft); font-size:14px;">To use the AI chatbot for follow-up questions, go back and choose Groq, Gemini, or OpenAI.</p>
+        <a href="/analyze" class="btn-main" style="margin-top:24px; display:inline-block;">Switch to Cloud AI →</a>
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+// ── CHATBOT ──────────────────────────────────────────────────────
+const messagesEl = document.getElementById("chatMessages");
+
+function appendMsg(text, role) {
+    const wrap   = document.createElement("div");
+    wrap.className = "chat-msg " + role;
+    const bubble = document.createElement("div");
+    bubble.className = "chat-bubble " + role;
+
+    // Format: bold, newlines, crisis class
+    const formatted = text
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+        .replace(/\n/g, "<br>");
+    bubble.innerHTML = formatted;
+
+    const time = document.createElement("div");
+    time.className = "chat-time";
+    time.textContent = role === "bot" ? "ClearScan Assistant" : "You";
+    bubble.appendChild(time);
+    wrap.appendChild(bubble);
+    messagesEl.appendChild(wrap);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function showTyping() {
+    const wrap = document.createElement("div");
+    wrap.className = "chat-msg bot"; wrap.id = "typingDots";
+    wrap.innerHTML = `<div class="chat-bubble bot typing-bubble">
+        <span class="t-dot"></span><span class="t-dot"></span><span class="t-dot"></span>
+    </div>`;
+    messagesEl.appendChild(wrap);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+function removeTyping() {
+    const t = document.getElementById("typingDots"); if (t) t.remove();
+}
+
+async function sendMessage() {
+    const input = document.getElementById("chatInput");
+    const msg   = input.value.trim();
+    if (!msg) return;
+
+    input.value = ""; input.style.height = "auto";
+    document.getElementById("sendBtn").disabled = true;
+    appendMsg(msg, "user");
+    showTyping();
+
+    try {
+        const res  = await fetch("/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: msg })
+        });
+        const data = await res.json();
+        removeTyping();
+
+        if (data.is_crisis) {
+            const wrap = document.createElement("div");
+            wrap.className = "chat-msg bot";
+            const bubble = document.createElement("div");
+            bubble.className = "chat-bubble bot crisis-bubble";
+            bubble.innerHTML = data.reply.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>");
+            const time = document.createElement("div");
+            time.className = "chat-time"; time.textContent = "ClearScan Assistant";
+            bubble.appendChild(time); wrap.appendChild(bubble); messagesEl.appendChild(wrap);
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+        } else {
+            appendMsg(data.reply, "bot");
+        }
+    } catch(e) {
+        removeTyping();
+        appendMsg("Sorry, something went wrong. Please try again.", "bot");
+    }
+    document.getElementById("sendBtn").disabled = false;
+}
+
+function handleKey(e) {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+function autoGrow(el) {
+    el.style.height = "auto";
+    el.style.height = Math.min(el.scrollHeight, 110) + "px";
+}
+function useSuggestion(el) {
+    document.getElementById("chatInput").value = el.textContent;
+    sendMessage();
+}
+</script>
+</body>
+</html>

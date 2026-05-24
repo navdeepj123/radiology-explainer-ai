@@ -10,15 +10,11 @@ def generate_explanation(report_text, provider="ollama", user_question=""):
     context_lines = []
 
     for item in retrieved_terms:
-
         term = item["term"]
         meaning = item["meaning"]
 
         findings.append(f"{term} detected in report")
-
-        context_lines.append(
-            f"{term}: {meaning}"
-        )
+        context_lines.append(f"{term}: {meaning}")
 
     context = "\n".join(context_lines)
 
@@ -97,16 +93,36 @@ Important output rules:
 
     ai_summary = generate_with_provider(prompt, provider)
 
-    # Clean markdown code blocks if model adds them
-    ai_summary = ai_summary.strip()
+    if ai_summary is None:
+        ai_summary = """
+<div class="ai-output">
+    <div class="risk-box">
+        <h3>Risk Level: Unknown</h3>
+        <p>The AI provider did not return a response. Please try another provider.</p>
+    </div>
+</div>
+"""
+
+    ai_summary = str(ai_summary).strip()
     ai_summary = ai_summary.replace("```html", "")
     ai_summary = ai_summary.replace("```HTML", "")
     ai_summary = ai_summary.replace("```Html", "")
     ai_summary = ai_summary.replace("```", "")
     ai_summary = ai_summary.strip()
 
+    risk_level = "Unknown"
+
+    if "Risk Level: High" in ai_summary:
+        risk_level = "High"
+    elif "Risk Level: Medium" in ai_summary:
+        risk_level = "Medium"
+    elif "Risk Level: Low" in ai_summary:
+        risk_level = "Low"
+
     return {
         "summary": ai_summary,
+        "risk_level": risk_level,
+        "risk_reason": "Based on the report findings.",
         "findings": findings,
         "terms": retrieved_terms,
         "provider": provider,

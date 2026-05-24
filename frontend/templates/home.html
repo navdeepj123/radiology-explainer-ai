@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClearScan — Understand Your Radiology Report</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">
+        <div class="logo-mark">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <circle cx="11" cy="11" r="10" stroke="#0D9488" stroke-width="2"/>
+                <path d="M7 11L10 14L15 8" stroke="#0D9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <span>Clear<span class="logo-accent">Scan</span></span>
+    </div>
+    <div class="nav-links">
+        <a href="#how" class="nav-link">How It Works</a>
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#safety" class="nav-link">Safety</a>
+    </div>
+    <a href="/analyze" class="nav-cta">Analyze Report →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-left">
+        <div class="hero-badge">
+            <span class="badge-dot"></span>
+            Free · Private · AI-Powered
+        </div>
+        <h1 class="hero-title">
+            Your radiology report,<br>
+            <em>explained simply.</em>
+        </h1>
+        <p class="hero-desc">
+            Medical reports can feel overwhelming. ClearScan reads your radiology report
+            and explains every finding in calm, everyday language — so you understand
+            what's going on before your next appointment.
+        </p>
+        <div class="hero-btns">
+            <a href="/analyze" class="btn-main">Analyze My Report →</a>
+            <a href="#how" class="btn-soft">See how it works ↓</a>
+        </div>
+        <div class="hero-trust">
+            <div class="trust-item">
+                <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="7" stroke="#0D9488" stroke-width="1.4"/><path d="M4.5 7.5l2 2 4-4" stroke="#0D9488" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Never stores your data
+            </div>
+            <div class="trust-item">
+                <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="7" stroke="#0D9488" stroke-width="1.4"/><path d="M4.5 7.5l2 2 4-4" stroke="#0D9488" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Works for all ages
+            </div>
+            <div class="trust-item">
+                <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="7" stroke="#0D9488" stroke-width="1.4"/><path d="M4.5 7.5l2 2 4-4" stroke="#0D9488" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Ask follow-up questions
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-right">
+        <div class="sample-card">
+            <div class="sample-card-top">
+                <span class="sample-chip">Sample Output</span>
+                <span class="sample-status good">✓ Low Risk</span>
+            </div>
+            <div class="sample-summary">
+                <p>"Your scan shows no emergency findings. There is mild heart enlargement and a small amount of fluid near the left lung — both are common and manageable."</p>
+            </div>
+            <div class="sample-risk-bar">
+                <span class="risk-label-sm">Risk Level</span>
+                <div class="risk-track"><div class="risk-fill low"></div></div>
+                <span class="risk-tag-sm low">LOW</span>
+            </div>
+            <div class="sample-findings">
+                <div class="sf-row green"><span class="sf-dot"></span>No fracture or bleeding found</div>
+                <div class="sf-row amber"><span class="sf-dot"></span>Mild heart enlargement noted</div>
+                <div class="sf-row amber"><span class="sf-dot"></span>Small fluid near left lung</div>
+            </div>
+            <div class="sample-terms">
+                <div class="st-pill"><strong>Cardiomegaly</strong><span>Enlarged heart</span></div>
+                <div class="st-pill"><strong>Effusion</strong><span>Fluid buildup</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+    <div class="section-header">
+        <p class="section-eyebrow">Simple 3-step process</p>
+        <h2 class="section-title">How ClearScan Works</h2>
+    </div>
+    <div class="how-steps">
+        <div class="how-step">
+            <div class="step-icon-wrap"><span class="step-icon">📋</span><span class="step-num">1</span></div>
+            <h3>Paste or Upload</h3>
+            <p>Go to the Analyze page. Copy your radiology report text or upload the file directly.</p>
+        </div>
+        <div class="how-connector"><div class="connector-line"></div><span class="connector-arrow">→</span></div>
+        <div class="how-step">
+            <div class="step-icon-wrap"><span class="step-icon">🧠</span><span class="step-num">2</span></div>
+            <h3>AI Reads It</h3>
+            <p>Your chosen AI (Groq, Gemini, OpenAI, or local Ollama) analyzes every finding and term.</p>
+        </div>
+        <div class="how-connector"><div class="connector-line"></div><span class="connector-arrow">→</span></div>
+        <div class="how-step">
+            <div class="step-icon-wrap"><span class="step-icon">💬</span><span class="step-num">3</span></div>
+            <h3>Understand &amp; Ask</h3>
+            <p>Read your plain-language results, see the risk level, then chat with AI for any follow-up questions.</p>
+        </div>
+    </div>
+    <div class="how-cta">
+        <a href="/analyze" class="btn-main">Get Started Free →</a>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section" id="features">
+    <div class="section-header">
+        <p class="section-eyebrow">Everything you need</p>
+        <h2 class="section-title">Built for patients, not doctors</h2>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card">
+            <span class="feat-icon">🔒</span>
+            <h3>Private by default</h3>
+            <p>Use Ollama locally — your report never leaves your computer. Cloud AI options available when you need a chatbot.</p>
+        </div>
+        <div class="feature-card">
+            <span class="feat-icon">📊</span>
+            <h3>Risk level display</h3>
+            <p>See instantly whether findings are LOW, MEDIUM, or HIGH risk — with a clear one-line explanation of why.</p>
+        </div>
+        <div class="feature-card">
+            <span class="feat-icon">💬</span>
+            <h3>AI chatbot included</h3>
+            <p>Ask unlimited follow-up questions about your report. The chatbot only answers report-related questions.</p>
+        </div>
+        <div class="feature-card">
+            <span class="feat-icon">📖</span>
+            <h3>Terms decoded</h3>
+            <p>Every medical word in your report is automatically detected and explained in plain everyday language.</p>
+        </div>
+        <div class="feature-card">
+            <span class="feat-icon">🤖</span>
+            <h3>4 AI providers</h3>
+            <p>Choose from Groq, Gemini (free), OpenAI, or local Ollama — whatever you're comfortable with.</p>
+        </div>
+        <div class="feature-card">
+            <span class="feat-icon">🌍</span>
+            <h3>All ages welcome</h3>
+            <p>Designed with clarity for patients of every age — simple language, calm tone, no medical jargon.</p>
+        </div>
+    </div>
+</section>
+
+<!-- AI PROVIDERS -->
+<section class="providers-section">
+    <div class="section-header">
+        <p class="section-eyebrow">Flexible AI options</p>
+        <h2 class="section-title">Choose your AI provider</h2>
+    </div>
+    <div class="providers-grid">
+        <div class="provider-card local">
+            <div class="provider-top">
+                <span class="provider-emoji">🖥️</span>
+                <span class="provider-free-tag local-tag">100% Local</span>
+            </div>
+            <h3>Ollama</h3>
+            <p>Runs entirely on your computer. Your report never leaves your device. No API key needed.</p>
+            <div class="provider-note">No chatbot in local mode</div>
+        </div>
+        <div class="provider-card free">
+            <div class="provider-top">
+                <span class="provider-emoji">⚡</span>
+                <span class="provider-free-tag free-tag">Free Tier</span>
+            </div>
+            <h3>Groq</h3>
+            <p>Fast cloud AI. Free API key available at groq.com. Chatbot enabled for follow-up questions.</p>
+            <div class="provider-note">Chatbot ✓ · Free API key</div>
+        </div>
+        <div class="provider-card free">
+            <div class="provider-top">
+                <span class="provider-emoji">✨</span>
+                <span class="provider-free-tag free-tag">Free Tier</span>
+            </div>
+            <h3>Gemini</h3>
+            <p>Google's AI via OpenRouter. Free tier available. Excellent for detailed explanations.</p>
+            <div class="provider-note">Chatbot ✓ · Free via OpenRouter</div>
+        </div>
+        <div class="provider-card paid">
+            <div class="provider-top">
+                <span class="provider-emoji">🤖</span>
+                <span class="provider-free-tag paid-tag">Paid</span>
+            </div>
+            <h3>OpenAI</h3>
+            <p>GPT-4o-mini — highly capable. Requires a paid OpenAI API key. Best accuracy.</p>
+            <div class="provider-note">Chatbot ✓ · Paid API key</div>
+        </div>
+    </div>
+</section>
+
+<!-- SAFETY -->
+<section class="safety-section" id="safety">
+    <div class="safety-inner">
+        <div class="safety-icon-wrap">⚠️</div>
+        <div>
+            <h3>Important Notice</h3>
+            <p>ClearScan is an educational tool only. It does not provide medical diagnosis, treatment advice, or replace a qualified doctor. Always discuss your radiology results with your healthcare provider.</p>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="footer-logo">Clear<span>Scan</span></div>
+    <p class="footer-tagline">Helping patients understand their health, one report at a time.</p>
+    <p class="footer-copy">© 2025 ClearScan · Educational use only</p>
+</footer>
+
+<script>
+// Scroll reveal for how-steps
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("revealed"); });
+}, { threshold: 0.1 });
+document.querySelectorAll(".how-step, .feature-card, .provider-card").forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
