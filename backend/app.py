@@ -4,6 +4,7 @@ ClearScan — Radiology Report Explainer
 """
 
 import os
+from datetime import datetime
 from flask import Flask, request, render_template, session, jsonify
 from flask_cors import CORS
 
@@ -127,6 +128,19 @@ def analyze():
     except TypeError:
         results = generate_explanation(report_text, provider)
 
+    history = session.get("history", [])
+
+    summary_text = results.get("summary", "") if isinstance(results, dict) else str(results)
+
+    history.append({
+        "date": datetime.now().strftime("%d %b %Y, %I:%M %p"),
+        "provider": provider,
+        "report": report_text[:150],
+        "summary": summary_text[:250]
+    })
+
+    session["history"] = history[-5:]
+
     show_chatbot = provider in ("groq", "gemini", "openai")
 
     return render_template(
@@ -134,7 +148,8 @@ def analyze():
         results=results,
         provider=provider,
         show_chatbot=show_chatbot,
-        question=question
+        question=question,
+        history=session.get("history", [])
     )
 
 
