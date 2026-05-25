@@ -4,6 +4,7 @@ ClearScan — Radiology Report Explainer
 """
 
 import os
+import re
 from datetime import datetime
 from flask import Flask, request, render_template, session, jsonify
 from flask_cors import CORS
@@ -91,6 +92,17 @@ def clean_ai_reply(reply):
     return reply
 
 
+def clean_history_text(text):
+    text = str(text)
+    text = re.sub(r"<[^>]+>", " ", text)
+    text = text.replace("&nbsp;", " ")
+    text = text.replace("&amp;", "&")
+    text = text.replace("&lt;", "<")
+    text = text.replace("&gt;", ">")
+    text = " ".join(text.split())
+    return text
+
+
 @app.route("/")
 def home():
     return render_template("home.html")
@@ -131,11 +143,12 @@ def analyze():
     history = session.get("history", [])
 
     summary_text = results.get("summary", "") if isinstance(results, dict) else str(results)
+    summary_text = clean_history_text(summary_text)
 
     history.append({
         "date": datetime.now().strftime("%d %b %Y, %I:%M %p"),
         "provider": provider,
-        "report": report_text[:150],
+        "report": clean_history_text(report_text[:150]),
         "summary": summary_text[:250]
     })
 
