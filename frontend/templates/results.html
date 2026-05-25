@@ -10,7 +10,6 @@
 </head>
 <body class="results-body">
 
-<!-- NAVBAR -->
 <nav class="navbar">
     <a href="/" class="logo" style="text-decoration:none;">
         <div class="logo-mark">
@@ -30,13 +29,10 @@
     </div>
 </nav>
 
-<!-- RESULTS SPLIT LAYOUT -->
 <div class="results-layout {{ 'with-chat' if show_chatbot else '' }}">
 
-    <!-- ══ LEFT: EXPLANATION ══ -->
     <div class="explanation-panel">
 
-        <!-- Risk Banner -->
         {% set risk = results.risk_level | upper if results.risk_level else 'UNKNOWN' %}
         <div class="risk-banner {{ risk | lower }}">
             <div class="risk-banner-left">
@@ -53,7 +49,6 @@
             </div>
         </div>
 
-        <!-- AI Summary (HTML output from your existing rag_service) -->
         <div class="result-block">
             <div class="result-block-title">
                 <span class="rbt-dot teal"></span>
@@ -64,7 +59,6 @@
             </div>
         </div>
 
-        <!-- Key Findings from retriever -->
         {% if results.findings %}
         <div class="result-block">
             <div class="result-block-title">
@@ -79,7 +73,6 @@
         </div>
         {% endif %}
 
-        <!-- Medical Terms from knowledge base -->
         {% if results.terms %}
         <div class="result-block">
             <div class="result-block-title">
@@ -90,14 +83,51 @@
                 {% for item in results.terms %}
                 <div class="term-item">
                     <strong>{{ item.term }}</strong>
-                    <span>{{ item.meaning }}</span>
+                    <span>
+                        {% if item.meaning %}
+                            {{ item.meaning }}
+                        {% elif item.patient_explanation %}
+                            {{ item.patient_explanation }}
+                        {% elif item.simple_meaning %}
+                            {{ item.simple_meaning }}
+                        {% endif %}
+                    </span>
                 </div>
                 {% endfor %}
             </div>
         </div>
         {% endif %}
 
-        <!-- Safety + actions -->
+        {% if history %}
+        <div class="result-block">
+            <div class="result-block-title">
+                <span class="rbt-dot teal"></span>
+                Recent Report History
+            </div>
+
+            <div class="history-grid">
+                {% for item in history|reverse %}
+                <div class="history-card">
+                    <div class="history-top">
+                        <div class="history-provider">{{ item.provider | upper }}</div>
+                        <div class="history-date">{{ item.date }}</div>
+                    </div>
+
+                    <div class="history-section">
+                        <strong>Report Preview</strong>
+                        <p>{{ item.report }}...</p>
+                    </div>
+
+                    <div class="history-section">
+                        <strong>Generated Summary</strong>
+                        <p>{{ item.summary }}...</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
         <div class="result-safety-inline">
             <span>⚠️</span>
             <p>This explanation is for educational purposes only. Always discuss results with your doctor before making any health decisions.</p>
@@ -109,7 +139,6 @@
         </div>
     </div>
 
-    <!-- ══ RIGHT: CHATBOT ══ -->
     {% if show_chatbot %}
     <div class="chatbot-panel">
         <div class="chatbot-header">
@@ -162,7 +191,6 @@
     </div>
 
     {% else %}
-    <!-- Ollama: no chatbot -->
     <div class="no-chat-panel">
         <div class="no-chat-icon">🖥️</div>
         <h3>Local Mode Active</h3>
@@ -175,24 +203,24 @@
 </div>
 
 <script>
-// ── CHATBOT ──────────────────────────────────────────────────────
 const messagesEl = document.getElementById("chatMessages");
 
 function appendMsg(text, role) {
-    const wrap   = document.createElement("div");
+    const wrap = document.createElement("div");
     wrap.className = "chat-msg " + role;
     const bubble = document.createElement("div");
     bubble.className = "chat-bubble " + role;
 
-    // Format: bold, newlines, crisis class
     const formatted = text
         .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
         .replace(/\n/g, "<br>");
+
     bubble.innerHTML = formatted;
 
     const time = document.createElement("div");
     time.className = "chat-time";
     time.textContent = role === "bot" ? "ClearScan Assistant" : "You";
+
     bubble.appendChild(time);
     wrap.appendChild(bubble);
     messagesEl.appendChild(wrap);
@@ -201,67 +229,89 @@ function appendMsg(text, role) {
 
 function showTyping() {
     const wrap = document.createElement("div");
-    wrap.className = "chat-msg bot"; wrap.id = "typingDots";
+    wrap.className = "chat-msg bot";
+    wrap.id = "typingDots";
     wrap.innerHTML = `<div class="chat-bubble bot typing-bubble">
         <span class="t-dot"></span><span class="t-dot"></span><span class="t-dot"></span>
     </div>`;
     messagesEl.appendChild(wrap);
     messagesEl.scrollTop = messagesEl.scrollHeight;
 }
+
 function removeTyping() {
-    const t = document.getElementById("typingDots"); if (t) t.remove();
+    const t = document.getElementById("typingDots");
+    if (t) t.remove();
 }
 
 async function sendMessage() {
     const input = document.getElementById("chatInput");
-    const msg   = input.value.trim();
+    const msg = input.value.trim();
     if (!msg) return;
 
-    input.value = ""; input.style.height = "auto";
+    input.value = "";
+    input.style.height = "auto";
     document.getElementById("sendBtn").disabled = true;
+
     appendMsg(msg, "user");
     showTyping();
 
     try {
-        const res  = await fetch("/chat", {
+        const res = await fetch("/chat", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: msg })
         });
+
         const data = await res.json();
         removeTyping();
 
         if (data.is_crisis) {
             const wrap = document.createElement("div");
             wrap.className = "chat-msg bot";
+
             const bubble = document.createElement("div");
             bubble.className = "chat-bubble bot crisis-bubble";
-            bubble.innerHTML = data.reply.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>");
+            bubble.innerHTML = data.reply
+                .replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")
+                .replace(/\n/g,"<br>");
+
             const time = document.createElement("div");
-            time.className = "chat-time"; time.textContent = "ClearScan Assistant";
-            bubble.appendChild(time); wrap.appendChild(bubble); messagesEl.appendChild(wrap);
+            time.className = "chat-time";
+            time.textContent = "ClearScan Assistant";
+
+            bubble.appendChild(time);
+            wrap.appendChild(bubble);
+            messagesEl.appendChild(wrap);
             messagesEl.scrollTop = messagesEl.scrollHeight;
         } else {
             appendMsg(data.reply, "bot");
         }
+
     } catch(e) {
         removeTyping();
         appendMsg("Sorry, something went wrong. Please try again.", "bot");
     }
+
     document.getElementById("sendBtn").disabled = false;
 }
 
 function handleKey(e) {
-    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
 }
+
 function autoGrow(el) {
     el.style.height = "auto";
     el.style.height = Math.min(el.scrollHeight, 110) + "px";
 }
+
 function useSuggestion(el) {
     document.getElementById("chatInput").value = el.textContent;
     sendMessage();
 }
 </script>
+
 </body>
 </html>
