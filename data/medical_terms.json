@@ -3,540 +3,1938 @@
     "id": "T001",
     "term": "cardiomegaly",
     "simple_meaning": "Enlarged heart",
-    "urdu_hindi": "دل کا بڑا ہونا / दिल का बड़ा होना",
     "patient_explanation": "The heart appears larger than normal on the scan.",
-    "clinical_context": "This can be seen on chest X-rays and may be related to heart strain or heart disease.",
+    "clinical_context": "Seen on chest X-rays. May indicate heart strain, cardiomyopathy, or fluid around the heart.",
     "body_system": "Heart",
+    "category": "Cardiac",
     "severity": "Medium",
     "urgency": "Non-urgent",
-    "related_terms": ["heart enlargement", "cardiac enlargement"],
-    "found_in": ["Chest X-ray", "CT Chest"],
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫀",
+    "related_terms": [
+      "heart enlargement",
+      "cardiac enlargement"
+    ],
+    "synonyms_in_report": [
+      "enlarged cardiac silhouette",
+      "cardiomegaly noted",
+      "increased cardiothoracic ratio"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Hypertension",
+      "Cardiomyopathy",
+      "Heart failure",
+      "Valve disease",
+      "Pericardial effusion"
+    ],
     "action_note": "Discuss this finding with a healthcare professional.",
-    "ollama_prompt_hint": "Explain cardiomegaly to a patient in simple terms. Mention that it means an enlarged heart visible on imaging, possible causes like hypertension or cardiomyopathy, and that they should consult a cardiologist.",
-    "category": "Cardiac",
-    "common_causes": ["Hypertension", "Cardiomyopathy", "Heart failure", "Valve disease"],
-    "follow_up": "Echocardiogram often recommended"
+    "follow_up": "Echocardiogram often recommended",
+    "icd_hint": "I51.7"
   },
   {
     "id": "T002",
     "term": "pleural effusion",
     "simple_meaning": "Fluid around the lungs",
-    "urdu_hindi": "پھیپھڑوں کے گرد پانی / फेफड़ों के आसपास पानी",
     "patient_explanation": "There is extra fluid in the space around the lungs.",
-    "clinical_context": "This can happen with infection, heart problems, or inflammation.",
+    "clinical_context": "Can result from heart failure, infection, malignancy, or inflammation. May cause breathlessness.",
     "body_system": "Lung",
+    "category": "Pulmonary",
     "severity": "Medium",
     "urgency": "Semi-urgent",
-    "related_terms": ["fluid around lung", "pleural fluid"],
-    "found_in": ["Chest X-ray", "CT Chest"],
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "fluid around lung",
+      "pleural fluid"
+    ],
+    "synonyms_in_report": [
+      "bilateral pleural effusions",
+      "small left pleural effusion",
+      "blunting of costophrenic angle"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest",
+      "Ultrasound"
+    ],
+    "common_causes": [
+      "Heart failure",
+      "Pneumonia",
+      "Malignancy",
+      "Liver cirrhosis",
+      "Tuberculosis"
+    ],
     "action_note": "A doctor can explain the cause and next steps.",
-    "ollama_prompt_hint": "Explain pleural effusion in simple language. Describe it as fluid buildup around the lungs, mention it can cause breathlessness, and that causes include infections, heart failure, or cancer.",
-    "category": "Pulmonary",
-    "common_causes": ["Heart failure", "Pneumonia", "Malignancy", "Liver cirrhosis"],
-    "follow_up": "Thoracentesis may be needed for diagnosis or treatment"
+    "follow_up": "Thoracentesis may be needed for diagnosis or treatment",
+    "icd_hint": "J90"
   },
   {
     "id": "T003",
     "term": "atelectasis",
     "simple_meaning": "Part of the lung is not fully open",
-    "urdu_hindi": "پھیپھڑے کا حصہ بند ہونا / फेफड़े का हिस्सा बंद होना",
     "patient_explanation": "A small part of the lung is partly collapsed or not fully expanded.",
-    "clinical_context": "This is commonly seen on chest imaging and may be mild or temporary.",
+    "clinical_context": "Common post-operatively or due to mucus plugging. Usually temporary and reversible.",
     "body_system": "Lung",
+    "category": "Pulmonary",
     "severity": "Low",
     "urgency": "Non-urgent",
-    "related_terms": ["partial lung collapse", "lung under-expansion"],
-    "found_in": ["Chest X-ray", "CT Chest"],
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "partial lung collapse",
+      "lung under-expansion"
+    ],
+    "synonyms_in_report": [
+      "subsegmental atelectasis",
+      "discoid atelectasis",
+      "plate-like atelectasis",
+      "linear atelectasis"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Post-surgical",
+      "Mucus plugging",
+      "Compression",
+      "Prolonged bed rest"
+    ],
     "action_note": "This should be interpreted with symptoms and doctor advice.",
-    "ollama_prompt_hint": "Explain atelectasis simply. Tell the patient a small portion of lung is not fully inflated, often after surgery or due to a blockage, and that breathing exercises often help.",
-    "category": "Pulmonary",
-    "common_causes": ["Post-surgical", "Mucus plugging", "Compression", "Prolonged bed rest"],
-    "follow_up": "Breathing exercises or physiotherapy often recommended"
+    "follow_up": "Breathing exercises or physiotherapy often recommended",
+    "icd_hint": "J98.11"
   },
   {
     "id": "T004",
     "term": "fracture",
     "simple_meaning": "Broken bone",
-    "urdu_hindi": "ہڈی کا ٹوٹنا / हड्डी का टूटना",
     "patient_explanation": "A bone is cracked or broken.",
-    "clinical_context": "This is commonly seen on X-rays after injury or trauma.",
+    "clinical_context": "Seen on X-rays after injury. Can be cortical, hairline, comminuted, or pathological.",
     "body_system": "Bone",
+    "category": "Musculoskeletal",
     "severity": "High",
     "urgency": "Urgent",
-    "related_terms": ["broken bone", "bone break", "cortical break"],
-    "found_in": ["X-ray", "CT Scan"],
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "broken bone",
+      "bone break",
+      "cortical break"
+    ],
+    "synonyms_in_report": [
+      "acute fracture",
+      "hairline fracture",
+      "comminuted fracture",
+      "pathological fracture",
+      "cortical breach"
+    ],
+    "found_in": [
+      "X-ray",
+      "CT Scan"
+    ],
+    "common_causes": [
+      "Trauma",
+      "Osteoporosis",
+      "Stress injury",
+      "Pathological fracture"
+    ],
     "action_note": "Medical review is needed to decide treatment.",
-    "ollama_prompt_hint": "Explain a bone fracture to a patient. Describe it as a break or crack in the bone, mention types (hairline, displaced), and that treatment depends on severity ranging from casting to surgery.",
-    "category": "Musculoskeletal",
-    "common_causes": ["Trauma", "Osteoporosis", "Stress injury", "Pathological (cancer)"],
-    "follow_up": "Orthopaedic consultation and immobilization"
+    "follow_up": "Orthopaedic consultation and immobilization",
+    "icd_hint": "S00-S99"
   },
   {
     "id": "T005",
     "term": "consolidation",
     "simple_meaning": "Area of lung filled with infection or fluid",
-    "urdu_hindi": "پھیپھڑے میں جمع ہونا / फेफड़े में भराव",
     "patient_explanation": "Part of the lung appears denser than normal, often due to infection or inflammation.",
-    "clinical_context": "Commonly seen in pneumonia or lung infections.",
+    "clinical_context": "Often seen with pneumonia. Air is replaced by fluid, pus, or cells.",
     "body_system": "Lung",
+    "category": "Pulmonary",
     "severity": "Medium",
     "urgency": "Semi-urgent",
-    "related_terms": ["pneumonic consolidation", "airspace disease", "opacity"],
-    "found_in": ["Chest X-ray", "CT Chest"],
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "pneumonic consolidation",
+      "airspace disease",
+      "opacity"
+    ],
+    "synonyms_in_report": [
+      "airspace consolidation",
+      "lobar consolidation",
+      "patchy consolidation",
+      "alveolar opacification"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Pneumonia",
+      "Aspiration",
+      "Pulmonary edema",
+      "Lung cancer"
+    ],
     "action_note": "A healthcare professional can explain the cause and treatment if needed.",
-    "ollama_prompt_hint": "Explain lung consolidation in simple terms. Say that part of the lung is filled with infection, fluid, or cells instead of air, and is most commonly due to pneumonia requiring antibiotics.",
-    "category": "Pulmonary",
-    "common_causes": ["Pneumonia", "Aspiration", "Pulmonary edema", "Lung cancer"],
-    "follow_up": "Antibiotics if infective; repeat imaging to confirm resolution"
+    "follow_up": "Antibiotics if infective; repeat imaging may confirm resolution",
+    "icd_hint": "J18.9"
   },
   {
     "id": "T006",
     "term": "pneumothorax",
     "simple_meaning": "Collapsed lung",
-    "urdu_hindi": "پھیپھڑے کا گرنا / फेफड़े का गिरना",
     "patient_explanation": "Air is trapped around the lung, which can cause part of the lung to collapse.",
-    "clinical_context": "This may require urgent medical attention depending on the size and symptoms.",
+    "clinical_context": "Can be spontaneous or traumatic. Tension pneumothorax is a medical emergency.",
     "body_system": "Lung",
+    "category": "Pulmonary",
     "severity": "High",
     "urgency": "Urgent",
-    "related_terms": ["collapsed lung", "air in pleural space", "tension pneumothorax"],
-    "found_in": ["Chest X-ray", "CT Chest"],
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "collapsed lung",
+      "air in pleural space",
+      "tension pneumothorax"
+    ],
+    "synonyms_in_report": [
+      "right-sided pneumothorax",
+      "small apical pneumothorax",
+      "tension pneumothorax"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Trauma",
+      "Spontaneous",
+      "Ventilator complication",
+      "Procedure-related"
+    ],
     "action_note": "This should be reviewed urgently by a healthcare professional.",
-    "ollama_prompt_hint": "Explain pneumothorax urgently but calmly. Say air has entered the space around the lung causing it to partially or fully collapse, and that it may need a needle or tube to fix.",
-    "category": "Pulmonary",
-    "common_causes": ["Trauma", "Spontaneous (tall thin patients)", "Ventilator complication", "Procedure-related"],
-    "follow_up": "Urgent chest drain if large; observation if small"
+    "follow_up": "Urgent chest drain if large; observation if small",
+    "icd_hint": "J93.9"
   },
   {
     "id": "T007",
     "term": "fibrosis",
     "simple_meaning": "Scarring in tissue",
-    "urdu_hindi": "بافتوں میں داغ / ऊतकों में निशान",
     "patient_explanation": "There is scarring in part of the tissue seen on the scan.",
-    "clinical_context": "Fibrosis can occur after inflammation or long-term disease.",
+    "clinical_context": "Result of chronic inflammation. Can reduce lung flexibility.",
     "body_system": "Lung",
+    "category": "Pulmonary",
     "severity": "Medium",
     "urgency": "Non-urgent",
-    "related_terms": ["scar tissue", "lung scarring", "pulmonary fibrosis"],
-    "found_in": ["CT Chest", "Chest X-ray"],
+    "red_flag": false,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "scar tissue",
+      "lung scarring",
+      "pulmonary fibrosis"
+    ],
+    "synonyms_in_report": [
+      "pulmonary fibrosis",
+      "interstitial fibrosis",
+      "honeycombing",
+      "reticular pattern",
+      "traction bronchiectasis"
+    ],
+    "found_in": [
+      "CT Chest",
+      "Chest X-ray"
+    ],
+    "common_causes": [
+      "Previous infection",
+      "Autoimmune disease",
+      "Drug toxicity",
+      "Radiation"
+    ],
     "action_note": "A doctor can explain whether follow-up is needed.",
-    "ollama_prompt_hint": "Explain lung fibrosis simply. Say that over time, inflammation or disease caused scarring in the lung tissue, which can reduce lung capacity, and that management focuses on slowing progression.",
-    "category": "Pulmonary",
-    "common_causes": ["IPF", "Autoimmune disease", "Previous infection", "Drug toxicity"],
-    "follow_up": "Pulmonologist review; PFTs and HRCT"
+    "follow_up": "Pulmonologist review; PFTs and HRCT may be considered",
+    "icd_hint": "J84.10"
   },
   {
     "id": "T008",
     "term": "hemorrhage",
     "simple_meaning": "Bleeding",
-    "urdu_hindi": "خون بہنا / रक्तस्राव",
     "patient_explanation": "Bleeding has been detected in the scanned area.",
-    "clinical_context": "This may occur due to injury or medical conditions.",
+    "clinical_context": "In brain imaging this may include subdural, epidural, subarachnoid, or intracerebral bleeding.",
     "body_system": "Brain",
+    "category": "Neurological",
     "severity": "High",
     "urgency": "Urgent",
-    "related_terms": ["bleed", "brain bleed", "intracranial hemorrhage", "haematoma"],
-    "found_in": ["CT Brain", "MRI Brain"],
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "bleed",
+      "brain bleed",
+      "intracranial hemorrhage",
+      "haematoma"
+    ],
+    "synonyms_in_report": [
+      "acute hemorrhage",
+      "subdural haematoma",
+      "subarachnoid hemorrhage",
+      "intracerebral bleed",
+      "hyperdense collection"
+    ],
+    "found_in": [
+      "CT Brain",
+      "MRI Brain"
+    ],
+    "common_causes": [
+      "Trauma",
+      "Hypertension",
+      "Aneurysm rupture",
+      "Blood thinners",
+      "AVM"
+    ],
     "action_note": "Urgent medical review may be needed.",
-    "ollama_prompt_hint": "Explain brain hemorrhage urgently but clearly. Say there is active bleeding inside or around the brain, and depending on the size and location it may need urgent treatment or close monitoring.",
-    "category": "Neurological",
-    "common_causes": ["Trauma", "Hypertension", "Aneurysm rupture", "Blood thinners"],
-    "follow_up": "Neurosurgery review; blood pressure control"
+    "follow_up": "Neurosurgery review; blood pressure control may be needed",
+    "icd_hint": "I62.9"
   },
   {
     "id": "T009",
     "term": "edema",
     "simple_meaning": "Swelling caused by fluid",
-    "urdu_hindi": "سوجن / सूजन",
     "patient_explanation": "Extra fluid is causing swelling in the tissue.",
-    "clinical_context": "Edema can occur in many body areas due to inflammation or illness.",
+    "clinical_context": "Can occur in many areas. Significance depends on location and cause.",
     "body_system": "General",
+    "category": "General",
     "severity": "Medium",
     "urgency": "Varies",
-    "related_terms": ["swelling", "fluid build-up", "cerebral edema"],
-    "found_in": ["MRI", "CT Scan", "X-ray"],
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🩺",
+    "related_terms": [
+      "swelling",
+      "fluid build-up",
+      "cerebral edema"
+    ],
+    "synonyms_in_report": [
+      "vasogenic edema",
+      "perilesional edema",
+      "cytotoxic edema",
+      "pitting edema on imaging"
+    ],
+    "found_in": [
+      "MRI",
+      "CT Scan",
+      "X-ray"
+    ],
+    "common_causes": [
+      "Heart failure",
+      "Renal disease",
+      "Trauma",
+      "Inflammation",
+      "Tumour"
+    ],
     "action_note": "The cause should be discussed with a healthcare professional.",
-    "ollama_prompt_hint": "Explain edema simply. Say excess fluid has built up in the tissue causing swelling. In the brain it can increase pressure; in limbs it may be from heart or kidney issues.",
-    "category": "General",
-    "common_causes": ["Heart failure", "Renal disease", "Trauma", "Inflammation"],
-    "follow_up": "Depends on location and severity"
+    "follow_up": "Depends on location and severity",
+    "icd_hint": "R60.9"
   },
   {
     "id": "T010",
     "term": "lesion",
     "simple_meaning": "Abnormal area of tissue",
-    "urdu_hindi": "غیر معمولی جگہ / असामान्य क्षेत्र",
     "patient_explanation": "An area looks different from normal tissue. It does not always mean cancer.",
-    "clinical_context": "This term is used when imaging shows an area needing description or follow-up.",
+    "clinical_context": "Broad term covering any focal abnormality. Nature depends on size, location, and imaging features.",
     "body_system": "General",
+    "category": "General",
     "severity": "Medium",
     "urgency": "Non-urgent",
-    "related_terms": ["abnormal tissue", "small abnormal spot", "focal lesion"],
-    "found_in": ["MRI", "CT Scan", "Ultrasound"],
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🩺",
+    "related_terms": [
+      "abnormal tissue",
+      "small abnormal spot",
+      "focal lesion"
+    ],
+    "synonyms_in_report": [
+      "focal lesion",
+      "space-occupying lesion",
+      "hypodense lesion",
+      "enhancing lesion",
+      "ring-enhancing lesion"
+    ],
+    "found_in": [
+      "MRI",
+      "CT Scan",
+      "Ultrasound"
+    ],
+    "common_causes": [
+      "Infection",
+      "Cyst",
+      "Benign tumor",
+      "Malignancy",
+      "Infarct"
+    ],
     "action_note": "Further evaluation may be recommended.",
-    "ollama_prompt_hint": "Explain lesion gently. Tell the patient it simply means an area that looks different, does not automatically mean cancer, and further tests will clarify its nature.",
-    "category": "General",
-    "common_causes": ["Infection", "Cyst", "Benign tumor", "Malignancy"],
-    "follow_up": "MRI with contrast or biopsy may be needed"
+    "follow_up": "MRI with contrast or biopsy may be needed",
+    "icd_hint": "R89.9"
   },
   {
     "id": "T011",
     "term": "nodule",
     "simple_meaning": "Small spot or growth",
-    "urdu_hindi": "چھوٹی گانٹھ / छोटी गांठ",
     "patient_explanation": "A small spot was seen on the scan.",
-    "clinical_context": "Nodules are common and may need follow-up depending on size and appearance.",
+    "clinical_context": "Lung nodules are commonly monitored depending on size and appearance.",
     "body_system": "Lung",
+    "category": "Pulmonary",
     "severity": "Medium",
     "urgency": "Non-urgent",
-    "related_terms": ["small growth", "small spot", "pulmonary nodule", "lung nodule"],
-    "found_in": ["CT Chest", "Chest X-ray"],
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "small growth",
+      "small spot",
+      "pulmonary nodule",
+      "lung nodule"
+    ],
+    "synonyms_in_report": [
+      "pulmonary nodule",
+      "solid nodule",
+      "subsolid nodule",
+      "ground glass nodule",
+      "calcified nodule"
+    ],
+    "found_in": [
+      "CT Chest",
+      "Chest X-ray"
+    ],
+    "common_causes": [
+      "Old infection",
+      "Benign tumour",
+      "Early malignancy",
+      "Sarcoidosis"
+    ],
     "action_note": "A doctor may recommend monitoring or additional imaging.",
-    "ollama_prompt_hint": "Explain a lung nodule calmly. Say it is a small spot in the lung, most are benign (caused by old infections), but doctors will monitor it with repeat scans to ensure it doesn't change.",
-    "category": "Pulmonary",
-    "common_causes": ["Old infection (TB, fungi)", "Benign tumour", "Early malignancy", "Sarcoidosis"],
-    "follow_up": "Fleischner Society guidelines for follow-up CT"
+    "follow_up": "Follow-up CT may be recommended depending on guidelines",
+    "icd_hint": "R91.1"
   },
   {
     "id": "T012",
     "term": "calcification",
     "simple_meaning": "Calcium build-up",
-    "urdu_hindi": "کیلشیم جمع ہونا / कैल्शियम का जमाव",
     "patient_explanation": "There is calcium build-up in the tissue or blood vessel.",
-    "clinical_context": "Calcification can occur with aging or previous inflammation.",
+    "clinical_context": "Can occur with aging, previous inflammation, or vascular disease.",
     "body_system": "General",
+    "category": "General",
     "severity": "Low",
     "urgency": "Non-urgent",
-    "related_terms": ["calcium deposit", "dystrophic calcification"],
-    "found_in": ["CT Scan", "X-ray"],
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🩺",
+    "related_terms": [
+      "calcium deposit",
+      "dystrophic calcification"
+    ],
+    "synonyms_in_report": [
+      "calcified deposit",
+      "dystrophic calcification",
+      "vascular calcification",
+      "eggshell calcification",
+      "popcorn calcification"
+    ],
+    "found_in": [
+      "CT Scan",
+      "X-ray"
+    ],
+    "common_causes": [
+      "Aging",
+      "Previous infection",
+      "Atherosclerosis",
+      "Metabolic conditions"
+    ],
     "action_note": "This is often a chronic or older finding.",
-    "ollama_prompt_hint": "Explain calcification reassuringly. Say calcium has deposited in tissue over time, similar to chalk forming, often from old injuries or infections. It is usually benign.",
-    "category": "General",
-    "common_causes": ["Aging", "Previous infection", "Atherosclerosis", "Metabolic conditions"],
-    "follow_up": "Usually no action required unless in a blood vessel"
+    "follow_up": "Usually no action required unless clinically significant",
+    "icd_hint": "M61.9"
   },
   {
     "id": "T013",
     "term": "degenerative changes",
     "simple_meaning": "Wear and tear changes",
-    "urdu_hindi": "جوڑوں کی خرابی / जोड़ों की टूट-फूट",
     "patient_explanation": "The scan shows changes that commonly happen over time with aging or joint use.",
-    "clinical_context": "Often seen in joints or the spine.",
+    "clinical_context": "Includes osteophytes, disc space narrowing, and subchondral sclerosis. Very common with age.",
     "body_system": "Bone",
+    "category": "Musculoskeletal",
     "severity": "Low",
     "urgency": "Non-urgent",
-    "related_terms": ["wear and tear", "osteoarthritis", "spondylosis", "disc degeneration"],
-    "found_in": ["X-ray", "MRI"],
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "wear and tear",
+      "osteoarthritis",
+      "spondylosis",
+      "disc degeneration"
+    ],
+    "synonyms_in_report": [
+      "degenerative disc disease",
+      "spondylotic changes",
+      "facet joint degeneration",
+      "subchondral sclerosis"
+    ],
+    "found_in": [
+      "X-ray",
+      "MRI"
+    ],
+    "common_causes": [
+      "Aging",
+      "Repetitive strain",
+      "Previous injury",
+      "Obesity"
+    ],
     "action_note": "A doctor can explain if treatment or exercises may help.",
-    "ollama_prompt_hint": "Explain degenerative changes simply. Tell the patient these are normal wear-and-tear changes that come with age in the joints or spine, and that pain management and physiotherapy can help.",
-    "category": "Musculoskeletal",
-    "common_causes": ["Aging", "Repetitive strain", "Previous injury", "Obesity"],
-    "follow_up": "Physiotherapy; pain management; orthopaedic review if severe"
+    "follow_up": "Physiotherapy; pain management; orthopaedic review if severe",
+    "icd_hint": "M47.9"
   },
   {
     "id": "T014",
     "term": "unremarkable",
     "simple_meaning": "Normal appearance",
-    "urdu_hindi": "معمول کے مطابق / सामान्य दिखना",
     "patient_explanation": "The scanned area looks normal and no significant problem was seen.",
-    "clinical_context": "Often used in radiology reports to describe normal findings.",
+    "clinical_context": "Standard radiology term for normal findings.",
     "body_system": "General",
+    "category": "General",
     "severity": "Low",
     "urgency": "Non-urgent",
-    "related_terms": ["normal", "no abnormality", "within normal limits", "WNL"],
-    "found_in": ["X-ray", "CT", "MRI"],
-    "action_note": "This is generally reassuring.",
-    "ollama_prompt_hint": "Reassure the patient that 'unremarkable' is good news — it means the organ or area looks completely normal on imaging.",
-    "category": "General",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "✅",
+    "related_terms": [
+      "normal",
+      "no abnormality",
+      "within normal limits",
+      "WNL"
+    ],
+    "synonyms_in_report": [
+      "within normal limits",
+      "no acute findings",
+      "no significant abnormality",
+      "grossly unremarkable"
+    ],
+    "found_in": [
+      "X-ray",
+      "CT",
+      "MRI"
+    ],
     "common_causes": [],
-    "follow_up": "No action required"
+    "action_note": "This is generally reassuring.",
+    "follow_up": "No action required",
+    "icd_hint": "Z00.00"
   },
   {
     "id": "T015",
     "term": "mass",
     "simple_meaning": "Larger abnormal lump or growth",
-    "urdu_hindi": "بڑی گانٹھ / बड़ी गांठ",
     "patient_explanation": "A larger abnormal lump or growth was seen on the scan.",
-    "clinical_context": "A mass can have many causes and does not automatically mean cancer.",
+    "clinical_context": "Can be benign or malignant and often needs further characterization.",
     "body_system": "General",
+    "category": "General",
     "severity": "High",
     "urgency": "Semi-urgent",
-    "related_terms": ["growth", "abnormal mass", "space-occupying lesion"],
-    "found_in": ["CT Scan", "MRI", "Ultrasound", "X-ray"],
+    "red_flag": true,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🩺",
+    "related_terms": [
+      "growth",
+      "abnormal mass",
+      "space-occupying lesion"
+    ],
+    "synonyms_in_report": [
+      "soft tissue mass",
+      "heterogeneous mass",
+      "well-defined mass",
+      "lobulated mass",
+      "enhancing mass"
+    ],
+    "found_in": [
+      "CT Scan",
+      "MRI",
+      "Ultrasound",
+      "X-ray"
+    ],
+    "common_causes": [
+      "Cyst",
+      "Benign tumour",
+      "Malignancy",
+      "Lymphoma",
+      "Abscess"
+    ],
     "action_note": "This should be discussed with a healthcare professional.",
-    "ollama_prompt_hint": "Explain a mass finding clearly but not alarmingly. Say a growth larger than 3cm was seen, it requires further evaluation like biopsy, and the cause may be benign or need treatment.",
-    "category": "General",
-    "common_causes": ["Cyst", "Benign tumour", "Malignancy", "Lymphoma", "Abscess"],
-    "follow_up": "Biopsy or further imaging often required"
+    "follow_up": "Biopsy or further imaging often required",
+    "icd_hint": "R22.9"
   },
   {
     "id": "T016",
     "term": "infiltrate",
     "simple_meaning": "Abnormal material in lung tissue",
-    "urdu_hindi": "پھیپھڑے میں غیر معمولی مواد / फेफड़े में असामान्य सामग्री",
     "patient_explanation": "Part of the lung shows changes that may be due to infection, fluid, or inflammation.",
-    "clinical_context": "Commonly mentioned in chest imaging when pneumonia or inflammation is suspected.",
+    "clinical_context": "Non-specific term. Often requires clinical correlation.",
     "body_system": "Lung",
+    "category": "Pulmonary",
     "severity": "Medium",
     "urgency": "Semi-urgent",
-    "related_terms": ["lung infiltrate", "inflammatory change", "interstitial infiltrate"],
-    "found_in": ["Chest X-ray", "CT Chest"],
+    "red_flag": false,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "lung infiltrate",
+      "inflammatory change",
+      "interstitial infiltrate"
+    ],
+    "synonyms_in_report": [
+      "bilateral infiltrates",
+      "perihilar infiltrates",
+      "interstitial infiltrate",
+      "alveolar infiltrate"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Pneumonia",
+      "Aspiration",
+      "Pulmonary edema",
+      "Interstitial lung disease"
+    ],
     "action_note": "A doctor can explain whether treatment or follow-up is needed.",
-    "ollama_prompt_hint": "Explain lung infiltrate simply. Say the X-ray shows an area in the lung that is hazy or cloudy, suggesting infection, fluid, or inflammation, and further tests will identify the cause.",
-    "category": "Pulmonary",
-    "common_causes": ["Pneumonia", "Aspiration", "Pulmonary edema", "Interstitial lung disease"],
-    "follow_up": "Cultures; antibiotics if infective; repeat imaging"
+    "follow_up": "Cultures; antibiotics if infective; repeat imaging",
+    "icd_hint": "J18.9"
   },
   {
     "id": "T017",
     "term": "hyperinflation",
     "simple_meaning": "Lungs look over-expanded",
-    "urdu_hindi": "پھیپھڑوں کا حد سے زیادہ پھولنا / फेफड़ों का अत्यधिक फूलना",
     "patient_explanation": "The lungs appear more inflated than usual on the scan.",
-    "clinical_context": "This may be seen in conditions that affect breathing, such as COPD or asthma.",
+    "clinical_context": "Indicates air trapping and may be associated with COPD or asthma.",
     "body_system": "Lung",
+    "category": "Pulmonary",
     "severity": "Medium",
     "urgency": "Non-urgent",
-    "related_terms": ["overinflated lungs", "increased lung volume", "air trapping"],
-    "found_in": ["Chest X-ray", "CT Chest"],
+    "red_flag": false,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "overinflated lungs",
+      "increased lung volume",
+      "air trapping"
+    ],
+    "synonyms_in_report": [
+      "bilateral hyperinflation",
+      "barrel chest appearance",
+      "flattened hemidiaphragms",
+      "increased AP diameter"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "COPD",
+      "Asthma",
+      "Air trapping",
+      "Emphysema"
+    ],
     "action_note": "This should be interpreted with breathing symptoms and medical history.",
-    "ollama_prompt_hint": "Explain hyperinflation clearly. Say the lungs look bigger than normal on the X-ray, which can happen when air gets trapped — common in COPD or asthma — and inhalers can help.",
-    "category": "Pulmonary",
-    "common_causes": ["COPD", "Asthma", "Air trapping", "Emphysema"],
-    "follow_up": "Pulmonary function tests; respiratory physician review"
+    "follow_up": "Pulmonary function tests; respiratory physician review",
+    "icd_hint": "J43.9"
   },
   {
     "id": "T018",
     "term": "pleural thickening",
     "simple_meaning": "Thickening around the lung lining",
-    "urdu_hindi": "پھیپھڑوں کی جھلی کا موٹا ہونا / फेफड़े की झिल्ली का मोटा होना",
     "patient_explanation": "The lining around the lungs appears thicker than usual.",
-    "clinical_context": "This can occur after infection, inflammation, or previous exposure/injury.",
+    "clinical_context": "Can occur after infection, inflammation, exposure, or injury.",
     "body_system": "Lung",
+    "category": "Pulmonary",
     "severity": "Low",
     "urgency": "Non-urgent",
-    "related_terms": ["thickened pleura", "lung lining thickening", "calcified pleura"],
-    "found_in": ["Chest X-ray", "CT Chest"],
+    "red_flag": false,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "thickened pleura",
+      "lung lining thickening",
+      "calcified pleura"
+    ],
+    "synonyms_in_report": [
+      "bilateral pleural thickening",
+      "calcified pleural plaques",
+      "diffuse pleural thickening"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Previous infection",
+      "Asbestos exposure",
+      "Previous hemothorax",
+      "Mesothelioma"
+    ],
     "action_note": "A healthcare professional can explain if follow-up is required.",
-    "ollama_prompt_hint": "Explain pleural thickening simply. Say the lining around the lungs has become thicker, often from old infections or inflammation, and is usually harmless but needs monitoring.",
-    "category": "Pulmonary",
-    "common_causes": ["Previous infection (TB, empyema)", "Asbestos exposure", "Previous hemothorax", "Mesothelioma"],
-    "follow_up": "Occupational history important; CT for detailed evaluation"
+    "follow_up": "Occupational history important; CT may be needed",
+    "icd_hint": "J92.9"
   },
   {
     "id": "T019",
     "term": "emphysema",
     "simple_meaning": "Damage to air spaces in the lungs",
-    "urdu_hindi": "پھیپھڑوں کی ہوا کی تھیلیوں کا پھٹنا / फेफड़ों में हवा की थैलियों का नष्ट होना",
     "patient_explanation": "The scan shows changes in the lungs that can make breathing less efficient.",
-    "clinical_context": "Often related to long-term lung irritation or smoking history.",
+    "clinical_context": "Permanent air-space damage. Often related to smoking or chronic lung irritation.",
     "body_system": "Lung",
+    "category": "Pulmonary",
     "severity": "Medium",
     "urgency": "Non-urgent",
-    "related_terms": ["COPD changes", "air space damage", "bullous emphysema"],
-    "found_in": ["Chest X-ray", "CT Chest"],
+    "red_flag": false,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "COPD changes",
+      "air space damage",
+      "bullous emphysema"
+    ],
+    "synonyms_in_report": [
+      "centrilobular emphysema",
+      "panlobular emphysema",
+      "paraseptal emphysema",
+      "bullae",
+      "blebs"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Smoking",
+      "Alpha-1 antitrypsin deficiency",
+      "Air pollution",
+      "Occupational dust"
+    ],
     "action_note": "Discuss this with a healthcare professional, especially if there are breathing symptoms.",
-    "ollama_prompt_hint": "Explain emphysema carefully. Say the small air sacs in the lungs have been damaged and merged into larger, less efficient spaces — commonly from smoking — making breathing harder over time.",
-    "category": "Pulmonary",
-    "common_causes": ["Smoking", "Alpha-1 antitrypsin deficiency", "Air pollution", "Occupational dust"],
-    "follow_up": "Pulmonology referral; smoking cessation; bronchodilators"
+    "follow_up": "Pulmonology referral; smoking cessation; bronchodilators",
+    "icd_hint": "J43.9"
   },
   {
     "id": "T020",
     "term": "pulmonary edema",
     "simple_meaning": "Fluid in the lungs",
-    "urdu_hindi": "پھیپھڑوں میں پانی / फेफड़ों में पानी",
     "patient_explanation": "There is extra fluid in the lung tissue.",
-    "clinical_context": "This may be related to heart or lung conditions.",
+    "clinical_context": "Can be related to heart failure, kidney problems, or fluid overload.",
     "body_system": "Lung",
+    "category": "Pulmonary",
     "severity": "High",
     "urgency": "Urgent",
-    "related_terms": ["fluid in lungs", "lung edema", "flash pulmonary edema"],
-    "found_in": ["Chest X-ray", "CT Chest"],
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "fluid in lungs",
+      "lung edema",
+      "flash pulmonary edema"
+    ],
+    "synonyms_in_report": [
+      "pulmonary congestion",
+      "bat-wing opacity",
+      "perihilar haziness",
+      "Kerley B lines"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Heart failure",
+      "ARDS",
+      "Kidney failure",
+      "Fluid overload"
+    ],
     "action_note": "This should be reviewed promptly by a healthcare professional.",
-    "ollama_prompt_hint": "Explain pulmonary edema urgently. Say fluid has leaked into the lungs making it hard to breathe, often from heart failure, and it needs prompt treatment with diuretics and oxygen.",
-    "category": "Pulmonary",
-    "common_causes": ["Heart failure", "ARDS", "Kidney failure", "Fluid overload"],
-    "follow_up": "Urgent cardiology assessment; diuretics; oxygen"
+    "follow_up": "Urgent assessment; oxygen/diuretics may be needed",
+    "icd_hint": "J81.1"
   },
   {
     "id": "T021",
     "term": "midline shift",
     "simple_meaning": "Brain structures pushed from center",
-    "urdu_hindi": "دماغ کے مرکز سے ہٹنا / मस्तिष्क का केंद्र से खिसकना",
     "patient_explanation": "Some brain structures appear pushed away from their usual position.",
-    "clinical_context": "This can happen when there is swelling, bleeding, or pressure inside the skull.",
+    "clinical_context": "Can happen when swelling, bleeding, or pressure pushes brain structures.",
     "body_system": "Brain",
+    "category": "Neurological",
     "severity": "High",
     "urgency": "Urgent",
-    "related_terms": ["brain shift", "mass effect", "herniation"],
-    "found_in": ["CT Brain", "MRI Brain"],
+    "red_flag": true,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "brain shift",
+      "mass effect",
+      "herniation"
+    ],
+    "synonyms_in_report": [
+      "midline shift of Xmm",
+      "mass effect with midline shift",
+      "subfalcine herniation"
+    ],
+    "found_in": [
+      "CT Brain",
+      "MRI Brain"
+    ],
+    "common_causes": [
+      "Large haematoma",
+      "Tumour",
+      "Severe cerebral edema",
+      "Abscess"
+    ],
     "action_note": "This usually needs urgent medical review.",
-    "ollama_prompt_hint": "Explain midline shift urgently. Say pressure inside the skull is pushing brain structures to one side, which is a serious sign requiring urgent neurosurgical evaluation.",
-    "category": "Neurological",
-    "common_causes": ["Large haematoma", "Tumour", "Severe cerebral edema", "Abscess"],
-    "follow_up": "Neurosurgical emergency; ICP monitoring"
+    "follow_up": "Neurosurgical emergency; ICP monitoring may be needed",
+    "icd_hint": "G93.5"
   },
   {
     "id": "T022",
     "term": "ischemia",
     "simple_meaning": "Reduced blood flow",
-    "urdu_hindi": "خون کی کمی / खून की कमी",
     "patient_explanation": "An area may not be getting enough blood supply.",
     "clinical_context": "In brain imaging, this can relate to stroke-like changes.",
     "body_system": "Brain",
+    "category": "Neurological",
     "severity": "High",
     "urgency": "Urgent",
-    "related_terms": ["reduced blood supply", "lack of blood flow", "cerebral ischemia"],
-    "found_in": ["CT Brain", "MRI Brain"],
+    "red_flag": true,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "reduced blood supply",
+      "lack of blood flow",
+      "cerebral ischemia"
+    ],
+    "synonyms_in_report": [
+      "acute ischemic change",
+      "diffusion restriction",
+      "early ischemic changes",
+      "loss of grey-white differentiation"
+    ],
+    "found_in": [
+      "CT Brain",
+      "MRI Brain"
+    ],
+    "common_causes": [
+      "Emboli",
+      "Thrombosis",
+      "Vasospasm",
+      "Hypotension"
+    ],
     "action_note": "This should be reviewed by a healthcare professional.",
-    "ollama_prompt_hint": "Explain ischemia urgently. Say an area of the brain is not getting enough blood, which can lead to a stroke if untreated, and immediate medical assessment is critical.",
-    "category": "Neurological",
-    "common_causes": ["Emboli", "Thrombosis", "Vasospasm", "Hypotension"],
-    "follow_up": "Stroke team assessment; clot-busting medication if within window"
+    "follow_up": "Stroke team assessment may be needed",
+    "icd_hint": "I63.9"
   },
   {
     "id": "T023",
     "term": "infarct",
     "simple_meaning": "Tissue damage from reduced blood supply",
-    "urdu_hindi": "خون بند ہونے سے نقصان / रक्त की कमी से ऊतक क्षति",
     "patient_explanation": "An area of tissue may have been damaged because of reduced blood flow.",
     "clinical_context": "In brain reports, this often refers to stroke-related damage.",
     "body_system": "Brain",
+    "category": "Neurological",
     "severity": "High",
     "urgency": "Urgent",
-    "related_terms": ["stroke", "tissue damage", "old infarct", "lacunar infarct"],
-    "found_in": ["CT Brain", "MRI Brain"],
+    "red_flag": true,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "stroke",
+      "tissue damage",
+      "old infarct",
+      "lacunar infarct"
+    ],
+    "synonyms_in_report": [
+      "acute infarct",
+      "established infarct",
+      "lacunar infarct",
+      "cortical infarct",
+      "chronic infarct"
+    ],
+    "found_in": [
+      "CT Brain",
+      "MRI Brain"
+    ],
+    "common_causes": [
+      "Embolic stroke",
+      "Thrombotic stroke",
+      "Hypertension",
+      "Atrial fibrillation"
+    ],
     "action_note": "A doctor can explain whether it is new or old and what it means.",
-    "ollama_prompt_hint": "Explain infarct clearly. Say a stroke has caused permanent damage to a small area of brain tissue due to loss of blood supply. Old infarcts are from past events; new ones are emergencies.",
-    "category": "Neurological",
-    "common_causes": ["Embolic stroke", "Thrombotic stroke", "Hypertension", "Atrial fibrillation"],
-    "follow_up": "Neurology; anticoagulation or antiplatelet therapy"
+    "follow_up": "Neurology review; antiplatelet or anticoagulation depending on cause",
+    "icd_hint": "I63.9"
   },
   {
     "id": "T024",
     "term": "atrophy",
     "simple_meaning": "Shrinkage or loss of tissue volume",
-    "urdu_hindi": "ٹشو کا سکڑنا / ऊतक का सिकुड़ना",
     "patient_explanation": "Some tissue appears smaller than expected.",
     "clinical_context": "In brain imaging, mild atrophy can be age-related.",
     "body_system": "Brain",
+    "category": "Neurological",
     "severity": "Low",
     "urgency": "Non-urgent",
-    "related_terms": ["volume loss", "brain shrinkage", "cerebral atrophy", "cortical atrophy"],
-    "found_in": ["CT Brain", "MRI Brain"],
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "volume loss",
+      "brain shrinkage",
+      "cerebral atrophy",
+      "cortical atrophy"
+    ],
+    "synonyms_in_report": [
+      "global cerebral atrophy",
+      "cortical atrophy",
+      "cerebellar atrophy",
+      "age-related volume loss"
+    ],
+    "found_in": [
+      "CT Brain",
+      "MRI Brain"
+    ],
+    "common_causes": [
+      "Normal aging",
+      "Dementia",
+      "Alcohol use",
+      "Previous stroke"
+    ],
     "action_note": "A doctor can explain if this is expected for age or needs follow-up.",
-    "ollama_prompt_hint": "Explain brain atrophy gently. Say that the brain shows some reduction in size, which is normal with aging, but if more than expected for age, a neurologist may do further tests for memory conditions.",
-    "category": "Neurological",
-    "common_causes": ["Normal aging", "Dementia", "Alcohol use", "Previous stroke"],
-    "follow_up": "Neuropsychological assessment if symptomatic"
+    "follow_up": "Neuropsychological assessment if symptomatic",
+    "icd_hint": "G31.9"
   },
   {
     "id": "T025",
     "term": "osteophyte",
     "simple_meaning": "Bone spur",
-    "urdu_hindi": "ہڈی کی نوک / हड्डी की नोक",
     "patient_explanation": "Small bony outgrowths have formed at the edges of a joint.",
-    "clinical_context": "These are common in arthritic joints and the spine.",
+    "clinical_context": "A response to cartilage loss or wear-and-tear. Common with age.",
     "body_system": "Bone",
+    "category": "Musculoskeletal",
     "severity": "Low",
     "urgency": "Non-urgent",
-    "related_terms": ["bone spur", "marginal osteophyte", "spondylosis"],
-    "found_in": ["X-ray", "CT Scan", "MRI"],
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "bone spur",
+      "marginal osteophyte",
+      "spondylosis"
+    ],
+    "synonyms_in_report": [
+      "marginal osteophytes",
+      "anterior osteophytes",
+      "bridging osteophytes",
+      "syndesmophytes"
+    ],
+    "found_in": [
+      "X-ray",
+      "CT Scan",
+      "MRI"
+    ],
+    "common_causes": [
+      "Osteoarthritis",
+      "Aging",
+      "Joint overuse",
+      "Previous injury"
+    ],
     "action_note": "Usually age-related; physiotherapy or pain management may help.",
-    "ollama_prompt_hint": "Explain osteophytes simply. Say that extra bone has grown along joint edges as a response to wear and tear. They can cause pain if they press on nerves but are usually manageable.",
-    "category": "Musculoskeletal",
-    "common_causes": ["Osteoarthritis", "Aging", "Joint overuse", "Previous injury"],
-    "follow_up": "Pain management; physiotherapy; rarely surgery"
+    "follow_up": "Pain management; physiotherapy; rarely surgery",
+    "icd_hint": "M25.77"
   },
   {
     "id": "T026",
     "term": "disc herniation",
     "simple_meaning": "Slipped disc",
-    "urdu_hindi": "ریڑھ کی ہڈی کی ڈسک کا کھسکنا / रीढ़ की हड्डी की डिस्क का खिसकना",
     "patient_explanation": "One of the cushioning discs between spinal bones has bulged out of place.",
-    "clinical_context": "This can press on spinal nerves causing pain, numbness, or weakness.",
+    "clinical_context": "Most common in lower spine. Can press on nerves and cause sciatica-like symptoms.",
     "body_system": "Bone",
+    "category": "Musculoskeletal",
     "severity": "Medium",
     "urgency": "Semi-urgent",
-    "related_terms": ["slipped disc", "disc prolapse", "herniated nucleus pulposus", "disc protrusion"],
-    "found_in": ["MRI Spine", "CT Spine"],
+    "red_flag": false,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "slipped disc",
+      "disc prolapse",
+      "herniated nucleus pulposus",
+      "disc protrusion"
+    ],
+    "synonyms_in_report": [
+      "disc protrusion",
+      "disc extrusion",
+      "herniated nucleus pulposus",
+      "annular tear",
+      "posterior disc bulge"
+    ],
+    "found_in": [
+      "MRI Spine",
+      "CT Spine"
+    ],
+    "common_causes": [
+      "Aging",
+      "Heavy lifting",
+      "Sudden twisting",
+      "Trauma"
+    ],
     "action_note": "Neurosurgical or orthopaedic review may be needed depending on symptoms.",
-    "ollama_prompt_hint": "Explain disc herniation clearly. Say the soft cushion between two spinal bones has slipped out and may be pressing on a nerve, causing back or leg pain, and most cases improve with physiotherapy.",
-    "category": "Musculoskeletal",
-    "common_causes": ["Aging", "Heavy lifting", "Sudden twisting", "Trauma"],
-    "follow_up": "Physiotherapy; pain management; surgery if neurological deficit"
+    "follow_up": "Physiotherapy; pain management; surgery if neurological deficit",
+    "icd_hint": "M51.1"
   },
   {
     "id": "T027",
     "term": "hydrocephalus",
     "simple_meaning": "Fluid build-up in the brain",
-    "urdu_hindi": "دماغ میں پانی / दिमाग में पानी",
-    "patient_explanation": "Too much cerebrospinal fluid has built up inside the brain's cavities.",
-    "clinical_context": "This increases pressure inside the skull and can cause serious symptoms.",
+    "patient_explanation": "Too much cerebrospinal fluid has built up inside the brain cavities.",
+    "clinical_context": "Can increase pressure in the brain and may need urgent assessment.",
     "body_system": "Brain",
+    "category": "Neurological",
     "severity": "High",
     "urgency": "Urgent",
-    "related_terms": ["water on the brain", "dilated ventricles", "CSF obstruction"],
-    "found_in": ["CT Brain", "MRI Brain"],
+    "red_flag": true,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "water on the brain",
+      "dilated ventricles",
+      "CSF obstruction"
+    ],
+    "synonyms_in_report": [
+      "dilated ventricles",
+      "ventriculomegaly",
+      "obstructive hydrocephalus",
+      "communicating hydrocephalus",
+      "NPH"
+    ],
+    "found_in": [
+      "CT Brain",
+      "MRI Brain"
+    ],
+    "common_causes": [
+      "Obstruction to CSF flow",
+      "Meningitis",
+      "Tumour",
+      "Haemorrhage"
+    ],
     "action_note": "This usually requires urgent neurosurgical assessment.",
-    "ollama_prompt_hint": "Explain hydrocephalus clearly. Say there is too much fluid inside the cavities of the brain, which builds up pressure and can cause headaches, vomiting, or confusion — often treated with a shunt.",
-    "category": "Neurological",
-    "common_causes": ["Obstruction to CSF flow", "Meningitis", "Tumour", "Haemorrhage"],
-    "follow_up": "Neurosurgical review; ventriculoperitoneal shunt"
+    "follow_up": "Neurosurgical review; shunt may be needed",
+    "icd_hint": "G91.9"
   },
   {
     "id": "T028",
     "term": "lytic lesion",
     "simple_meaning": "Bone being destroyed",
-    "urdu_hindi": "ہڈی کا گھلنا / हड्डी का घुलना",
     "patient_explanation": "An area of bone appears to be breaking down or being eaten away.",
-    "clinical_context": "This can be caused by cancer spreading to bone, infections, or certain bone diseases.",
+    "clinical_context": "Can be aggressive and requires further assessment to find the cause.",
     "body_system": "Bone",
+    "category": "Musculoskeletal",
     "severity": "High",
     "urgency": "Semi-urgent",
-    "related_terms": ["bone destruction", "osteolysis", "metastatic lesion"],
-    "found_in": ["X-ray", "CT Scan", "MRI", "Bone Scan"],
+    "red_flag": true,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "bone destruction",
+      "osteolysis",
+      "metastatic lesion"
+    ],
+    "synonyms_in_report": [
+      "lytic lesion",
+      "permeative lytic lesion",
+      "punched-out lesion",
+      "osteolytic metastasis"
+    ],
+    "found_in": [
+      "X-ray",
+      "CT Scan",
+      "MRI",
+      "Bone Scan"
+    ],
+    "common_causes": [
+      "Metastatic cancer",
+      "Multiple myeloma",
+      "Osteomyelitis",
+      "Giant cell tumour"
+    ],
     "action_note": "This needs urgent follow-up with a specialist.",
-    "ollama_prompt_hint": "Explain a lytic lesion carefully. Say an area of bone is being destroyed, which can happen from cancer spread, infection, or certain bone conditions, and urgent further tests are needed.",
-    "category": "Musculoskeletal",
-    "common_causes": ["Metastatic cancer", "Multiple myeloma", "Osteomyelitis", "Giant cell tumour"],
-    "follow_up": "Oncology; bone biopsy; whole body staging"
+    "follow_up": "Oncology; bone biopsy; whole body staging",
+    "icd_hint": "C79.51"
   },
   {
     "id": "T029",
     "term": "ground glass opacity",
     "simple_meaning": "Hazy area in the lung",
-    "urdu_hindi": "پھیپھڑے میں دھندلا پن / फेफड़े में धुंधलापन",
-    "patient_explanation": "Part of the lung looks hazy, like frosted glass — the structures underneath can still be seen.",
-    "clinical_context": "Seen in infections, inflammation, or early lung disease. Was widely reported in COVID-19 chest CTs.",
+    "patient_explanation": "Part of the lung looks hazy, like frosted glass, while structures underneath may still be seen.",
+    "clinical_context": "Often reflects infection, inflammation, edema, or scarring depending on context.",
     "body_system": "Lung",
+    "category": "Pulmonary",
     "severity": "Medium",
     "urgency": "Semi-urgent",
-    "related_terms": ["GGO", "hazy opacity", "frosted glass", "COVID-19 lung changes"],
-    "found_in": ["CT Chest", "Chest X-ray"],
-    "action_note": "Follow-up imaging or clinical correlation needed.",
-    "ollama_prompt_hint": "Explain ground glass opacity clearly. Say part of the lung looks like frosted glass on the scan — hazy but you can see through it. It often means infection or inflammation and needs clinical correlation.",
-    "category": "Pulmonary",
-    "common_causes": ["COVID-19", "Viral pneumonia", "Pulmonary fibrosis", "Pulmonary edema"],
-    "follow_up": "Repeat CT in 3-6 months if no infection; PFTs"
+    "red_flag": false,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "GGO",
+      "hazy opacity",
+      "frosted glass",
+      "COVID-19 lung changes"
+    ],
+    "synonyms_in_report": [
+      "bilateral ground glass opacities",
+      "GGO",
+      "hazy opacity",
+      "multifocal ground glass",
+      "crazy paving pattern"
+    ],
+    "found_in": [
+      "CT Chest",
+      "Chest X-ray"
+    ],
+    "common_causes": [
+      "COVID-19",
+      "Viral pneumonia",
+      "Pulmonary fibrosis",
+      "Pulmonary edema"
+    ],
+    "action_note": "Follow-up imaging or clinical correlation may be needed.",
+    "follow_up": "Repeat CT in 3-6 months if persistent; PFTs",
+    "icd_hint": "J12.89"
   },
   {
     "id": "T030",
     "term": "lymphadenopathy",
     "simple_meaning": "Enlarged lymph nodes",
-    "urdu_hindi": "لمف نوڈ کا بڑھنا / लिम्फ नोड्स का बढ़ना",
-    "patient_explanation": "The lymph nodes (small glands in the body) appear larger than normal.",
-    "clinical_context": "Can be due to infection, inflammation, or in some cases cancer.",
+    "patient_explanation": "The lymph nodes appear larger than normal.",
+    "clinical_context": "Can occur with infection, inflammation, immune conditions, or cancer.",
     "body_system": "General",
+    "category": "General",
     "severity": "Medium",
     "urgency": "Semi-urgent",
-    "related_terms": ["enlarged lymph nodes", "lymph node enlargement", "adenopathy"],
-    "found_in": ["CT Chest", "CT Abdomen", "MRI", "Ultrasound"],
+    "red_flag": false,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🩺",
+    "related_terms": [
+      "enlarged lymph nodes",
+      "lymph node enlargement",
+      "adenopathy"
+    ],
+    "synonyms_in_report": [
+      "mediastinal lymphadenopathy",
+      "hilar adenopathy",
+      "axillary lymphadenopathy",
+      "necrotic lymph node"
+    ],
+    "found_in": [
+      "CT Chest",
+      "CT Abdomen",
+      "MRI",
+      "Ultrasound"
+    ],
+    "common_causes": [
+      "Infection",
+      "Lymphoma",
+      "Metastatic cancer",
+      "Sarcoidosis"
+    ],
     "action_note": "The cause needs to be determined with further tests.",
-    "ollama_prompt_hint": "Explain lymphadenopathy gently. Say the lymph nodes (small glands) are swollen, which commonly happens with infections but can also signal other conditions — a doctor will determine the cause.",
+    "follow_up": "Blood tests; biopsy if persistent or large",
+    "icd_hint": "R59.9"
+  },
+  {
+    "id": "T031",
+    "term": "hepatomegaly",
+    "simple_meaning": "Enlarged liver",
+    "patient_explanation": "The liver appears larger than expected on the scan.",
+    "clinical_context": "Can be associated with fatty liver, hepatitis, heart failure, or infiltration.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "severity": "Medium",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫀",
+    "related_terms": [
+      "enlarged liver",
+      "liver enlargement"
+    ],
+    "synonyms_in_report": [
+      "hepatomegaly noted",
+      "liver span increased",
+      "enlarged hepatic parenchyma"
+    ],
+    "found_in": [
+      "Ultrasound Abdomen",
+      "CT Abdomen",
+      "MRI Abdomen"
+    ],
+    "common_causes": [
+      "Fatty liver",
+      "Hepatitis",
+      "Heart failure",
+      "Malignancy",
+      "Alcohol"
+    ],
+    "action_note": "Liver function tests and further imaging are usually advised.",
+    "follow_up": "LFTs; hepatology referral if persistent",
+    "icd_hint": "R16.0"
+  },
+  {
+    "id": "T032",
+    "term": "splenomegaly",
+    "simple_meaning": "Enlarged spleen",
+    "patient_explanation": "The spleen appears larger than normal on the scan.",
+    "clinical_context": "Can be linked with infection, liver disease, or blood conditions.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "severity": "Medium",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫀",
+    "related_terms": [
+      "enlarged spleen",
+      "spleen enlargement"
+    ],
+    "synonyms_in_report": [
+      "splenomegaly",
+      "enlarged splenic parenchyma",
+      "massive splenomegaly"
+    ],
+    "found_in": [
+      "Ultrasound Abdomen",
+      "CT Abdomen"
+    ],
+    "common_causes": [
+      "Portal hypertension",
+      "Lymphoma",
+      "Malaria",
+      "Viral infection",
+      "Haemolytic anaemia"
+    ],
+    "action_note": "Blood tests and cause evaluation may be needed.",
+    "follow_up": "FBC; haematology or gastroenterology referral",
+    "icd_hint": "R16.1"
+  },
+  {
+    "id": "T033",
+    "term": "cholelithiasis",
+    "simple_meaning": "Gallstones",
+    "patient_explanation": "Stones have been found inside the gallbladder.",
+    "clinical_context": "Often incidental unless causing pain or inflammation.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫀",
+    "related_terms": [
+      "gallstones",
+      "gall bladder stones"
+    ],
+    "synonyms_in_report": [
+      "cholelithiasis",
+      "echogenic foci in gallbladder",
+      "posterior acoustic shadowing",
+      "gallbladder calculi"
+    ],
+    "found_in": [
+      "Ultrasound Abdomen",
+      "CT Abdomen"
+    ],
+    "common_causes": [
+      "High cholesterol",
+      "Obesity",
+      "Rapid weight loss",
+      "Female sex",
+      "Age"
+    ],
+    "action_note": "If asymptomatic, may not need treatment. See a doctor if you have pain.",
+    "follow_up": "Surgical review if symptomatic; cholecystectomy",
+    "icd_hint": "K80.20"
+  },
+  {
+    "id": "T034",
+    "term": "renal calculus",
+    "simple_meaning": "Kidney stone",
+    "patient_explanation": "A stone has been found in the kidney or urinary tract.",
+    "clinical_context": "Most small stones pass naturally. Obstruction changes urgency.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫀",
+    "related_terms": [
+      "kidney stone",
+      "urinary stone",
+      "nephrolithiasis"
+    ],
+    "synonyms_in_report": [
+      "calculus",
+      "nephrolithiasis",
+      "ureterolithiasis",
+      "hyperdense calculus in ureter"
+    ],
+    "found_in": [
+      "CT KUB",
+      "Ultrasound",
+      "X-ray"
+    ],
+    "common_causes": [
+      "Dehydration",
+      "High oxalate diet",
+      "Hypercalcaemia",
+      "Recurrent UTI"
+    ],
+    "action_note": "Pain management and urology review if large.",
+    "follow_up": "Urology review if >5mm or obstructing; hydration",
+    "icd_hint": "N20.0"
+  },
+  {
+    "id": "T035",
+    "term": "hydronephrosis",
+    "simple_meaning": "Swelling of the kidney due to blocked urine flow",
+    "patient_explanation": "Urine is not draining properly from the kidney, causing it to swell.",
+    "clinical_context": "Can happen due to stone, stricture, tumour, enlarged prostate, or pregnancy.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫀",
+    "related_terms": [
+      "kidney swelling",
+      "blocked kidney",
+      "dilated renal pelvis"
+    ],
+    "synonyms_in_report": [
+      "mild hydronephrosis",
+      "moderate hydronephrosis",
+      "severe hydronephrosis",
+      "pelviectasis",
+      "dilated renal collecting system",
+      "hydroureter"
+    ],
+    "found_in": [
+      "Ultrasound",
+      "CT KUB",
+      "MRI"
+    ],
+    "common_causes": [
+      "Kidney stone",
+      "Stricture",
+      "Tumour",
+      "BPH",
+      "Pregnancy"
+    ],
+    "action_note": "Urology review is needed especially if bilateral or worsening.",
+    "follow_up": "Urology; nephrostomy if severe; treat underlying cause",
+    "icd_hint": "N13.30"
+  },
+  {
+    "id": "T036",
+    "term": "aortic aneurysm",
+    "simple_meaning": "Bulging of the main artery",
+    "patient_explanation": "The main blood vessel in the body has ballooned or bulged in one area.",
+    "clinical_context": "Size and symptoms determine urgency. Large aneurysms may need repair.",
+    "body_system": "Vascular",
+    "category": "Vascular",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🫀",
+    "related_terms": [
+      "AAA",
+      "abdominal aortic aneurysm",
+      "thoracic aortic aneurysm"
+    ],
+    "synonyms_in_report": [
+      "aortic aneurysm",
+      "AAA",
+      "fusiform aneurysm",
+      "saccular aneurysm",
+      "aortic dilatation"
+    ],
+    "found_in": [
+      "CT Angiography",
+      "Ultrasound Abdomen",
+      "MRI"
+    ],
+    "common_causes": [
+      "Atherosclerosis",
+      "Hypertension",
+      "Smoking",
+      "Connective tissue disease",
+      "Trauma"
+    ],
+    "action_note": "Urgent vascular surgery review if large or symptomatic.",
+    "follow_up": "Vascular surgery review; surveillance or repair depending on size",
+    "icd_hint": "I71.4"
+  },
+  {
+    "id": "T037",
+    "term": "pulmonary embolism",
+    "simple_meaning": "Blood clot in the lung",
+    "patient_explanation": "A blood clot has blocked one of the arteries supplying the lungs.",
+    "clinical_context": "CTPA is commonly used. Requires urgent medical treatment.",
+    "body_system": "Vascular",
+    "category": "Vascular",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "PE",
+      "lung clot",
+      "pulmonary thromboembolism"
+    ],
+    "synonyms_in_report": [
+      "filling defect in pulmonary artery",
+      "bilateral PE",
+      "saddle embolus",
+      "subsegmental PE"
+    ],
+    "found_in": [
+      "CT Pulmonary Angiography (CTPA)",
+      "V/Q Scan"
+    ],
+    "common_causes": [
+      "DVT",
+      "Immobility",
+      "Surgery",
+      "Cancer",
+      "Oral contraceptive pill"
+    ],
+    "action_note": "This requires urgent medical treatment with blood thinners.",
+    "follow_up": "Anticoagulation; haematology if recurrent",
+    "icd_hint": "I26.99"
+  },
+  {
+    "id": "T038",
+    "term": "deep vein thrombosis",
+    "simple_meaning": "Blood clot in a deep vein",
+    "patient_explanation": "A blood clot has formed in one of the deep veins, usually in the leg.",
+    "clinical_context": "Doppler ultrasound is diagnostic. Untreated clots can travel to the lungs.",
+    "body_system": "Vascular",
+    "category": "Vascular",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🩸",
+    "related_terms": [
+      "DVT",
+      "leg clot",
+      "venous thrombosis"
+    ],
+    "synonyms_in_report": [
+      "non-compressible vein",
+      "echogenic thrombus",
+      "acute DVT",
+      "femoral vein thrombosis"
+    ],
+    "found_in": [
+      "Doppler Ultrasound",
+      "CT Venography"
+    ],
+    "common_causes": [
+      "Immobility",
+      "Surgery",
+      "Cancer",
+      "Dehydration",
+      "Clotting disorders"
+    ],
+    "action_note": "Requires urgent blood thinners to prevent clot spreading to lungs.",
+    "follow_up": "Anticoagulation; thrombophilia screen if recurrent",
+    "icd_hint": "I82.409"
+  },
+  {
+    "id": "T039",
+    "term": "stenosis",
+    "simple_meaning": "Narrowing of a blood vessel or passage",
+    "patient_explanation": "A blood vessel or opening has become narrower than normal, reducing flow through it.",
+    "clinical_context": "Significance depends on location and degree of narrowing.",
+    "body_system": "Vascular",
+    "category": "Vascular",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🩸",
+    "related_terms": [
+      "narrowing",
+      "vascular narrowing",
+      "canal stenosis",
+      "spinal stenosis"
+    ],
+    "synonyms_in_report": [
+      "significant stenosis",
+      "moderate stenosis",
+      "high-grade stenosis",
+      "critical stenosis"
+    ],
+    "found_in": [
+      "Doppler Ultrasound",
+      "CT Angiography",
+      "MRI",
+      "X-ray"
+    ],
+    "common_causes": [
+      "Atherosclerosis",
+      "Calcification",
+      "Scar tissue",
+      "Degenerative disease"
+    ],
+    "action_note": "The degree of narrowing determines urgency; discuss with your doctor.",
+    "follow_up": "Angioplasty, stenting, or surgery depending on site and severity",
+    "icd_hint": "I77.1"
+  },
+  {
+    "id": "T040",
+    "term": "enhancement",
+    "simple_meaning": "Area that lights up with contrast dye",
+    "patient_explanation": "After contrast dye was injected, this area appeared brighter.",
+    "clinical_context": "Enhancement helps doctors assess blood supply or abnormal tissue behavior.",
+    "body_system": "General",
     "category": "General",
-    "common_causes": ["Infection (TB, viral)", "Lymphoma", "Metastatic cancer", "Sarcoidosis"],
-    "follow_up": "Blood tests; biopsy if persistent or large"
+    "severity": "Medium",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🩺",
+    "related_terms": [
+      "contrast enhancement",
+      "avid enhancement",
+      "ring enhancement"
+    ],
+    "synonyms_in_report": [
+      "avidly enhancing",
+      "ring-enhancing lesion",
+      "heterogeneous enhancement",
+      "peripheral enhancement",
+      "post-contrast enhancement"
+    ],
+    "found_in": [
+      "CT with contrast",
+      "MRI with contrast"
+    ],
+    "common_causes": [
+      "Tumour",
+      "Infection/abscess",
+      "Inflammation",
+      "Active disease"
+    ],
+    "action_note": "Enhancement pattern helps characterise the abnormality.",
+    "follow_up": "Biopsy or specialist review depending on location",
+    "icd_hint": "Depends on diagnosis"
+  },
+  {
+    "id": "T041",
+    "term": "fatty liver",
+    "simple_meaning": "Fat build-up in the liver",
+    "patient_explanation": "Too much fat has accumulated in the liver tissue.",
+    "clinical_context": "Common finding that can improve with lifestyle change.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫀",
+    "related_terms": [
+      "steatosis",
+      "NAFLD",
+      "hepatic steatosis"
+    ],
+    "synonyms_in_report": [
+      "hepatic steatosis",
+      "fatty infiltration of the liver",
+      "echogenic liver",
+      "increased liver echogenicity"
+    ],
+    "found_in": [
+      "Ultrasound Abdomen",
+      "CT Abdomen",
+      "MRI Abdomen"
+    ],
+    "common_causes": [
+      "Obesity",
+      "Diabetes",
+      "Alcohol",
+      "Dyslipidaemia",
+      "Medications"
+    ],
+    "action_note": "Lifestyle changes such as diet and exercise are important.",
+    "follow_up": "LFTs; hepatology if advanced; weight loss programme",
+    "icd_hint": "K76.0"
+  },
+  {
+    "id": "T042",
+    "term": "ascites",
+    "simple_meaning": "Fluid in the abdomen",
+    "patient_explanation": "Free fluid has collected inside the abdomen.",
+    "clinical_context": "Can be due to liver disease, heart failure, cancer, or infection.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫀",
+    "related_terms": [
+      "belly water",
+      "peritoneal fluid",
+      "free fluid abdomen"
+    ],
+    "synonyms_in_report": [
+      "free fluid in abdomen",
+      "moderate ascites",
+      "large volume ascites",
+      "peritoneal fluid collection"
+    ],
+    "found_in": [
+      "Ultrasound Abdomen",
+      "CT Abdomen"
+    ],
+    "common_causes": [
+      "Liver cirrhosis",
+      "Heart failure",
+      "Malignancy",
+      "Tuberculosis"
+    ],
+    "action_note": "The cause needs to be investigated.",
+    "follow_up": "Paracentesis; hepatology or oncology referral",
+    "icd_hint": "R18.8"
+  },
+  {
+    "id": "T043",
+    "term": "pancreatic duct dilatation",
+    "simple_meaning": "Widened pancreatic drainage tube",
+    "patient_explanation": "The tube that drains the pancreas appears wider than normal.",
+    "clinical_context": "Can happen with obstruction, chronic pancreatitis, cystic lesions, stones, or tumour.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "severity": "High",
+    "urgency": "Semi-urgent",
+    "red_flag": true,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🫀",
+    "related_terms": [
+      "dilated pancreatic duct",
+      "wirsung duct dilatation"
+    ],
+    "synonyms_in_report": [
+      "dilated pancreatic duct",
+      "pancreatic duct prominence",
+      "double duct sign"
+    ],
+    "found_in": [
+      "CT Abdomen",
+      "MRI/MRCP",
+      "Ultrasound"
+    ],
+    "common_causes": [
+      "Pancreatic cancer",
+      "Chronic pancreatitis",
+      "IPMN",
+      "Stones"
+    ],
+    "action_note": "Specialist review needed to exclude serious causes.",
+    "follow_up": "MRCP; gastroenterology; oncology if malignancy suspected",
+    "icd_hint": "K86.89"
+  },
+  {
+    "id": "T044",
+    "term": "air under diaphragm",
+    "simple_meaning": "Free air in the abdomen — possible organ perforation",
+    "patient_explanation": "Air has been found in an area where it should not normally be.",
+    "clinical_context": "Can suggest pneumoperitoneum and possible bowel or stomach perforation.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫀",
+    "related_terms": [
+      "pneumoperitoneum",
+      "free air abdomen",
+      "perforated bowel"
+    ],
+    "synonyms_in_report": [
+      "free air under diaphragm",
+      "pneumoperitoneum",
+      "subdiaphragmatic air"
+    ],
+    "found_in": [
+      "Erect Chest X-ray",
+      "CT Abdomen"
+    ],
+    "common_causes": [
+      "Perforated peptic ulcer",
+      "Perforated bowel",
+      "Post-operative",
+      "Diverticular perforation"
+    ],
+    "action_note": "This is a surgical emergency; urgent review needed.",
+    "follow_up": "Urgent surgical review; laparotomy may be required",
+    "icd_hint": "K65.0"
+  },
+  {
+    "id": "T045",
+    "term": "cortical thinning",
+    "simple_meaning": "Thin outer layer of kidney",
+    "patient_explanation": "The outer working layer of the kidney appears thinner than normal.",
+    "clinical_context": "Can indicate chronic kidney disease or long-standing obstruction.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "severity": "Medium",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🫀",
+    "related_terms": [
+      "renal cortical thinning",
+      "chronic kidney disease on imaging"
+    ],
+    "synonyms_in_report": [
+      "bilateral cortical thinning",
+      "parenchymal thinning",
+      "reduced corticomedullary differentiation"
+    ],
+    "found_in": [
+      "Ultrasound Kidneys",
+      "CT Abdomen"
+    ],
+    "common_causes": [
+      "Chronic kidney disease",
+      "Chronic hypertension",
+      "Recurrent infections",
+      "Obstruction"
+    ],
+    "action_note": "Kidney function blood tests are needed.",
+    "follow_up": "Renal function tests; nephrology referral",
+    "icd_hint": "N18.9"
+  },
+  {
+    "id": "T046",
+    "term": "spondylolisthesis",
+    "simple_meaning": "Slipped vertebra",
+    "patient_explanation": "One of the spinal bones has slipped forward over the bone below it.",
+    "clinical_context": "Can cause back pain or nerve symptoms depending on severity.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "severity": "Medium",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "slipped vertebra",
+      "spinal instability"
+    ],
+    "synonyms_in_report": [
+      "Grade I spondylolisthesis",
+      "anterolisthesis",
+      "retrolisthesis",
+      "degenerative spondylolisthesis"
+    ],
+    "found_in": [
+      "X-ray Spine",
+      "MRI Spine",
+      "CT Spine"
+    ],
+    "common_causes": [
+      "Degenerative disease",
+      "Pars defect",
+      "Trauma",
+      "Congenital"
+    ],
+    "action_note": "Physiotherapy and pain management are usually first-line.",
+    "follow_up": "Physiotherapy; neurosurgery if neurological deficit",
+    "icd_hint": "M43.10"
+  },
+  {
+    "id": "T047",
+    "term": "sclerosis",
+    "simple_meaning": "Hardening or thickening of tissue",
+    "patient_explanation": "An area of tissue or bone has become harder or denser than normal.",
+    "clinical_context": "In joints this is often from arthritis; elsewhere significance depends on context.",
+    "body_system": "General",
+    "category": "General",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🩺",
+    "related_terms": [
+      "hardening",
+      "subchondral sclerosis",
+      "bone sclerosis"
+    ],
+    "synonyms_in_report": [
+      "subchondral sclerosis",
+      "bony sclerosis",
+      "reactive sclerosis",
+      "diffuse sclerosis"
+    ],
+    "found_in": [
+      "X-ray",
+      "CT Scan",
+      "MRI"
+    ],
+    "common_causes": [
+      "Osteoarthritis",
+      "Stress response",
+      "Paget disease",
+      "Blastic metastasis"
+    ],
+    "action_note": "Context determines significance; discuss with your doctor.",
+    "follow_up": "Depends on context; often incidental in osteoarthritis",
+    "icd_hint": "M85.8"
+  },
+  {
+    "id": "T048",
+    "term": "cyst",
+    "simple_meaning": "Fluid-filled sac",
+    "patient_explanation": "A small sac filled with fluid was seen on the scan. These are usually harmless.",
+    "clinical_context": "Simple cysts are usually benign. Complex cysts may need follow-up.",
+    "body_system": "General",
+    "category": "General",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🩺",
+    "related_terms": [
+      "simple cyst",
+      "complex cyst",
+      "fluid collection"
+    ],
+    "synonyms_in_report": [
+      "simple cyst",
+      "Bosniak I cyst",
+      "anechoic cyst",
+      "renal cortical cyst",
+      "hepatic cyst"
+    ],
+    "found_in": [
+      "Ultrasound",
+      "CT Scan",
+      "MRI"
+    ],
+    "common_causes": [
+      "Congenital",
+      "Hormonal",
+      "Post-traumatic",
+      "Parasitic"
+    ],
+    "action_note": "Simple cysts are almost always benign. Complex ones need review.",
+    "follow_up": "Surveillance if complex; no action for simple benign cysts",
+    "icd_hint": "N28.1"
+  },
+  {
+    "id": "T049",
+    "term": "perihilar haziness",
+    "simple_meaning": "Cloudiness around the centre of the lungs",
+    "patient_explanation": "The area around the centre of the lungs appears hazy or cloudy on the X-ray.",
+    "clinical_context": "Can be seen with pulmonary edema, pulmonary hypertension, or infection.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "medium",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "hilar haze",
+      "bat-wing opacity",
+      "central haziness"
+    ],
+    "synonyms_in_report": [
+      "perihilar haziness",
+      "bilateral perihilar infiltrates",
+      "hilar flare",
+      "bat-wing appearance"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Pulmonary edema",
+      "Pulmonary hypertension",
+      "Bilateral pneumonia"
+    ],
+    "action_note": "Usually associated with heart or lung conditions; discuss with your doctor.",
+    "follow_up": "Cardiology review; echocardiogram may be needed",
+    "icd_hint": "J81.0"
+  },
+  {
+    "id": "T050",
+    "term": "bowel obstruction",
+    "simple_meaning": "Blocked intestine",
+    "patient_explanation": "The intestine appears blocked, preventing normal passage of contents.",
+    "clinical_context": "Can cause abdominal pain, vomiting, swelling, and inability to pass gas/stool.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫀",
+    "related_terms": [
+      "intestinal obstruction",
+      "SBO",
+      "LBO",
+      "ileus"
+    ],
+    "synonyms_in_report": [
+      "dilated bowel loops",
+      "air-fluid levels",
+      "small bowel obstruction",
+      "large bowel obstruction"
+    ],
+    "found_in": [
+      "Abdominal X-ray",
+      "CT Abdomen"
+    ],
+    "common_causes": [
+      "Adhesions",
+      "Hernia",
+      "Colorectal cancer",
+      "Volvulus",
+      "Crohn disease"
+    ],
+    "action_note": "This requires urgent surgical evaluation.",
+    "follow_up": "Surgical review; NG tube; IV fluids; possible surgery",
+    "icd_hint": "K56.60"
   }
 ]
