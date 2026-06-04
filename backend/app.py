@@ -53,6 +53,7 @@ CRISIS_REPLY = (
     "Your wellbeing matters more than this report. 💙"
 )
 
+# ← YOUR change: added {detected_terms_section} and rule 12
 CHATBOT_SYSTEM = """
 You are ClearScan Assistant — a warm AI that helps patients understand their radiology report.
 
@@ -60,6 +61,8 @@ The patient's radiology report is:
 ---
 {report}
 ---
+
+{detected_terms_section}
 
 RULES:
 1. ONLY answer questions about this specific radiology report.
@@ -73,6 +76,7 @@ RULES:
 9. Do not use # symbols.
 10. Do not use ``` code blocks.
 11. Always suggest discussing medical decisions with a doctor.
+12. IMPORTANT: The detected terms listed above are CONFIRMED findings — never say they are absent or normal.
 """
 
 
@@ -143,6 +147,10 @@ def analyze():
     except TypeError:
         results = generate_explanation(report_text, provider)
 
+    # ← YOUR change: store detected_terms in session for chatbot
+    if isinstance(results, dict):
+        session["detected_terms"] = results.get("detected_terms", [])
+
     history      = session.get("history", [])
     summary_text = results.get("summary", "") if isinstance(results, dict) else str(results)
     summary_text = clean_history_text(summary_text)
@@ -167,7 +175,7 @@ def analyze():
     )
 
 
-# ── ANALYZE AJAX (new — returns JSON for single-page UI) ──────────────────────
+# ── ANALYZE AJAX (friend's change — single-page UI) ───────────────────────────
 
 @app.route("/analyze_ajax", methods=["POST"])
 def analyze_ajax():
@@ -181,7 +189,6 @@ def analyze_ajax():
     provider    = request.form.get("provider", "groq").strip()
     uploaded    = request.files.get("report_file")
 
-    # File upload support
     if uploaded and uploaded.filename:
         try:
             report_text = uploaded.read().decode("utf-8", errors="ignore").strip()
@@ -191,17 +198,18 @@ def analyze_ajax():
     if not report_text:
         return jsonify({"error": "Please paste your report text or upload a file."}), 400
 
-    # Store in session so /chat works immediately after
     session["report_text"] = report_text
     session["provider"]    = provider
 
-    # Run the same AI analysis
     try:
         results = generate_explanation(report_text, provider, "")
     except TypeError:
         results = generate_explanation(report_text, provider)
 
-    # Save to history (same as /analyze)
+    # ← YOUR change: also store detected_terms in ajax route
+    if isinstance(results, dict):
+        session["detected_terms"] = results.get("detected_terms", [])
+
     history      = session.get("history", [])
     summary_text = results.get("summary", "") if isinstance(results, dict) else str(results)
     summary_text = clean_history_text(summary_text)
@@ -214,7 +222,6 @@ def analyze_ajax():
     })
     session["history"] = history[-5:]
 
-    # Return JSON to frontend
     return jsonify({
         "risk_level":  results.get("risk_level",  "unknown"),
         "risk_reason": results.get("risk_reason", ""),
@@ -233,6 +240,7 @@ def chat():
     user_msg = data.get("message", "").strip()
     provider = session.get("provider", "groq")
     report   = session.get("report_text", "")
+    detected_terms = session.get("detected_terms", [])  # ← YOUR change
 
     if not user_msg:
         return jsonify({"reply": "Please type a message."})
@@ -262,17 +270,23 @@ def chat():
             )
         })
 
-    system = CHATBOT_SYSTEM.format(report=report)
-
-    try:
-        reply = generate_with_provider(
-            user_msg,
-            provider,
-            system_prompt=system
+    # ← YOUR change: inject detected terms into chatbot system prompt
+    if detected_terms:
+        terms_list = "\n".join([f"- {item['term']}" for item in detected_terms])
+        detected_terms_section = (
+            f"Confirmed detected findings in this report:\n{terms_list}\n"
+            "Never say any of the above findings are absent or normal."
         )
-    except TypeError:
-        full_prompt = system + "\n\nPatient question: " + user_msg
-        reply = generate_with_provider(full_prompt, provider)
+    else:
+        detected_terms_section = ""
+
+    system = CHATBOT_SYSTEM.format(
+        report=report,
+        detected_terms_section=detected_terms_section
+    )
+
+    full_prompt = system + "\n\nPatient question: " + user_msg
+    reply = generate_with_provider(full_prompt, provider, detected_terms=detected_terms)
 
     reply = clean_ai_reply(reply)
 
