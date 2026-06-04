@@ -92,11 +92,15 @@
       "lung under-expansion"
     ],
     "synonyms_in_report": [
-      "subsegmental atelectasis",
-      "discoid atelectasis",
-      "plate-like atelectasis",
-      "linear atelectasis"
-    ],
+    "subsegmental atelectasis",
+    "discoid atelectasis",
+    "plate-like atelectasis",
+    "linear atelectasis",
+    "atelectatic changes",
+    "bibasal atelectasis",
+    "bibasal atelectatic changes",
+    "atelectatic"
+],
     "found_in": [
       "Chest X-ray",
       "CT Chest"
@@ -165,8 +169,7 @@
     "scan_type_emoji": "🫁",
     "related_terms": [
       "pneumonic consolidation",
-      "airspace disease",
-      "opacity"
+      "airspace disease"
     ],
     "synonyms_in_report": [
       "airspace consolidation",

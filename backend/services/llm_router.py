@@ -8,21 +8,37 @@ def _is_valid_response(response):
     return response is not None and str(response).strip() != ""
 
 
-def generate_with_provider(prompt, provider="ollama"):
+def _build_prompt(prompt, detected_terms=None):
+    if not detected_terms:
+        return prompt
+
+    terms_list = "\n".join([f"- {item['term']}" for item in detected_terms])
+
+    return f"""The following medical terms were CONFIRMED detected in this radiology report:
+{terms_list}
+
+Your explanation MUST acknowledge ALL of these findings. Do NOT say any of them are absent or normal.
+
+{prompt}"""
+
+
+def generate_with_provider(prompt, provider="ollama", detected_terms=None):
     provider = provider.lower().strip()
+
+    final_prompt = _build_prompt(prompt, detected_terms)
 
     try:
         if provider == "ollama":
-            response = generate_with_ollama(prompt)
+            response = generate_with_ollama(final_prompt)
 
         elif provider == "groq":
-            response = generate_with_groq(prompt)
+            response = generate_with_groq(final_prompt)
 
         elif provider == "gemini":
-            response = generate_with_gemini(prompt)
+            response = generate_with_gemini(final_prompt)
 
         elif provider == "openai":
-            response = generate_with_openai(prompt)
+            response = generate_with_openai(final_prompt)
 
         else:
             return "Unknown provider selected."
@@ -55,13 +71,13 @@ def generate_with_provider(prompt, provider="ollama"):
                 print(f"🔄 Trying fallback provider: {fallback_provider}")
 
                 if fallback_provider == "groq":
-                    fallback_response = generate_with_groq(prompt)
+                    fallback_response = generate_with_groq(final_prompt)
 
                 elif fallback_provider == "gemini":
-                    fallback_response = generate_with_gemini(prompt)
+                    fallback_response = generate_with_gemini(final_prompt)
 
                 elif fallback_provider == "openai":
-                    fallback_response = generate_with_openai(prompt)
+                    fallback_response = generate_with_openai(final_prompt)
 
                 if _is_valid_response(fallback_response):
                     return fallback_response

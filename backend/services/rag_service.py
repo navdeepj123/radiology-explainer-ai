@@ -18,6 +18,13 @@ def generate_explanation(report_text, provider="ollama", user_question=""):
 
     context = "\n".join(context_lines)
 
+    # ← Build confirmed terms block to inject into prompt
+    if retrieved_terms:
+        confirmed_terms_block = "Confirmed Detected Terms (MUST acknowledge ALL of these — do NOT say any are absent or normal):\n"
+        confirmed_terms_block += "\n".join([f"- {item['term']}" for item in retrieved_terms])
+    else:
+        confirmed_terms_block = "No specific medical terms were detected in this report."
+
     prompt = f"""
 You are a radiology report explanation assistant for normal patients.
 
@@ -36,12 +43,15 @@ Rules:
 - If something is normal, say it is reassuring
 - Explain like the reader is not from a medical background
 - Keep each bullet short and easy to understand
+- CRITICAL: Every term listed under Confirmed Detected Terms MUST appear in your explanation as a real finding
 
 Radiology Report:
 {report_text}
 
 Retrieved Medical Context:
 {context}
+
+{confirmed_terms_block}
 
 Return the answer ONLY in this HTML format:
 
@@ -65,11 +75,6 @@ Return the answer ONLY in this HTML format:
         <li><strong>Finding:</strong> explain simply.</li>
     </ul>
 
-    <h3>Medical Terms Explained</h3>
-    <ul>
-        <li><strong>Term:</strong> easy meaning.</li>
-        <li><strong>Term:</strong> easy meaning.</li>
-    </ul>
 
     <h3>What This Means For The Patient</h3>
     <ul>
@@ -91,7 +96,8 @@ Important output rules:
 - Do not add text outside the HTML
 """
 
-    ai_summary = generate_with_provider(prompt, provider)
+    # ← Pass retrieved_terms as detected_terms to enforce consistency
+    ai_summary = generate_with_provider(prompt, provider, detected_terms=retrieved_terms)
 
     if ai_summary is None:
         ai_summary = """
@@ -125,6 +131,7 @@ Important output rules:
         "risk_reason": "Based on the report findings.",
         "findings": findings,
         "terms": retrieved_terms,
+        "detected_terms": retrieved_terms,  # ← added so app.py session storage works
         "provider": provider,
         "question": user_question
     }

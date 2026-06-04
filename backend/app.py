@@ -61,6 +61,8 @@ The patient's radiology report is:
 {report}
 ---
 
+{detected_terms_section}
+
 RULES:
 1. ONLY answer questions about this specific radiology report.
 2. If unrelated, say: "I can only help you understand this radiology report."
@@ -73,6 +75,7 @@ RULES:
 9. Do not use # symbols.
 10. Do not use ``` code blocks.
 11. Always suggest discussing medical decisions with a doctor.
+12. IMPORTANT: The detected terms listed above are CONFIRMED findings — never say they are absent or normal.
 """
 
 
@@ -140,6 +143,10 @@ def analyze():
     except TypeError:
         results = generate_explanation(report_text, provider)
 
+    # ← Store detected_terms in session so chatbot can use them too
+    if isinstance(results, dict):
+        session["detected_terms"] = results.get("detected_terms", [])
+
     history = session.get("history", [])
 
     summary_text = results.get("summary", "") if isinstance(results, dict) else str(results)
@@ -174,6 +181,7 @@ def chat():
 
     provider = session.get("provider", "groq")
     report = session.get("report_text", "")
+    detected_terms = session.get("detected_terms", [])  # ← get stored detected terms
 
     if not user_msg:
         return jsonify({"reply": "Please type a message."})
@@ -203,18 +211,24 @@ def chat():
             )
         })
 
-    system = CHATBOT_SYSTEM.format(report=report)
-
-    try:
-        reply = generate_with_provider(
-            user_msg,
-            provider,
-            system_prompt=system
+    # ← Build detected terms section for system prompt
+    if detected_terms:
+        terms_list = "\n".join([f"- {item['term']}" for item in detected_terms])
+        detected_terms_section = (
+            f"Confirmed detected findings in this report:\n{terms_list}\n"
+            "Never say any of the above findings are absent or normal."
         )
+    else:
+        detected_terms_section = ""
 
-    except TypeError:
-        full_prompt = system + "\n\nPatient question: " + user_msg
-        reply = generate_with_provider(full_prompt, provider)
+    system = CHATBOT_SYSTEM.format(
+        report=report,
+        detected_terms_section=detected_terms_section
+    )
+
+    # ← Clean single call, no system_prompt kwarg needed
+    full_prompt = system + "\n\nPatient question: " + user_msg
+    reply = generate_with_provider(full_prompt, provider, detected_terms=detected_terms)
 
     reply = clean_ai_reply(reply)
 
