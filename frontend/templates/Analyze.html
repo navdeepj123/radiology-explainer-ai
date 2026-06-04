@@ -1,227 +1,725 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClearScan — Analyze Report</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClearScan — Analyze Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080d1a; --bg2:#0b1020;
+  --card:#111827; --card2:#141e30;
+  --border:#1a2540; --border2:#1e2d45;
+  --blue:#4f7cff; --blue-dk:#3a63e8;
+  --text:#e8eaf0; --muted:#7a8aaa; --dim:#3d4f6e;
+  --input-bg:#0f1928;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+
+/* TOP BAR */
+.topbar{height:48px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 1rem;background:var(--bg2);border-bottom:1px solid var(--border)}
+.topbar-logo{font-family:'Libre Baskerville',serif;font-weight:700;font-size:1.1rem;color:var(--blue);text-decoration:none}
+.topbar-r{display:flex;align-items:center;gap:.5rem}
+.tbtn{display:inline-flex;align-items:center;padding:5px 12px;border:1px solid var(--border2);border-radius:6px;font-size:.78rem;color:var(--muted);background:transparent;cursor:pointer;text-decoration:none;transition:border-color .15s,color .15s}
+.tbtn:hover{border-color:#2a3f66;color:var(--text)}
+.tpill{font-size:.72rem;padding:4px 10px;border:1px solid var(--border2);border-radius:100px;color:var(--muted);background:var(--card)}
+
+/* LAYOUT */
+.app{display:flex;flex:1;overflow:hidden}
+
+/* LEFT SETTINGS SIDEBAR */
+.settings-sidebar{
+  width:200px;flex-shrink:0;background:var(--bg2);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.sb-head{padding:.85rem 1rem;border-bottom:1px solid var(--border)}
+.sb-title{font-size:.88rem;font-weight:600;color:var(--text)}
+.sb-sub{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:.1rem}
+.sb-tool{display:flex;align-items:center;gap:7px;margin:.65rem 1rem .25rem;padding:.5rem .65rem;background:var(--card);border:1px solid var(--border2);border-radius:8px}
+.sb-tool span{font-size:.75rem;font-weight:500;color:var(--text)}
+.sb-sec{padding:.65rem 1rem .3rem;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.sb-row{padding:.25rem 1rem}
+.sb-lbl{font-size:.65rem;color:var(--muted);margin-bottom:.25rem}
+.sb-sel{width:100%;padding:.4rem .5rem;background:var(--card);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-size:.75rem;font-family:'DM Sans',sans-serif;cursor:pointer;outline:none}
+.sb-sel:focus{border-color:var(--blue)}
+.sb-hint{font-size:.64rem;color:var(--muted);padding:.3rem 1rem .7rem;line-height:1.55;border-bottom:1px solid var(--border)}
+.sb-spacer{flex:1}
+.sb-privacy{padding:.65rem 1rem;border-top:1px solid var(--border);font-size:.64rem;color:var(--dim);line-height:1.5}
+.sb-privacy strong{color:var(--muted)}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.main-top{height:40px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;border-bottom:1px solid var(--border);background:var(--bg2)}
+.main-top-title{font-size:.8rem;color:var(--muted);font-weight:500}
+
+/* messages */
+.msgs{flex:1;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1.25rem;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.msgs::-webkit-scrollbar{width:4px}
+.msgs::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* empty state */
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:.4rem;background:radial-gradient(ellipse 60% 50% at 50% 60%,rgba(79,124,255,.06),transparent)}
+.e-icon{font-size:2.2rem;margin-bottom:.2rem;animation:pulse 2.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.e-eyebrow{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.e-title{font-family:'Libre Baskerville',serif;font-size:1.7rem;font-weight:700;color:var(--text)}
+.e-sub{font-size:.83rem;color:var(--muted);line-height:1.6;max-width:340px}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;margin-top:.4rem}
+.chip{padding:5px 12px;background:var(--card);border:1px solid var(--border2);border-radius:100px;font-size:.72rem;color:var(--muted);cursor:pointer;transition:border-color .15s,color .15s}
+.chip:hover{border-color:var(--blue);color:var(--text)}
+
+/* message rows */
+.msg-row{display:flex;flex-direction:column;gap:.3rem;max-width:820px;width:100%}
+.msg-row.user{align-self:flex-end;align-items:flex-end}
+.msg-row.bot{align-self:flex-start;align-items:flex-start}
+.msg-meta{font-size:.67rem;color:var(--dim);padding:0 .2rem}
+.user-bubble{background:var(--blue);color:#fff;padding:.7rem .95rem;border-radius:13px 13px 3px 13px;font-size:.85rem;line-height:1.65;max-width:640px;word-break:break-word;white-space:pre-wrap}
+.bot-card{background:var(--card);border:1px solid var(--border2);border-radius:3px 13px 13px 13px;overflow:hidden;max-width:720px;width:100%}
+.risk-strip{display:flex;align-items:center;gap:.85rem;padding:.7rem 1rem;border-bottom:1px solid var(--border2)}
+.risk-strip.low{background:rgba(16,185,129,.07)}
+.risk-strip.medium{background:rgba(245,158,11,.07)}
+.risk-strip.high{background:rgba(239,68,68,.07)}
+.risk-strip.unknown{background:rgba(100,116,139,.07)}
+.risk-lbl{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.risk-val{font-size:.85rem;font-weight:700;margin-top:.1rem}
+.risk-strip.low .risk-val{color:#10B981}
+.risk-strip.medium .risk-val{color:#F59E0B}
+.risk-strip.high .risk-val{color:#EF4444}
+.risk-strip.unknown .risk-val{color:var(--muted)}
+.risk-reason{font-size:.75rem;color:var(--muted);line-height:1.5;flex:1}
+.bot-body{padding:.8rem 1rem;display:flex;flex-direction:column;gap:.7rem}
+.rs-title{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);display:flex;align-items:center;gap:.35rem;margin-bottom:.3rem}
+.rs-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;display:inline-block}
+.rs-dot.teal{background:#0D9488}.rs-dot.blue{background:var(--blue)}.rs-dot.amber{background:#F59E0B}
+.rs-content{font-size:.82rem;color:var(--text);line-height:1.7}
+.findings-list{display:flex;flex-direction:column;gap:.25rem}
+.fi{display:flex;align-items:flex-start;gap:.45rem;font-size:.79rem;color:var(--text);line-height:1.5;padding:.28rem .4rem;background:var(--card2);border-radius:5px}
+.fi-dash{color:var(--dim);flex-shrink:0}
+.terms-list{display:flex;flex-direction:column;gap:.25rem}
+.ti{display:flex;gap:.6rem;align-items:flex-start;padding:.3rem .45rem;background:var(--card2);border-radius:5px}
+.ti-name{font-size:.77rem;font-weight:600;color:var(--blue);min-width:100px;flex-shrink:0}
+.ti-def{font-size:.77rem;color:var(--muted);line-height:1.5}
+.bot-actions{display:flex;gap:.4rem;padding:.5rem 1rem;border-top:1px solid var(--border2);background:rgba(0,0,0,.12)}
+.ba-btn{font-size:.69rem;color:var(--muted);background:transparent;border:1px solid var(--border);padding:3px 9px;border-radius:5px;cursor:pointer;text-decoration:none;transition:color .15s,border-color .15s}
+.ba-btn:hover{color:var(--text);border-color:var(--border2)}
+.typing-row{display:flex;gap:.5rem;align-items:center;padding:.2rem 0}
+.t-ring{width:22px;height:22px;border:2px solid var(--border2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.t-txt{font-size:.78rem;color:var(--muted)}
+
+/* BOTTOM INPUT */
+.input-area{flex-shrink:0;border-top:1px solid var(--border);background:var(--bg2);padding:.65rem 1.25rem .8rem}
+.err-bar{margin-bottom:.5rem;padding:.5rem .8rem;background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.25);border-radius:7px;font-size:.78rem;color:#f87171}
+.input-box{display:flex;align-items:flex-end;gap:.45rem;background:var(--input-bg);border:1px solid var(--border2);border-radius:11px;padding:.5rem .65rem;transition:border-color .2s}
+.input-box:focus-within{border-color:var(--blue)}
+.ic-btn{width:30px;height:30px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:transparent;border:none;cursor:pointer;color:var(--muted);border-radius:6px;transition:background .15s,color .15s}
+.ic-btn:hover{background:var(--card);color:var(--text)}
+#mainTa{flex:1;background:transparent;border:none;outline:none;resize:none;font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--text);line-height:1.6;min-height:34px;max-height:150px;padding:.1rem 0}
+#mainTa::placeholder{color:var(--dim)}
+.send-btn{width:34px;height:34px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--blue);border:none;border-radius:7px;cursor:pointer;transition:background .15s,transform .1s}
+.send-btn:hover{background:var(--blue-dk)}
+.send-btn:active{transform:scale(.95)}
+.send-btn:disabled{background:var(--dim);cursor:not-allowed}
+.input-meta{display:flex;align-items:center;justify-content:space-between;margin-top:.35rem;padding:0 .15rem}
+.meta-note{font-size:.65rem;color:var(--dim)}
+.meta-r{display:flex;align-items:center;gap:.5rem}
+.file-tag{font-size:.65rem;color:var(--blue)}
+.sample-btn{font-size:.65rem;color:var(--blue);background:none;border:none;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.sample-btn:hover{color:#7aa0ff}
+#fileInput{display:none}
+
+/* RIGHT CHAT SIDEBAR */
+.chat-sidebar{
+  width:280px;flex-shrink:0;
+  background:var(--bg2);
+  border-left:1px solid var(--border);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  transition:width .25s ease;
+}
+.chat-sidebar.hidden{width:0;border-left:none;overflow:hidden}
+
+.cs-topbar{
+  height:40px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 .85rem;
+  border-bottom:1px solid var(--border);
+  background:var(--bg2);
+}
+.cs-title-wrap{display:flex;align-items:center;gap:.5rem}
+.cs-avatar{
+  width:26px;height:26px;border-radius:50%;
+  background:rgba(79,124,255,.15);border:1px solid rgba(79,124,255,.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;flex-shrink:0;
+}
+.cs-name{font-size:.8rem;font-weight:600;color:var(--text)}
+.cs-status{display:flex;align-items:center;gap:4px;font-size:.65rem;color:var(--muted)}
+.cs-dot{width:5px;height:5px;border-radius:50%;background:#10B981}
+.cs-provider-tag{font-size:.65rem;padding:2px 8px;background:rgba(79,124,255,.12);border:1px solid rgba(79,124,255,.2);border-radius:100px;color:var(--blue)}
+
+/* chat messages area */
+.cs-msgs{
+  flex:1;overflow-y:auto;
+  padding:.75rem;
+  display:flex;flex-direction:column;
+  gap:.5rem;
+  scrollbar-width:thin;scrollbar-color:var(--border) transparent;
+}
+.cs-msgs::-webkit-scrollbar{width:3px}
+.cs-msgs::-webkit-scrollbar-thumb{background:var(--border)}
+
+/* pre-analysis notice inside chat */
+.cs-notice{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:1.5rem .75rem;
+  text-align:center;gap:.5rem;flex:1;
+}
+.cs-notice-icon{font-size:1.6rem}
+.cs-notice p{font-size:.75rem;color:var(--muted);line-height:1.55}
+.cs-notice small{font-size:.67rem;color:var(--dim)}
+
+/* bubbles */
+.cs-row{display:flex;flex-direction:column;gap:2px}
+.cs-bubble{
+  padding:.55rem .7rem;
+  font-size:.78rem;line-height:1.6;
+  word-break:break-word;max-width:100%;
+}
+.cs-bubble.bot{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:3px 10px 10px 10px;color:var(--text);
+}
+.cs-bubble.user{
+  background:var(--blue);color:#fff;
+  border-radius:10px 10px 3px 10px;
+  align-self:flex-end;
+}
+.cs-bubble.error{background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.25);color:#f87171;border-radius:8px}
+.cs-who{font-size:.63rem;color:var(--dim);padding:0 .1rem;margin-top:1px}
+
+/* quick suggestions */
+.cs-suggestions{display:flex;flex-direction:column;gap:.3rem;margin-top:.35rem}
+.cs-sug{
+  padding:.4rem .6rem;background:var(--card2);
+  border:1px solid var(--border2);border-radius:6px;
+  font-size:.73rem;color:var(--muted);cursor:pointer;
+  transition:border-color .15s,color .15s;
+}
+.cs-sug:hover{border-color:var(--blue);color:var(--text)}
+
+/* typing dots */
+.cs-typing{display:flex;gap:3px;padding:.5rem .65rem;background:var(--card);border:1px solid var(--border2);border-radius:3px 9px 9px 9px;width:fit-content}
+.cs-typing span{width:5px;height:5px;border-radius:50%;background:var(--muted);animation:td 1.2s ease-in-out infinite}
+.cs-typing span:nth-child(2){animation-delay:.2s}
+.cs-typing span:nth-child(3){animation-delay:.4s}
+@keyframes td{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+
+/* chat input */
+.cs-input-wrap{
+  flex-shrink:0;
+  border-top:1px solid var(--border);
+  padding:.6rem .75rem;
+  background:var(--bg2);
+}
+.cs-limit{font-size:.63rem;color:var(--dim);margin-bottom:.4rem;display:flex;align-items:center;gap:4px}
+.cs-input-row{display:flex;gap:.4rem;align-items:flex-end}
+.cs-ta{
+  flex:1;background:var(--input-bg);
+  border:1px solid var(--border2);border-radius:8px;
+  padding:.45rem .6rem;color:var(--text);
+  font-family:'DM Sans',sans-serif;font-size:.78rem;
+  outline:none;resize:none;min-height:34px;max-height:80px;line-height:1.5;
+}
+.cs-ta:focus{border-color:var(--blue)}
+.cs-ta::placeholder{color:var(--dim)}
+.cs-ta:disabled{opacity:.4;cursor:not-allowed}
+.cs-send{
+  width:32px;height:32px;flex-shrink:0;
+  background:var(--blue);border:none;border-radius:7px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .15s;
+}
+.cs-send:hover{background:var(--blue-dk)}
+.cs-send:disabled{background:var(--dim);cursor:not-allowed}
+
+@media(max-width:900px){.settings-sidebar{display:none}}
+@media(max-width:700px){.chat-sidebar{display:none}}
+</style>
 </head>
 <body>
 
-<div class="blob blob-1"></div>
-<div class="blob blob-2"></div>
+<!-- TOP BAR -->
+<div class="topbar">
+  <a href="/" class="topbar-logo">ClearScan</a>
+  <div class="topbar-r">
+    <a href="/" class="tbtn">← Home</a>
+    <span class="tpill" id="provTag">⚡ GROQ</span>
+  </div>
+</div>
 
-<!-- NAVBAR -->
-<nav class="navbar">
-    <a href="/" class="logo" style="text-decoration:none;">
-        <div class="logo-mark">
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-                <circle cx="11" cy="11" r="10" stroke="#0D9488" stroke-width="2"/>
-                <path d="M7 11L10 14L15 8" stroke="#0D9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </div>
-        <span>Clear<span class="logo-accent">Scan</span></span>
-    </a>
-    <div class="nav-links">
-        <a href="/" class="nav-link">← Home</a>
+<div class="app">
+
+  <!-- LEFT: SETTINGS SIDEBAR -->
+  <aside class="settings-sidebar">
+    <div class="sb-head">
+      <div class="sb-title">ClearScan</div>
+      <div class="sb-sub">Patient Health Tools</div>
     </div>
-    <div class="page-indicator">Step 1 of 2 — Submit Report</div>
-</nav>
+    <div class="sb-tool"><span>🫁</span><span>Radiology Explainer</span></div>
+    <div class="sb-sec">AI Provider</div>
+    <div class="sb-row">
+      <div class="sb-lbl">Select model</div>
+      <select class="sb-sel" id="provSel" onchange="onProviderChange(this.value)">
+        <option value="groq">⚡ Groq — Fast, free</option>
+        <option value="gemini">✨ Gemini — OpenRouter</option>
+        <option value="openai">🤖 OpenAI — GPT-4o-mini</option>
+        <option value="ollama">🖥️ Ollama — Local</option>
+      </select>
+    </div>
+    <div class="sb-hint" id="sbHint">Fast and free. Report sent to Groq servers.</div>
+    <div class="sb-spacer"></div>
+    <div class="sb-privacy"><strong>🔒 Private</strong><br>Never stored on our servers.</div>
+  </aside>
 
-<main class="analyze-page">
-    <div class="analyze-header">
-        <p class="section-eyebrow">Report Analysis</p>
-        <h1 class="analyze-title">Analyze Your Radiology Report</h1>
-        <p class="analyze-sub">Paste your report below or upload a file. Your data is private and never saved.</p>
+  <!-- CENTER: MAIN CHAT AREA -->
+  <div class="main">
+    <div class="main-top">
+      <span class="main-top-title">Radiology Report Explainer</span>
+      <span class="tpill" id="statusPill">Ready</span>
     </div>
 
-    {% if error %}
-    <div class="error-banner">⚠ {{ error }}</div>
-    {% endif %}
-
-    <div class="form-layout">
-        <!-- FORM -->
-        <div class="form-box">
-            <div class="form-box-header">
-                <div class="form-box-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <rect x="3" y="3" width="18" height="18" rx="4" stroke="#0D9488" stroke-width="1.8"/>
-                        <path d="M8 8h8M8 12h8M8 16h5" stroke="#0D9488" stroke-width="1.8" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <div>
-                    <h2>Enter Your Report</h2>
-                    <p>Your information is private and never saved.</p>
-                </div>
-            </div>
-
-            <form method="POST" action="/analyze" enctype="multipart/form-data" onsubmit="handleSubmit()">
-
-                <!-- Step 1: Text -->
-                <div class="form-field">
-                    <label class="field-label">
-                        <span class="field-step">Step 1</span>
-                        Paste your report text
-                    </label>
-                    <textarea id="reportBox" name="report_text"
-                        placeholder="Paste your radiology report here.&#10;&#10;Example: Mild cardiomegaly is noted. No hemorrhage or fracture is seen. Small pleural effusion is present on the left side..."></textarea>
-                    <div class="field-actions">
-                        <button type="button" class="text-btn" onclick="loadSample()">↺ Load sample report</button>
-                        <button type="reset" class="text-btn muted" onclick="clearFile()">✕ Clear all</button>
-                    </div>
-                </div>
-
-                <div class="or-divider"><span>or upload a file</span></div>
-
-                <!-- Step 2: Upload -->
-                <div class="form-field">
-                    <label class="field-label">
-                        <span class="field-step">Step 2</span>
-                        Upload report file
-                        <span class="optional-tag">optional</span>
-                    </label>
-                    <div class="upload-box" id="uploadBox" onclick="document.getElementById('fileInput').click()">
-                        <div class="upload-icon">
-                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                                <path d="M16 22V10M16 10L12 14M16 10L20 14" stroke="#0D9488" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M8 26h16" stroke="#0D9488" stroke-width="1.8" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                        <p class="upload-text">Click to select a file</p>
-                        <p class="upload-sub" id="uploadSub">PDF or plain text — max 10MB</p>
-                        <input type="file" id="fileInput" name="report_file" style="display:none"
-                               onchange="handleFile(this)" accept=".pdf,.txt,.doc,.docx">
-                    </div>
-                </div>
-
-                <!-- Step 3: AI Model -->
-                <div class="form-field">
-                    <label class="field-label">
-                        <span class="field-step">Step 3</span>
-                        Choose AI Model
-                    </label>
-                    <div class="select-wrap">
-                        <select name="provider" id="provider" onchange="updateProviderHint(this.value)">
-                            <option value="groq">⚡ Groq — Fast, free tier, chatbot enabled</option>
-                            <option value="gemini">✨ Gemini — Free via OpenRouter, chatbot enabled</option>
-                            <option value="openai">🤖 OpenAI — GPT-4o-mini, chatbot enabled</option>
-                            <option value="ollama">🖥️ Ollama — Local, fully private, no chatbot</option>
-                        </select>
-                        <span class="select-arrow">▾</span>
-                    </div>
-                    <div class="provider-hint" id="providerHint">
-                        <span id="hintIcon">⚡</span>
-                        <span id="hintText">Groq is fast and free. Your report is sent to Groq's servers. The AI chatbot will be available on the results page.</span>
-                    </div>
-                </div>
-
-                <!-- Step 4: Question -->
-                <div class="form-field">
-                    <label class="field-label">
-                        <span class="field-step">Step 4</span>
-                        Your question
-                        <span class="optional-tag">optional</span>
-                    </label>
-                    <input type="text" name="question"
-                           placeholder="E.g. What does cardiomegaly mean for me?">
-                </div>
-
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    <span id="btnText">Generate Explanation →</span>
-                    <span id="loadingText" style="display:none">
-                        <span class="spinner"></span> Analyzing your report…
-                    </span>
-                </button>
-
-                <p class="form-disclaimer">
-                    🔒 Your report is processed securely and never stored. This is for educational purposes only.
-                </p>
-            </form>
+    <div class="msgs" id="msgs">
+      <div class="empty" id="emptyState">
+        <div class="e-icon">🫁</div>
+        <div class="e-eyebrow">Radiology Explainer</div>
+        <div class="e-title">ClearScan</div>
+        <p class="e-sub">Paste your report below.<br>Get a plain-language explanation instantly.</p>
+        <div class="chips">
+          <span class="chip" onclick="onLoadSample()">↺ Load sample report</span>
+          <span class="chip" onclick="onFocusInput()">Chest X-Ray</span>
+          <span class="chip" onclick="onFocusInput()">CT Scan</span>
+          <span class="chip" onclick="onFocusInput()">MRI Results</span>
         </div>
-
-        <!-- SIDEBAR -->
-        <div class="form-sidebar">
-            <div class="sidebar-card revealed">
-                <h4>What you'll get</h4>
-                <div class="sidebar-item">
-                    <div class="sidebar-item-icon">📊</div>
-                    <div><strong>Risk level</strong><p>HIGH, MEDIUM, or LOW with reason</p></div>
-                </div>
-                <div class="sidebar-item">
-                    <div class="sidebar-item-icon">💬</div>
-                    <div><strong>Plain-language summary</strong><p>Clear, friendly overview of your report</p></div>
-                </div>
-                <div class="sidebar-item">
-                    <div class="sidebar-item-icon">🔍</div>
-                    <div><strong>Key findings</strong><p>Each finding explained in simple words</p></div>
-                </div>
-                <div class="sidebar-item">
-                    <div class="sidebar-item-icon">📖</div>
-                    <div><strong>Medical terms decoded</strong><p>Every term in everyday language</p></div>
-                </div>
-                <div class="sidebar-item">
-                    <div class="sidebar-item-icon">🤖</div>
-                    <div><strong>AI Chatbot</strong><p>Ask anything about your report (cloud AI only)</p></div>
-                </div>
-            </div>
-
-            <div class="privacy-notice">
-                <div class="privacy-icon">🔒</div>
-                <div>
-                    <strong>100% Private</strong>
-                    <p>Your report is never stored or shared with anyone.</p>
-                </div>
-            </div>
-
-            <div class="ai-table-card">
-                <h4>Which AI to use?</h4>
-                <table class="ai-compare-table">
-                    <tr><th>Model</th><th>Cost</th><th>Chatbot</th></tr>
-                    <tr><td>⚡ Groq</td><td class="c-free">Free</td><td class="c-yes">✓</td></tr>
-                    <tr><td>✨ Gemini</td><td class="c-free">Free</td><td class="c-yes">✓</td></tr>
-                    <tr><td>🤖 OpenAI</td><td class="c-paid">Paid</td><td class="c-yes">✓</td></tr>
-                    <tr><td>🖥️ Ollama</td><td class="c-free">Local</td><td class="c-no">✗</td></tr>
-                </table>
-            </div>
-        </div>
+      </div>
     </div>
-</main>
+
+    <div class="input-area">
+      <div class="err-bar" id="errBar" style="display:none"></div>
+      <div class="input-box">
+        <button class="ic-btn" type="button" title="Attach file"
+                onclick="document.getElementById('fileInput').click()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M13.5 7.5L7 14a3.5 3.5 0 01-4.95-4.95l7-7A2 2 0 0111.88 4.9l-7 7a.5.5 0 01-.71-.71l6-6"
+              stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <input type="file" id="fileInput" accept=".pdf,.txt,.doc,.docx" onchange="onFileSelect(this)">
+        <textarea id="mainTa"
+          placeholder="Paste your radiology report here…"
+          oninput="onMainGrow(this)"></textarea>
+        <button class="send-btn" id="mainSendBtn" onclick="onMainSend()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M1.5 7h11M8 3l4.5 4L8 11" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="input-meta">
+        <span class="meta-note">🔒 Processed securely · Never stored</span>
+        <div class="meta-r">
+          <span class="file-tag" id="fileTag"></span>
+          <button class="sample-btn" onclick="onLoadSample()">↺ Sample report</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: CHAT SIDEBAR -->
+  <aside class="chat-sidebar" id="chatSidebar">
+    <div class="cs-topbar">
+      <div class="cs-title-wrap">
+        <div class="cs-avatar">💬</div>
+        <div>
+          <div class="cs-name">ClearScan Assistant</div>
+          <div class="cs-status"><span class="cs-dot"></span>Online · Report-aware</div>
+        </div>
+      </div>
+      <span class="cs-provider-tag" id="csChatTag">GROQ</span>
+    </div>
+
+    <!-- messages -->
+    <div class="cs-msgs" id="csMsgs">
+
+      <!-- pre-analysis notice (shown before report submitted) -->
+      <div class="cs-notice" id="csNotice">
+        <div class="cs-notice-icon">🫁</div>
+        <p>Submit your radiology report first, then I'll be able to answer your questions about it.</p>
+        <small>Powered by <span id="csNoticeProv">Groq</span></small>
+      </div>
+
+    </div>
+
+    <div class="cs-input-wrap">
+      <div class="cs-limit">🔒 Only answers questions about your report</div>
+      <div class="cs-input-row">
+        <textarea class="cs-ta" id="csTa" rows="1"
+          placeholder="Ask about your report…"
+          onkeydown="onCsKey(event)"
+          oninput="onCsGrow(this)"
+          disabled></textarea>
+        <button class="cs-send" id="csSendBtn" onclick="onCsSend()" disabled>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M1 6h10M7 2l4 4-4 4" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+</div>
 
 <script>
-function loadSample() {
-    document.getElementById("reportBox").value =
-        "Mild cardiomegaly is noted. No hemorrhage or fracture is seen. Small pleural effusion is present on the left side. Mild atelectasis in the right lower lobe. No acute pulmonary consolidation identified. The bony structures appear intact.";
-}
-function handleSubmit() {
-    document.getElementById("btnText").style.display = "none";
-    document.getElementById("loadingText").style.display = "flex";
-    document.getElementById("submitBtn").disabled = true;
-}
-function handleFile(input) {
-    if (input.files.length > 0) {
-        document.getElementById("uploadSub").textContent = "✓ " + input.files[0].name;
-        document.getElementById("uploadBox").classList.add("file-selected");
-    }
-}
-function clearFile() {
-    document.getElementById("fileInput").value = "";
-    document.getElementById("uploadSub").textContent = "PDF or plain text — max 10MB";
-    document.getElementById("uploadBox").classList.remove("file-selected");
-}
-const hints = {
-    groq:   { icon:"⚡", text:"Groq is fast and free. Your report is sent to Groq's servers. The AI chatbot will be available on the results page." },
-    gemini: { icon:"✨", text:"Gemini via OpenRouter is free. Your report is sent to Google's servers. The AI chatbot will be available on the results page." },
-    openai: { icon:"🤖", text:"OpenAI GPT-4o-mini is highly capable but requires a paid API key. The AI chatbot will be available on the results page." },
-    ollama: { icon:"🖥️", text:"Ollama runs fully on your computer. Your report never leaves your device. Note: the chatbot is not available in local mode." }
+// ─────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────
+var provider   = 'groq';
+var selFile    = null;
+var isAnalyzed = false;
+
+var provData = {
+  groq:   { tag:'⚡ GROQ',   shortTag:'GROQ',   hint:'Fast and free. Report sent to Groq servers.',   name:'Groq'   },
+  gemini: { tag:'✨ GEMINI', shortTag:'GEMINI', hint:'Free via OpenRouter. Report sent to Google.',   name:'Gemini' },
+  openai: { tag:'🤖 OPENAI', shortTag:'OPENAI', hint:'GPT-4o-mini. Requires paid API key.',           name:'OpenAI' },
+  ollama: { tag:'🖥️ LOCAL',  shortTag:'LOCAL',  hint:'Runs on your computer. No chatbot available.', name:'Ollama' }
 };
-function updateProviderHint(val) {
-    const h = hints[val];
-    if (h) {
-        document.getElementById("hintIcon").textContent = h.icon;
-        document.getElementById("hintText").textContent = h.text;
-    }
+
+// ─────────────────────────────────────────
+// PROVIDER CHANGE
+// ─────────────────────────────────────────
+function onProviderChange(val) {
+  provider = val;
+  var d = provData[val] || provData['groq'];
+
+  // update tags
+  document.getElementById('sbHint').textContent      = d.hint;
+  document.getElementById('provTag').textContent     = d.tag;
+  document.getElementById('csChatTag').textContent   = d.shortTag;
+  document.getElementById('csNoticeProv').textContent = d.name;
+
+  // show/hide chat sidebar
+  var sidebar = document.getElementById('chatSidebar');
+  if (val === 'ollama') {
+    sidebar.classList.add('hidden');
+  } else {
+    sidebar.classList.remove('hidden');
+  }
+}
+
+// ─────────────────────────────────────────
+// INPUT HELPERS
+// ─────────────────────────────────────────
+function onMainGrow(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 150) + 'px';
+}
+
+function onFocusInput() {
+  document.getElementById('mainTa').focus();
+}
+
+function onLoadSample() {
+  var ta = document.getElementById('mainTa');
+  ta.value = 'CHEST X-RAY PA VIEW\n\nFINDINGS: Mild cardiomegaly is noted. Small left pleural effusion is present. Mild bibasal atelectatic changes are seen. No focal consolidation. No pneumothorax. No acute fracture identified.\n\nIMPRESSION:\n1. Mild cardiomegaly.\n2. Small left pleural effusion.\n3. Mild bibasal atelectatic changes.\n4. No emergency chest abnormality detected.';
+  onMainGrow(ta);
+  ta.focus();
+}
+
+function onFileSelect(input) {
+  if (input.files.length > 0) {
+    selFile = input.files[0];
+    document.getElementById('fileTag').textContent = '📎 ' + selFile.name;
+  }
+}
+
+// ─────────────────────────────────────────
+// MAIN SEND (submit report)
+// ─────────────────────────────────────────
+function onMainSend() {
+  var text = document.getElementById('mainTa').value.trim();
+  if (!text && !selFile) {
+    showErr('Please paste your report or attach a file.');
+    return;
+  }
+  hideErr();
+  removeEmpty();
+
+  appendUserBubble(text || ('📎 ' + selFile.name));
+
+  var ta = document.getElementById('mainTa');
+  ta.value = '';
+  ta.style.height = 'auto';
+  document.getElementById('mainSendBtn').disabled = true;
+  document.getElementById('statusPill').textContent = 'Analyzing…';
+
+  var typId = showMainTyping();
+
+  var fd = new FormData();
+  if (text)    fd.append('report_text', text);
+  if (selFile) fd.append('report_file', selFile);
+  fd.append('provider', provider);
+
+  fetch('/analyze_ajax', { method: 'POST', body: fd })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      removeTyping(typId);
+      if (data.error) {
+        showErr(data.error);
+        document.getElementById('statusPill').textContent = 'Error';
+      } else {
+        renderBotResult(data);
+        activateChatbot();
+        isAnalyzed = true;
+        ta.placeholder = 'Ask a follow-up question about your report…';
+        document.getElementById('statusPill').textContent = 'Analysis complete';
+      }
+    })
+    .catch(function() {
+      removeTyping(typId);
+      showErr('Something went wrong. Please check your connection and try again.');
+      document.getElementById('statusPill').textContent = 'Error';
+    })
+    .finally(function() {
+      document.getElementById('mainSendBtn').disabled = false;
+      selFile = null;
+      document.getElementById('fileTag').textContent = '';
+      document.getElementById('fileInput').value = '';
+    });
+}
+
+// ─────────────────────────────────────────
+// ACTIVATE CHATBOT (after analysis)
+// ─────────────────────────────────────────
+function activateChatbot() {
+  if (provider === 'ollama') return;
+
+  // hide notice, show welcome message
+  var notice = document.getElementById('csNotice');
+  if (notice) notice.remove();
+
+  // add welcome bubble
+  var wrap = document.createElement('div');
+  wrap.className = 'cs-row';
+  wrap.innerHTML = '<div class="cs-bubble bot">'
+    + 'Hi! I\'ve read your radiology report. Ask me anything about it 😊'
+    + '</div>'
+    + '<div class="cs-who">ClearScan Assistant</div>'
+    + '<div class="cs-suggestions">'
+    + '<div class="cs-sug" onclick="onCsQuickAsk(this)">What does the risk level mean?</div>'
+    + '<div class="cs-sug" onclick="onCsQuickAsk(this)">Should I be worried?</div>'
+    + '<div class="cs-sug" onclick="onCsQuickAsk(this)">What to ask my doctor?</div>'
+    + '<div class="cs-sug" onclick="onCsQuickAsk(this)">Explain the main finding simply</div>'
+    + '</div>';
+  document.getElementById('csMsgs').appendChild(wrap);
+  document.getElementById('csMsgs').scrollTop = 99999;
+
+  // enable input
+  document.getElementById('csTa').disabled      = false;
+  document.getElementById('csTa').placeholder   = 'Ask about your report…';
+  document.getElementById('csSendBtn').disabled = false;
+}
+
+// ─────────────────────────────────────────
+// RENDER MAIN RESULT
+// ─────────────────────────────────────────
+function removeEmpty() {
+  var e = document.getElementById('emptyState');
+  if (e) e.remove();
+}
+
+function appendUserBubble(txt) {
+  var msgs = document.getElementById('msgs');
+  var row  = document.createElement('div');
+  row.className = 'msg-row user';
+  row.innerHTML = '<div class="msg-meta">You</div>'
+    + '<div class="user-bubble">' + escHtml(txt) + '</div>';
+  msgs.appendChild(row);
+  scrollBottom();
+}
+
+function showMainTyping() {
+  var msgs = document.getElementById('msgs');
+  var id   = 'typ-' + Date.now();
+  var el   = document.createElement('div');
+  el.id    = id;
+  el.className = 'typing-row';
+  el.innerHTML = '<div class="t-ring"></div><span class="t-txt">Analyzing your report…</span>';
+  msgs.appendChild(el);
+  scrollBottom();
+  return id;
+}
+
+function removeTyping(id) {
+  var el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+function renderBotResult(d) {
+  var msgs  = document.getElementById('msgs');
+  var risk  = ((d.risk_level || 'unknown') + '').toLowerCase();
+  var rLbl  = risk==='high' ? '🔴 HIGH' : risk==='medium' ? '🟡 MEDIUM' : risk==='low' ? '🟢 LOW' : '⚪ UNKNOWN';
+  var pTag  = (provData[provider] || provData['groq']).tag;
+
+  var findHtml = '';
+  if (d.findings && d.findings.length) {
+    findHtml = '<div><div class="rs-title"><span class="rs-dot blue"></span>Key Findings</div>'
+      + '<div class="findings-list">'
+      + d.findings.map(function(f){ return '<div class="fi"><span class="fi-dash">—</span><span>'+escHtml(f)+'</span></div>'; }).join('')
+      + '</div></div>';
+  }
+
+  var termHtml = '';
+  if (d.terms && d.terms.length) {
+    termHtml = '<div><div class="rs-title"><span class="rs-dot amber"></span>Medical Terms Decoded</div>'
+      + '<div class="terms-list">'
+      + d.terms.map(function(t){
+          var def = t.meaning || t.patient_explanation || t.simple_meaning || '';
+          return '<div class="ti"><span class="ti-name">'+escHtml(t.term)+'</span><span class="ti-def">'+escHtml(def)+'</span></div>';
+        }).join('')
+      + '</div></div>';
+  }
+
+  var row = document.createElement('div');
+  row.className = 'msg-row bot';
+  row.innerHTML = '<div class="msg-meta">ClearScan · ' + pTag + '</div>'
+    + '<div class="bot-card">'
+      + '<div class="risk-strip ' + risk + '">'
+        + '<div><div class="risk-lbl">Risk Level</div><div class="risk-val">'+rLbl+'</div></div>'
+        + '<div class="risk-reason">'+escHtml(d.risk_reason||'See summary below.')+'</div>'
+      + '</div>'
+      + '<div class="bot-body">'
+        + '<div><div class="rs-title"><span class="rs-dot teal"></span>Plain-Language Summary</div>'
+        + '<div class="rs-content">'+(d.summary||'')+'</div></div>'
+        + findHtml + termHtml
+      + '</div>'
+      + '<div class="bot-actions">'
+        + '<button class="ba-btn" onclick="window.print()">🖨 Print</button>'
+        + '<button class="ba-btn" onclick="onCopyResult(this)">📋 Copy</button>'
+        + '<button class="ba-btn" onclick="location.reload()">↺ New Report</button>'
+      + '</div>'
+    + '</div>'
+    + '<div style="font-size:.63rem;color:var(--dim);padding:.15rem .2rem">⚠️ Educational use only. Always discuss with your healthcare provider.</div>';
+  msgs.appendChild(row);
+  scrollBottom();
+}
+
+function onCopyResult(btn) {
+  var card = btn.closest('.bot-card');
+  navigator.clipboard.writeText(card.innerText).then(function() {
+    btn.textContent = '✓ Copied';
+    setTimeout(function(){ btn.textContent = '📋 Copy'; }, 2000);
+  });
+}
+
+// ─────────────────────────────────────────
+// CHATBOT SIDEBAR
+// ─────────────────────────────────────────
+function onCsGrow(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 80) + 'px';
+}
+
+function onCsKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); onCsSend(); }
+}
+
+function onCsQuickAsk(el) {
+  document.getElementById('csTa').value = el.textContent;
+  onCsSend();
+}
+
+function onCsSend() {
+  var inp = document.getElementById('csTa');
+  var msg = inp.value.trim();
+  if (!msg) return;
+  inp.value = '';
+  inp.style.height = 'auto';
+  document.getElementById('csSendBtn').disabled = true;
+
+  csAppend(msg, 'user');
+  var tid = csTyping();
+
+  fetch('/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: msg })
+  })
+    .then(function(res){ return res.json(); })
+    .then(function(data){
+      csRemoveTyping(tid);
+      csAppend(data.reply, 'bot');
+    })
+    .catch(function(){
+      csRemoveTyping(tid);
+      csAppend('Something went wrong. Please try again.', 'error');
+    })
+    .finally(function(){
+      document.getElementById('csSendBtn').disabled = false;
+    });
+}
+
+function csAppend(text, role) {
+  var msgs = document.getElementById('csMsgs');
+  var wrap = document.createElement('div');
+  wrap.className = 'cs-row';
+  var bubble = document.createElement('div');
+  bubble.className = 'cs-bubble ' + role;
+  bubble.innerHTML = text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+  var who = document.createElement('div');
+  who.className = 'cs-who';
+  who.textContent = role === 'user' ? 'You' : 'ClearScan Assistant';
+  wrap.appendChild(bubble);
+  wrap.appendChild(who);
+  msgs.appendChild(wrap);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function csTyping() {
+  var msgs = document.getElementById('csMsgs');
+  var id   = 'cst-' + Date.now();
+  var el   = document.createElement('div');
+  el.id = id;
+  el.innerHTML = '<div class="cs-typing"><span></span><span></span><span></span></div>';
+  msgs.appendChild(el);
+  msgs.scrollTop = msgs.scrollHeight;
+  return id;
+}
+
+function csRemoveTyping(id) {
+  var el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+// ─────────────────────────────────────────
+// UTILS
+// ─────────────────────────────────────────
+function scrollBottom() {
+  var m = document.getElementById('msgs');
+  m.scrollTop = m.scrollHeight;
+}
+function showErr(msg) {
+  var e = document.getElementById('errBar');
+  e.textContent = '⚠ ' + msg;
+  e.style.display = 'block';
+}
+function hideErr() {
+  document.getElementById('errBar').style.display = 'none';
+}
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 </script>
 </body>

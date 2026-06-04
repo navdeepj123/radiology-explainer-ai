@@ -103,22 +103,25 @@ def clean_history_text(text):
     return text
 
 
+# ── HOME ──────────────────────────────────────────────────────────────────────
+
 @app.route("/")
 def home():
     return render_template("home.html")
 
 
+# ── ANALYZE (original — renders results.html) ─────────────────────────────────
+
 @app.route("/analyze", methods=["GET", "POST"])
 def analyze():
 
     if request.method == "GET":
-        return render_template("analyze.html")
+        return render_template("Analyze.html")
 
     report_text = request.form.get("report_text", "").strip()
-    question = request.form.get("question", "").strip()
-    provider = request.form.get("provider", "groq").strip()
-
-    uploaded = request.files.get("report_file")
+    question    = request.form.get("question", "").strip()
+    provider    = request.form.get("provider", "groq").strip()
+    uploaded    = request.files.get("report_file")
 
     if uploaded and uploaded.filename:
         try:
@@ -128,30 +131,28 @@ def analyze():
 
     if not report_text:
         return render_template(
-            "analyze.html",
+            "Analyze.html",
             error="Please paste your report text or upload a file."
         )
 
     session["report_text"] = report_text
-    session["provider"] = provider
+    session["provider"]    = provider
 
     try:
         results = generate_explanation(report_text, provider, question)
     except TypeError:
         results = generate_explanation(report_text, provider)
 
-    history = session.get("history", [])
-
+    history      = session.get("history", [])
     summary_text = results.get("summary", "") if isinstance(results, dict) else str(results)
     summary_text = clean_history_text(summary_text)
 
     history.append({
-        "date": datetime.now().strftime("%d %b %Y, %I:%M %p"),
+        "date":     datetime.now().strftime("%d %b %Y, %I:%M %p"),
         "provider": provider,
-        "report": clean_history_text(report_text[:150]),
-        "summary": summary_text[:250]
+        "report":   clean_history_text(report_text[:150]),
+        "summary":  summary_text[:250]
     })
-
     session["history"] = history[-5:]
 
     show_chatbot = provider in ("groq", "gemini", "openai")
@@ -166,14 +167,72 @@ def analyze():
     )
 
 
+# ── ANALYZE AJAX (new — returns JSON for single-page UI) ──────────────────────
+
+@app.route("/analyze_ajax", methods=["POST"])
+def analyze_ajax():
+    """
+    Same logic as /analyze POST but returns JSON.
+    Called by the new Analyze.html via fetch() — no page reload needed.
+    Results + chatbot all appear on the same page.
+    """
+
+    report_text = request.form.get("report_text", "").strip()
+    provider    = request.form.get("provider", "groq").strip()
+    uploaded    = request.files.get("report_file")
+
+    # File upload support
+    if uploaded and uploaded.filename:
+        try:
+            report_text = uploaded.read().decode("utf-8", errors="ignore").strip()
+        except Exception:
+            pass
+
+    if not report_text:
+        return jsonify({"error": "Please paste your report text or upload a file."}), 400
+
+    # Store in session so /chat works immediately after
+    session["report_text"] = report_text
+    session["provider"]    = provider
+
+    # Run the same AI analysis
+    try:
+        results = generate_explanation(report_text, provider, "")
+    except TypeError:
+        results = generate_explanation(report_text, provider)
+
+    # Save to history (same as /analyze)
+    history      = session.get("history", [])
+    summary_text = results.get("summary", "") if isinstance(results, dict) else str(results)
+    summary_text = clean_history_text(summary_text)
+
+    history.append({
+        "date":     datetime.now().strftime("%d %b %Y, %I:%M %p"),
+        "provider": provider,
+        "report":   clean_history_text(report_text[:150]),
+        "summary":  summary_text[:250]
+    })
+    session["history"] = history[-5:]
+
+    # Return JSON to frontend
+    return jsonify({
+        "risk_level":  results.get("risk_level",  "unknown"),
+        "risk_reason": results.get("risk_reason", ""),
+        "summary":     results.get("summary",     ""),
+        "findings":    results.get("findings",    []),
+        "terms":       results.get("terms",       []),
+    })
+
+
+# ── CHAT ──────────────────────────────────────────────────────────────────────
+
 @app.route("/chat", methods=["POST"])
 def chat():
 
-    data = request.get_json(silent=True) or {}
+    data     = request.get_json(silent=True) or {}
     user_msg = data.get("message", "").strip()
-
     provider = session.get("provider", "groq")
-    report = session.get("report_text", "")
+    report   = session.get("report_text", "")
 
     if not user_msg:
         return jsonify({"reply": "Please type a message."})
@@ -182,7 +241,7 @@ def chat():
 
     if any(keyword in lower for keyword in CRISIS_KEYWORDS):
         return jsonify({
-            "reply": CRISIS_REPLY,
+            "reply":     CRISIS_REPLY,
             "is_crisis": True
         })
 
@@ -211,7 +270,6 @@ def chat():
             provider,
             system_prompt=system
         )
-
     except TypeError:
         full_prompt = system + "\n\nPatient question: " + user_msg
         reply = generate_with_provider(full_prompt, provider)
@@ -220,6 +278,8 @@ def chat():
 
     return jsonify({"reply": reply})
 
+
+# ── RUN ───────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
