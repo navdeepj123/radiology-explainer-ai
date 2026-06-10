@@ -57,8 +57,11 @@ def retrieve_relevant_info(report_text):
                 if item_id not in found_ids:
                     found_ids.add(item_id)
                     found_terms.append({
-                        "term": item.get("term", ""),  # always show main term
-                        "meaning": meaning
+               "term":      item.get("term", ""),
+    "meaning":   meaning,
+    "severity":  item.get("severity", "Low"),
+    "urgency":   item.get("urgency", "Non-urgent"),
+    "red_flag":  item.get("red_flag", False)
                     })
                 break  # ← found a match for this item, no need to check more variants
 

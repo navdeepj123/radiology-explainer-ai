@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ClearScan — Analyze Report</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -31,11 +31,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 .app{display:flex;flex:1;overflow:hidden}
 
 /* LEFT SETTINGS SIDEBAR */
-.settings-sidebar{
-  width:200px;flex-shrink:0;background:var(--bg2);
-  border-right:1px solid var(--border);
-  display:flex;flex-direction:column;overflow:hidden;
-}
+.settings-sidebar{width:200px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
 .sb-head{padding:.85rem 1rem;border-bottom:1px solid var(--border)}
 .sb-title{font-size:.88rem;font-weight:600;color:var(--text)}
 .sb-sub{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:.1rem}
@@ -47,21 +43,37 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 .sb-sel{width:100%;padding:.4rem .5rem;background:var(--card);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-size:.75rem;font-family:'DM Sans',sans-serif;cursor:pointer;outline:none}
 .sb-sel:focus{border-color:var(--blue)}
 .sb-hint{font-size:.64rem;color:var(--muted);padding:.3rem 1rem .7rem;line-height:1.55;border-bottom:1px solid var(--border)}
-.sb-spacer{flex:1}
-.sb-privacy{padding:.65rem 1rem;border-top:1px solid var(--border);font-size:.64rem;color:var(--dim);line-height:1.5}
+
+/* OLLAMA MODEL SELECTOR */
+.sb-ollama-wrap{display:none}
+.sb-ollama-hint{font-size:.64rem;color:var(--muted);padding:.2rem 1rem .6rem;line-height:1.5;border-bottom:1px solid var(--border)}
+
+/* HISTORY */
+.sb-hist-sec{padding:.6rem 1rem .2rem;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);border-top:1px solid var(--border);margin-top:.5rem}
+.sb-hist-list{flex:1;overflow-y:auto;padding:0 .5rem .5rem;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.sb-hist-list::-webkit-scrollbar{width:3px}
+.sb-hist-list::-webkit-scrollbar-thumb{background:var(--border)}
+.sb-hist-empty{padding:.6rem .75rem;font-size:.72rem;color:var(--dim);text-align:center;margin-top:.5rem}
+.sh-item{padding:.5rem .65rem;border-radius:7px;margin-bottom:.3rem;border:1px solid transparent;transition:background .15s,border-color .15s;cursor:pointer}
+.sh-item:hover{background:var(--card2);border-color:var(--border2)}
+.sh-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.2rem}
+.sh-prov{font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:100px;background:rgba(79,124,255,.15);color:var(--blue)}
+.sh-time{font-size:.6rem;color:var(--dim)}
+.sh-preview{font-size:.7rem;color:var(--muted);line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sh-risk{font-size:.62rem;margin-top:.2rem}
+.sh-risk.low{color:#10B981}.sh-risk.medium{color:#F59E0B}.sh-risk.high{color:#EF4444}.sh-risk.unknown{color:var(--dim)}
+.sb-privacy{padding:.65rem 1rem;border-top:1px solid var(--border);font-size:.64rem;color:var(--dim);line-height:1.5;flex-shrink:0}
 .sb-privacy strong{color:var(--muted)}
 
 /* MAIN */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
 .main-top{height:40px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;border-bottom:1px solid var(--border);background:var(--bg2)}
 .main-top-title{font-size:.8rem;color:var(--muted);font-weight:500}
-
-/* messages */
 .msgs{flex:1;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1.25rem;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
 .msgs::-webkit-scrollbar{width:4px}
 .msgs::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 
-/* empty state */
+/* EMPTY STATE */
 .empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:.4rem;background:radial-gradient(ellipse 60% 50% at 50% 60%,rgba(79,124,255,.06),transparent)}
 .e-icon{font-size:2.2rem;margin-bottom:.2rem;animation:pulse 2.5s ease-in-out infinite}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
@@ -72,7 +84,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 .chip{padding:5px 12px;background:var(--card);border:1px solid var(--border2);border-radius:100px;font-size:.72rem;color:var(--muted);cursor:pointer;transition:border-color .15s,color .15s}
 .chip:hover{border-color:var(--blue);color:var(--text)}
 
-/* message rows */
+/* MESSAGE ROWS */
 .msg-row{display:flex;flex-direction:column;gap:.3rem;max-width:820px;width:100%}
 .msg-row.user{align-self:flex-end;align-items:flex-end}
 .msg-row.bot{align-self:flex-start;align-items:flex-start}
@@ -132,118 +144,72 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 .sample-btn:hover{color:#7aa0ff}
 #fileInput{display:none}
 
-/* RIGHT CHAT SIDEBAR */
-.chat-sidebar{
-  width:280px;flex-shrink:0;
-  background:var(--bg2);
-  border-left:1px solid var(--border);
-  display:flex;flex-direction:column;
-  overflow:hidden;
-  transition:width .25s ease;
-}
-.chat-sidebar.hidden{width:0;border-left:none;overflow:hidden}
+/* NEW REPORT BAR */
+.new-report-bar{display:none;justify-content:center;align-items:center;gap:1rem;padding:.75rem 1.25rem;border-top:1px solid var(--border);background:var(--bg2);flex-shrink:0}
+.new-report-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.25rem;background:transparent;border:1px solid var(--border2);border-radius:8px;color:var(--muted);font-size:.78rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:border-color .15s,color .15s}
+.new-report-btn:hover{border-color:var(--blue);color:var(--text)}
+.analyzed-note{font-size:.7rem;color:var(--dim)}
 
-.cs-topbar{
-  height:40px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 .85rem;
-  border-bottom:1px solid var(--border);
-  background:var(--bg2);
-}
+/* OLLAMA INLINE CHAT */
+.ollama-chat{background:var(--card);border:1px solid var(--border2);border-radius:3px 13px 13px 13px;max-width:720px;width:100%;overflow:hidden}
+.ollama-chat-head{padding:.5rem .8rem;border-bottom:1px solid var(--border2);font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--dim)}
+.ollama-chat-msgs{display:flex;flex-direction:column;gap:.5rem;padding:.6rem .8rem;max-height:280px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.ollama-chat-msgs::-webkit-scrollbar{width:3px}
+.ollama-chat-msgs::-webkit-scrollbar-thumb{background:var(--border)}
+.oc-bubble{padding:.45rem .7rem;font-size:.8rem;line-height:1.6;border-radius:10px;max-width:90%;word-break:break-word}
+.oc-bubble.user{background:var(--blue);color:#fff;align-self:flex-end;border-radius:10px 10px 3px 10px}
+.oc-bubble.bot{background:var(--card2);border:1px solid var(--border2);color:var(--text);border-radius:3px 10px 10px 10px}
+.oc-typing{display:flex;gap:3px;padding:.45rem .7rem;background:var(--card2);border:1px solid var(--border2);border-radius:3px 10px 10px 10px;width:fit-content}
+.oc-typing span{width:5px;height:5px;border-radius:50%;background:var(--muted);animation:td 1.2s ease-in-out infinite}
+.oc-typing span:nth-child(2){animation-delay:.2s}
+.oc-typing span:nth-child(3){animation-delay:.4s}
+.ollama-chat-input{display:flex;gap:.4rem;align-items:flex-end;padding:.5rem .8rem;border-top:1px solid var(--border2)}
+.oc-ta{flex:1;background:var(--input-bg);border:1px solid var(--border2);border-radius:8px;padding:.4rem .6rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.8rem;outline:none;resize:none;min-height:32px;max-height:80px;line-height:1.5}
+.oc-ta:focus{border-color:var(--blue)}
+.oc-ta::placeholder{color:var(--dim)}
+.oc-send{width:30px;height:30px;flex-shrink:0;background:var(--blue);border:none;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.oc-send:hover{background:var(--blue-dk)}
+.oc-send:disabled{background:var(--dim);cursor:not-allowed}
+
+/* RIGHT CHAT SIDEBAR */
+.chat-sidebar{width:280px;flex-shrink:0;background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transition:width .25s ease}
+.chat-sidebar.hidden{width:0;border-left:none;overflow:hidden}
+.cs-topbar{height:40px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 .85rem;border-bottom:1px solid var(--border);background:var(--bg2)}
 .cs-title-wrap{display:flex;align-items:center;gap:.5rem}
-.cs-avatar{
-  width:26px;height:26px;border-radius:50%;
-  background:rgba(79,124,255,.15);border:1px solid rgba(79,124,255,.25);
-  display:flex;align-items:center;justify-content:center;
-  font-size:.75rem;flex-shrink:0;
-}
+.cs-avatar{width:26px;height:26px;border-radius:50%;background:rgba(79,124,255,.15);border:1px solid rgba(79,124,255,.25);display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0}
 .cs-name{font-size:.8rem;font-weight:600;color:var(--text)}
 .cs-status{display:flex;align-items:center;gap:4px;font-size:.65rem;color:var(--muted)}
 .cs-dot{width:5px;height:5px;border-radius:50%;background:#10B981}
 .cs-provider-tag{font-size:.65rem;padding:2px 8px;background:rgba(79,124,255,.12);border:1px solid rgba(79,124,255,.2);border-radius:100px;color:var(--blue)}
-
-/* chat messages area */
-.cs-msgs{
-  flex:1;overflow-y:auto;
-  padding:.75rem;
-  display:flex;flex-direction:column;
-  gap:.5rem;
-  scrollbar-width:thin;scrollbar-color:var(--border) transparent;
-}
+.cs-msgs{flex:1;overflow-y:auto;padding:.75rem;display:flex;flex-direction:column;gap:.5rem;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
 .cs-msgs::-webkit-scrollbar{width:3px}
 .cs-msgs::-webkit-scrollbar-thumb{background:var(--border)}
-
-/* pre-analysis notice inside chat */
-.cs-notice{
-  display:flex;flex-direction:column;align-items:center;
-  justify-content:center;padding:1.5rem .75rem;
-  text-align:center;gap:.5rem;flex:1;
-}
+.cs-notice{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem .75rem;text-align:center;gap:.5rem;flex:1}
 .cs-notice-icon{font-size:1.6rem}
 .cs-notice p{font-size:.75rem;color:var(--muted);line-height:1.55}
 .cs-notice small{font-size:.67rem;color:var(--dim)}
-
-/* bubbles */
 .cs-row{display:flex;flex-direction:column;gap:2px}
-.cs-bubble{
-  padding:.55rem .7rem;
-  font-size:.78rem;line-height:1.6;
-  word-break:break-word;max-width:100%;
-}
-.cs-bubble.bot{
-  background:var(--card);border:1px solid var(--border2);
-  border-radius:3px 10px 10px 10px;color:var(--text);
-}
-.cs-bubble.user{
-  background:var(--blue);color:#fff;
-  border-radius:10px 10px 3px 10px;
-  align-self:flex-end;
-}
+.cs-bubble{padding:.55rem .7rem;font-size:.78rem;line-height:1.6;word-break:break-word;max-width:100%}
+.cs-bubble.bot{background:var(--card);border:1px solid var(--border2);border-radius:3px 10px 10px 10px;color:var(--text)}
+.cs-bubble.user{background:var(--blue);color:#fff;border-radius:10px 10px 3px 10px;align-self:flex-end}
 .cs-bubble.error{background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.25);color:#f87171;border-radius:8px}
 .cs-who{font-size:.63rem;color:var(--dim);padding:0 .1rem;margin-top:1px}
-
-/* quick suggestions */
 .cs-suggestions{display:flex;flex-direction:column;gap:.3rem;margin-top:.35rem}
-.cs-sug{
-  padding:.4rem .6rem;background:var(--card2);
-  border:1px solid var(--border2);border-radius:6px;
-  font-size:.73rem;color:var(--muted);cursor:pointer;
-  transition:border-color .15s,color .15s;
-}
+.cs-sug{padding:.4rem .6rem;background:var(--card2);border:1px solid var(--border2);border-radius:6px;font-size:.73rem;color:var(--muted);cursor:pointer;transition:border-color .15s,color .15s}
 .cs-sug:hover{border-color:var(--blue);color:var(--text)}
-
-/* typing dots */
 .cs-typing{display:flex;gap:3px;padding:.5rem .65rem;background:var(--card);border:1px solid var(--border2);border-radius:3px 9px 9px 9px;width:fit-content}
 .cs-typing span{width:5px;height:5px;border-radius:50%;background:var(--muted);animation:td 1.2s ease-in-out infinite}
 .cs-typing span:nth-child(2){animation-delay:.2s}
 .cs-typing span:nth-child(3){animation-delay:.4s}
 @keyframes td{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
-
-/* chat input */
-.cs-input-wrap{
-  flex-shrink:0;
-  border-top:1px solid var(--border);
-  padding:.6rem .75rem;
-  background:var(--bg2);
-}
+.cs-input-wrap{flex-shrink:0;border-top:1px solid var(--border);padding:.6rem .75rem;background:var(--bg2)}
 .cs-limit{font-size:.63rem;color:var(--dim);margin-bottom:.4rem;display:flex;align-items:center;gap:4px}
 .cs-input-row{display:flex;gap:.4rem;align-items:flex-end}
-.cs-ta{
-  flex:1;background:var(--input-bg);
-  border:1px solid var(--border2);border-radius:8px;
-  padding:.45rem .6rem;color:var(--text);
-  font-family:'DM Sans',sans-serif;font-size:.78rem;
-  outline:none;resize:none;min-height:34px;max-height:80px;line-height:1.5;
-}
+.cs-ta{flex:1;background:var(--input-bg);border:1px solid var(--border2);border-radius:8px;padding:.45rem .6rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.78rem;outline:none;resize:none;min-height:34px;max-height:80px;line-height:1.5}
 .cs-ta:focus{border-color:var(--blue)}
 .cs-ta::placeholder{color:var(--dim)}
 .cs-ta:disabled{opacity:.4;cursor:not-allowed}
-.cs-send{
-  width:32px;height:32px;flex-shrink:0;
-  background:var(--blue);border:none;border-radius:7px;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:background .15s;
-}
+.cs-send{width:32px;height:32px;flex-shrink:0;background:var(--blue);border:none;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
 .cs-send:hover{background:var(--blue-dk)}
 .cs-send:disabled{background:var(--dim);cursor:not-allowed}
 
@@ -253,7 +219,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 </head>
 <body>
 
-<!-- TOP BAR -->
 <div class="topbar">
   <a href="/" class="topbar-logo">ClearScan</a>
   <div class="topbar-r">
@@ -264,7 +229,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 
 <div class="app">
 
-  <!-- LEFT: SETTINGS SIDEBAR -->
+  <!-- LEFT SIDEBAR -->
   <aside class="settings-sidebar">
     <div class="sb-head">
       <div class="sb-title">ClearScan</div>
@@ -282,11 +247,28 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
       </select>
     </div>
     <div class="sb-hint" id="sbHint">Fast and free. Report sent to Groq servers.</div>
-    <div class="sb-spacer"></div>
+
+    <!-- OLLAMA MODEL SELECTOR — only shows when Ollama selected -->
+    <div class="sb-ollama-wrap" id="sbOllamaWrap">
+      <div class="sb-sec">Ollama Model</div>
+      <div class="sb-row">
+        <div class="sb-lbl">Select model</div>
+        <select class="sb-sel" id="ollamaModelSel" onchange="onOllamaModelChange(this.value)">
+          <option value="llama3.2:1b">⚡ llama3.2:1b — Fast</option>
+          <option value="mistral">🧠 mistral — Better quality</option>
+        </select>
+      </div>
+      <div class="sb-ollama-hint" id="ollamaModelHint">Fast responses, good for Q&amp;A.</div>
+    </div>
+
+    <div class="sb-hist-sec">Recent Reports</div>
+    <div class="sb-hist-list" id="sbHistList">
+      <div class="sb-hist-empty" id="sbHistEmpty">No reports yet</div>
+    </div>
     <div class="sb-privacy"><strong>🔒 Private</strong><br>Never stored on our servers.</div>
   </aside>
 
-  <!-- CENTER: MAIN CHAT AREA -->
+  <!-- CENTER -->
   <div class="main">
     <div class="main-top">
       <span class="main-top-title">Radiology Report Explainer</span>
@@ -308,7 +290,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
       </div>
     </div>
 
-    <div class="input-area">
+    <div class="input-area" id="inputArea">
       <div class="err-bar" id="errBar" style="display:none"></div>
       <div class="input-box">
         <button class="ic-btn" type="button" title="Attach file"
@@ -336,9 +318,19 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
         </div>
       </div>
     </div>
+
+    <div class="new-report-bar" id="newReportBar">
+      <span class="analyzed-note">✓ Report analyzed — ask questions in the chat →</span>
+      <button class="new-report-btn" onclick="onNewReport()">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <path d="M2 6.5a4.5 4.5 0 104.5-4.5H4M4 2L2 4l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Analyse New Report
+      </button>
+    </div>
   </div>
 
-  <!-- RIGHT: CHAT SIDEBAR -->
+  <!-- RIGHT CHAT SIDEBAR -->
   <aside class="chat-sidebar" id="chatSidebar">
     <div class="cs-topbar">
       <div class="cs-title-wrap">
@@ -350,19 +342,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
       </div>
       <span class="cs-provider-tag" id="csChatTag">GROQ</span>
     </div>
-
-    <!-- messages -->
     <div class="cs-msgs" id="csMsgs">
-
-      <!-- pre-analysis notice (shown before report submitted) -->
       <div class="cs-notice" id="csNotice">
         <div class="cs-notice-icon">🫁</div>
         <p>Submit your radiology report first, then I'll be able to answer your questions about it.</p>
         <small>Powered by <span id="csNoticeProv">Groq</span></small>
       </div>
-
     </div>
-
     <div class="cs-input-wrap">
       <div class="cs-limit">🔒 Only answers questions about your report</div>
       <div class="cs-input-row">
@@ -386,16 +372,59 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 // ─────────────────────────────────────────
 // STATE
 // ─────────────────────────────────────────
-var provider   = 'groq';
-var selFile    = null;
-var isAnalyzed = false;
+var provider    = 'groq';
+var ollamaModel = 'llama3.2:1b';
+var selFile     = null;
+var isAnalyzed  = false;
+var savedText   = '';
+var historyArr  = [];
 
 var provData = {
   groq:   { tag:'⚡ GROQ',   shortTag:'GROQ',   hint:'Fast and free. Report sent to Groq servers.',   name:'Groq'   },
   gemini: { tag:'✨ GEMINI', shortTag:'GEMINI', hint:'Free via OpenRouter. Report sent to Google.',   name:'Gemini' },
   openai: { tag:'🤖 OPENAI', shortTag:'OPENAI', hint:'GPT-4o-mini. Requires paid API key.',           name:'OpenAI' },
-  ollama: { tag:'🖥️ LOCAL',  shortTag:'LOCAL',  hint:'Runs on your computer. No chatbot available.', name:'Ollama' }
+  ollama: { tag:'🖥️ LOCAL',  shortTag:'LOCAL',  hint:'Runs locally on your computer.',               name:'Ollama' }
 };
+
+var ollamaHints = {
+  'llama3.2:1b': '⚡ Fast responses, good for Q&A.',
+  'mistral':     '🧠 Better quality analysis, slower.'
+};
+
+// ─────────────────────────────────────────
+// HISTORY
+// ─────────────────────────────────────────
+function addToHistory(reportText, riskLevel, prov) {
+  var now  = new Date();
+  var time = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+  historyArr.unshift({
+    preview: reportText.substring(0, 80).trim(),
+    risk:    (riskLevel || 'unknown').toLowerCase(),
+    prov:    prov.toUpperCase(),
+    time:    time
+  });
+  if (historyArr.length > 5) historyArr.pop();
+  var list  = document.getElementById('sbHistList');
+  var empty = document.getElementById('sbHistEmpty');
+  if (empty) empty.style.display = 'none';
+  list.querySelectorAll('.sh-item').forEach(function(el){ el.remove(); });
+  historyArr.forEach(function(item) {
+    var rLabel = item.risk==='high'   ? '🔴 High risk'
+               : item.risk==='medium' ? '🟡 Medium risk'
+               : item.risk==='low'    ? '🟢 Low risk'
+               :                        '⚪ Unknown';
+    var div = document.createElement('div');
+    div.className = 'sh-item';
+    div.innerHTML =
+      '<div class="sh-top">'
+        + '<span class="sh-prov">'+item.prov+'</span>'
+        + '<span class="sh-time">'+item.time+'</span>'
+      + '</div>'
+      + '<div class="sh-preview">'+escHtml(item.preview)+'…</div>'
+      + '<div class="sh-risk '+item.risk+'">'+rLabel+'</div>';
+    list.appendChild(div);
+  });
+}
 
 // ─────────────────────────────────────────
 // PROVIDER CHANGE
@@ -403,14 +432,15 @@ var provData = {
 function onProviderChange(val) {
   provider = val;
   var d = provData[val] || provData['groq'];
-
-  // update tags
-  document.getElementById('sbHint').textContent      = d.hint;
-  document.getElementById('provTag').textContent     = d.tag;
-  document.getElementById('csChatTag').textContent   = d.shortTag;
+  document.getElementById('sbHint').textContent       = d.hint;
+  document.getElementById('provTag').textContent      = d.tag;
+  document.getElementById('csChatTag').textContent    = d.shortTag;
   document.getElementById('csNoticeProv').textContent = d.name;
 
-  // show/hide chat sidebar
+  // show/hide ollama model selector
+  document.getElementById('sbOllamaWrap').style.display = (val === 'ollama') ? 'block' : 'none';
+
+  // show/hide right chat sidebar
   var sidebar = document.getElementById('chatSidebar');
   if (val === 'ollama') {
     sidebar.classList.add('hidden');
@@ -420,24 +450,29 @@ function onProviderChange(val) {
 }
 
 // ─────────────────────────────────────────
+// OLLAMA MODEL CHANGE
+// ─────────────────────────────────────────
+function onOllamaModelChange(val) {
+  ollamaModel = val;
+  document.getElementById('ollamaModelHint').textContent = ollamaHints[val] || '';
+}
+
+// ─────────────────────────────────────────
 // INPUT HELPERS
 // ─────────────────────────────────────────
 function onMainGrow(el) {
   el.style.height = 'auto';
   el.style.height = Math.min(el.scrollHeight, 150) + 'px';
 }
-
 function onFocusInput() {
   document.getElementById('mainTa').focus();
 }
-
 function onLoadSample() {
   var ta = document.getElementById('mainTa');
   ta.value = 'CHEST X-RAY PA VIEW\n\nFINDINGS: Mild cardiomegaly is noted. Small left pleural effusion is present. Mild bibasal atelectatic changes are seen. No focal consolidation. No pneumothorax. No acute fracture identified.\n\nIMPRESSION:\n1. Mild cardiomegaly.\n2. Small left pleural effusion.\n3. Mild bibasal atelectatic changes.\n4. No emergency chest abnormality detected.';
   onMainGrow(ta);
   ta.focus();
 }
-
 function onFileSelect(input) {
   if (input.files.length > 0) {
     selFile = input.files[0];
@@ -446,7 +481,7 @@ function onFileSelect(input) {
 }
 
 // ─────────────────────────────────────────
-// MAIN SEND (submit report)
+// MAIN SEND
 // ─────────────────────────────────────────
 function onMainSend() {
   var text = document.getElementById('mainTa').value.trim();
@@ -456,22 +491,19 @@ function onMainSend() {
   }
   hideErr();
   removeEmpty();
-
+  savedText = text;
   appendUserBubble(text || ('📎 ' + selFile.name));
-
   var ta = document.getElementById('mainTa');
   ta.value = '';
   ta.style.height = 'auto';
   document.getElementById('mainSendBtn').disabled = true;
   document.getElementById('statusPill').textContent = 'Analyzing…';
-
   var typId = showMainTyping();
-
   var fd = new FormData();
   if (text)    fd.append('report_text', text);
   if (selFile) fd.append('report_file', selFile);
   fd.append('provider', provider);
-
+  if (provider === 'ollama') fd.append('ollama_model', ollamaModel);
   fetch('/analyze_ajax', { method: 'POST', body: fd })
     .then(function(res) { return res.json(); })
     .then(function(data) {
@@ -482,9 +514,11 @@ function onMainSend() {
       } else {
         renderBotResult(data);
         activateChatbot();
+        addToHistory(savedText, data.risk_level, provider);
         isAnalyzed = true;
-        ta.placeholder = 'Ask a follow-up question about your report…';
         document.getElementById('statusPill').textContent = 'Analysis complete';
+        document.getElementById('inputArea').style.display    = 'none';
+        document.getElementById('newReportBar').style.display = 'flex';
       }
     })
     .catch(function() {
@@ -501,16 +535,63 @@ function onMainSend() {
 }
 
 // ─────────────────────────────────────────
-// ACTIVATE CHATBOT (after analysis)
+// NEW REPORT
+// ─────────────────────────────────────────
+function onNewReport() {
+  isAnalyzed = false;
+  savedText  = '';
+  document.getElementById('inputArea').style.display    = 'block';
+  document.getElementById('newReportBar').style.display = 'none';
+  document.getElementById('mainTa').value        = '';
+  document.getElementById('mainTa').style.height = 'auto';
+  document.getElementById('mainTa').placeholder  = 'Paste your radiology report here…';
+  document.getElementById('statusPill').textContent     = 'Ready';
+  document.getElementById('mainSendBtn').disabled       = false;
+  document.getElementById('mainTa').focus();
+  document.getElementById('csMsgs').innerHTML =
+    '<div class="cs-notice" id="csNotice">'
+    + '<div class="cs-notice-icon">🫁</div>'
+    + '<p>Submit your radiology report first, then I\'ll be able to answer your questions about it.</p>'
+    + '<small>Powered by <span id="csNoticeProv">'
+    + (provData[provider]||provData['groq']).name
+    + '</span></small>'
+    + '</div>';
+  document.getElementById('csTa').disabled      = true;
+  document.getElementById('csSendBtn').disabled = true;
+}
+
+// ─────────────────────────────────────────
+// ACTIVATE CHATBOT
 // ─────────────────────────────────────────
 function activateChatbot() {
-  if (provider === 'ollama') return;
+  if (provider === 'ollama') {
+    var msgs = document.getElementById('msgs');
+    var card = document.createElement('div');
+    card.className = 'msg-row bot';
+    var modelLabel = ollamaModel === 'mistral' ? '🧠 mistral' : '⚡ llama3.2:1b';
+    card.innerHTML =
+      '<div class="msg-meta">ClearScan Assistant · 🖥️ LOCAL · ' + modelLabel + '</div>'
+      + '<div class="ollama-chat">'
+        + '<div class="ollama-chat-head">🔒 Local Chat — Ask questions about your report</div>'
+        + '<div class="ollama-chat-msgs" id="ocMsgs">'
+          + '<div class="oc-bubble bot">Hi! I\'ve read your report. Ask me anything about it 😊 (Running locally via Ollama — fully private)</div>'
+        + '</div>'
+        + '<div class="ollama-chat-input">'
+          + '<textarea class="oc-ta" id="ocTa" rows="1" placeholder="Ask about your report…" onkeydown="onOcKey(event)" oninput="onOcGrow(this)"></textarea>'
+          + '<button class="oc-send" id="ocSendBtn" onclick="onOcSend()">'
+            + '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 6h10M7 2l4 4-4 4" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+          + '</button>'
+        + '</div>'
+      + '</div>';
+    msgs.appendChild(card);
+    scrollBottom();
+    setTimeout(function(){ document.getElementById('ocTa').focus(); }, 100);
+    return;
+  }
 
-  // hide notice, show welcome message
+  // Cloud providers: right sidebar
   var notice = document.getElementById('csNotice');
   if (notice) notice.remove();
-
-  // add welcome bubble
   var wrap = document.createElement('div');
   wrap.className = 'cs-row';
   wrap.innerHTML = '<div class="cs-bubble bot">'
@@ -525,21 +606,77 @@ function activateChatbot() {
     + '</div>';
   document.getElementById('csMsgs').appendChild(wrap);
   document.getElementById('csMsgs').scrollTop = 99999;
-
-  // enable input
   document.getElementById('csTa').disabled      = false;
   document.getElementById('csTa').placeholder   = 'Ask about your report…';
   document.getElementById('csSendBtn').disabled = false;
 }
 
 // ─────────────────────────────────────────
-// RENDER MAIN RESULT
+// OLLAMA INLINE CHAT
+// ─────────────────────────────────────────
+function onOcGrow(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 80) + 'px';
+}
+function onOcKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); onOcSend(); }
+}
+function onOcSend() {
+  var inp = document.getElementById('ocTa');
+  if (!inp) return;
+  var msg = inp.value.trim();
+  if (!msg) return;
+  inp.value = '';
+  inp.style.height = 'auto';
+  document.getElementById('ocSendBtn').disabled = true;
+  var ocMsgs = document.getElementById('ocMsgs');
+  var ub = document.createElement('div');
+  ub.className = 'oc-bubble user';
+  ub.textContent = msg;
+  ocMsgs.appendChild(ub);
+  ocMsgs.scrollTop = ocMsgs.scrollHeight;
+  var tid = 'oct-' + Date.now();
+  var typing = document.createElement('div');
+  typing.id = tid;
+  typing.innerHTML = '<div class="oc-typing"><span></span><span></span><span></span></div>';
+  ocMsgs.appendChild(typing);
+  ocMsgs.scrollTop = ocMsgs.scrollHeight;
+  fetch('/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: msg })
+  })
+    .then(function(res){ return res.json(); })
+    .then(function(data){
+      var t = document.getElementById(tid);
+      if (t) t.remove();
+      var bb = document.createElement('div');
+      bb.className = 'oc-bubble bot';
+      bb.innerHTML = data.reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+      ocMsgs.appendChild(bb);
+      ocMsgs.scrollTop = ocMsgs.scrollHeight;
+    })
+    .catch(function(){
+      var t = document.getElementById(tid);
+      if (t) t.remove();
+      var bb = document.createElement('div');
+      bb.className = 'oc-bubble bot';
+      bb.textContent = 'Something went wrong. Please try again.';
+      ocMsgs.appendChild(bb);
+    })
+    .finally(function(){
+      var btn = document.getElementById('ocSendBtn');
+      if (btn) btn.disabled = false;
+    });
+}
+
+// ─────────────────────────────────────────
+// RENDER RESULT
 // ─────────────────────────────────────────
 function removeEmpty() {
   var e = document.getElementById('emptyState');
   if (e) e.remove();
 }
-
 function appendUserBubble(txt) {
   var msgs = document.getElementById('msgs');
   var row  = document.createElement('div');
@@ -549,7 +686,6 @@ function appendUserBubble(txt) {
   msgs.appendChild(row);
   scrollBottom();
 }
-
 function showMainTyping() {
   var msgs = document.getElementById('msgs');
   var id   = 'typ-' + Date.now();
@@ -561,18 +697,18 @@ function showMainTyping() {
   scrollBottom();
   return id;
 }
-
 function removeTyping(id) {
   var el = document.getElementById(id);
   if (el) el.remove();
 }
-
 function renderBotResult(d) {
   var msgs  = document.getElementById('msgs');
   var risk  = ((d.risk_level || 'unknown') + '').toLowerCase();
   var rLbl  = risk==='high' ? '🔴 HIGH' : risk==='medium' ? '🟡 MEDIUM' : risk==='low' ? '🟢 LOW' : '⚪ UNKNOWN';
   var pTag  = (provData[provider] || provData['groq']).tag;
-
+  if (provider === 'ollama') {
+    pTag = ollamaModel === 'mistral' ? '🧠 MISTRAL' : '⚡ LLAMA3.2:1B';
+  }
   var findHtml = '';
   if (d.findings && d.findings.length) {
     findHtml = '<div><div class="rs-title"><span class="rs-dot blue"></span>Key Findings</div>'
@@ -580,7 +716,6 @@ function renderBotResult(d) {
       + d.findings.map(function(f){ return '<div class="fi"><span class="fi-dash">—</span><span>'+escHtml(f)+'</span></div>'; }).join('')
       + '</div></div>';
   }
-
   var termHtml = '';
   if (d.terms && d.terms.length) {
     termHtml = '<div><div class="rs-title"><span class="rs-dot amber"></span>Medical Terms Decoded</div>'
@@ -591,7 +726,6 @@ function renderBotResult(d) {
         }).join('')
       + '</div></div>';
   }
-
   var row = document.createElement('div');
   row.className = 'msg-row bot';
   row.innerHTML = '<div class="msg-meta">ClearScan · ' + pTag + '</div>'
@@ -608,14 +742,13 @@ function renderBotResult(d) {
       + '<div class="bot-actions">'
         + '<button class="ba-btn" onclick="window.print()">🖨 Print</button>'
         + '<button class="ba-btn" onclick="onCopyResult(this)">📋 Copy</button>'
-        + '<button class="ba-btn" onclick="location.reload()">↺ New Report</button>'
+        + '<button class="ba-btn" onclick="onNewReport()">↺ New Report</button>'
       + '</div>'
     + '</div>'
     + '<div style="font-size:.63rem;color:var(--dim);padding:.15rem .2rem">⚠️ Educational use only. Always discuss with your healthcare provider.</div>';
   msgs.appendChild(row);
   scrollBottom();
 }
-
 function onCopyResult(btn) {
   var card = btn.closest('.bot-card');
   navigator.clipboard.writeText(card.innerText).then(function() {
@@ -625,22 +758,19 @@ function onCopyResult(btn) {
 }
 
 // ─────────────────────────────────────────
-// CHATBOT SIDEBAR
+// CLOUD CHATBOT SIDEBAR
 // ─────────────────────────────────────────
 function onCsGrow(el) {
   el.style.height = 'auto';
   el.style.height = Math.min(el.scrollHeight, 80) + 'px';
 }
-
 function onCsKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); onCsSend(); }
 }
-
 function onCsQuickAsk(el) {
   document.getElementById('csTa').value = el.textContent;
   onCsSend();
 }
-
 function onCsSend() {
   var inp = document.getElementById('csTa');
   var msg = inp.value.trim();
@@ -648,10 +778,8 @@ function onCsSend() {
   inp.value = '';
   inp.style.height = 'auto';
   document.getElementById('csSendBtn').disabled = true;
-
   csAppend(msg, 'user');
   var tid = csTyping();
-
   fetch('/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -670,7 +798,6 @@ function onCsSend() {
       document.getElementById('csSendBtn').disabled = false;
     });
 }
-
 function csAppend(text, role) {
   var msgs = document.getElementById('csMsgs');
   var wrap = document.createElement('div');
@@ -686,7 +813,6 @@ function csAppend(text, role) {
   msgs.appendChild(wrap);
   msgs.scrollTop = msgs.scrollHeight;
 }
-
 function csTyping() {
   var msgs = document.getElementById('csMsgs');
   var id   = 'cst-' + Date.now();
@@ -697,7 +823,6 @@ function csTyping() {
   msgs.scrollTop = msgs.scrollHeight;
   return id;
 }
-
 function csRemoveTyping(id) {
   var el = document.getElementById(id);
   if (el) el.remove();

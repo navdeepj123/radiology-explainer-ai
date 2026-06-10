@@ -125,6 +125,7 @@ def analyze():
     report_text = request.form.get("report_text", "").strip()
     question    = request.form.get("question", "").strip()
     provider    = request.form.get("provider", "groq").strip()
+    ollama_model = request.form.get("ollama_model", "llama3.2:1b").strip()
     uploaded    = request.files.get("report_file")
 
     if uploaded and uploaded.filename:
@@ -141,9 +142,11 @@ def analyze():
 
     session["report_text"] = report_text
     session["provider"]    = provider
+    session["ollama_model"] = ollama_model
+
 
     try:
-        results = generate_explanation(report_text, provider, question)
+        results = generate_explanation(report_text, provider, question, ollama_model=ollama_model)
     except TypeError:
         results = generate_explanation(report_text, provider)
 
@@ -187,6 +190,8 @@ def analyze_ajax():
 
     report_text = request.form.get("report_text", "").strip()
     provider    = request.form.get("provider", "groq").strip()
+    ollama_model = request.form.get("ollama_model", "llama3.2:1b").strip()
+
     uploaded    = request.files.get("report_file")
 
     if uploaded and uploaded.filename:
@@ -200,9 +205,10 @@ def analyze_ajax():
 
     session["report_text"] = report_text
     session["provider"]    = provider
+    session["ollama_model"] = ollama_model
 
     try:
-        results = generate_explanation(report_text, provider, "")
+        results = generate_explanation(report_text, provider, "", ollama_model=ollama_model)
     except TypeError:
         results = generate_explanation(report_text, provider)
 
@@ -239,6 +245,7 @@ def chat():
     data     = request.get_json(silent=True) or {}
     user_msg = data.get("message", "").strip()
     provider = session.get("provider", "groq")
+    ollama_model = session.get("ollama_model", "llama3.2:1b")
     report   = session.get("report_text", "")
     detected_terms = session.get("detected_terms", [])  # ← YOUR change
 
@@ -286,7 +293,7 @@ def chat():
     )
 
     full_prompt = system + "\n\nPatient question: " + user_msg
-    reply = generate_with_provider(full_prompt, provider, detected_terms=detected_terms)
+    reply = generate_with_provider(full_prompt, provider, detected_terms=detected_terms, ollama_model=ollama_model)
 
     reply = clean_ai_reply(reply)
 
