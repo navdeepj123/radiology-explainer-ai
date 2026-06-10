@@ -22,14 +22,14 @@ Your explanation MUST acknowledge ALL of these findings. Do NOT say any of them 
 {prompt}"""
 
 
-def generate_with_provider(prompt, provider="ollama", detected_terms=None):
+def generate_with_provider(prompt, provider="ollama", detected_terms=None, ollama_model="llama3.2:1b"):
     provider = provider.lower().strip()
 
     final_prompt = _build_prompt(prompt, detected_terms)
 
     try:
         if provider == "ollama":
-            response = generate_with_ollama(final_prompt)
+            response = generate_with_ollama(final_prompt, model=ollama_model)
 
         elif provider == "groq":
             response = generate_with_groq(final_prompt)
