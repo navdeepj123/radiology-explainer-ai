@@ -5,6 +5,8 @@ ClearScan — Radiology Report Explainer
 
 import os
 import re
+import io
+import pdfplumber
 from datetime import datetime
 from flask import Flask, request, render_template, session, jsonify
 from flask_cors import CORS
@@ -53,7 +55,6 @@ CRISIS_REPLY = (
     "Your wellbeing matters more than this report. 💙"
 )
 
-# ← YOUR change: added {detected_terms_section} and rule 12
 CHATBOT_SYSTEM = """
 You are ClearScan Assistant — a warm AI that helps patients understand their radiology report.
 
@@ -107,6 +108,39 @@ def clean_history_text(text):
     return text
 
 
+def extract_pdf_text(file_storage):
+    """
+    PDF file se text nikalta hai.
+    file_storage = Flask ka request.files['report_file'] object
+    Returns: (extracted_text, error_message)
+    """
+    try:
+        file_bytes = file_storage.read()
+        text_parts = []
+
+        with pdfplumber.open(io.BytesIO(file_bytes)) as pdf:
+            for page in pdf.pages:
+                page_text = page.extract_text()
+                if page_text:
+                    text_parts.append(page_text)
+
+        full_text = "\n".join(text_parts).strip()
+
+        if not full_text:
+            return None, (
+                "Could not find any readable text in this PDF. "
+                "It might be a scanned image — please paste the text manually."
+            )
+
+        return full_text, None
+
+    except Exception:
+        return None, (
+            "Could not read this PDF file. "
+            "Please try again or paste the text manually."
+        )
+
+
 # ── HOME ──────────────────────────────────────────────────────────────────────
 
 @app.route("/")
@@ -122,17 +156,26 @@ def analyze():
     if request.method == "GET":
         return render_template("Analyze.html")
 
-    report_text = request.form.get("report_text", "").strip()
-    question    = request.form.get("question", "").strip()
-    provider    = request.form.get("provider", "groq").strip()
+    report_text  = request.form.get("report_text", "").strip()
+    question     = request.form.get("question", "").strip()
+    provider     = request.form.get("provider", "groq").strip()
     ollama_model = request.form.get("ollama_model", "llama3.2:1b").strip()
-    uploaded    = request.files.get("report_file")
+    uploaded     = request.files.get("report_file")
 
+    # File upload support (PDF + plain text fallback)
     if uploaded and uploaded.filename:
-        try:
-            report_text = uploaded.read().decode("utf-8", errors="ignore").strip()
-        except Exception:
-            pass
+        filename_lower = uploaded.filename.lower()
+
+        if filename_lower.endswith(".pdf"):
+            extracted_text, pdf_error = extract_pdf_text(uploaded)
+            if pdf_error:
+                return render_template("Analyze.html", error=pdf_error)
+            report_text = extracted_text
+        else:
+            try:
+                report_text = uploaded.read().decode("utf-8", errors="ignore").strip()
+            except Exception:
+                pass
 
     if not report_text:
         return render_template(
@@ -140,17 +183,15 @@ def analyze():
             error="Please paste your report text or upload a file."
         )
 
-    session["report_text"] = report_text
-    session["provider"]    = provider
+    session["report_text"]  = report_text
+    session["provider"]     = provider
     session["ollama_model"] = ollama_model
-
 
     try:
         results = generate_explanation(report_text, provider, question, ollama_model=ollama_model)
     except TypeError:
         results = generate_explanation(report_text, provider)
 
-    # ← YOUR change: store detected_terms in session for chatbot
     if isinstance(results, dict):
         session["detected_terms"] = results.get("detected_terms", [])
 
@@ -178,7 +219,7 @@ def analyze():
     )
 
 
-# ── ANALYZE AJAX (friend's change — single-page UI) ───────────────────────────
+# ── ANALYZE AJAX (single-page UI, now with PDF support) ────────────────────────
 
 @app.route("/analyze_ajax", methods=["POST"])
 def analyze_ajax():
@@ -188,23 +229,31 @@ def analyze_ajax():
     Results + chatbot all appear on the same page.
     """
 
-    report_text = request.form.get("report_text", "").strip()
-    provider    = request.form.get("provider", "groq").strip()
+    report_text  = request.form.get("report_text", "").strip()
+    provider     = request.form.get("provider", "groq").strip()
     ollama_model = request.form.get("ollama_model", "llama3.2:1b").strip()
+    uploaded     = request.files.get("report_file")
 
-    uploaded    = request.files.get("report_file")
-
+    # File upload support (PDF + plain text fallback)
     if uploaded and uploaded.filename:
-        try:
-            report_text = uploaded.read().decode("utf-8", errors="ignore").strip()
-        except Exception:
-            pass
+        filename_lower = uploaded.filename.lower()
+
+        if filename_lower.endswith(".pdf"):
+            extracted_text, pdf_error = extract_pdf_text(uploaded)
+            if pdf_error:
+                return jsonify({"error": pdf_error}), 400
+            report_text = extracted_text
+        else:
+            try:
+                report_text = uploaded.read().decode("utf-8", errors="ignore").strip()
+            except Exception:
+                pass
 
     if not report_text:
         return jsonify({"error": "Please paste your report text or upload a file."}), 400
 
-    session["report_text"] = report_text
-    session["provider"]    = provider
+    session["report_text"]  = report_text
+    session["provider"]     = provider
     session["ollama_model"] = ollama_model
 
     try:
@@ -212,7 +261,6 @@ def analyze_ajax():
     except TypeError:
         results = generate_explanation(report_text, provider)
 
-    # ← YOUR change: also store detected_terms in ajax route
     if isinstance(results, dict):
         session["detected_terms"] = results.get("detected_terms", [])
 
@@ -242,12 +290,12 @@ def analyze_ajax():
 @app.route("/chat", methods=["POST"])
 def chat():
 
-    data     = request.get_json(silent=True) or {}
-    user_msg = data.get("message", "").strip()
-    provider = session.get("provider", "groq")
-    ollama_model = session.get("ollama_model", "llama3.2:1b")
-    report   = session.get("report_text", "")
-    detected_terms = session.get("detected_terms", [])  # ← YOUR change
+    data           = request.get_json(silent=True) or {}
+    user_msg       = data.get("message", "").strip()
+    provider       = session.get("provider", "groq")
+    ollama_model   = session.get("ollama_model", "llama3.2:1b")
+    report         = session.get("report_text", "")
+    detected_terms = session.get("detected_terms", [])
 
     if not user_msg:
         return jsonify({"reply": "Please type a message."})
@@ -277,7 +325,6 @@ def chat():
             )
         })
 
-    # ← YOUR change: inject detected terms into chatbot system prompt
     if detected_terms:
         terms_list = "\n".join([f"- {item['term']}" for item in detected_terms])
         detected_terms_section = (

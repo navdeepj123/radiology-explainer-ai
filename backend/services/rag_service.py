@@ -94,9 +94,48 @@ def _convert_to_html(text):
     return '\n'.join(output)
 
 
+def _filter_terms_actually_in_report(report_text, retrieved_terms):
+    """
+    Sirf woh terms rakho jo report_text mein ACTUALLY likhe
+    hain. Isse retriever ke false-positive matches (jaise
+    semantic similarity se aaye galat terms) AI ke summary
+    ya chatbot mein "confirmed finding" ban ke nahi aayenge.
+    """
+    report_lower = report_text.lower()
+    verified = []
+
+    for item in retrieved_terms:
+        term = item.get("term", "")
+        term_lower = term.lower().strip()
+
+        if not term_lower:
+            continue
+
+        # exact phrase report mein hai?
+        if term_lower in report_lower:
+            verified.append(item)
+            continue
+
+        # ya uske alternate/synonym forms report mein hain?
+        synonyms = item.get("synonyms", [])
+        found_synonym = False
+        for syn in synonyms:
+            if syn.lower().strip() in report_lower:
+                found_synonym = True
+                break
+
+        if found_synonym:
+            verified.append(item)
+
+    return verified
+
+
 def generate_explanation(report_text, provider="ollama", user_question="", ollama_model="llama3.2:1b"):
 
-    retrieved_terms = retrieve_relevant_info(report_text)
+    raw_retrieved_terms = retrieve_relevant_info(report_text)
+
+    # ── SAFETY FILTER — sirf report mein actually likhe terms rakho ──
+    retrieved_terms = _filter_terms_actually_in_report(report_text, raw_retrieved_terms)
 
     findings      = []
     context_lines = []
