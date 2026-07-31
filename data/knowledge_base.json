@@ -92,15 +92,15 @@
       "lung under-expansion"
     ],
     "synonyms_in_report": [
-    "subsegmental atelectasis",
-    "discoid atelectasis",
-    "plate-like atelectasis",
-    "linear atelectasis",
-    "atelectatic changes",
-    "bibasal atelectasis",
-    "bibasal atelectatic changes",
-    "atelectatic"
-],
+      "subsegmental atelectasis",
+      "discoid atelectasis",
+      "plate-like atelectasis",
+      "linear atelectasis",
+      "atelectatic changes",
+      "bibasal atelectasis",
+      "bibasal atelectatic changes",
+      "atelectatic"
+    ],
     "found_in": [
       "Chest X-ray",
       "CT Chest"
@@ -1939,5 +1939,3242 @@
     "action_note": "This requires urgent surgical evaluation.",
     "follow_up": "Surgical review; NG tube; IV fluids; possible surgery",
     "icd_hint": "K56.60"
+  },
+  {
+    "term": "pericardial effusion",
+    "simple_meaning": "Fluid around the heart",
+    "patient_explanation": "There is extra fluid in the sac surrounding the heart.",
+    "clinical_context": "Can be caused by infection, inflammation, cancer, or kidney failure; large amounts can affect heart function.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "❤️",
+    "related_terms": [
+      "fluid around heart"
+    ],
+    "synonyms_in_report": [
+      "pericardial fluid collection",
+      "small pericardial effusion"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest",
+      "Echocardiogram"
+    ],
+    "common_causes": [
+      "Infection",
+      "Inflammation",
+      "Cancer",
+      "Kidney failure"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Echocardiogram often recommended",
+    "icd_hint": "I31.3",
+    "id": "T051"
+  },
+  {
+    "term": "cardiac tamponade",
+    "simple_meaning": "Heart squeezed by fluid pressure",
+    "patient_explanation": "Fluid buildup around the heart is pressing on it, which can stop it working properly.",
+    "clinical_context": "A medical emergency where pericardial fluid raises pressure enough to impair heart filling.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "❤️",
+    "related_terms": [],
+    "synonyms_in_report": [
+      "tamponade physiology",
+      "cardiac tamponade"
+    ],
+    "found_in": [
+      "Echocardiogram",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Large pericardial effusion",
+      "Trauma",
+      "Malignancy"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Urgent drainage (pericardiocentesis) usually required",
+    "icd_hint": "I31.4",
+    "id": "T052"
+  },
+  {
+    "term": "cardiomyopathy",
+    "simple_meaning": "Weakened or thickened heart muscle",
+    "patient_explanation": "The heart muscle isn't working or shaped the way it normally should.",
+    "clinical_context": "Umbrella term covering dilated, hypertrophic, or restrictive patterns affecting heart pump function.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "❤️",
+    "related_terms": [
+      "heart muscle disease"
+    ],
+    "synonyms_in_report": [
+      "dilated cardiomyopathy",
+      "hypertrophic cardiomyopathy"
+    ],
+    "found_in": [
+      "Echocardiogram",
+      "Cardiac MRI"
+    ],
+    "common_causes": [
+      "Genetic causes",
+      "Hypertension",
+      "Alcohol",
+      "Prior heart attack"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Cardiology follow-up recommended",
+    "icd_hint": "I42.9",
+    "id": "T053"
+  },
+  {
+    "term": "left ventricular hypertrophy",
+    "simple_meaning": "Thickened wall of the heart's main pumping chamber",
+    "patient_explanation": "The main pumping chamber of the heart has thicker walls than normal.",
+    "clinical_context": "Commonly related to longstanding high blood pressure or valve disease increasing heart workload.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "severity": "Medium",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "❤️",
+    "related_terms": [
+      "LVH",
+      "thick heart wall"
+    ],
+    "synonyms_in_report": [
+      "LV hypertrophy",
+      "left ventricular wall thickening"
+    ],
+    "found_in": [
+      "Echocardiogram",
+      "ECG",
+      "Cardiac MRI"
+    ],
+    "common_causes": [
+      "Hypertension",
+      "Aortic stenosis",
+      "Athletic heart"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Blood pressure control and cardiology review",
+    "icd_hint": "I51.7",
+    "id": "T054"
+  },
+  {
+    "term": "mitral regurgitation",
+    "simple_meaning": "Leaky heart valve (mitral)",
+    "patient_explanation": "One of the heart's valves isn't closing fully, so some blood leaks backward.",
+    "clinical_context": "Graded mild to severe; severe leakage can lead to heart enlargement or failure over time.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "severity": "Medium",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "❤️",
+    "related_terms": [
+      "mitral valve leak"
+    ],
+    "synonyms_in_report": [
+      "moderate mitral regurgitation",
+      "MR jet"
+    ],
+    "found_in": [
+      "Echocardiogram"
+    ],
+    "common_causes": [
+      "Valve degeneration",
+      "Prior heart attack",
+      "Rheumatic disease"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Cardiology follow-up and repeat echocardiogram",
+    "icd_hint": "I34.0",
+    "id": "T055"
+  },
+  {
+    "term": "aortic stenosis",
+    "simple_meaning": "Narrowed heart valve (aortic)",
+    "patient_explanation": "The valve that lets blood leave the heart's main chamber has become narrowed.",
+    "clinical_context": "Restricts blood flow out of the heart; severe cases can cause chest pain, fainting, or breathlessness.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "❤️",
+    "related_terms": [
+      "aortic valve narrowing"
+    ],
+    "synonyms_in_report": [
+      "moderate aortic stenosis",
+      "AV stenosis"
+    ],
+    "found_in": [
+      "Echocardiogram"
+    ],
+    "common_causes": [
+      "Valve calcification with age",
+      "Congenital bicuspid valve",
+      "Rheumatic disease"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Cardiology follow-up; may need valve replacement if severe",
+    "icd_hint": "I35.0",
+    "id": "T056"
+  },
+  {
+    "term": "coronary artery calcification",
+    "simple_meaning": "Calcium deposits in heart arteries",
+    "patient_explanation": "Small deposits of calcium have built up in the arteries that supply the heart.",
+    "clinical_context": "A marker of underlying atherosclerosis (artery hardening); often quantified with a calcium score.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "❤️",
+    "related_terms": [
+      "coronary calcium",
+      "CAC score"
+    ],
+    "synonyms_in_report": [
+      "coronary artery calcification noted",
+      "calcified coronary plaque"
+    ],
+    "found_in": [
+      "CT Chest",
+      "Cardiac CT"
+    ],
+    "common_causes": [
+      "Atherosclerosis",
+      "High cholesterol",
+      "Smoking",
+      "Age"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Discuss cardiovascular risk factors with your doctor",
+    "icd_hint": "I25.84",
+    "id": "T057"
+  },
+  {
+    "term": "atrial enlargement",
+    "simple_meaning": "Enlarged upper heart chamber",
+    "patient_explanation": "One of the smaller, upper chambers of the heart appears larger than usual.",
+    "clinical_context": "Often reflects longstanding high pressure or valve disease affecting that chamber.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "❤️",
+    "related_terms": [
+      "left atrial enlargement",
+      "atrial dilation"
+    ],
+    "synonyms_in_report": [
+      "LA enlargement",
+      "left atrial dilatation"
+    ],
+    "found_in": [
+      "Echocardiogram",
+      "Chest X-ray"
+    ],
+    "common_causes": [
+      "Hypertension",
+      "Mitral valve disease",
+      "Atrial fibrillation"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Cardiology follow-up if symptomatic",
+    "icd_hint": "I51.7",
+    "id": "T058"
+  },
+  {
+    "term": "cor pulmonale",
+    "simple_meaning": "Right heart strain from lung disease",
+    "patient_explanation": "The right side of the heart is under strain, usually because of a lung problem.",
+    "clinical_context": "Right ventricular enlargement/dysfunction secondary to chronic lung disease or pulmonary hypertension.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "❤️",
+    "related_terms": [
+      "right heart strain"
+    ],
+    "synonyms_in_report": [
+      "cor pulmonale",
+      "right ventricular strain pattern"
+    ],
+    "found_in": [
+      "Echocardiogram",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "COPD",
+      "Pulmonary hypertension",
+      "Chronic pulmonary embolism"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Cardiology and respiratory follow-up",
+    "icd_hint": "I27.9",
+    "id": "T059"
+  },
+  {
+    "term": "pacemaker lead artifact",
+    "simple_meaning": "Wire from a heart device seen on imaging",
+    "patient_explanation": "A thin wire from a heart pacemaker or defibrillator is visible on the scan; this is expected if you have one.",
+    "clinical_context": "Not itself a finding of concern; position is usually checked for correct placement.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "❤️",
+    "related_terms": [
+      "pacemaker wire"
+    ],
+    "synonyms_in_report": [
+      "pacemaker lead in situ",
+      "ICD lead"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Prior pacemaker/ICD implantation"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Routine device check with cardiology as scheduled",
+    "icd_hint": "Z95.0",
+    "id": "T060"
+  },
+  {
+    "term": "tricuspid regurgitation",
+    "simple_meaning": "Leaky heart valve (tricuspid)",
+    "patient_explanation": "One of the heart's valves on the right side isn't closing fully, letting some blood flow backward.",
+    "clinical_context": "Often mild and incidental, but can indicate right heart strain when moderate-severe.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "❤️",
+    "related_terms": [
+      "tricuspid valve leak"
+    ],
+    "synonyms_in_report": [
+      "mild tricuspid regurgitation",
+      "TR jet"
+    ],
+    "found_in": [
+      "Echocardiogram"
+    ],
+    "common_causes": [
+      "Right heart strain",
+      "Pulmonary hypertension",
+      "Valve degeneration"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Follow-up echocardiogram if worsening symptoms",
+    "icd_hint": "I36.1",
+    "id": "T061"
+  },
+  {
+    "term": "aortic valve calcification",
+    "simple_meaning": "Calcium buildup on the aortic valve",
+    "patient_explanation": "The valve that controls blood leaving the heart has calcium deposits on it.",
+    "clinical_context": "Can progress to aortic stenosis over time; often age-related.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "❤️",
+    "related_terms": [
+      "aortic valve sclerosis"
+    ],
+    "synonyms_in_report": [
+      "aortic valve calcification",
+      "calcified aortic valve"
+    ],
+    "found_in": [
+      "Echocardiogram",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Age-related degeneration",
+      "Atherosclerosis"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Periodic echocardiogram monitoring",
+    "icd_hint": "I35.8",
+    "id": "T062"
+  },
+  {
+    "term": "ventricular septal defect",
+    "simple_meaning": "Hole between the heart's lower chambers",
+    "patient_explanation": "There is a small opening in the wall separating the two main pumping chambers of the heart.",
+    "clinical_context": "May be congenital (present from birth) or, rarely, acquired after a heart attack; size determines significance.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "❤️",
+    "related_terms": [
+      "VSD",
+      "septal hole"
+    ],
+    "synonyms_in_report": [
+      "ventricular septal defect",
+      "VSD noted"
+    ],
+    "found_in": [
+      "Echocardiogram",
+      "Cardiac MRI"
+    ],
+    "common_causes": [
+      "Congenital heart defect",
+      "Post-myocardial infarction rupture"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Cardiology assessment for closure need",
+    "icd_hint": "Q21.0",
+    "id": "T063"
+  },
+  {
+    "term": "cardiothoracic ratio increased",
+    "simple_meaning": "Heart appears large relative to chest",
+    "patient_explanation": "The heart's size compared to the chest cavity is larger than the usual range.",
+    "clinical_context": "A simple screening sign on chest X-ray that can suggest cardiomegaly or fluid overload.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "❤️",
+    "related_terms": [],
+    "synonyms_in_report": [
+      "increased cardiothoracic ratio",
+      "CTR >0.5"
+    ],
+    "found_in": [
+      "Chest X-ray"
+    ],
+    "common_causes": [
+      "Fluid overload",
+      "Cardiomyopathy",
+      "Valve disease"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Correlate clinically; echocardiogram if persistent",
+    "icd_hint": "I51.7",
+    "id": "T064"
+  },
+  {
+    "term": "myocardial scarring",
+    "simple_meaning": "Old heart muscle damage",
+    "patient_explanation": "There is evidence of old, healed damage to part of the heart muscle.",
+    "clinical_context": "Typically reflects a prior heart attack or inflammatory event; can affect pump function.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "severity": "Medium",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "❤️",
+    "related_terms": [
+      "old infarct",
+      "myocardial fibrosis"
+    ],
+    "synonyms_in_report": [
+      "late gadolinium enhancement",
+      "myocardial scar"
+    ],
+    "found_in": [
+      "Cardiac MRI"
+    ],
+    "common_causes": [
+      "Prior myocardial infarction",
+      "Myocarditis"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Cardiology follow-up recommended",
+    "icd_hint": "I25.2",
+    "id": "T065"
+  },
+  {
+    "term": "aortic regurgitation",
+    "simple_meaning": "Leaky heart valve (aortic)",
+    "patient_explanation": "The valve controlling blood leaving the heart's main chamber isn't sealing fully, letting blood leak backward.",
+    "clinical_context": "Can cause the heart's main chamber to enlarge over time if moderate-severe.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "severity": "Medium",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "❤️",
+    "related_terms": [
+      "aortic valve leak"
+    ],
+    "synonyms_in_report": [
+      "mild aortic regurgitation",
+      "AR jet"
+    ],
+    "found_in": [
+      "Echocardiogram"
+    ],
+    "common_causes": [
+      "Valve degeneration",
+      "Aortic root dilation",
+      "Endocarditis"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Cardiology follow-up and repeat echocardiogram",
+    "icd_hint": "I35.1",
+    "id": "T066"
+  },
+  {
+    "term": "sternal wire artifact",
+    "simple_meaning": "Wires from prior heart surgery",
+    "patient_explanation": "Metal wires used to close the breastbone after previous heart surgery are visible; this is expected.",
+    "clinical_context": "Not a new finding of concern; confirms history of prior sternotomy (open-heart surgery).",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "❤️",
+    "related_terms": [
+      "sternotomy wires"
+    ],
+    "synonyms_in_report": [
+      "sternal wires in situ",
+      "post-sternotomy changes"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Prior cardiac surgery"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "No specific follow-up needed for the wires themselves",
+    "icd_hint": "Z98.89",
+    "id": "T067"
+  },
+  {
+    "term": "right ventricular enlargement",
+    "simple_meaning": "Enlarged right heart chamber",
+    "patient_explanation": "The right pumping chamber of the heart appears larger than normal.",
+    "clinical_context": "Often related to lung disease, pulmonary hypertension, or valve problems raising pressure on that side.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "❤️",
+    "related_terms": [
+      "RV enlargement",
+      "RV dilation"
+    ],
+    "synonyms_in_report": [
+      "right ventricular dilatation",
+      "RV enlargement"
+    ],
+    "found_in": [
+      "Echocardiogram",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Pulmonary hypertension",
+      "Pulmonary embolism",
+      "Tricuspid regurgitation"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Cardiology and respiratory follow-up",
+    "icd_hint": "I51.7",
+    "id": "T068"
+  },
+  {
+    "term": "ejection fraction reduced",
+    "simple_meaning": "Weaker heart pumping strength",
+    "patient_explanation": "The heart isn't pumping out as much blood with each beat as it normally would.",
+    "clinical_context": "A key measure of heart failure severity, usually obtained on echocardiogram.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "❤️",
+    "related_terms": [
+      "reduced EF",
+      "heart failure"
+    ],
+    "synonyms_in_report": [
+      "EF 40%",
+      "reduced ejection fraction"
+    ],
+    "found_in": [
+      "Echocardiogram",
+      "Cardiac MRI"
+    ],
+    "common_causes": [
+      "Prior heart attack",
+      "Cardiomyopathy",
+      "Longstanding hypertension"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Cardiology follow-up for heart failure management",
+    "icd_hint": "I50.20",
+    "id": "T069"
+  },
+  {
+    "term": "aortic root dilation",
+    "simple_meaning": "Widened base of the main artery",
+    "patient_explanation": "The section of the main artery closest to the heart is wider than the usual range.",
+    "clinical_context": "Monitored over time as significant enlargement raises risk of aortic dissection or rupture.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "❤️",
+    "related_terms": [
+      "aortic root enlargement"
+    ],
+    "synonyms_in_report": [
+      "mild aortic root dilation",
+      "aortic root 4.0cm"
+    ],
+    "found_in": [
+      "Echocardiogram",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Hypertension",
+      "Connective tissue disorder",
+      "Bicuspid aortic valve"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Periodic imaging surveillance recommended",
+    "icd_hint": "I71.2",
+    "id": "T070"
+  },
+  {
+    "term": "bronchiectasis",
+    "simple_meaning": "Widened, damaged airways",
+    "patient_explanation": "The tubes that carry air into the lungs are permanently widened and scarred.",
+    "clinical_context": "Leads to mucus buildup and recurrent infections; can be localized or widespread.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Medium",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "airway widening"
+    ],
+    "synonyms_in_report": [
+      "cylindrical bronchiectasis",
+      "bronchiectatic changes"
+    ],
+    "found_in": [
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Chronic infection",
+      "Cystic fibrosis",
+      "Prior severe pneumonia"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Respiratory follow-up recommended",
+    "icd_hint": "J47.9",
+    "id": "T071"
+  },
+  {
+    "term": "interstitial lung disease",
+    "simple_meaning": "Scarring pattern in lung tissue",
+    "patient_explanation": "There are changes in the fine lung tissue that can make breathing less efficient over time.",
+    "clinical_context": "Umbrella term for many conditions causing lung scarring or inflammation of the interstitium.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "lung scarring"
+    ],
+    "synonyms_in_report": [
+      "interstitial changes",
+      "ILD pattern"
+    ],
+    "found_in": [
+      "CT Chest",
+      "HRCT"
+    ],
+    "common_causes": [
+      "Autoimmune disease",
+      "Occupational exposure",
+      "Idiopathic pulmonary fibrosis"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Respiratory specialist referral recommended",
+    "icd_hint": "J84.9",
+    "id": "T072"
+  },
+  {
+    "term": "pleural plaque",
+    "simple_meaning": "Thickened patch on lung lining",
+    "patient_explanation": "There's a small area of thickening on the lining that covers the lungs.",
+    "clinical_context": "Frequently related to past asbestos exposure; usually benign but noted for monitoring.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "calcified pleural plaque"
+    ],
+    "synonyms_in_report": [
+      "pleural plaquing",
+      "calcified pleural plaques"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Asbestos exposure"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Routine monitoring, no urgent action typically needed",
+    "icd_hint": "J92.0",
+    "id": "T073"
+  },
+  {
+    "term": "pneumonia",
+    "simple_meaning": "Lung infection",
+    "patient_explanation": "There is an infection in part of the lung tissue.",
+    "clinical_context": "Common cause of consolidation on imaging; severity ranges from mild to life-threatening.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "lung infection"
+    ],
+    "synonyms_in_report": [
+      "community-acquired pneumonia",
+      "right lower lobe pneumonia"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Bacterial infection",
+      "Viral infection",
+      "Aspiration"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Antibiotics and follow-up imaging as advised",
+    "icd_hint": "J18.9",
+    "id": "T074"
+  },
+  {
+    "term": "tree-in-bud opacities",
+    "simple_meaning": "Small branching pattern in the lungs",
+    "patient_explanation": "A pattern that looks like tiny budding branches shows up on the scan, often linked to small airway inflammation.",
+    "clinical_context": "Classically associated with infections that affect the small airways, including tuberculosis.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "small airway disease"
+    ],
+    "synonyms_in_report": [
+      "tree-in-bud pattern",
+      "centrilobular nodules with tree-in-bud"
+    ],
+    "found_in": [
+      "CT Chest",
+      "HRCT"
+    ],
+    "common_causes": [
+      "Infection",
+      "Aspiration",
+      "Bronchiolitis"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Further work-up guided by clinical symptoms",
+    "icd_hint": "J98.4",
+    "id": "T075"
+  },
+  {
+    "term": "honeycombing",
+    "simple_meaning": "Cluster of small air-filled cysts in scarred lung",
+    "patient_explanation": "Part of the lung tissue has a pattern of small cyst-like spaces, usually a sign of advanced scarring.",
+    "clinical_context": "A hallmark feature of advanced pulmonary fibrosis, particularly usual interstitial pneumonia pattern.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "honeycomb lung"
+    ],
+    "synonyms_in_report": [
+      "honeycombing",
+      "honeycomb pattern"
+    ],
+    "found_in": [
+      "CT Chest",
+      "HRCT"
+    ],
+    "common_causes": [
+      "Idiopathic pulmonary fibrosis",
+      "Advanced interstitial lung disease"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Respiratory specialist referral recommended",
+    "icd_hint": "J84.10",
+    "id": "T076"
+  },
+  {
+    "term": "cavitary lesion",
+    "simple_meaning": "Hollow space within a lung abnormality",
+    "patient_explanation": "There's an abnormal area in the lung that has a hollow, air-filled centre.",
+    "clinical_context": "Can occur with infection (including tuberculosis), abscess, or certain tumours.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "cavitation",
+      "lung cavity"
+    ],
+    "synonyms_in_report": [
+      "cavitary lesion",
+      "cavitating mass"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Infection/abscess",
+      "Tuberculosis",
+      "Malignancy"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Prompt clinical correlation and further work-up advised",
+    "icd_hint": "J98.4",
+    "id": "T077"
+  },
+  {
+    "term": "bulla",
+    "simple_meaning": "Large air-filled sac in the lung",
+    "patient_explanation": "There is a large air-filled pocket within the lung tissue, often from damaged, stretched lung.",
+    "clinical_context": "Common in emphysema; large bullae can occasionally rupture causing pneumothorax.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "bullous change"
+    ],
+    "synonyms_in_report": [
+      "bulla noted",
+      "bullous emphysema"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Emphysema",
+      "Smoking"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Respiratory follow-up as needed",
+    "icd_hint": "J43.9",
+    "id": "T078"
+  },
+  {
+    "term": "pneumomediastinum",
+    "simple_meaning": "Air in the chest cavity around the heart",
+    "patient_explanation": "There is air present in the central chest space around the heart and major vessels, which isn't normally there.",
+    "clinical_context": "Can result from airway or oesophageal injury, or spontaneously from a ruptured air sac.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "mediastinal air"
+    ],
+    "synonyms_in_report": [
+      "pneumomediastinum",
+      "free mediastinal air"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Airway injury",
+      "Oesophageal rupture",
+      "Spontaneous alveolar rupture"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Requires prompt clinical assessment",
+    "icd_hint": "J98.2",
+    "id": "T079"
+  },
+  {
+    "term": "miliary pattern",
+    "simple_meaning": "Widespread tiny nodules in the lungs",
+    "patient_explanation": "Many very small spots are scattered evenly throughout both lungs.",
+    "clinical_context": "Classic pattern associated with disseminated infection (e.g. tuberculosis) spreading through the bloodstream.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "miliary nodules"
+    ],
+    "synonyms_in_report": [
+      "miliary pattern",
+      "miliary nodularity"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Miliary tuberculosis",
+      "Disseminated fungal infection",
+      "Metastatic disease"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Urgent clinical correlation recommended",
+    "icd_hint": "A19.9",
+    "id": "T080"
+  },
+  {
+    "term": "reticular pattern",
+    "simple_meaning": "Net-like marking pattern in the lungs",
+    "patient_explanation": "A fine, web-like pattern of lines is visible across part of the lung tissue.",
+    "clinical_context": "Often an early or associated feature of interstitial lung disease.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Medium",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "reticulation"
+    ],
+    "synonyms_in_report": [
+      "reticular opacities",
+      "fine reticular pattern"
+    ],
+    "found_in": [
+      "CT Chest",
+      "HRCT"
+    ],
+    "common_causes": [
+      "Interstitial lung disease",
+      "Pulmonary fibrosis"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Respiratory follow-up recommended",
+    "icd_hint": "J84.9",
+    "id": "T081"
+  },
+  {
+    "term": "air bronchogram",
+    "simple_meaning": "Visible airways within a lung abnormality",
+    "patient_explanation": "The small air tubes inside the lungs are visible within an area of abnormal lung tissue, which happens when the tissue around them fills with fluid or infection.",
+    "clinical_context": "A useful sign that helps confirm consolidation (fluid/infection-filled lung) rather than other causes.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "air bronchograms"
+    ],
+    "synonyms_in_report": [
+      "air bronchogram sign"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Pneumonia",
+      "Pulmonary edema"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Correlate with clinical symptoms and treatment response",
+    "icd_hint": "J18.9",
+    "id": "T082"
+  },
+  {
+    "term": "Kerley B lines",
+    "simple_meaning": "Short horizontal lines at lung edges",
+    "patient_explanation": "Small horizontal lines appear near the outer edges of the lungs, a sign linked to fluid buildup.",
+    "clinical_context": "Represents fluid in the tiny lymphatic channels of the lung, classically from heart failure.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "septal lines"
+    ],
+    "synonyms_in_report": [
+      "Kerley B lines",
+      "septal thickening"
+    ],
+    "found_in": [
+      "Chest X-ray"
+    ],
+    "common_causes": [
+      "Heart failure",
+      "Pulmonary edema",
+      "Lymphangitic spread of cancer"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Cardiac assessment recommended",
+    "icd_hint": "J81.1",
+    "id": "T083"
+  },
+  {
+    "term": "tension pneumothorax",
+    "simple_meaning": "Trapped air compressing the chest (emergency)",
+    "patient_explanation": "Air trapped outside the lung is building up pressure and pushing on the heart and the other lung.",
+    "clinical_context": "A life-threatening emergency requiring immediate needle or chest tube decompression.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [],
+    "synonyms_in_report": [
+      "tension pneumothorax",
+      "mediastinal shift with pneumothorax"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Trauma",
+      "Mechanical ventilation",
+      "Spontaneous rupture"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Emergency treatment required immediately",
+    "icd_hint": "J93.0",
+    "id": "T084"
+  },
+  {
+    "term": "hydropneumothorax",
+    "simple_meaning": "Air and fluid together outside the lung",
+    "patient_explanation": "There is both air and fluid trapped in the space around the lung.",
+    "clinical_context": "Can follow trauma, surgery, or infection with a fluid collection that has also released gas.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Medium",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [],
+    "synonyms_in_report": [
+      "hydropneumothorax"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Trauma",
+      "Post-surgical",
+      "Infection with gas-forming organism"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Prompt clinical assessment recommended",
+    "icd_hint": "J94.8",
+    "id": "T085"
+  },
+  {
+    "term": "mucus plugging",
+    "simple_meaning": "Airway blocked by thick mucus",
+    "patient_explanation": "Thick mucus is blocking part of an airway, which can cause the section of lung it supplies to collapse slightly.",
+    "clinical_context": "Common cause of atelectasis, especially post-operatively or in chronic airway disease.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "mucous plugging"
+    ],
+    "synonyms_in_report": [
+      "mucus plugging",
+      "mucoid impaction"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Post-surgical",
+      "Asthma/COPD",
+      "Cystic fibrosis"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Breathing exercises or physiotherapy often recommended",
+    "icd_hint": "J98.09",
+    "id": "T086"
+  },
+  {
+    "term": "pleural adhesion",
+    "simple_meaning": "Lung lining stuck to chest wall",
+    "patient_explanation": "Part of the lining around the lung has become stuck to the chest wall, usually from previous inflammation.",
+    "clinical_context": "Typically a sign of prior pleural inflammation, infection, or surgery; usually not itself concerning.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "pleural scarring"
+    ],
+    "synonyms_in_report": [
+      "pleural adhesions",
+      "pleuroparenchymal scarring"
+    ],
+    "found_in": [
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Prior infection",
+      "Prior surgery",
+      "Prior pleuritis"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "No specific follow-up usually required",
+    "icd_hint": "J94.8",
+    "id": "T087"
+  },
+  {
+    "term": "apical scarring",
+    "simple_meaning": "Old healed scarring at the top of the lung",
+    "patient_explanation": "There's old scar tissue at the very top of one or both lungs, usually from a past infection.",
+    "clinical_context": "Commonly a residual finding from prior tuberculosis or other old infection; usually stable.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "apical fibrosis"
+    ],
+    "synonyms_in_report": [
+      "apical scarring",
+      "apical pleural thickening and scarring"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Prior tuberculosis",
+      "Prior infection"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Compare with prior imaging if available",
+    "icd_hint": "J98.4",
+    "id": "T088"
+  },
+  {
+    "term": "subpleural nodule",
+    "simple_meaning": "Small spot near the lung surface",
+    "patient_explanation": "A small spot has been found just beneath the outer surface of the lung.",
+    "clinical_context": "Location and size guide whether follow-up imaging or biopsy is recommended.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [],
+    "synonyms_in_report": [
+      "subpleural nodule",
+      "peripheral lung nodule"
+    ],
+    "found_in": [
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Old granuloma",
+      "Benign nodule",
+      "Early tumour (less common)"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Follow-up CT often recommended depending on size",
+    "icd_hint": "R91.1",
+    "id": "T089"
+  },
+  {
+    "term": "mediastinal widening",
+    "simple_meaning": "Enlarged central chest space",
+    "patient_explanation": "The central area of the chest between the lungs looks wider than expected.",
+    "clinical_context": "Can be due to benign fat, lymph node enlargement, or more serious causes like aortic injury.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "widened mediastinum"
+    ],
+    "synonyms_in_report": [
+      "mediastinal widening"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Lymphadenopathy",
+      "Aortic pathology",
+      "Mediastinal mass"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Further imaging (CT) typically recommended",
+    "icd_hint": "J98.5",
+    "id": "T090"
+  },
+  {
+    "term": "hilar prominence",
+    "simple_meaning": "Enlarged central lung structures",
+    "patient_explanation": "The area where the major airways and vessels enter the lung looks larger than usual.",
+    "clinical_context": "Can reflect enlarged lymph nodes, prominent vessels, or, less often, a mass.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "hilar enlargement"
+    ],
+    "synonyms_in_report": [
+      "hilar prominence",
+      "prominent hila"
+    ],
+    "found_in": [
+      "Chest X-ray",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Lymphadenopathy",
+      "Pulmonary hypertension",
+      "Vascular congestion"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Further imaging may be advised if new or enlarging",
+    "icd_hint": "R91.8",
+    "id": "T091"
+  },
+  {
+    "term": "pulmonary hypertension",
+    "simple_meaning": "High blood pressure in the lung arteries",
+    "patient_explanation": "The blood pressure in the arteries supplying the lungs is higher than normal.",
+    "clinical_context": "Increases strain on the right side of the heart; can be primary or secondary to lung/heart disease.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "pulmonary artery hypertension"
+    ],
+    "synonyms_in_report": [
+      "pulmonary hypertension",
+      "PA pressure elevated"
+    ],
+    "found_in": [
+      "Echocardiogram",
+      "CT Chest"
+    ],
+    "common_causes": [
+      "COPD",
+      "Chronic pulmonary embolism",
+      "Left heart disease"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Cardiology/respiratory specialist referral recommended",
+    "icd_hint": "I27.20",
+    "id": "T092"
+  },
+  {
+    "term": "bronchial wall thickening",
+    "simple_meaning": "Thickened airway walls",
+    "patient_explanation": "The walls of the breathing tubes in the lungs appear thicker than usual.",
+    "clinical_context": "A nonspecific finding often related to inflammation, infection, or chronic airway disease.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "airway wall thickening"
+    ],
+    "synonyms_in_report": [
+      "bronchial wall thickening",
+      "peribronchial thickening"
+    ],
+    "found_in": [
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Asthma/COPD",
+      "Chronic bronchitis",
+      "Infection"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Correlate with respiratory symptoms",
+    "icd_hint": "J44.9",
+    "id": "T093"
+  },
+  {
+    "term": "subsegmental pulmonary embolism",
+    "simple_meaning": "Small blood clot in a lung artery branch",
+    "patient_explanation": "A small blood clot is blocking one of the smaller branches of a lung artery.",
+    "clinical_context": "Smaller than a main pulmonary embolism but still requires clinical assessment for treatment.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Medium",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [],
+    "synonyms_in_report": [
+      "subsegmental PE",
+      "small subsegmental filling defect"
+    ],
+    "found_in": [
+      "CT Pulmonary Angiogram"
+    ],
+    "common_causes": [
+      "Deep vein thrombosis",
+      "Immobility",
+      "Cancer",
+      "Surgery"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Prompt clinical assessment for anticoagulation",
+    "icd_hint": "I26.99",
+    "id": "T094"
+  },
+  {
+    "term": "emphysematous changes",
+    "simple_meaning": "Damaged, over-inflated lung tissue",
+    "patient_explanation": "Part of the lung tissue has lost its normal elastic structure and become over-inflated.",
+    "clinical_context": "Reflects breakdown of lung air sacs, most often from smoking.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Medium",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "emphysema"
+    ],
+    "synonyms_in_report": [
+      "emphysematous change",
+      "centrilobular emphysema"
+    ],
+    "found_in": [
+      "CT Chest"
+    ],
+    "common_causes": [
+      "Smoking",
+      "Alpha-1 antitrypsin deficiency"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Respiratory follow-up recommended",
+    "icd_hint": "J43.9",
+    "id": "T095"
+  },
+  {
+    "term": "costophrenic angle blunting",
+    "simple_meaning": "Rounded edge at the base of the lung",
+    "patient_explanation": "The normally sharp angle at the bottom edge of the lung looks rounded rather than pointed.",
+    "clinical_context": "A subtle early sign that can indicate a small amount of fluid around the lung.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🫁",
+    "related_terms": [
+      "pleural effusion"
+    ],
+    "synonyms_in_report": [
+      "blunting of costophrenic angle",
+      "CP angle blunting"
+    ],
+    "found_in": [
+      "Chest X-ray"
+    ],
+    "common_causes": [
+      "Small pleural effusion",
+      "Pleural scarring"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Correlate clinically; further imaging if symptomatic",
+    "icd_hint": "J94.8",
+    "id": "T096"
+  },
+  {
+    "term": "osteoarthritis",
+    "simple_meaning": "Wear-and-tear joint damage",
+    "patient_explanation": "The cushioning cartilage in a joint has worn down, which is a common part of joint ageing.",
+    "clinical_context": "The most common form of arthritis, causing joint space narrowing, osteophytes, and stiffness.",
+    "body_system": "Bone/Joint",
+    "category": "Musculoskeletal",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "degenerative joint disease"
+    ],
+    "synonyms_in_report": [
+      "osteoarthritic changes",
+      "degenerative changes consistent with osteoarthritis"
+    ],
+    "found_in": [
+      "X-ray",
+      "MRI"
+    ],
+    "common_causes": [
+      "Age",
+      "Joint overuse",
+      "Prior injury",
+      "Obesity"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Physiotherapy and pain management as advised",
+    "icd_hint": "M19.90",
+    "id": "T097"
+  },
+  {
+    "term": "osteoporosis",
+    "simple_meaning": "Weakened, low-density bone",
+    "patient_explanation": "The bones have become thinner and more fragile than normal, raising the risk of fractures.",
+    "clinical_context": "A systemic condition reducing bone density, often assessed with a DEXA scan.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "severity": "Medium",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "low bone density",
+      "osteopenia"
+    ],
+    "synonyms_in_report": [
+      "osteoporotic changes",
+      "reduced bone mineral density"
+    ],
+    "found_in": [
+      "X-ray",
+      "DEXA scan"
+    ],
+    "common_causes": [
+      "Age",
+      "Menopause",
+      "Long-term steroid use",
+      "Vitamin D deficiency"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "DEXA scan and bone health review recommended",
+    "icd_hint": "M81.0",
+    "id": "T098"
+  },
+  {
+    "term": "osteopenia",
+    "simple_meaning": "Mildly reduced bone density",
+    "patient_explanation": "Bone density is a little lower than normal, though not as low as osteoporosis.",
+    "clinical_context": "Considered an early stage of bone density loss; monitored to prevent progression.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "low bone density"
+    ],
+    "synonyms_in_report": [
+      "osteopenic changes",
+      "mild osteopenia"
+    ],
+    "found_in": [
+      "X-ray",
+      "DEXA scan"
+    ],
+    "common_causes": [
+      "Age",
+      "Low calcium/vitamin D intake",
+      "Sedentary lifestyle"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Bone health review with your doctor recommended",
+    "icd_hint": "M85.8",
+    "id": "T099"
+  },
+  {
+    "term": "compression fracture",
+    "simple_meaning": "Collapsed vertebral bone",
+    "patient_explanation": "One of the bones in the spine has partially collapsed, often becoming shorter or wedge-shaped.",
+    "clinical_context": "Common in osteoporosis but can also follow trauma; may cause back pain and height loss.",
+    "body_system": "Spine",
+    "category": "Musculoskeletal",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "vertebral compression fracture"
+    ],
+    "synonyms_in_report": [
+      "compression fracture",
+      "wedge compression deformity"
+    ],
+    "found_in": [
+      "X-ray",
+      "CT",
+      "MRI"
+    ],
+    "common_causes": [
+      "Osteoporosis",
+      "Trauma",
+      "Metastatic disease"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Spine specialist or orthopaedic follow-up recommended",
+    "icd_hint": "M48.50",
+    "id": "T100"
+  },
+  {
+    "term": "stress fracture",
+    "simple_meaning": "Small crack from repetitive strain",
+    "patient_explanation": "A tiny crack has formed in a bone due to repeated stress, rather than a single injury.",
+    "clinical_context": "Common in weight-bearing bones with repetitive activity, such as running.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "fatigue fracture"
+    ],
+    "synonyms_in_report": [
+      "stress fracture",
+      "stress reaction"
+    ],
+    "found_in": [
+      "X-ray",
+      "MRI",
+      "Bone scan"
+    ],
+    "common_causes": [
+      "Repetitive activity/overuse",
+      "Osteoporosis"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Rest and activity modification typically advised",
+    "icd_hint": "M84.30",
+    "id": "T101"
+  },
+  {
+    "term": "avulsion fracture",
+    "simple_meaning": "Small bone fragment pulled off by a tendon/ligament",
+    "patient_explanation": "A small piece of bone has been pulled away from the main bone by a tendon or ligament.",
+    "clinical_context": "Occurs where a tendon or ligament attaches, often from sudden forceful contraction.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "severity": "Low",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "avulsion injury"
+    ],
+    "synonyms_in_report": [
+      "avulsion fracture",
+      "bony avulsion"
+    ],
+    "found_in": [
+      "X-ray",
+      "MRI"
+    ],
+    "common_causes": [
+      "Sports injury",
+      "Sudden forceful muscle contraction"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Orthopaedic assessment recommended",
+    "icd_hint": "S79.101A",
+    "id": "T102"
+  },
+  {
+    "term": "dislocation",
+    "simple_meaning": "Joint bones out of normal position",
+    "patient_explanation": "The bones that form a joint have moved out of their normal alignment.",
+    "clinical_context": "Requires prompt reduction (repositioning) to restore normal joint alignment and function.",
+    "body_system": "Joint",
+    "category": "Musculoskeletal",
+    "severity": "Medium",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "joint dislocation"
+    ],
+    "synonyms_in_report": [
+      "dislocation",
+      "frank dislocation"
+    ],
+    "found_in": [
+      "X-ray",
+      "CT"
+    ],
+    "common_causes": [
+      "Trauma",
+      "Sports injury",
+      "Ligament laxity"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Requires prompt orthopaedic assessment",
+    "icd_hint": "S43.006A",
+    "id": "T103"
+  },
+  {
+    "term": "subluxation",
+    "simple_meaning": "Partial joint misalignment",
+    "patient_explanation": "The bones of a joint are partly out of position, but not fully dislocated.",
+    "clinical_context": "A milder form of joint displacement, still needing assessment to prevent recurrence or instability.",
+    "body_system": "Joint",
+    "category": "Musculoskeletal",
+    "severity": "Low",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "partial dislocation"
+    ],
+    "synonyms_in_report": [
+      "subluxation",
+      "mild subluxation"
+    ],
+    "found_in": [
+      "X-ray",
+      "MRI"
+    ],
+    "common_causes": [
+      "Trauma",
+      "Ligament laxity"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Orthopaedic assessment recommended",
+    "icd_hint": "S43.006A",
+    "id": "T104"
+  },
+  {
+    "term": "meniscal tear",
+    "simple_meaning": "Torn knee cartilage cushion",
+    "patient_explanation": "The cartilage cushion inside the knee that absorbs shock has a tear.",
+    "clinical_context": "Common knee injury from twisting movements or degeneration; severity varies widely.",
+    "body_system": "Joint",
+    "category": "Musculoskeletal",
+    "severity": "Medium",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "knee cartilage tear"
+    ],
+    "synonyms_in_report": [
+      "meniscal tear",
+      "medial meniscus tear"
+    ],
+    "found_in": [
+      "MRI"
+    ],
+    "common_causes": [
+      "Sports injury/twisting",
+      "Degeneration with age"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Orthopaedic or physiotherapy follow-up recommended",
+    "icd_hint": "S83.209A",
+    "id": "T105"
+  },
+  {
+    "term": "ACL tear",
+    "simple_meaning": "Torn knee ligament (ACL)",
+    "patient_explanation": "One of the main ligaments that stabilises the knee is torn.",
+    "clinical_context": "A common sports injury that can cause knee instability; may need surgical reconstruction.",
+    "body_system": "Joint",
+    "category": "Musculoskeletal",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "anterior cruciate ligament tear"
+    ],
+    "synonyms_in_report": [
+      "ACL tear",
+      "complete ACL rupture"
+    ],
+    "found_in": [
+      "MRI"
+    ],
+    "common_causes": [
+      "Sports injury",
+      "Sudden pivoting movement"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Orthopaedic assessment recommended",
+    "icd_hint": "S83.511A",
+    "id": "T106"
+  },
+  {
+    "term": "rotator cuff tear",
+    "simple_meaning": "Torn shoulder tendon group",
+    "patient_explanation": "One or more of the tendons that help move and stabilise the shoulder is torn.",
+    "clinical_context": "Common with age-related degeneration or after a fall/injury; severity ranges from partial to full-thickness.",
+    "body_system": "Joint",
+    "category": "Musculoskeletal",
+    "severity": "Medium",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "shoulder tendon tear"
+    ],
+    "synonyms_in_report": [
+      "rotator cuff tear",
+      "supraspinatus tear"
+    ],
+    "found_in": [
+      "MRI",
+      "Ultrasound"
+    ],
+    "common_causes": [
+      "Age-related degeneration",
+      "Trauma",
+      "Repetitive overhead activity"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Orthopaedic or physiotherapy follow-up recommended",
+    "icd_hint": "M75.100",
+    "id": "T107"
+  },
+  {
+    "term": "labral tear",
+    "simple_meaning": "Torn joint rim cartilage",
+    "patient_explanation": "The ring of cartilage that deepens a joint socket (shoulder or hip) has a tear.",
+    "clinical_context": "Can cause pain, clicking, or instability in the affected joint.",
+    "body_system": "Joint",
+    "category": "Musculoskeletal",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "labrum tear"
+    ],
+    "synonyms_in_report": [
+      "labral tear",
+      "SLAP tear"
+    ],
+    "found_in": [
+      "MRI"
+    ],
+    "common_causes": [
+      "Sports injury",
+      "Repetitive joint stress",
+      "Joint instability"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Orthopaedic follow-up recommended",
+    "icd_hint": "S43.439A",
+    "id": "T108"
+  },
+  {
+    "term": "bone marrow edema",
+    "simple_meaning": "Fluid signal inside bone",
+    "patient_explanation": "There is extra fluid within the bone itself, usually a sign of stress or minor injury.",
+    "clinical_context": "A sensitive but nonspecific MRI finding suggesting bone stress, bruising, or early fracture.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "bone bruise"
+    ],
+    "synonyms_in_report": [
+      "bone marrow edema",
+      "bone contusion"
+    ],
+    "found_in": [
+      "MRI"
+    ],
+    "common_causes": [
+      "Trauma",
+      "Overuse",
+      "Early stress fracture"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Rest and follow-up imaging if symptoms persist",
+    "icd_hint": "M25.9",
+    "id": "T109"
+  },
+  {
+    "term": "periosteal reaction",
+    "simple_meaning": "New bone forming on the bone surface",
+    "patient_explanation": "The lining of the bone is producing new bone tissue in response to irritation, injury, or infection.",
+    "clinical_context": "Pattern of periosteal reaction can help distinguish benign from more concerning causes.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "periosteal new bone"
+    ],
+    "synonyms_in_report": [
+      "periosteal reaction",
+      "periosteal thickening"
+    ],
+    "found_in": [
+      "X-ray",
+      "MRI"
+    ],
+    "common_causes": [
+      "Trauma/stress fracture",
+      "Infection",
+      "Tumour (less common)"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Further evaluation recommended to determine cause",
+    "icd_hint": "M89.9",
+    "id": "T110"
+  },
+  {
+    "term": "joint effusion",
+    "simple_meaning": "Extra fluid inside a joint",
+    "patient_explanation": "There is more fluid than usual inside a joint space.",
+    "clinical_context": "A nonspecific sign of joint irritation that can accompany injury, arthritis, or infection.",
+    "body_system": "Joint",
+    "category": "Musculoskeletal",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "joint fluid",
+      "synovial effusion"
+    ],
+    "synonyms_in_report": [
+      "joint effusion",
+      "small knee effusion"
+    ],
+    "found_in": [
+      "X-ray",
+      "MRI",
+      "Ultrasound"
+    ],
+    "common_causes": [
+      "Injury",
+      "Osteoarthritis",
+      "Infection (less common)"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Correlate with symptoms; further work-up if infection suspected",
+    "icd_hint": "M25.469",
+    "id": "T111"
+  },
+  {
+    "term": "synovitis",
+    "simple_meaning": "Inflamed joint lining",
+    "patient_explanation": "The lining tissue inside a joint is inflamed.",
+    "clinical_context": "Can accompany arthritis, injury, or infection; often causes swelling and pain.",
+    "body_system": "Joint",
+    "category": "Musculoskeletal",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "synovial inflammation"
+    ],
+    "synonyms_in_report": [
+      "synovitis",
+      "synovial thickening"
+    ],
+    "found_in": [
+      "MRI",
+      "Ultrasound"
+    ],
+    "common_causes": [
+      "Rheumatoid arthritis",
+      "Osteoarthritis",
+      "Injury"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Rheumatology or orthopaedic follow-up as advised",
+    "icd_hint": "M65.9",
+    "id": "T112"
+  },
+  {
+    "term": "tendinosis",
+    "simple_meaning": "Degenerated tendon without acute tear",
+    "patient_explanation": "A tendon shows signs of long-term wear and thickening rather than a fresh injury.",
+    "clinical_context": "Represents chronic degenerative change from repetitive stress, distinct from acute tendon inflammation.",
+    "body_system": "Soft tissue",
+    "category": "Musculoskeletal",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "tendinopathy"
+    ],
+    "synonyms_in_report": [
+      "tendinosis",
+      "chronic tendinopathy"
+    ],
+    "found_in": [
+      "MRI",
+      "Ultrasound"
+    ],
+    "common_causes": [
+      "Repetitive overuse",
+      "Age-related degeneration"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Physiotherapy often recommended",
+    "icd_hint": "M65.9",
+    "id": "T113"
+  },
+  {
+    "term": "bursitis",
+    "simple_meaning": "Inflamed cushioning sac near a joint",
+    "patient_explanation": "A small fluid-filled sac that cushions a joint is inflamed and swollen.",
+    "clinical_context": "Common around the shoulder, hip, elbow, or knee, often from repetitive friction or pressure.",
+    "body_system": "Soft tissue",
+    "category": "Musculoskeletal",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "bursal inflammation"
+    ],
+    "synonyms_in_report": [
+      "bursitis",
+      "subacromial bursitis"
+    ],
+    "found_in": [
+      "Ultrasound",
+      "MRI"
+    ],
+    "common_causes": [
+      "Repetitive movement",
+      "Prolonged pressure",
+      "Infection (less common)"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Rest and anti-inflammatory measures typically advised",
+    "icd_hint": "M71.9",
+    "id": "T114"
+  },
+  {
+    "term": "chondromalacia",
+    "simple_meaning": "Softened cartilage under the kneecap",
+    "patient_explanation": "The cartilage on the underside of the kneecap has softened and is wearing down.",
+    "clinical_context": "A common cause of anterior knee pain, particularly in younger, active people.",
+    "body_system": "Joint",
+    "category": "Musculoskeletal",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "patellofemoral chondromalacia"
+    ],
+    "synonyms_in_report": [
+      "chondromalacia patellae",
+      "patellar cartilage softening"
+    ],
+    "found_in": [
+      "MRI"
+    ],
+    "common_causes": [
+      "Overuse",
+      "Patellar malalignment",
+      "Muscle imbalance"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Physiotherapy typically recommended",
+    "icd_hint": "M22.4",
+    "id": "T115"
+  },
+  {
+    "term": "scoliosis",
+    "simple_meaning": "Sideways curve of the spine",
+    "patient_explanation": "The spine curves to one side more than the normal, straight alignment.",
+    "clinical_context": "Can be mild and incidental or more significant, sometimes needing monitoring or bracing.",
+    "body_system": "Spine",
+    "category": "Musculoskeletal",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "spinal curvature"
+    ],
+    "synonyms_in_report": [
+      "scoliosis",
+      "mild thoracolumbar scoliosis"
+    ],
+    "found_in": [
+      "X-ray"
+    ],
+    "common_causes": [
+      "Idiopathic (most common)",
+      "Congenital",
+      "Degenerative"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Spine specialist follow-up if curve is significant",
+    "icd_hint": "M41.9",
+    "id": "T116"
+  },
+  {
+    "term": "kyphosis",
+    "simple_meaning": "Excessive forward curve of the upper spine",
+    "patient_explanation": "The upper back curves forward more than normal, sometimes giving a rounded or hunched appearance.",
+    "clinical_context": "Can be postural, age-related, or due to compression fractures affecting the spine.",
+    "body_system": "Spine",
+    "category": "Musculoskeletal",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "hyperkyphosis"
+    ],
+    "synonyms_in_report": [
+      "kyphosis",
+      "increased thoracic kyphosis"
+    ],
+    "found_in": [
+      "X-ray"
+    ],
+    "common_causes": [
+      "Osteoporosis with compression fractures",
+      "Degenerative disc disease",
+      "Postural causes"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Spine specialist follow-up if progressive",
+    "icd_hint": "M40.209",
+    "id": "T117"
+  },
+  {
+    "term": "spondylosis",
+    "simple_meaning": "General spinal degeneration",
+    "patient_explanation": "The spine shows general wear-and-tear changes that are common with age.",
+    "clinical_context": "An umbrella term for age-related degenerative changes affecting discs and joints of the spine.",
+    "body_system": "Spine",
+    "category": "Musculoskeletal",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "spinal degeneration"
+    ],
+    "synonyms_in_report": [
+      "spondylotic changes",
+      "multilevel spondylosis"
+    ],
+    "found_in": [
+      "X-ray",
+      "MRI"
+    ],
+    "common_causes": [
+      "Age-related wear",
+      "Prior injury"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Physiotherapy and pain management as advised",
+    "icd_hint": "M47.819",
+    "id": "T118"
+  },
+  {
+    "term": "facet joint arthropathy",
+    "simple_meaning": "Worn small spinal joints",
+    "patient_explanation": "The small joints at the back of the spine that guide movement show wear-and-tear changes.",
+    "clinical_context": "A common source of back pain related to degenerative changes in the small spinal joints.",
+    "body_system": "Spine",
+    "category": "Musculoskeletal",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "facet arthropathy"
+    ],
+    "synonyms_in_report": [
+      "facet joint hypertrophy",
+      "facet arthropathy"
+    ],
+    "found_in": [
+      "X-ray",
+      "MRI",
+      "CT"
+    ],
+    "common_causes": [
+      "Age-related degeneration",
+      "Prior injury"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Physiotherapy and pain management as advised",
+    "icd_hint": "M47.816",
+    "id": "T119"
+  },
+  {
+    "term": "spinal canal stenosis",
+    "simple_meaning": "Narrowed spinal canal",
+    "patient_explanation": "The channel in the spine that houses the spinal cord or nerves has become narrower than normal.",
+    "clinical_context": "Can compress nerves, causing pain, numbness, or weakness, particularly with standing or walking.",
+    "body_system": "Spine",
+    "category": "Musculoskeletal",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "spinal stenosis"
+    ],
+    "synonyms_in_report": [
+      "spinal canal stenosis",
+      "central canal narrowing"
+    ],
+    "found_in": [
+      "MRI",
+      "CT"
+    ],
+    "common_causes": [
+      "Degenerative disc disease",
+      "Osteoarthritis",
+      "Ligament thickening"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Spine specialist follow-up recommended",
+    "icd_hint": "M48.06",
+    "id": "T120"
+  },
+  {
+    "term": "sacroiliitis",
+    "simple_meaning": "Inflammation of the lower back/pelvis joint",
+    "patient_explanation": "The joint connecting the base of the spine to the pelvis is inflamed.",
+    "clinical_context": "Can be linked to inflammatory arthritis conditions or mechanical strain.",
+    "body_system": "Joint",
+    "category": "Musculoskeletal",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "SI joint inflammation"
+    ],
+    "synonyms_in_report": [
+      "sacroiliitis",
+      "SI joint changes"
+    ],
+    "found_in": [
+      "X-ray",
+      "MRI",
+      "CT"
+    ],
+    "common_causes": [
+      "Inflammatory arthritis (e.g. ankylosing spondylitis)",
+      "Mechanical strain",
+      "Infection (less common)"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Rheumatology follow-up if inflammatory cause suspected",
+    "icd_hint": "M46.1",
+    "id": "T121"
+  },
+  {
+    "term": "osteomyelitis",
+    "simple_meaning": "Bone infection",
+    "patient_explanation": "There is an infection within the bone itself.",
+    "clinical_context": "A serious infection requiring prompt antibiotic treatment, and sometimes surgery, to prevent bone damage.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "bone infection"
+    ],
+    "synonyms_in_report": [
+      "osteomyelitis",
+      "features consistent with osteomyelitis"
+    ],
+    "found_in": [
+      "X-ray",
+      "MRI",
+      "Bone scan"
+    ],
+    "common_causes": [
+      "Bacterial infection",
+      "Diabetic foot ulcer",
+      "Post-surgical infection"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Requires prompt medical treatment",
+    "icd_hint": "M86.9",
+    "id": "T122"
+  },
+  {
+    "term": "bone cyst",
+    "simple_meaning": "Fluid-filled cavity in bone",
+    "patient_explanation": "There is a fluid-filled space within the bone, which is usually a benign, non-cancerous finding.",
+    "clinical_context": "Most bone cysts are benign and found incidentally; monitored to ensure stability over time.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "simple bone cyst"
+    ],
+    "synonyms_in_report": [
+      "unicameral bone cyst",
+      "bone cyst"
+    ],
+    "found_in": [
+      "X-ray",
+      "MRI"
+    ],
+    "common_causes": [
+      "Benign developmental finding"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Follow-up imaging if size or symptoms change",
+    "icd_hint": "M85.60",
+    "id": "T123"
+  },
+  {
+    "term": "enchondroma",
+    "simple_meaning": "Benign cartilage growth inside bone",
+    "patient_explanation": "There is a small, usually harmless growth of cartilage tissue inside a bone.",
+    "clinical_context": "One of the most common benign bone tumours, often found incidentally on imaging.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "cartilage tumour"
+    ],
+    "synonyms_in_report": [
+      "enchondroma",
+      "benign cartilaginous lesion"
+    ],
+    "found_in": [
+      "X-ray",
+      "MRI"
+    ],
+    "common_causes": [
+      "Benign developmental finding"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Periodic monitoring may be advised",
+    "icd_hint": "D16.9",
+    "id": "T124"
+  },
+  {
+    "term": "avascular necrosis",
+    "simple_meaning": "Bone tissue dying from lost blood supply",
+    "patient_explanation": "Part of a bone has lost its blood supply, causing the bone tissue in that area to die.",
+    "clinical_context": "Can lead to bone collapse over time if untreated; the hip is a commonly affected site.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🦴",
+    "related_terms": [
+      "osteonecrosis"
+    ],
+    "synonyms_in_report": [
+      "avascular necrosis",
+      "AVN of the femoral head"
+    ],
+    "found_in": [
+      "MRI",
+      "X-ray"
+    ],
+    "common_causes": [
+      "Long-term steroid use",
+      "Trauma",
+      "Excess alcohol use"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Orthopaedic assessment recommended",
+    "icd_hint": "M87.9",
+    "id": "T125"
+  },
+  {
+    "term": "cerebral microbleeds",
+    "simple_meaning": "Tiny old bleeds in the brain",
+    "patient_explanation": "Very small, old areas of bleeding are scattered within the brain tissue.",
+    "clinical_context": "Often related to small blood vessel disease and are a marker of bleeding risk on certain scans.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "microhemorrhages"
+    ],
+    "synonyms_in_report": [
+      "cerebral microbleeds",
+      "microhemorrhage foci"
+    ],
+    "found_in": [
+      "MRI"
+    ],
+    "common_causes": [
+      "Small vessel disease",
+      "Hypertension",
+      "Amyloid angiopathy"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Neurology follow-up recommended",
+    "icd_hint": "I61.9",
+    "id": "T126"
+  },
+  {
+    "term": "white matter hyperintensities",
+    "simple_meaning": "Bright spots in the brain's white matter",
+    "patient_explanation": "Small bright areas are seen in the deeper white matter of the brain on certain scan sequences.",
+    "clinical_context": "A common, often age-related finding linked to small blood vessel changes; significance depends on extent.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "leukoaraiosis"
+    ],
+    "synonyms_in_report": [
+      "white matter hyperintensities",
+      "T2/FLAIR white matter changes"
+    ],
+    "found_in": [
+      "MRI"
+    ],
+    "common_causes": [
+      "Small vessel disease",
+      "Age-related change",
+      "Hypertension"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Correlate with clinical symptoms and vascular risk factors",
+    "icd_hint": "I67.9",
+    "id": "T127"
+  },
+  {
+    "term": "leukoaraiosis",
+    "simple_meaning": "Age-related white matter changes",
+    "patient_explanation": "There are diffuse changes in the deep brain tissue that are commonly seen with ageing and small blood vessel changes.",
+    "clinical_context": "A descriptive term for chronic small vessel ischemic changes in the brain's white matter.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "white matter disease"
+    ],
+    "synonyms_in_report": [
+      "leukoaraiosis",
+      "chronic microvascular ischemic changes"
+    ],
+    "found_in": [
+      "MRI",
+      "CT Head"
+    ],
+    "common_causes": [
+      "Age",
+      "Hypertension",
+      "Small vessel disease"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Vascular risk factor management recommended",
+    "icd_hint": "I67.3",
+    "id": "T128"
+  },
+  {
+    "term": "subdural hematoma",
+    "simple_meaning": "Bleeding between the brain and its outer covering",
+    "patient_explanation": "There is a collection of blood between the brain surface and its outer protective layer.",
+    "clinical_context": "Can follow head trauma, especially in older adults; may require urgent surgical drainage if large.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "SDH"
+    ],
+    "synonyms_in_report": [
+      "subdural hematoma",
+      "acute subdural hemorrhage"
+    ],
+    "found_in": [
+      "CT Head",
+      "MRI"
+    ],
+    "common_causes": [
+      "Head trauma",
+      "Falls (especially in elderly)",
+      "Blood thinner use"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Requires urgent neurosurgical assessment",
+    "icd_hint": "S06.5X0A",
+    "id": "T129"
+  },
+  {
+    "term": "epidural hematoma",
+    "simple_meaning": "Bleeding between the skull and brain covering",
+    "patient_explanation": "There is a collection of blood between the inner skull surface and the brain's outer covering.",
+    "clinical_context": "A neurosurgical emergency, often following skull fracture, that can rapidly raise brain pressure.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "EDH"
+    ],
+    "synonyms_in_report": [
+      "epidural hematoma",
+      "extradural hemorrhage"
+    ],
+    "found_in": [
+      "CT Head"
+    ],
+    "common_causes": [
+      "Head trauma",
+      "Skull fracture"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Requires emergency neurosurgical assessment",
+    "icd_hint": "S06.4X0A",
+    "id": "T130"
+  },
+  {
+    "term": "subarachnoid hemorrhage",
+    "simple_meaning": "Bleeding around the brain's surface",
+    "patient_explanation": "There is bleeding into the space surrounding the brain, between the brain and its covering membranes.",
+    "clinical_context": "A medical emergency, often from a ruptured aneurysm, presenting classically with sudden severe headache.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "SAH"
+    ],
+    "synonyms_in_report": [
+      "subarachnoid hemorrhage",
+      "SAH"
+    ],
+    "found_in": [
+      "CT Head",
+      "MRI",
+      "Angiogram"
+    ],
+    "common_causes": [
+      "Ruptured cerebral aneurysm",
+      "Trauma",
+      "Arteriovenous malformation"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Requires emergency neurosurgical assessment",
+    "icd_hint": "I60.9",
+    "id": "T131"
+  },
+  {
+    "term": "intraventricular hemorrhage",
+    "simple_meaning": "Bleeding into the brain's fluid chambers",
+    "patient_explanation": "There is bleeding into the fluid-filled chambers deep inside the brain.",
+    "clinical_context": "Can occur alongside other types of brain bleeding and may obstruct normal fluid drainage.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "IVH"
+    ],
+    "synonyms_in_report": [
+      "intraventricular hemorrhage",
+      "IVH extension"
+    ],
+    "found_in": [
+      "CT Head",
+      "MRI"
+    ],
+    "common_causes": [
+      "Extension from other brain hemorrhage",
+      "Trauma",
+      "Hypertension"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Requires urgent neurosurgical assessment",
+    "icd_hint": "I61.5",
+    "id": "T132"
+  },
+  {
+    "term": "cerebral edema",
+    "simple_meaning": "Brain tissue swelling",
+    "patient_explanation": "There is swelling within the brain tissue.",
+    "clinical_context": "Can raise pressure inside the skull and is often associated with injury, stroke, or tumour.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "brain swelling"
+    ],
+    "synonyms_in_report": [
+      "cerebral edema",
+      "vasogenic edema"
+    ],
+    "found_in": [
+      "CT Head",
+      "MRI"
+    ],
+    "common_causes": [
+      "Stroke",
+      "Trauma",
+      "Tumour",
+      "Infection"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Requires urgent clinical assessment",
+    "icd_hint": "G93.6",
+    "id": "T133"
+  },
+  {
+    "term": "mass effect",
+    "simple_meaning": "Brain structures pushed out of position",
+    "patient_explanation": "An abnormal area is large enough to be pushing on and displacing the normal brain structures nearby.",
+    "clinical_context": "An important sign that guides urgency, as significant mass effect can raise pressure inside the skull.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [],
+    "synonyms_in_report": [
+      "mass effect",
+      "local mass effect"
+    ],
+    "found_in": [
+      "CT Head",
+      "MRI"
+    ],
+    "common_causes": [
+      "Tumour",
+      "Hemorrhage",
+      "Large infarct",
+      "Abscess"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Requires urgent neurosurgical assessment",
+    "icd_hint": "G93.89",
+    "id": "T134"
+  },
+  {
+    "term": "brain herniation",
+    "simple_meaning": "Brain tissue pushed out of its normal space",
+    "patient_explanation": "Part of the brain has been pushed out of its usual compartment due to pressure buildup.",
+    "clinical_context": "A life-threatening emergency requiring immediate treatment to relieve pressure on the brain.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "cerebral herniation"
+    ],
+    "synonyms_in_report": [
+      "uncal herniation",
+      "tonsillar herniation"
+    ],
+    "found_in": [
+      "CT Head",
+      "MRI"
+    ],
+    "common_causes": [
+      "Severe mass effect",
+      "Large hemorrhage",
+      "Large tumour"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Medical emergency requiring immediate treatment",
+    "icd_hint": "G93.5",
+    "id": "T135"
+  },
+  {
+    "term": "meningioma",
+    "simple_meaning": "Usually benign tumour of the brain's covering",
+    "patient_explanation": "There is a growth arising from the membranes covering the brain, which is usually non-cancerous.",
+    "clinical_context": "The most common primary benign brain tumour; often monitored rather than immediately treated.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "Medium",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "meningeal tumour"
+    ],
+    "synonyms_in_report": [
+      "meningioma",
+      "extra-axial mass consistent with meningioma"
+    ],
+    "found_in": [
+      "MRI",
+      "CT Head"
+    ],
+    "common_causes": [
+      "Usually sporadic; rarely genetic (e.g. NF2)"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Neurosurgical follow-up recommended",
+    "icd_hint": "D32.9",
+    "id": "T136"
+  },
+  {
+    "term": "glioma",
+    "simple_meaning": "Tumour arising from brain support cells",
+    "patient_explanation": "There is a growth arising from the supportive tissue cells within the brain.",
+    "clinical_context": "A category of brain tumours ranging from low-grade (slower growing) to high-grade (more aggressive).",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "brain tumour"
+    ],
+    "synonyms_in_report": [
+      "glioma",
+      "infiltrative glial neoplasm"
+    ],
+    "found_in": [
+      "MRI"
+    ],
+    "common_causes": [
+      "Usually sporadic; rarely genetic"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Requires urgent neurosurgical/oncology assessment",
+    "icd_hint": "D43.2",
+    "id": "T137"
+  },
+  {
+    "term": "arachnoid cyst",
+    "simple_meaning": "Fluid-filled pocket near the brain surface",
+    "patient_explanation": "There is a fluid-filled sac between the brain and one of its covering membranes, usually present from birth.",
+    "clinical_context": "Typically a benign, incidental finding that rarely causes symptoms unless large.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "arachnoid cyst"
+    ],
+    "synonyms_in_report": [
+      "arachnoid cyst",
+      "incidental arachnoid cyst"
+    ],
+    "found_in": [
+      "MRI",
+      "CT Head"
+    ],
+    "common_causes": [
+      "Congenital (present from birth)"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Usually monitored only if symptomatic",
+    "icd_hint": "G93.0",
+    "id": "T138"
+  },
+  {
+    "term": "Chiari malformation",
+    "simple_meaning": "Brain tissue extending into the spinal canal",
+    "patient_explanation": "Part of the lower brain sits lower than usual, extending slightly into the top of the spinal canal.",
+    "clinical_context": "Can be an incidental finding or cause symptoms like headache, depending on the degree of descent.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "cerebellar tonsillar ectopia"
+    ],
+    "synonyms_in_report": [
+      "Chiari I malformation",
+      "tonsillar ectopia"
+    ],
+    "found_in": [
+      "MRI"
+    ],
+    "common_causes": [
+      "Congenital (present from birth)"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Neurology follow-up recommended if symptomatic",
+    "icd_hint": "Q07.00",
+    "id": "T139"
+  },
+  {
+    "term": "syrinx",
+    "simple_meaning": "Fluid-filled cavity in the spinal cord",
+    "patient_explanation": "There is a fluid-filled channel that has formed within the spinal cord.",
+    "clinical_context": "Can be associated with Chiari malformation, trauma, or spinal cord tumours.",
+    "body_system": "Spine",
+    "category": "Neurological",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "syringomyelia"
+    ],
+    "synonyms_in_report": [
+      "syrinx",
+      "syringomyelia"
+    ],
+    "found_in": [
+      "MRI"
+    ],
+    "common_causes": [
+      "Chiari malformation",
+      "Spinal trauma",
+      "Spinal cord tumour"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Neurosurgical follow-up recommended",
+    "icd_hint": "G95.0",
+    "id": "T140"
+  },
+  {
+    "term": "demyelination",
+    "simple_meaning": "Loss of the brain/spinal cord's protective nerve coating",
+    "patient_explanation": "Areas of the brain or spinal cord have lost some of the protective coating around nerve fibres.",
+    "clinical_context": "A key feature of conditions like multiple sclerosis, though it can have other causes too.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "demyelinating lesion"
+    ],
+    "synonyms_in_report": [
+      "demyelinating plaque",
+      "demyelination"
+    ],
+    "found_in": [
+      "MRI"
+    ],
+    "common_causes": [
+      "Multiple sclerosis",
+      "Inflammatory conditions",
+      "Prior infection"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Neurology referral recommended",
+    "icd_hint": "G37.9",
+    "id": "T141"
+  },
+  {
+    "term": "encephalomalacia",
+    "simple_meaning": "Old area of softened brain tissue",
+    "patient_explanation": "There is an area of the brain where tissue has softened, usually the result of an old injury or stroke.",
+    "clinical_context": "Represents chronic tissue damage from a prior event such as stroke, trauma, or infection.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "gliotic scar"
+    ],
+    "synonyms_in_report": [
+      "encephalomalacia",
+      "gliotic encephalomalacia"
+    ],
+    "found_in": [
+      "MRI",
+      "CT Head"
+    ],
+    "common_causes": [
+      "Prior stroke",
+      "Prior trauma",
+      "Prior infection"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Correlate with clinical history; routine follow-up",
+    "icd_hint": "G93.89",
+    "id": "T142"
+  },
+  {
+    "term": "ventriculomegaly",
+    "simple_meaning": "Enlarged brain fluid chambers",
+    "patient_explanation": "The fluid-filled chambers deep within the brain are larger than normal.",
+    "clinical_context": "Can reflect hydrocephalus (fluid buildup) or, in some cases, brain volume loss.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "enlarged ventricles"
+    ],
+    "synonyms_in_report": [
+      "ventriculomegaly",
+      "mild ventricular enlargement"
+    ],
+    "found_in": [
+      "MRI",
+      "CT Head"
+    ],
+    "common_causes": [
+      "Hydrocephalus",
+      "Brain atrophy",
+      "Prior injury"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Neurology follow-up recommended",
+    "icd_hint": "G91.9",
+    "id": "T143"
+  },
+  {
+    "term": "cerebellar atrophy",
+    "simple_meaning": "Shrinkage of the brain's coordination centre",
+    "patient_explanation": "The part of the brain that helps coordinate movement and balance has reduced in size.",
+    "clinical_context": "Can occur with ageing or be linked to specific neurological conditions affecting balance and coordination.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "cerebellar volume loss"
+    ],
+    "synonyms_in_report": [
+      "cerebellar atrophy",
+      "cerebellar volume loss"
+    ],
+    "found_in": [
+      "MRI"
+    ],
+    "common_causes": [
+      "Age-related change",
+      "Alcohol-related damage",
+      "Neurodegenerative conditions"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Neurology follow-up recommended",
+    "icd_hint": "G31.9",
+    "id": "T144"
+  },
+  {
+    "term": "pituitary microadenoma",
+    "simple_meaning": "Small benign growth on the pituitary gland",
+    "patient_explanation": "There is a small, usually benign growth on the pituitary gland at the base of the brain.",
+    "clinical_context": "Very common and often incidental; some produce hormones that may need monitoring or treatment.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "Low",
+    "urgency": "Non-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "pituitary adenoma"
+    ],
+    "synonyms_in_report": [
+      "pituitary microadenoma",
+      "small pituitary lesion"
+    ],
+    "found_in": [
+      "MRI"
+    ],
+    "common_causes": [
+      "Usually sporadic, benign glandular growth"
+    ],
+    "action_note": "This should be interpreted with symptoms and doctor advice.",
+    "follow_up": "Endocrinology follow-up recommended",
+    "icd_hint": "D35.2",
+    "id": "T145"
+  },
+  {
+    "term": "cerebral aneurysm",
+    "simple_meaning": "Bulge in a brain blood vessel wall",
+    "patient_explanation": "There is a small bulge or ballooning in the wall of one of the blood vessels in the brain.",
+    "clinical_context": "Unruptured aneurysms are often monitored; risk of rupture depends on size and location.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "intracranial aneurysm"
+    ],
+    "synonyms_in_report": [
+      "cerebral aneurysm",
+      "unruptured saccular aneurysm"
+    ],
+    "found_in": [
+      "MRA",
+      "CT Angiogram",
+      "Angiogram"
+    ],
+    "common_causes": [
+      "Vessel wall weakness",
+      "Hypertension",
+      "Family history"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Neurosurgical/neurology follow-up recommended",
+    "icd_hint": "I67.1",
+    "id": "T146"
+  },
+  {
+    "term": "arteriovenous malformation",
+    "simple_meaning": "Tangled, abnormal blood vessels",
+    "patient_explanation": "There is an abnormal tangle of blood vessels where arteries connect directly to veins, bypassing normal tissue.",
+    "clinical_context": "Congenital vascular abnormality that carries a risk of bleeding and may need treatment.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "AVM"
+    ],
+    "synonyms_in_report": [
+      "arteriovenous malformation",
+      "AVM"
+    ],
+    "found_in": [
+      "MRI",
+      "CT Angiogram",
+      "Angiogram"
+    ],
+    "common_causes": [
+      "Congenital (present from birth)"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Neurosurgical follow-up recommended",
+    "icd_hint": "Q28.2",
+    "id": "T147"
+  },
+  {
+    "term": "diffusion restriction",
+    "simple_meaning": "Sign of very recent tissue injury",
+    "patient_explanation": "A pattern on the scan suggests an area of brain tissue has been recently and acutely injured.",
+    "clinical_context": "A key MRI finding used to identify acute stroke within hours of onset.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "acute infarct"
+    ],
+    "synonyms_in_report": [
+      "restricted diffusion",
+      "DWI positive lesion"
+    ],
+    "found_in": [
+      "MRI"
+    ],
+    "common_causes": [
+      "Acute ischemic stroke"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Requires urgent stroke assessment",
+    "icd_hint": "I63.9",
+    "id": "T148"
+  },
+  {
+    "term": "watershed infarct",
+    "simple_meaning": "Stroke in a border-zone brain area",
+    "patient_explanation": "A stroke has occurred in an area of the brain that sits at the border between two blood supply territories.",
+    "clinical_context": "Often related to a period of low blood pressure or blood flow rather than a single blocked vessel.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "High",
+    "urgency": "Urgent",
+    "red_flag": true,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "border-zone infarct"
+    ],
+    "synonyms_in_report": [
+      "watershed infarction",
+      "border-zone ischemic changes"
+    ],
+    "found_in": [
+      "MRI",
+      "CT Head"
+    ],
+    "common_causes": [
+      "Low blood pressure episode",
+      "Severe carotid artery narrowing"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Requires urgent stroke assessment",
+    "icd_hint": "I63.9",
+    "id": "T149"
+  },
+  {
+    "term": "lacunar infarct",
+    "simple_meaning": "Small deep stroke",
+    "patient_explanation": "A small area of the deep brain tissue has been damaged by a blocked tiny blood vessel.",
+    "clinical_context": "Common in people with longstanding high blood pressure or diabetes affecting small brain vessels.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "severity": "Medium",
+    "urgency": "Semi-urgent",
+    "red_flag": false,
+    "patient_language_level": "simple",
+    "scan_type_emoji": "🧠",
+    "related_terms": [
+      "lacunar stroke"
+    ],
+    "synonyms_in_report": [
+      "lacunar infarct",
+      "small vessel infarct"
+    ],
+    "found_in": [
+      "MRI",
+      "CT Head"
+    ],
+    "common_causes": [
+      "Hypertension",
+      "Diabetes",
+      "Small vessel disease"
+    ],
+    "action_note": "Discuss this finding with a healthcare professional.",
+    "follow_up": "Vascular risk factor management and neurology follow-up",
+    "icd_hint": "I63.9",
+    "id": "T150"
   }
 ]
