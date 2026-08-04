@@ -33,6 +33,9 @@ CRISIS_KEYWORDS = [
     "not worth living", "give up on life", "end it all", "hurt myself"
 ]
 
+# Max number of Q&A exchanges to keep in the session chat history
+MAX_CHAT_TURNS = 6
+
 OFF_TOPIC_KEYWORDS = [
     "recipe", "movie", "weather", "sports", "politics", "code", "programming",
     "football", "cricket", "stock", "investment", "travel", "food", "game",
@@ -95,6 +98,27 @@ def clean_ai_reply(reply):
     reply = reply.strip()
 
     return reply
+
+
+def build_conversation_context(chat_messages):
+    """
+    Turns session["chat_messages"] (list of {role, content}) into a
+    plain-text transcript the LLM can use as conversation memory.
+    """
+    if not chat_messages:
+        return ""
+
+    lines = []
+    for msg in chat_messages:
+        speaker = "Patient" if msg.get("role") == "user" else "Assistant"
+        lines.append(f"{speaker}: {msg.get('content', '')}")
+
+    return (
+        "Previous conversation in this session (for context only, "
+        "do not repeat it back):\n"
+        + "\n".join(lines)
+        + "\n"
+    )
 
 
 def clean_history_text(text):
@@ -186,6 +210,7 @@ def analyze():
     session["report_text"]  = report_text
     session["provider"]     = provider
     session["ollama_model"] = ollama_model
+    session["chat_messages"] = []  # new report → start a fresh chat conversation
 
     try:
         results = generate_explanation(report_text, provider, question, ollama_model=ollama_model)
@@ -255,6 +280,7 @@ def analyze_ajax():
     session["report_text"]  = report_text
     session["provider"]     = provider
     session["ollama_model"] = ollama_model
+    session["chat_messages"] = []  # new report → start a fresh chat conversation
 
     try:
         results = generate_explanation(report_text, provider, "", ollama_model=ollama_model)
@@ -296,6 +322,7 @@ def chat():
     ollama_model   = session.get("ollama_model", "llama3.2:1b")
     report         = session.get("report_text", "")
     detected_terms = session.get("detected_terms", [])
+    chat_messages  = session.get("chat_messages", [])
 
     if not user_msg:
         return jsonify({"reply": "Please type a message."})
@@ -339,10 +366,25 @@ def chat():
         detected_terms_section=detected_terms_section
     )
 
-    full_prompt = system + "\n\nPatient question: " + user_msg
+    conversation_context = build_conversation_context(chat_messages)
+
+    full_prompt = (
+        system
+        + "\n\n"
+        + conversation_context
+        + "\nPatient question: "
+        + user_msg
+    )
     reply = generate_with_provider(full_prompt, provider, detected_terms=detected_terms, ollama_model=ollama_model)
 
     reply = clean_ai_reply(reply)
+
+    # Store this exchange in the session so future questions in this
+    # conversation have context. Keep only the most recent MAX_CHAT_TURNS
+    # exchanges to avoid the prompt growing unbounded.
+    chat_messages.append({"role": "user", "content": user_msg})
+    chat_messages.append({"role": "assistant", "content": reply})
+    session["chat_messages"] = chat_messages[-(MAX_CHAT_TURNS * 2):]
 
     return jsonify({"reply": reply})
 
