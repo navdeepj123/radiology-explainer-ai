@@ -26,16 +26,17 @@ document.getElementById('csMicBtn').innerHTML   = ClearScanVoice.micSvg;
 // ─────────────────────────────────────────
 // STATE
 // ─────────────────────────────────────────
-var provider     = 'groq';
-var ollamaModel  = 'llama3.2:1b';
-var answerLength = 'standard';
-var detailLevel  = 'medium';
-var selFile      = null;
-var isAnalyzed   = false;
-var savedText    = '';
-var historyArr   = [];
-var lastText     = '';
-var lastFile     = null;
+var provider           = 'groq';
+var ollamaModel        = 'llama3.2:1b';
+var answerLength       = 'standard';
+var detailLevel        = 'medium';
+var selFile            = null;
+var isAnalyzed         = false;
+var savedText          = '';
+var historyArr         = [];
+var lastText           = '';
+var lastFile            = null;
+var activeConversationId = null;   // MongoDB conversation currently open
 
 var provData = {
   groq:   { tag:'⚡ GROQ',   shortTag:'GROQ',   hint:'Fast and free. Report sent to Groq servers.',   name:'Groq'   },
@@ -50,29 +51,56 @@ var ollamaHints = {
 };
 
 // ─────────────────────────────────────────
+// LOAD SAVED HISTORY ON PAGE LOAD (from MongoDB)
+// ─────────────────────────────────────────
+fetch('/conversations')
+  .then(function(res){ return res.json(); })
+  .then(function(data){
+    historyArr = (data.conversations || []).map(function(c) {
+      return {
+        preview: c.preview,
+        risk:    (c.risk_level || 'unknown').toLowerCase(),
+        prov:    c.provider.toUpperCase(),
+        time:    c.date,
+        id:      c.id
+      };
+    });
+    renderHistoryList();
+  })
+  .catch(function(){ /* silently ignore — sidebar just stays empty */ });
+
+// ─────────────────────────────────────────
 // HISTORY
 // ─────────────────────────────────────────
-function addToHistory(reportText, riskLevel, prov) {
+function addToHistory(reportText, riskLevel, prov, convId) {
   var now  = new Date();
   var time = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
   historyArr.unshift({
     preview: reportText.substring(0, 80).trim(),
     risk:    (riskLevel || 'unknown').toLowerCase(),
     prov:    prov.toUpperCase(),
-    time:    time
+    time:    time,
+    id:      convId
   });
   if (historyArr.length > 5) historyArr.pop();
+  renderHistoryList();
+}
+
+function renderHistoryList() {
   var list  = document.getElementById('sbHistList');
   var empty = document.getElementById('sbHistEmpty');
-  if (empty) empty.style.display = 'none';
+  if (empty) empty.style.display = historyArr.length ? 'none' : 'block';
   list.querySelectorAll('.sh-item').forEach(function(el){ el.remove(); });
+
   historyArr.forEach(function(item) {
     var rLabel = item.risk==='high'   ? '🔴 High risk'
                : item.risk==='medium' ? '🟡 Medium risk'
                : item.risk==='low'    ? '🟢 Low risk'
                :                        '⚪ Unknown';
     var div = document.createElement('div');
-    div.className = 'sh-item';
+    div.className = 'sh-item' + (item.id === activeConversationId ? ' active' : '');
+    div.style.cursor = 'pointer';
+    div.onclick = function(){ loadConversation(item.id); };
     div.innerHTML =
       '<div class="sh-top">'
         + '<span class="sh-prov">'+item.prov+'</span>'
@@ -166,7 +194,11 @@ function onMainSend() {
     return;
   }
   hideErr();
-  removeEmpty();
+
+  // fresh report = fresh visual thread — purani conversation ka view clear karo
+  document.getElementById('msgs').innerHTML = '';
+  resetChatPanel();   // csMsgs ko bhi "submit your report" notice pe wapas laata hai
+
   savedText = text;
   lastText  = text;
   lastFile  = selFile;
@@ -201,7 +233,8 @@ function runAnalysis(text, file) {
       } else {
         renderBotResult(data);
         activateChatbot();
-        addToHistory(savedText, data.risk_level, provider);
+        activeConversationId = data.conversation_id;
+        addToHistory(savedText, data.risk_level, provider, data.conversation_id);
         isAnalyzed = true;
         document.getElementById('statusPill').textContent = 'Analysis complete';
         document.getElementById('inputArea').style.display    = 'none';
@@ -263,6 +296,8 @@ function onCopyUser(btn) {
 function onNewReport() {
   isAnalyzed = false;
   savedText  = '';
+  activeConversationId = null;
+  document.getElementById('msgs').innerHTML = '';   // purana result/chat hata do
   document.getElementById('inputArea').style.display    = 'block';
   document.getElementById('newReportBar').style.display = 'none';
   document.getElementById('mainTa').value        = '';
@@ -281,6 +316,67 @@ function onNewReport() {
     + '</div>';
   document.getElementById('csTa').disabled      = true;
   document.getElementById('csSendBtn').disabled = true;
+  renderHistoryList();   // active highlight hata do kyunki koi active chat nahi hai ab
+}
+
+// ─────────────────────────────────────────
+// LOAD PREVIOUS CONVERSATION (sidebar click)
+// ─────────────────────────────────────────
+function loadConversation(convId) {
+  if (!convId || convId === activeConversationId) return;
+
+  fetch('/conversation/' + convId)
+    .then(function(res){ return res.json(); })
+    .then(function(conv) {
+      if (conv.error) { showErr('Could not load that report.'); return; }
+
+      activeConversationId = convId;
+      provider    = conv.provider;
+      ollamaModel = conv.ollama_model || ollamaModel;
+      answerLength = conv.answer_length || 'standard';
+      detailLevel  = conv.detail_level  || 'medium';
+
+      // pehle csMsgs ko default notice template pe reset karo, taaki
+      // csNoticeProv element wapas exist kare onProviderChange chalne se pehle
+      document.getElementById('csMsgs').innerHTML =
+        '<div class="cs-notice" id="csNotice">'
+        + '<div class="cs-notice-icon">🫁</div>'
+        + '<p>Submit your radiology report first, then I\'ll be able to answer your questions about it.</p>'
+        + '<small>Powered by <span id="csNoticeProv"></span></small>'
+        + '</div>';
+
+      onProviderChange(provider);   // ab safe hai — csNoticeProv exist karta hai
+
+      // dropdowns ko bhi is conversation ki saved values pe sync karo
+      var provSel = document.getElementById('provSel');
+      if (provSel) provSel.value = provider;
+      var ollamaSel = document.getElementById('ollamaModelSel');
+      if (ollamaSel) ollamaSel.value = ollamaModel;
+      var lengthSel = document.getElementById('lengthSel');
+      if (lengthSel) lengthSel.value = answerLength;
+      var detailSel = document.getElementById('detailSel');
+      if (detailSel) detailSel.value = detailLevel;
+
+      document.getElementById('msgs').innerHTML = '';
+      appendUserBubble(conv.report_text.substring(0, 150), null);
+      renderBotResult(conv.results);
+      activateChatbot();   // ye csNotice ko hata ke asli messages daalega
+
+      conv.chat_messages.forEach(function(m) {
+        csAppend(m.content, m.role === 'user' ? 'user' : 'bot');
+      });
+
+      isAnalyzed = true;
+      document.getElementById('inputArea').style.display    = 'none';
+      document.getElementById('newReportBar').style.display = 'flex';
+      document.getElementById('statusPill').textContent     = 'Analysis complete';
+
+      renderHistoryList();
+    })
+    .catch(function(err){
+      console.error('loadConversation ERROR:', err);
+      showErr('Could not load that report.');
+    });
 }
 
 // ─────────────────────────────────────────
@@ -372,7 +468,10 @@ function onOcSend() {
       message: msg,
       language: ClearScanControls.getLanguageName(),
       answer_length: answerLength,
-      detail_level: detailLevel
+      detail_level: detailLevel,
+      conversation_id: activeConversationId,
+      provider: provider,
+      ollama_model: ollamaModel
     })
   })
     .then(function(res){ return res.json(); })
@@ -547,7 +646,8 @@ function onCsSend() {
       message: msg,
       language: ClearScanControls.getLanguageName(),
       answer_length: answerLength,
-      detail_level: detailLevel
+      detail_level: detailLevel,
+      conversation_id: activeConversationId
     })
   })
     .then(function(res){ return res.json(); })
