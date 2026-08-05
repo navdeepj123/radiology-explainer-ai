@@ -22,7 +22,7 @@ app = Flask(
 app.secret_key = os.environ.get("FLASK_SECRET", "clearscan-secret-key-2025")
 CORS(app)
 
-from services.rag_service import generate_explanation
+from services.rag_service import generate_explanation, get_length_instruction, get_detail_instruction
 from services.llm_router import generate_with_provider
 
 
@@ -33,7 +33,6 @@ CRISIS_KEYWORDS = [
     "not worth living", "give up on life", "end it all", "hurt myself"
 ]
 
-# Max number of Q&A exchanges to keep in the session chat history
 MAX_CHAT_TURNS = 6
 
 OFF_TOPIC_KEYWORDS = [
@@ -74,14 +73,15 @@ RULES:
 3. Do not diagnose.
 4. Do not give treatment or medicine advice.
 5. Use simple patient-friendly language.
-6. Keep answers under 120 words.
-7. Use short bullet points if helpful.
-8. Do not use markdown headings.
-9. Do not use # symbols.
-10. Do not use ``` code blocks.
-11. Always suggest discussing medical decisions with a doctor.
-12. IMPORTANT: The detected terms listed above are CONFIRMED findings — never say they are absent or normal.
-13. {language_instruction}
+6. Use short bullet points if helpful.
+7. Do not use markdown headings.
+8. Do not use # symbols.
+9. Do not use ``` code blocks.
+10. Always suggest discussing medical decisions with a doctor.
+11. IMPORTANT: The detected terms listed above are CONFIRMED findings — never say they are absent or normal.
+12. {language_instruction}
+13. {length_instruction}
+14. {detail_instruction}
 """
 
 
@@ -200,12 +200,14 @@ def analyze():
     if request.method == "GET":
         return render_template("Analyze.html")
 
-    report_text  = request.form.get("report_text", "").strip()
-    question     = request.form.get("question", "").strip()
-    provider     = request.form.get("provider", "groq").strip()
-    ollama_model = request.form.get("ollama_model", "llama3.2:1b").strip()
-    language     = request.form.get("language", "English").strip()
-    uploaded     = request.files.get("report_file")
+    report_text   = request.form.get("report_text", "").strip()
+    question      = request.form.get("question", "").strip()
+    provider      = request.form.get("provider", "groq").strip()
+    ollama_model  = request.form.get("ollama_model", "llama3.2:1b").strip()
+    language      = request.form.get("language", "English").strip()
+    answer_length = request.form.get("answer_length", "standard").strip()
+    detail_level  = request.form.get("detail_level", "medium").strip()
+    uploaded      = request.files.get("report_file")
 
     # File upload support (PDF + plain text fallback)
     if uploaded and uploaded.filename:
@@ -232,12 +234,15 @@ def analyze():
     session["provider"]      = provider
     session["ollama_model"]  = ollama_model
     session["language"]      = language
+    session["answer_length"] = answer_length
+    session["detail_level"]  = detail_level
     session["chat_messages"] = []  # new report → start a fresh chat conversation
 
     try:
         results = generate_explanation(
             report_text, provider, question,
-            ollama_model=ollama_model, language=language
+            ollama_model=ollama_model, language=language,
+            answer_length=answer_length, detail_level=detail_level
         )
     except TypeError:
         try:
@@ -272,7 +277,7 @@ def analyze():
     )
 
 
-# ── ANALYZE AJAX (single-page UI, now with PDF + language support) ─────────────
+# ── ANALYZE AJAX (single-page UI, PDF + language + style support) ──────────────
 
 @app.route("/analyze_ajax", methods=["POST"])
 def analyze_ajax():
@@ -282,11 +287,13 @@ def analyze_ajax():
     Results + chatbot all appear on the same page.
     """
 
-    report_text  = request.form.get("report_text", "").strip()
-    provider     = request.form.get("provider", "groq").strip()
-    ollama_model = request.form.get("ollama_model", "llama3.2:1b").strip()
-    language     = request.form.get("language", "English").strip()
-    uploaded     = request.files.get("report_file")
+    report_text   = request.form.get("report_text", "").strip()
+    provider      = request.form.get("provider", "groq").strip()
+    ollama_model  = request.form.get("ollama_model", "llama3.2:1b").strip()
+    language      = request.form.get("language", "English").strip()
+    answer_length = request.form.get("answer_length", "standard").strip()
+    detail_level  = request.form.get("detail_level", "medium").strip()
+    uploaded      = request.files.get("report_file")
 
     # File upload support (PDF + plain text fallback)
     if uploaded and uploaded.filename:
@@ -310,12 +317,15 @@ def analyze_ajax():
     session["provider"]      = provider
     session["ollama_model"]  = ollama_model
     session["language"]      = language
+    session["answer_length"] = answer_length
+    session["detail_level"]  = detail_level
     session["chat_messages"] = []  # new report → start a fresh chat conversation
 
     try:
         results = generate_explanation(
             report_text, provider, "",
-            ollama_model=ollama_model, language=language
+            ollama_model=ollama_model, language=language,
+            answer_length=answer_length, detail_level=detail_level
         )
     except TypeError:
         try:
@@ -355,6 +365,8 @@ def chat():
     data           = request.get_json(silent=True) or {}
     user_msg       = data.get("message", "").strip()
     language       = data.get("language", session.get("language", "English"))
+    answer_length  = data.get("answer_length", session.get("answer_length", "standard"))
+    detail_level   = data.get("detail_level", session.get("detail_level", "medium"))
     provider       = session.get("provider", "groq")
     ollama_model   = session.get("ollama_model", "llama3.2:1b")
     report         = session.get("report_text", "")
@@ -399,11 +411,15 @@ def chat():
         detected_terms_section = ""
 
     language_instruction = get_language_instruction(language)
+    length_instruction    = get_length_instruction(answer_length)
+    detail_instruction    = get_detail_instruction(detail_level)
 
     system = CHATBOT_SYSTEM.format(
         report=report,
         detected_terms_section=detected_terms_section,
-        language_instruction=language_instruction
+        language_instruction=language_instruction,
+        length_instruction=length_instruction,
+        detail_instruction=detail_instruction
     )
 
     conversation_context = build_conversation_context(chat_messages)
@@ -419,9 +435,6 @@ def chat():
 
     reply = clean_ai_reply(reply)
 
-    # Store this exchange in the session so future questions in this
-    # conversation have context. Keep only the most recent MAX_CHAT_TURNS
-    # exchanges to avoid the prompt growing unbounded.
     chat_messages.append({"role": "user", "content": user_msg})
     chat_messages.append({"role": "assistant", "content": reply})
     session["chat_messages"] = chat_messages[-(MAX_CHAT_TURNS * 2):]
