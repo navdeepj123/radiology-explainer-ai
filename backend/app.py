@@ -81,7 +81,27 @@ RULES:
 10. Do not use ``` code blocks.
 11. Always suggest discussing medical decisions with a doctor.
 12. IMPORTANT: The detected terms listed above are CONFIRMED findings — never say they are absent or normal.
+13. {language_instruction}
 """
+
+
+def get_language_instruction(language):
+    """
+    Language ke hisaab se AI ko instruction deta hai.
+    Hinglish ek special casual style hai, baaki normal languages hain.
+    """
+    if not language or language.lower() == "english":
+        return "Respond in English."
+
+    if language.lower() == "hinglish":
+        return (
+            "Respond in Hinglish — a casual mix of Hindi and English, "
+            "the way young Indians speak. Example style: 'Aapka heart normal se "
+            "thoda bada hai, but tension lene ki zaroorat nahi hai.' Keep it "
+            "friendly and easy to understand."
+        )
+
+    return f"Respond ONLY in {language} language. Translate all medical explanations into {language}."
 
 
 def clean_ai_reply(reply):
@@ -184,6 +204,7 @@ def analyze():
     question     = request.form.get("question", "").strip()
     provider     = request.form.get("provider", "groq").strip()
     ollama_model = request.form.get("ollama_model", "llama3.2:1b").strip()
+    language     = request.form.get("language", "English").strip()
     uploaded     = request.files.get("report_file")
 
     # File upload support (PDF + plain text fallback)
@@ -207,15 +228,22 @@ def analyze():
             error="Please paste your report text or upload a file."
         )
 
-    session["report_text"]  = report_text
-    session["provider"]     = provider
-    session["ollama_model"] = ollama_model
+    session["report_text"]   = report_text
+    session["provider"]      = provider
+    session["ollama_model"]  = ollama_model
+    session["language"]      = language
     session["chat_messages"] = []  # new report → start a fresh chat conversation
 
     try:
-        results = generate_explanation(report_text, provider, question, ollama_model=ollama_model)
+        results = generate_explanation(
+            report_text, provider, question,
+            ollama_model=ollama_model, language=language
+        )
     except TypeError:
-        results = generate_explanation(report_text, provider)
+        try:
+            results = generate_explanation(report_text, provider, question, ollama_model=ollama_model)
+        except TypeError:
+            results = generate_explanation(report_text, provider)
 
     if isinstance(results, dict):
         session["detected_terms"] = results.get("detected_terms", [])
@@ -244,7 +272,7 @@ def analyze():
     )
 
 
-# ── ANALYZE AJAX (single-page UI, now with PDF support) ────────────────────────
+# ── ANALYZE AJAX (single-page UI, now with PDF + language support) ─────────────
 
 @app.route("/analyze_ajax", methods=["POST"])
 def analyze_ajax():
@@ -257,6 +285,7 @@ def analyze_ajax():
     report_text  = request.form.get("report_text", "").strip()
     provider     = request.form.get("provider", "groq").strip()
     ollama_model = request.form.get("ollama_model", "llama3.2:1b").strip()
+    language     = request.form.get("language", "English").strip()
     uploaded     = request.files.get("report_file")
 
     # File upload support (PDF + plain text fallback)
@@ -277,15 +306,22 @@ def analyze_ajax():
     if not report_text:
         return jsonify({"error": "Please paste your report text or upload a file."}), 400
 
-    session["report_text"]  = report_text
-    session["provider"]     = provider
-    session["ollama_model"] = ollama_model
+    session["report_text"]   = report_text
+    session["provider"]      = provider
+    session["ollama_model"]  = ollama_model
+    session["language"]      = language
     session["chat_messages"] = []  # new report → start a fresh chat conversation
 
     try:
-        results = generate_explanation(report_text, provider, "", ollama_model=ollama_model)
+        results = generate_explanation(
+            report_text, provider, "",
+            ollama_model=ollama_model, language=language
+        )
     except TypeError:
-        results = generate_explanation(report_text, provider)
+        try:
+            results = generate_explanation(report_text, provider, "", ollama_model=ollama_model)
+        except TypeError:
+            results = generate_explanation(report_text, provider)
 
     if isinstance(results, dict):
         session["detected_terms"] = results.get("detected_terms", [])
@@ -318,6 +354,7 @@ def chat():
 
     data           = request.get_json(silent=True) or {}
     user_msg       = data.get("message", "").strip()
+    language       = data.get("language", session.get("language", "English"))
     provider       = session.get("provider", "groq")
     ollama_model   = session.get("ollama_model", "llama3.2:1b")
     report         = session.get("report_text", "")
@@ -361,9 +398,12 @@ def chat():
     else:
         detected_terms_section = ""
 
+    language_instruction = get_language_instruction(language)
+
     system = CHATBOT_SYSTEM.format(
         report=report,
-        detected_terms_section=detected_terms_section
+        detected_terms_section=detected_terms_section,
+        language_instruction=language_instruction
     )
 
     conversation_context = build_conversation_context(chat_messages)

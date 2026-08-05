@@ -8,6 +8,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* ───── DARK THEME (default) ───── */
 :root{
   --bg:#080d1a;
   --bg2:#0d1326;
@@ -21,9 +23,36 @@
   --muted:#8b9cbd;
   --light:#5a6a82;
   --teal:#0D9488;
+  --hover-border:#3a4a6a;
+  --glow:rgba(79,124,255,.12);
+  --glow2:rgba(79,124,255,.1);
+  --check-bg:rgba(79,124,255,.15);
+  --safety-warn:#FFF7ED;
 }
+
+/* ───── LIGHT THEME ───── */
+html[data-theme="light"]{
+  --bg:#f4f6fb;
+  --bg2:#ffffff;
+  --card:#ffffff;
+  --card2:#f1f5f9;
+  --border:#e2e8f0;
+  --blue:#2563eb;
+  --blue-dark:#1d4ed8;
+  --blue-glow:rgba(37,99,235,.12);
+  --text:#0f172a;
+  --muted:#5b6b85;
+  --light:#8896ac;
+  --teal:#0D9488;
+  --hover-border:#94a3b8;
+  --glow:rgba(37,99,235,.06);
+  --glow2:rgba(37,99,235,.05);
+  --check-bg:rgba(37,99,235,.1);
+  --safety-warn:#FFF7ED;
+}
+
 html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .2s ease,color .2s ease}
 
 /* ── NAV ── */
 nav{
@@ -34,6 +63,7 @@ nav{
   position:sticky;top:0;z-index:100;
   backdrop-filter:blur(10px);
 }
+html[data-theme="light"] nav{background:rgba(255,255,255,.9)}
 .logo{font-family:'Libre Baskerville',serif;font-weight:700;font-size:1.25rem;color:var(--blue);text-decoration:none;letter-spacing:.01em}
 .nav-right{display:flex;align-items:center;gap:.75rem}
 .nav-pill{
@@ -43,7 +73,7 @@ nav{
   font-size:0.8rem;color:var(--muted);background:transparent;cursor:pointer;
   text-decoration:none;transition:border-color .15s,color .15s;
 }
-.nav-pill:hover{border-color:#3a4a6a;color:var(--text)}
+.nav-pill:hover{border-color:var(--hover-border);color:var(--text)}
 .nav-menu{
   display:inline-flex;align-items:center;gap:6px;
   padding:6px 16px;border:1px solid var(--border);
@@ -52,6 +82,13 @@ nav{
   transition:background .15s;
 }
 .nav-menu:hover{background:var(--card2)}
+
+/* THEME TOGGLE */
+.theme-btn{
+  width:32px;height:32px;padding:0;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:.9rem;line-height:1;background:var(--card);
+}
 
 /* ── BREADCRUMB ── */
 .breadcrumb{
@@ -68,13 +105,13 @@ nav{
 .hero{
   text-align:center;
   padding:5rem 2rem 4rem;
-  background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(79,124,255,.12),transparent);
+  background:radial-gradient(ellipse 80% 50% at 50% -10%,var(--glow),transparent);
 }
 .hero-badge{
   display:inline-flex;align-items:center;gap:7px;
   padding:6px 16px;
   border:1px solid rgba(79,124,255,.35);
-  border-radius:100px;background:rgba(79,124,255,.08);
+  border-radius:100px;background:var(--check-bg);
   font-size:0.75rem;font-weight:600;color:var(--blue);
   letter-spacing:.08em;text-transform:uppercase;margin-bottom:1.75rem;
 }
@@ -153,7 +190,7 @@ h2{
 .check-row{display:flex;gap:1rem;align-items:flex-start}
 .check-icon{
   width:20px;height:20px;flex-shrink:0;margin-top:.1rem;
-  background:rgba(79,124,255,.15);border-radius:50%;
+  background:var(--check-bg);border-radius:50%;
   display:flex;align-items:center;justify-content:center;
 }
 .check-icon svg{display:block}
@@ -167,7 +204,7 @@ h2{
   border-radius:12px;padding:1.5rem;
   transition:border-color .2s,background .2s;
 }
-.feat-card:hover{border-color:#2a3f66;background:var(--card2)}
+.feat-card:hover{border-color:var(--hover-border);background:var(--card2)}
 .feat-emoji{font-size:1.5rem;margin-bottom:1rem;display:block}
 .feat-card h3{font-size:.9rem;font-weight:600;color:var(--text);margin-bottom:.6rem}
 .feat-card p{font-size:.8rem;color:var(--muted);line-height:1.65}
@@ -179,11 +216,11 @@ h2{
   border-radius:12px;padding:1.75rem 1.5rem;
   transition:border-color .2s;
 }
-.step-card:hover{border-color:#2a3f66}
+.step-card:hover{border-color:var(--hover-border)}
 .step-num{
   font-family:'Libre Baskerville',serif;
   font-size:2rem;font-weight:700;
-  color:rgba(79,124,255,.3);
+  color:var(--blue-glow);
   margin-bottom:1rem;display:block;
   letter-spacing:-.03em;
 }
@@ -198,7 +235,7 @@ h2{
   border-radius:12px;padding:1.25rem;
   transition:border-color .2s;
 }
-.case-card:hover{border-color:#2a3f66}
+.case-card:hover{border-color:var(--hover-border)}
 .case-tag{font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--blue);margin-bottom:.65rem}
 .case-card p{font-size:.8rem;color:var(--muted);line-height:1.65}
 .cases-row2{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
@@ -210,7 +247,7 @@ h2{
   border-radius:12px;padding:1.5rem 1.25rem;
   text-align:center;transition:border-color .2s;
 }
-.benefit-card:hover{border-color:#2a3f66}
+.benefit-card:hover{border-color:var(--hover-border)}
 .benefit-emoji{font-size:2rem;margin-bottom:.85rem;display:block}
 .benefit-card h3{font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:.5rem}
 .benefit-card p{font-size:.75rem;color:var(--muted);line-height:1.6}
@@ -267,7 +304,7 @@ h2{
 /* ── FINAL CTA ── */
 .cta-section{
   text-align:center;padding:6rem 2rem;
-  background:radial-gradient(ellipse 70% 60% at 50% 100%,rgba(79,124,255,.1),transparent);
+  background:radial-gradient(ellipse 70% 60% at 50% 100%,var(--glow2),transparent);
   border-top:1px solid var(--border);
 }
 .cta-section h2{max-width:700px;margin:0 auto 1rem}
@@ -320,6 +357,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:3.5rem 2
   .sources-meta{flex-direction:column;gap:.5rem}
 }
 </style>
+<script src="{{ url_for('static', filename='controls.js') }}"></script>
 </head>
 <body>
 
@@ -327,8 +365,10 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:3.5rem 2
 <nav>
   <a href="/" class="logo">ClearScan</a>
   <div class="nav-right">
-    <span class="nav-pill">Aa ▾</span>
-    <span class="nav-pill">English</span>
+    <div id="ctrlSlot" style="display:flex;gap:.5rem;align-items:center;"></div>
+    <button class="nav-pill theme-btn" onclick="toggleTheme()" title="Toggle dark / light mode">
+      <span id="themeIcon">🌙</span>
+    </button>
     <a href="/analyze" class="nav-menu">Open Tool →</a>
   </div>
 </nav>
@@ -359,7 +399,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:3.5rem 2
 <!-- SCROLLING MARQUEE -->
 <div class="marquee-wrap">
   <div class="marquee-track">
-    <!-- first copy -->
     <span class="marquee-item"><span class="marquee-icon">💊</span>Feel more in control of your health.</span>
     <span class="marquee-item"><span class="marquee-icon">📄</span>Save time researching reports.</span>
     <span class="marquee-item"><span class="marquee-icon">✅</span>Get reliable health explanations.</span>
@@ -369,7 +408,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:3.5rem 2
     <span class="marquee-item"><span class="marquee-icon">📋</span>Translate medical terminology easily.</span>
     <span class="marquee-item"><span class="marquee-icon">❤️</span>Support loved ones' health journeys.</span>
     <span class="marquee-item"><span class="marquee-icon">🏥</span>Prepare for doctor appointments.</span>
-    <!-- second copy for seamless loop -->
     <span class="marquee-item"><span class="marquee-icon">💊</span>Feel more in control of your health.</span>
     <span class="marquee-item"><span class="marquee-icon">📄</span>Save time researching reports.</span>
     <span class="marquee-item"><span class="marquee-icon">✅</span>Get reliable health explanations.</span>
@@ -599,6 +637,25 @@ function toggleFaq(btn){
     btn.querySelector('.faq-arrow').textContent='▲';
   }
 }
+
+// ── THEME (dark / light) ──
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  var icon = document.getElementById('themeIcon');
+  if (icon) icon.textContent = (t === 'light') ? '☀️' : '🌙';
+  try { localStorage.setItem('clearscan-theme', t); } catch (e) {}
+}
+function toggleTheme() {
+  var cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  applyTheme(cur === 'dark' ? 'light' : 'dark');
+}
+(function initTheme() {
+  var saved = 'dark';
+  try { saved = localStorage.getItem('clearscan-theme') || 'dark'; } catch (e) {}
+  applyTheme(saved);
+})();
+
+ClearScanControls.init("#ctrlSlot");
 </script>
 </body>
 </html>
