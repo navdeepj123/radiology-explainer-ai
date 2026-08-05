@@ -19,6 +19,7 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+flask_session_data/
 # C extensions
 *.so
 
