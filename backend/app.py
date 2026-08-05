@@ -1,8 +1,8 @@
 """
 ClearScan — Radiology Report Explainer
 3-page Flask app: Home → Analyze → Results + Chatbot
-Now with multi-conversation support: every "Analyse New Report" creates its
-own conversation (report + chat thread) that can be reopened from the sidebar.
+Multi-conversation support: every "Analyse New Report" creates its own
+conversation (report + chat thread) that can be reopened from the sidebar.
 """
 
 import os
@@ -30,7 +30,7 @@ app.config["SESSION_FILE_DIR"] = os.path.join(BASE_DIR, "backend", "flask_sessio
 app.config["SESSION_PERMANENT"] = False
 Session(app)
 
-from services.rag_service import generate_explanation
+from services.rag_service import generate_explanation, get_length_instruction, get_detail_instruction
 from services.llm_router import generate_with_provider
 
 
@@ -85,14 +85,15 @@ RULES:
 3. Do not diagnose.
 4. Do not give treatment or medicine advice.
 5. Use simple patient-friendly language.
-6. Keep answers under 120 words.
-7. Use short bullet points if helpful.
-8. Do not use markdown headings.
-9. Do not use # symbols.
-10. Do not use ``` code blocks.
-11. Always suggest discussing medical decisions with a doctor.
-12. IMPORTANT: The detected terms listed above are CONFIRMED findings — never say they are absent or normal.
-13. {language_instruction}
+6. Use short bullet points if helpful.
+7. Do not use markdown headings.
+8. Do not use # symbols.
+9. Do not use ``` code blocks.
+10. Always suggest discussing medical decisions with a doctor.
+11. IMPORTANT: The detected terms listed above are CONFIRMED findings — never say they are absent or normal.
+12. {language_instruction}
+13. {length_instruction}
+14. {detail_instruction}
 """
 
 
@@ -198,7 +199,8 @@ def extract_pdf_text(file_storage):
 
 # ── CONVERSATION HELPERS ────────────────────────────────────────────────────
 
-def create_conversation(report_text, provider, ollama_model, language, results):
+def create_conversation(report_text, provider, ollama_model, language,
+                         answer_length, detail_level, results):
     """
     Builds a new conversation dict, stores it in session["conversations"],
     marks it active, trims the list to MAX_CONVERSATIONS, and returns its id.
@@ -207,7 +209,6 @@ def create_conversation(report_text, provider, ollama_model, language, results):
 
     conv_id = uuid.uuid4().hex[:12]
     detected_terms = results.get("detected_terms", []) if isinstance(results, dict) else []
-    summary_text = results.get("summary", "") if isinstance(results, dict) else str(results)
 
     conversations[conv_id] = {
         "id":             conv_id,
@@ -215,6 +216,8 @@ def create_conversation(report_text, provider, ollama_model, language, results):
         "provider":       provider,
         "ollama_model":   ollama_model,
         "language":       language,
+        "answer_length":  answer_length,
+        "detail_level":   detail_level,
         "detected_terms": detected_terms,
         "results": {
             "risk_level":  results.get("risk_level",  "unknown") if isinstance(results, dict) else "unknown",
@@ -257,12 +260,14 @@ def analyze():
     if request.method == "GET":
         return render_template("Analyze.html")
 
-    report_text  = request.form.get("report_text", "").strip()
-    question     = request.form.get("question", "").strip()
-    provider     = request.form.get("provider", "groq").strip()
-    ollama_model = request.form.get("ollama_model", "llama3.2:1b").strip()
-    language     = request.form.get("language", "English").strip()
-    uploaded     = request.files.get("report_file")
+    report_text   = request.form.get("report_text", "").strip()
+    question      = request.form.get("question", "").strip()
+    provider      = request.form.get("provider", "groq").strip()
+    ollama_model  = request.form.get("ollama_model", "llama3.2:1b").strip()
+    language      = request.form.get("language", "English").strip()
+    answer_length = request.form.get("answer_length", "standard").strip()
+    detail_level  = request.form.get("detail_level", "medium").strip()
+    uploaded      = request.files.get("report_file")
 
     # File upload support (PDF + plain text fallback)
     if uploaded and uploaded.filename:
@@ -288,7 +293,8 @@ def analyze():
     try:
         results = generate_explanation(
             report_text, provider, question,
-            ollama_model=ollama_model, language=language
+            ollama_model=ollama_model, language=language,
+            answer_length=answer_length, detail_level=detail_level
         )
     except TypeError:
         try:
@@ -296,8 +302,10 @@ def analyze():
         except TypeError:
             results = generate_explanation(report_text, provider)
 
-    # NEW: create a conversation instead of overwriting one global session state
-    create_conversation(report_text, provider, ollama_model, language, results)
+    # Create a conversation (report + its own chat thread) instead of
+    # overwriting one global session state
+    create_conversation(report_text, provider, ollama_model, language,
+                         answer_length, detail_level, results)
 
     history      = session.get("history", [])
     summary_text = results.get("summary", "") if isinstance(results, dict) else str(results)
@@ -334,11 +342,13 @@ def analyze_ajax():
     thread), instead of overwriting the previous one.
     """
 
-    report_text  = request.form.get("report_text", "").strip()
-    provider     = request.form.get("provider", "groq").strip()
-    ollama_model = request.form.get("ollama_model", "llama3.2:1b").strip()
-    language     = request.form.get("language", "English").strip()
-    uploaded     = request.files.get("report_file")
+    report_text   = request.form.get("report_text", "").strip()
+    provider      = request.form.get("provider", "groq").strip()
+    ollama_model  = request.form.get("ollama_model", "llama3.2:1b").strip()
+    language      = request.form.get("language", "English").strip()
+    answer_length = request.form.get("answer_length", "standard").strip()
+    detail_level  = request.form.get("detail_level", "medium").strip()
+    uploaded      = request.files.get("report_file")
 
     # File upload support (PDF + plain text fallback)
     if uploaded and uploaded.filename:
@@ -361,7 +371,8 @@ def analyze_ajax():
     try:
         results = generate_explanation(
             report_text, provider, "",
-            ollama_model=ollama_model, language=language
+            ollama_model=ollama_model, language=language,
+            answer_length=answer_length, detail_level=detail_level
         )
     except TypeError:
         try:
@@ -369,8 +380,9 @@ def analyze_ajax():
         except TypeError:
             results = generate_explanation(report_text, provider)
 
-    # NEW: create a fresh conversation (report + its own chat thread)
-    conv_id = create_conversation(report_text, provider, ollama_model, language, results)
+    # Create a fresh conversation (report + its own chat thread)
+    conv_id = create_conversation(report_text, provider, ollama_model, language,
+                                   answer_length, detail_level, results)
 
     history      = session.get("history", [])
     summary_text = results.get("summary", "") if isinstance(results, dict) else str(results)
@@ -385,7 +397,7 @@ def analyze_ajax():
     session["history"] = history[-5:]
 
     return jsonify({
-        "conversation_id": conv_id,   # ← frontend must save this and send it back on /chat
+        "conversation_id": conv_id,   # ← frontend saves this and sends it back on /chat
         "risk_level":  results.get("risk_level",  "unknown"),
         "risk_reason": results.get("risk_reason", ""),
         "summary":     results.get("summary",     ""),
@@ -438,6 +450,8 @@ def get_conversation(conv_id):
         "provider":       conv["provider"],
         "ollama_model":   conv["ollama_model"],
         "language":       conv["language"],
+        "answer_length":  conv.get("answer_length", "standard"),
+        "detail_level":   conv.get("detail_level", "medium"),
         "results":        conv["results"],
         "chat_messages":  conv["chat_messages"],
     })
@@ -461,6 +475,8 @@ def chat():
         })
 
     language       = data.get("language", conv.get("language", "English"))
+    answer_length  = data.get("answer_length", conv.get("answer_length", "standard"))
+    detail_level   = data.get("detail_level", conv.get("detail_level", "medium"))
     provider       = conv.get("provider", "groq")
     ollama_model   = conv.get("ollama_model", "llama3.2:1b")
     report         = conv.get("report_text", "")
@@ -505,11 +521,15 @@ def chat():
         detected_terms_section = ""
 
     language_instruction = get_language_instruction(language)
+    length_instruction    = get_length_instruction(answer_length)
+    detail_instruction    = get_detail_instruction(detail_level)
 
     system = CHATBOT_SYSTEM.format(
         report=report,
         detected_terms_section=detected_terms_section,
-        language_instruction=language_instruction
+        language_instruction=language_instruction,
+        length_instruction=length_instruction,
+        detail_instruction=detail_instruction
     )
 
     conversation_context = build_conversation_context(chat_messages)
@@ -530,8 +550,10 @@ def chat():
     # switching conversations doesn't mix up chat histories.
     chat_messages.append({"role": "user", "content": user_msg})
     chat_messages.append({"role": "assistant", "content": reply})
-    conv["chat_messages"] = chat_messages[-(MAX_CHAT_TURNS * 2):]
-    conv["language"] = language  # remember latest language choice for this conversation
+    conv["chat_messages"]  = chat_messages[-(MAX_CHAT_TURNS * 2):]
+    conv["language"]       = language        # remember latest choices for this conversation
+    conv["answer_length"]  = answer_length
+    conv["detail_level"]   = detail_level
 
     conversations[conv_id] = conv
     session["conversations"] = conversations
