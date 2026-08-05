@@ -130,7 +130,32 @@ def _filter_terms_actually_in_report(report_text, retrieved_terms):
     return verified
 
 
-def generate_explanation(report_text, provider="ollama", user_question="", ollama_model="llama3.2:1b"):
+def _get_language_instruction(language):
+    """
+    Language ke hisaab se AI ko instruction deta hai.
+    Hinglish ek special casual style hai, baaki normal languages hain.
+    """
+    if not language or language.strip().lower() == "english":
+        return "Write your entire response in English."
+
+    if language.strip().lower() == "hinglish":
+        return (
+            "Write your ENTIRE response in Hinglish — a casual mix of Hindi "
+            "and English, the way young Indians speak in everyday conversation. "
+            "Example style: 'Aapka heart normal se thoda bada hai, but tension "
+            "lene ki zaroorat nahi hai.' Keep all section headings, bullet points, "
+            "and explanations in this Hinglish style. Keep it friendly and easy "
+            "to understand."
+        )
+
+    return (
+        f"Write your ENTIRE response in {language} language, including all "
+        f"section headings, bullet points, and explanations. Do not use English "
+        f"except for medical terms that don't have a common {language} equivalent."
+    )
+
+
+def generate_explanation(report_text, provider="ollama", user_question="", ollama_model="llama3.2:1b", language="English"):
 
     raw_retrieved_terms = retrieve_relevant_info(report_text)
 
@@ -154,11 +179,15 @@ def generate_explanation(report_text, provider="ollama", user_question="", ollam
     else:
         confirmed_terms_block = "No specific medical terms were detected."
 
+    language_instruction = _get_language_instruction(language)
+
     # ── Small model ke liye simple plain-text prompt ──
     is_small_model = (provider == "ollama" and ollama_model in ["llama3.2:1b", "llama3.2:3b"])
 
     if is_small_model:
         prompt = f"""You are a helpful assistant explaining a radiology report to a patient in simple language.
+
+IMPORTANT LANGUAGE INSTRUCTION: {language_instruction}
 
 Report:
 {report_text}
@@ -184,12 +213,13 @@ Write a short explanation with these 4 sections using bullet points:
 You are a radiology report explanation assistant for normal patients.
 
 Rules:
-- Use simple English only
+- Use simple language only
 - Use short bullet points
 - Do not diagnose
 - Do not give treatment or medicine advice
 - Explain like the reader has no medical background
 - CRITICAL: Every term in Confirmed Detected Terms MUST appear as a real finding
+- IMPORTANT LANGUAGE INSTRUCTION: {language_instruction}
 
 Radiology Report:
 {report_text}
@@ -199,7 +229,7 @@ Medical Context:
 
 {confirmed_terms_block}
 
-Return ONLY this HTML, nothing else:
+Return ONLY this HTML, nothing else (but write the actual text content in the language specified above):
 
 <div class="ai-output">
 
