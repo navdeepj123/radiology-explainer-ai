@@ -1,10 +1,11 @@
 """
 ClearScan — Radiology Report Explainer
 3-page Flask app: Home → Analyze → Results + Chatbot
-Now with MongoDB-backed conversations: every "Analyse New Report" creates its
+MongoDB-backed conversations: every "Analyse New Report" creates its
 own conversation (report + chat thread), permanently saved, reopenable from
 the sidebar even after a server restart or new browser session on the same
 device (via a long-lived anon_id cookie — no login required yet).
+Also supports per-conversation answer_length + detail_level preferences.
 """
 
 import os
@@ -45,7 +46,7 @@ conversations_col = db["conversations"]
 OWNER_COOKIE_NAME = "cs_owner_id"
 OWNER_COOKIE_MAX_AGE = 60 * 60 * 24 * 365  # 1 year
 
-from services.rag_service import generate_explanation
+from services.rag_service import generate_explanation, get_length_instruction, get_detail_instruction
 from services.llm_router import generate_with_provider
 
 
@@ -97,14 +98,15 @@ RULES:
 3. Do not diagnose.
 4. Do not give treatment or medicine advice.
 5. Use simple patient-friendly language.
-6. Keep answers under 120 words.
-7. Use short bullet points if helpful.
-8. Do not use markdown headings.
-9. Do not use # symbols.
-10. Do not use ``` code blocks.
-11. Always suggest discussing medical decisions with a doctor.
-12. IMPORTANT: The detected terms listed above are CONFIRMED findings — never say they are absent or normal.
-13. {language_instruction}
+6. Use short bullet points if helpful.
+7. Do not use markdown headings.
+8. Do not use # symbols.
+9. Do not use ``` code blocks.
+10. Always suggest discussing medical decisions with a doctor.
+11. IMPORTANT: The detected terms listed above are CONFIRMED findings — never say they are absent or normal.
+12. {language_instruction}
+13. {length_instruction}
+14. {detail_instruction}
 """
 
 
@@ -222,7 +224,8 @@ def extract_pdf_text(file_storage):
 
 # ── CONVERSATION HELPERS (MongoDB) ──────────────────────────────────────────
 
-def create_conversation(owner_id, report_text, provider, ollama_model, language, results):
+def create_conversation(owner_id, report_text, provider, ollama_model, language,
+                         answer_length, detail_level, results):
     """
     Inserts a new conversation document into MongoDB, trims this owner's
     conversations to MAX_CONVERSATIONS (deletes oldest if over), and
@@ -236,6 +239,8 @@ def create_conversation(owner_id, report_text, provider, ollama_model, language,
         "provider":       provider,
         "ollama_model":   ollama_model,
         "language":       language,
+        "answer_length":  answer_length,
+        "detail_level":   detail_level,
         "detected_terms": detected_terms,
         "results": {
             "risk_level":  results.get("risk_level",  "unknown") if isinstance(results, dict) else "unknown",
@@ -262,8 +267,6 @@ def create_conversation(owner_id, report_text, provider, ollama_model, language,
         for extra in owner_convs[MAX_CONVERSATIONS:]:
             conversations_col.delete_one({"_id": extra["_id"]})
 
-    print(f"### create_conversation CALLED — conv_id={conv_id}, owner={owner_id} ###")  # TEMP DEBUG — remove later
-
     return conv_id
 
 
@@ -274,6 +277,8 @@ def serialize_conv(doc):
         "provider":       doc["provider"],
         "ollama_model":   doc["ollama_model"],
         "language":       doc["language"],
+        "answer_length":  doc.get("answer_length", "standard"),
+        "detail_level":   doc.get("detail_level", "medium"),
         "detected_terms": doc.get("detected_terms", []),
         "results":        doc["results"],
         "chat_messages":  doc.get("chat_messages", []),
@@ -295,12 +300,14 @@ def analyze():
     if request.method == "GET":
         return render_template("Analyze.html")
 
-    report_text  = request.form.get("report_text", "").strip()
-    question     = request.form.get("question", "").strip()
-    provider     = request.form.get("provider", "groq").strip()
-    ollama_model = request.form.get("ollama_model", "llama3.2:1b").strip()
-    language     = request.form.get("language", "English").strip()
-    uploaded     = request.files.get("report_file")
+    report_text   = request.form.get("report_text", "").strip()
+    question      = request.form.get("question", "").strip()
+    provider      = request.form.get("provider", "groq").strip()
+    ollama_model  = request.form.get("ollama_model", "llama3.2:1b").strip()
+    language      = request.form.get("language", "English").strip()
+    answer_length = request.form.get("answer_length", "standard").strip()
+    detail_level  = request.form.get("detail_level", "medium").strip()
+    uploaded      = request.files.get("report_file")
 
     if uploaded and uploaded.filename:
         filename_lower = uploaded.filename.lower()
@@ -321,7 +328,8 @@ def analyze():
     try:
         results = generate_explanation(
             report_text, provider, question,
-            ollama_model=ollama_model, language=language
+            ollama_model=ollama_model, language=language,
+            answer_length=answer_length, detail_level=detail_level
         )
     except TypeError:
         try:
@@ -329,7 +337,8 @@ def analyze():
         except TypeError:
             results = generate_explanation(report_text, provider)
 
-    create_conversation(g.owner_id, report_text, provider, ollama_model, language, results)
+    create_conversation(g.owner_id, report_text, provider, ollama_model, language,
+                         answer_length, detail_level, results)
 
     show_chatbot = provider in ("groq", "gemini", "openai")
 
@@ -346,11 +355,20 @@ def analyze():
 
 @app.route("/analyze_ajax", methods=["POST"])
 def analyze_ajax():
-    report_text  = request.form.get("report_text", "").strip()
-    provider     = request.form.get("provider", "groq").strip()
-    ollama_model = request.form.get("ollama_model", "llama3.2:1b").strip()
-    language     = request.form.get("language", "English").strip()
-    uploaded     = request.files.get("report_file")
+    """
+    Same logic as /analyze POST but returns JSON.
+    Called by Analyze.html via fetch() — no page reload needed.
+    Every call here creates a NEW conversation (fresh report + its own chat
+    thread), instead of overwriting the previous one.
+    """
+
+    report_text   = request.form.get("report_text", "").strip()
+    provider      = request.form.get("provider", "groq").strip()
+    ollama_model  = request.form.get("ollama_model", "llama3.2:1b").strip()
+    language      = request.form.get("language", "English").strip()
+    answer_length = request.form.get("answer_length", "standard").strip()
+    detail_level  = request.form.get("detail_level", "medium").strip()
+    uploaded      = request.files.get("report_file")
 
     if uploaded and uploaded.filename:
         filename_lower = uploaded.filename.lower()
@@ -371,7 +389,8 @@ def analyze_ajax():
     try:
         results = generate_explanation(
             report_text, provider, "",
-            ollama_model=ollama_model, language=language
+            ollama_model=ollama_model, language=language,
+            answer_length=answer_length, detail_level=detail_level
         )
     except TypeError:
         try:
@@ -379,10 +398,12 @@ def analyze_ajax():
         except TypeError:
             results = generate_explanation(report_text, provider)
 
-    conv_id = create_conversation(g.owner_id, report_text, provider, ollama_model, language, results)
+    # Create a fresh conversation (report + its own chat thread)
+    conv_id = create_conversation(g.owner_id, report_text, provider, ollama_model, language,
+                                   answer_length, detail_level, results)
 
     return jsonify({
-        "conversation_id": conv_id,
+        "conversation_id": conv_id,   # ← frontend saves this and sends it back on /chat
         "risk_level":  results.get("risk_level",  "unknown"),
         "risk_reason": results.get("risk_reason", ""),
         "summary":     results.get("summary",     ""),
@@ -444,6 +465,8 @@ def chat():
         return jsonify({"reply": "I don't have your report loaded. Please go back and submit your report first."})
 
     language       = data.get("language", doc.get("language", "English"))
+    answer_length  = data.get("answer_length", doc.get("answer_length", "standard"))
+    detail_level   = data.get("detail_level", doc.get("detail_level", "medium"))
     provider       = doc.get("provider", "groq")
     ollama_model   = doc.get("ollama_model", "llama3.2:1b")
     report         = doc.get("report_text", "")
@@ -480,11 +503,15 @@ def chat():
         detected_terms_section = ""
 
     language_instruction = get_language_instruction(language)
+    length_instruction    = get_length_instruction(answer_length)
+    detail_instruction    = get_detail_instruction(detail_level)
 
     system = CHATBOT_SYSTEM.format(
         report=report,
         detected_terms_section=detected_terms_section,
-        language_instruction=language_instruction
+        language_instruction=language_instruction,
+        length_instruction=length_instruction,
+        detail_instruction=detail_instruction
     )
 
     conversation_context = build_conversation_context(chat_messages)
@@ -499,7 +526,12 @@ def chat():
 
     conversations_col.update_one(
         {"_id": ObjectId(conv_id)},
-        {"$set": {"chat_messages": chat_messages, "language": language}}
+        {"$set": {
+            "chat_messages": chat_messages,
+            "language": language,
+            "answer_length": answer_length,
+            "detail_level": detail_level
+        }}
     )
 
     return jsonify({"reply": reply})
