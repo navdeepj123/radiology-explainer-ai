@@ -458,6 +458,25 @@ function toggleTheme() {
 ClearScanControls.init("#ctrlSlot");
 
 // ─────────────────────────────────────────
+// LOAD SAVED HISTORY ON PAGE LOAD (from MongoDB)
+// ─────────────────────────────────────────
+fetch('/conversations')
+  .then(function(res){ return res.json(); })
+  .then(function(data){
+    historyArr = (data.conversations || []).map(function(c) {
+      return {
+        preview: c.preview,
+        risk:    (c.risk_level || 'unknown').toLowerCase(),
+        prov:    c.provider.toUpperCase(),
+        time:    c.date,
+        id:      c.id
+      };
+    });
+    renderHistoryList();
+  })
+  .catch(function(){ /* silently ignore — sidebar just stays empty */ });
+
+// ─────────────────────────────────────────
 // STATE
 // ─────────────────────────────────────────
 var provider    = 'groq';
@@ -729,14 +748,23 @@ function loadConversation(convId) {
 
       activeConversationId = convId;
       provider = conv.provider;
-      onProviderChange(provider);
+
+      // NEW: pehle csMsgs ko default notice template pe reset karo,
+      // taaki csNoticeProv element wapas exist kare onProviderChange chalne se pehle
+      document.getElementById('csMsgs').innerHTML =
+        '<div class="cs-notice" id="csNotice">'
+        + '<div class="cs-notice-icon">🫁</div>'
+        + '<p>Submit your radiology report first, then I\'ll be able to answer your questions about it.</p>'
+        + '<small>Powered by <span id="csNoticeProv"></span></small>'
+        + '</div>';
+
+      onProviderChange(provider);   // ab safe hai — csNoticeProv exist karta hai
 
       document.getElementById('msgs').innerHTML = '';
       appendUserBubble(conv.report_text.substring(0, 150), null);
       renderBotResult(conv.results);
-      activateChatbot();
+      activateChatbot();   // ye csNotice ko hata ke asli messages daalega
 
-      document.getElementById('csMsgs').innerHTML = '';
       conv.chat_messages.forEach(function(m) {
         csAppend(m.content, m.role === 'user' ? 'user' : 'bot');
       });
@@ -746,9 +774,13 @@ function loadConversation(convId) {
       document.getElementById('newReportBar').style.display = 'flex';
       document.getElementById('statusPill').textContent     = 'Analysis complete';
 
-      renderHistoryList();   // active highlight update karne ke liye
+      renderHistoryList();
     })
-    .catch(function(){ showErr('Could not load that report.'); });
+    .catch(function(err){
+      console.error('loadConversation ERROR:', err);
+      showErr('Could not load that report.');
+    });
+
 }
 // ─────────────────────────────────────────
 // ACTIVATE CHATBOT
