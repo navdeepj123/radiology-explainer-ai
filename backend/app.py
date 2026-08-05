@@ -1,15 +1,19 @@
 """
 ClearScan — Radiology Report Explainer
 3-page Flask app: Home → Analyze → Results + Chatbot
+Now with multi-conversation support: every "Analyse New Report" creates its
+own conversation (report + chat thread) that can be reopened from the sidebar.
 """
 
 import os
 import re
 import io
+import uuid
 import pdfplumber
 from datetime import datetime
 from flask import Flask, request, render_template, session, jsonify
 from flask_cors import CORS
+from flask_session import Session
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -21,6 +25,10 @@ app = Flask(
 
 app.secret_key = os.environ.get("FLASK_SECRET", "clearscan-secret-key-2025")
 CORS(app)
+app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_FILE_DIR"] = os.path.join(BASE_DIR, "backend", "flask_session_data")
+app.config["SESSION_PERMANENT"] = False
+Session(app)
 
 from services.rag_service import generate_explanation
 from services.llm_router import generate_with_provider
@@ -33,8 +41,11 @@ CRISIS_KEYWORDS = [
     "not worth living", "give up on life", "end it all", "hurt myself"
 ]
 
-# Max number of Q&A exchanges to keep in the session chat history
+# Max number of Q&A exchanges to keep per conversation's chat history
 MAX_CHAT_TURNS = 6
+
+# Max number of conversations kept in the session (matches the sidebar limit)
+MAX_CONVERSATIONS = 5
 
 OFF_TOPIC_KEYWORDS = [
     "recipe", "movie", "weather", "sports", "politics", "code", "programming",
@@ -122,7 +133,7 @@ def clean_ai_reply(reply):
 
 def build_conversation_context(chat_messages):
     """
-    Turns session["chat_messages"] (list of {role, content}) into a
+    Turns a conversation's chat_messages (list of {role, content}) into a
     plain-text transcript the LLM can use as conversation memory.
     """
     if not chat_messages:
@@ -185,6 +196,52 @@ def extract_pdf_text(file_storage):
         )
 
 
+# ── CONVERSATION HELPERS ────────────────────────────────────────────────────
+
+def create_conversation(report_text, provider, ollama_model, language, results):
+    """
+    Builds a new conversation dict, stores it in session["conversations"],
+    marks it active, trims the list to MAX_CONVERSATIONS, and returns its id.
+    """
+    conversations = session.get("conversations", {})
+
+    conv_id = uuid.uuid4().hex[:12]
+    detected_terms = results.get("detected_terms", []) if isinstance(results, dict) else []
+    summary_text = results.get("summary", "") if isinstance(results, dict) else str(results)
+
+    conversations[conv_id] = {
+        "id":             conv_id,
+        "report_text":    report_text,
+        "provider":       provider,
+        "ollama_model":   ollama_model,
+        "language":       language,
+        "detected_terms": detected_terms,
+        "results": {
+            "risk_level":  results.get("risk_level",  "unknown") if isinstance(results, dict) else "unknown",
+            "risk_reason": results.get("risk_reason", "")        if isinstance(results, dict) else "",
+            "summary":     results.get("summary",     "")        if isinstance(results, dict) else str(results),
+            "findings":    results.get("findings",    [])        if isinstance(results, dict) else [],
+            "terms":       results.get("terms",       [])        if isinstance(results, dict) else [],
+        },
+        "chat_messages": [],
+        "preview":       clean_history_text(report_text[:80]),
+        "risk_level":    results.get("risk_level", "unknown") if isinstance(results, dict) else "unknown",
+        "date":          datetime.now().strftime("%d %b %Y, %I:%M %p"),
+        "timestamp":     datetime.now().isoformat(),
+    }
+
+    # keep only the most recent MAX_CONVERSATIONS conversations (oldest dropped)
+    if len(conversations) > MAX_CONVERSATIONS:
+        oldest_id = min(conversations, key=lambda k: conversations[k]["timestamp"])
+        conversations.pop(oldest_id, None)
+
+    session["conversations"] = conversations
+    session["active_conversation_id"] = conv_id
+    session.modified = True
+
+    return conv_id
+
+
 # ── HOME ──────────────────────────────────────────────────────────────────────
 
 @app.route("/")
@@ -228,12 +285,6 @@ def analyze():
             error="Please paste your report text or upload a file."
         )
 
-    session["report_text"]   = report_text
-    session["provider"]      = provider
-    session["ollama_model"]  = ollama_model
-    session["language"]      = language
-    session["chat_messages"] = []  # new report → start a fresh chat conversation
-
     try:
         results = generate_explanation(
             report_text, provider, question,
@@ -245,8 +296,8 @@ def analyze():
         except TypeError:
             results = generate_explanation(report_text, provider)
 
-    if isinstance(results, dict):
-        session["detected_terms"] = results.get("detected_terms", [])
+    # NEW: create a conversation instead of overwriting one global session state
+    create_conversation(report_text, provider, ollama_model, language, results)
 
     history      = session.get("history", [])
     summary_text = results.get("summary", "") if isinstance(results, dict) else str(results)
@@ -272,14 +323,15 @@ def analyze():
     )
 
 
-# ── ANALYZE AJAX (single-page UI, now with PDF + language support) ─────────────
+# ── ANALYZE AJAX (single-page UI, PDF + language + multi-conversation) ─────────
 
 @app.route("/analyze_ajax", methods=["POST"])
 def analyze_ajax():
     """
     Same logic as /analyze POST but returns JSON.
-    Called by the new Analyze.html via fetch() — no page reload needed.
-    Results + chatbot all appear on the same page.
+    Called by Analyze.html via fetch() — no page reload needed.
+    Every call here creates a NEW conversation (fresh report + its own chat
+    thread), instead of overwriting the previous one.
     """
 
     report_text  = request.form.get("report_text", "").strip()
@@ -306,12 +358,6 @@ def analyze_ajax():
     if not report_text:
         return jsonify({"error": "Please paste your report text or upload a file."}), 400
 
-    session["report_text"]   = report_text
-    session["provider"]      = provider
-    session["ollama_model"]  = ollama_model
-    session["language"]      = language
-    session["chat_messages"] = []  # new report → start a fresh chat conversation
-
     try:
         results = generate_explanation(
             report_text, provider, "",
@@ -323,8 +369,8 @@ def analyze_ajax():
         except TypeError:
             results = generate_explanation(report_text, provider)
 
-    if isinstance(results, dict):
-        session["detected_terms"] = results.get("detected_terms", [])
+    # NEW: create a fresh conversation (report + its own chat thread)
+    conv_id = create_conversation(report_text, provider, ollama_model, language, results)
 
     history      = session.get("history", [])
     summary_text = results.get("summary", "") if isinstance(results, dict) else str(results)
@@ -339,6 +385,7 @@ def analyze_ajax():
     session["history"] = history[-5:]
 
     return jsonify({
+        "conversation_id": conv_id,   # ← frontend must save this and send it back on /chat
         "risk_level":  results.get("risk_level",  "unknown"),
         "risk_reason": results.get("risk_reason", ""),
         "summary":     results.get("summary",     ""),
@@ -347,19 +394,78 @@ def analyze_ajax():
     })
 
 
-# ── CHAT ──────────────────────────────────────────────────────────────────────
+# ── CONVERSATIONS: list for sidebar ────────────────────────────────────────
+
+@app.route("/conversations", methods=["GET"])
+def list_conversations():
+    """
+    Returns a lightweight list of this session's conversations
+    (newest first) for rendering the 'Recent Reports' sidebar.
+    """
+    conversations = session.get("conversations", {})
+    items = [
+        {
+            "id":         c["id"],
+            "preview":    c["preview"],
+            "provider":   c["provider"],
+            "risk_level": c["risk_level"],
+            "date":       c["date"],
+        }
+        for c in conversations.values()
+    ]
+    items.sort(key=lambda x: x["date"], reverse=True)
+    return jsonify({
+        "conversations": items,
+        "active_conversation_id": session.get("active_conversation_id")
+    })
+
+
+# ── CONVERSATIONS: reload one full conversation (report + chat) ───────────
+
+@app.route("/conversation/<conv_id>", methods=["GET"])
+def get_conversation(conv_id):
+    conversations = session.get("conversations", {})
+    conv = conversations.get(conv_id)
+    if not conv:
+        return jsonify({"error": "Conversation not found"}), 404
+
+    session["active_conversation_id"] = conv_id
+    session.modified = True
+
+    return jsonify({
+        "id":             conv["id"],
+        "report_text":    conv["report_text"],
+        "provider":       conv["provider"],
+        "ollama_model":   conv["ollama_model"],
+        "language":       conv["language"],
+        "results":        conv["results"],
+        "chat_messages":  conv["chat_messages"],
+    })
+
+
+# ── CHAT — reads/writes the ACTIVE conversation's own chat thread ─────────
 
 @app.route("/chat", methods=["POST"])
 def chat():
 
-    data           = request.get_json(silent=True) or {}
-    user_msg       = data.get("message", "").strip()
-    language       = data.get("language", session.get("language", "English"))
-    provider       = session.get("provider", "groq")
-    ollama_model   = session.get("ollama_model", "llama3.2:1b")
-    report         = session.get("report_text", "")
-    detected_terms = session.get("detected_terms", [])
-    chat_messages  = session.get("chat_messages", [])
+    data     = request.get_json(silent=True) or {}
+    user_msg = data.get("message", "").strip()
+
+    conv_id = data.get("conversation_id") or session.get("active_conversation_id")
+    conversations = session.get("conversations", {})
+    conv = conversations.get(conv_id)
+
+    if not conv:
+        return jsonify({
+            "reply": "I don't have your report loaded. Please go back and submit your report first."
+        })
+
+    language       = data.get("language", conv.get("language", "English"))
+    provider       = conv.get("provider", "groq")
+    ollama_model   = conv.get("ollama_model", "llama3.2:1b")
+    report         = conv.get("report_text", "")
+    detected_terms = conv.get("detected_terms", [])
+    chat_messages  = conv.get("chat_messages", [])
 
     if not user_msg:
         return jsonify({"reply": "Please type a message."})
@@ -419,12 +525,17 @@ def chat():
 
     reply = clean_ai_reply(reply)
 
-    # Store this exchange in the session so future questions in this
-    # conversation have context. Keep only the most recent MAX_CHAT_TURNS
-    # exchanges to avoid the prompt growing unbounded.
+    # Store this exchange in THIS conversation's own chat thread (not a
+    # single global one) so future questions have the right context and
+    # switching conversations doesn't mix up chat histories.
     chat_messages.append({"role": "user", "content": user_msg})
     chat_messages.append({"role": "assistant", "content": reply})
-    session["chat_messages"] = chat_messages[-(MAX_CHAT_TURNS * 2):]
+    conv["chat_messages"] = chat_messages[-(MAX_CHAT_TURNS * 2):]
+    conv["language"] = language  # remember latest language choice for this conversation
+
+    conversations[conv_id] = conv
+    session["conversations"] = conversations
+    session.modified = True
 
     return jsonify({"reply": reply})
 
