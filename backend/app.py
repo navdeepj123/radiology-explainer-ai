@@ -6,6 +6,10 @@ own conversation (report + chat thread), permanently saved, reopenable from
 the sidebar even after a server restart or new browser session on the same
 device (via a long-lived anon_id cookie — no login required yet).
 Also supports per-conversation answer_length + detail_level preferences.
+Now with output verification: every AI-generated explanation and chat reply
+is checked against confirmed dataset terms, and results are logged to
+MongoDB for accuracy/hallucination-rate analysis.
+Also supports renaming and deleting conversations from the sidebar.
 """
 
 import os
@@ -19,6 +23,7 @@ from flask import Flask, request, render_template, jsonify, g
 from flask_cors import CORS
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from services.output_verifier import verify_output
 
 load_dotenv()
 
@@ -38,6 +43,7 @@ MONGO_URI = os.environ.get("MONGO_URI")
 mongo_client = MongoClient(MONGO_URI)
 db = mongo_client["clearscan"]
 conversations_col = db["conversations"]
+verification_logs_col = db["verification_logs"]   # stores every verification check result
 
 # Owner cookie: identifies "this browser" so history persists across visits
 # without requiring login. When real login (Epic 5) is added later, this
@@ -222,6 +228,30 @@ def extract_pdf_text(file_storage):
         )
 
 
+# ── VERIFICATION LOGGING ─────────────────────────────────────────────────
+
+def log_verification(conv_id, provider, language, verification, source):
+    """
+    Har verification check ka result MongoDB me save karta hai.
+    source: "explanation" (initial report explanation) ya "chat" (chatbot reply)
+    Yehi tumhara research data hai — /verification-stats isi collection se
+    accuracy numbers nikalta hai.
+    """
+    try:
+        verification_logs_col.insert_one({
+            "conv_id":       conv_id,
+            "provider":      provider,
+            "language":      language,
+            "source":        source,
+            "passed":        verification.get("passed", True),
+            "checked_count": verification.get("checked_count", 0),
+            "failed_terms":  verification.get("failed_terms", []),
+            "timestamp":     datetime.utcnow(),
+        })
+    except Exception as e:
+        print(f"⚠️ Verification logging failed: {e}")
+
+
 # ── CONVERSATION HELPERS (MongoDB) ──────────────────────────────────────────
 
 def create_conversation(owner_id, report_text, provider, ollama_model, language,
@@ -337,8 +367,17 @@ def analyze():
         except TypeError:
             results = generate_explanation(report_text, provider)
 
-    create_conversation(g.owner_id, report_text, provider, ollama_model, language,
-                         answer_length, detail_level, results)
+    conv_id = create_conversation(g.owner_id, report_text, provider, ollama_model, language,
+                                   answer_length, detail_level, results)
+
+    # verify the explanation against confirmed terms and log it
+    explanation_verification = results.get("verification") if isinstance(results, dict) else None
+    if explanation_verification is None:
+        explanation_verification = verify_output(
+            results.get("summary", "") if isinstance(results, dict) else str(results),
+            results.get("detected_terms", []) if isinstance(results, dict) else []
+        )
+    log_verification(conv_id, provider, language, explanation_verification, source="explanation")
 
     show_chatbot = provider in ("groq", "gemini", "openai")
 
@@ -402,6 +441,15 @@ def analyze_ajax():
     conv_id = create_conversation(g.owner_id, report_text, provider, ollama_model, language,
                                    answer_length, detail_level, results)
 
+    # verify the explanation against confirmed terms and log it
+    explanation_verification = results.get("verification") if isinstance(results, dict) else None
+    if explanation_verification is None:
+        explanation_verification = verify_output(
+            results.get("summary", "") if isinstance(results, dict) else str(results),
+            results.get("detected_terms", []) if isinstance(results, dict) else []
+        )
+    log_verification(conv_id, provider, language, explanation_verification, source="explanation")
+
     return jsonify({
         "conversation_id": conv_id,   # ← frontend saves this and sends it back on /chat
         "risk_level":  results.get("risk_level",  "unknown"),
@@ -409,6 +457,7 @@ def analyze_ajax():
         "summary":     results.get("summary",     ""),
         "findings":    results.get("findings",    []),
         "terms":       results.get("terms",       []),
+        "verification": explanation_verification,
     })
 
 
@@ -421,6 +470,7 @@ def list_conversations():
         {
             "id":         str(d["_id"]),
             "preview":    d["preview"],
+            "title":      d.get("custom_title"),   # NEW — renamed title, if set
             "provider":   d["provider"],
             "risk_level": d["risk_level"],
             "date":       d["date"],
@@ -443,6 +493,39 @@ def get_conversation(conv_id):
         return jsonify({"error": "Conversation not found"}), 404
 
     return jsonify(serialize_conv(doc))
+
+
+# ── CONVERSATIONS: delete (NEW) ─────────────────────────────────────────
+
+@app.route("/conversation/<conv_id>", methods=["DELETE"])
+def delete_conversation(conv_id):
+    try:
+        result = conversations_col.delete_one({"_id": ObjectId(conv_id), "owner_id": g.owner_id})
+    except Exception:
+        return jsonify({"error": "Invalid id"}), 400
+    if result.deleted_count == 0:
+        return jsonify({"error": "Not found"}), 404
+    return jsonify({"deleted": True})
+
+
+# ── CONVERSATIONS: rename (NEW) ─────────────────────────────────────────
+
+@app.route("/conversation/<conv_id>/rename", methods=["POST"])
+def rename_conversation(conv_id):
+    data = request.get_json(silent=True) or {}
+    title = (data.get("title") or "").strip()[:100]
+    if not title:
+        return jsonify({"error": "Title required"}), 400
+    try:
+        result = conversations_col.update_one(
+            {"_id": ObjectId(conv_id), "owner_id": g.owner_id},
+            {"$set": {"custom_title": title}}
+        )
+    except Exception:
+        return jsonify({"error": "Invalid id"}), 400
+    if result.matched_count == 0:
+        return jsonify({"error": "Not found"}), 404
+    return jsonify({"title": title})
 
 
 # ── CHAT — reads/writes the given conversation's own chat thread ──────────
@@ -520,6 +603,10 @@ def chat():
     reply = generate_with_provider(full_prompt, provider, detected_terms=detected_terms, ollama_model=ollama_model)
     reply = clean_ai_reply(reply)
 
+    # verify chatbot reply against confirmed terms and log it
+    verification = verify_output(reply, detected_terms)
+    log_verification(conv_id, provider, language, verification, source="chat")
+
     chat_messages.append({"role": "user", "content": user_msg})
     chat_messages.append({"role": "assistant", "content": reply})
     chat_messages = chat_messages[-(MAX_CHAT_TURNS * 2):]
@@ -534,7 +621,36 @@ def chat():
         }}
     )
 
-    return jsonify({"reply": reply})
+    return jsonify({
+        "reply": reply,
+        "verification": verification
+    })
+
+
+# ── VERIFICATION STATS — research/accuracy dashboard data ────────────
+
+@app.route("/verification-stats", methods=["GET"])
+def verification_stats():
+    pipeline = [
+        {"$group": {
+            "_id": {"provider": "$provider", "source": "$source"},
+            "total": {"$sum": 1},
+            "passed": {"$sum": {"$cond": ["$passed", 1, 0]}},
+        }}
+    ]
+    results = list(verification_logs_col.aggregate(pipeline))
+    stats = []
+    for r in results:
+        total = r["total"]
+        passed = r["passed"]
+        stats.append({
+            "provider": r["_id"]["provider"],
+            "source": r["_id"]["source"],
+            "total_checks": total,
+            "passed": passed,
+            "accuracy_percent": round((passed / total) * 100, 1) if total else 0,
+        })
+    return jsonify({"stats": stats})
 
 
 # ── RUN ───────────────────────────────────────────────────────────────────────
