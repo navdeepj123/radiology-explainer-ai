@@ -37,6 +37,7 @@ var historyArr         = [];
 var lastText           = '';
 var lastFile            = null;
 var activeConversationId = null;   // MongoDB conversation currently open
+var chatSearchQuery    = '';       // NEW — sidebar search filter
 
 var provData = {
   groq:   { tag:'⚡ GROQ',   shortTag:'GROQ',   hint:'Fast and free. Report sent to Groq servers.',   name:'Groq'   },
@@ -59,6 +60,7 @@ fetch('/conversations')
     historyArr = (data.conversations || []).map(function(c) {
       return {
         preview: c.preview,
+        title:   c.title,           // NEW — custom rename, if set
         risk:    (c.risk_level || 'unknown').toLowerCase(),
         prov:    c.provider.toUpperCase(),
         time:    c.date,
@@ -77,6 +79,7 @@ function addToHistory(reportText, riskLevel, prov, convId) {
   var time = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
   historyArr.unshift({
     preview: reportText.substring(0, 80).trim(),
+    title:   null,
     risk:    (riskLevel || 'unknown').toLowerCase(),
     prov:    prov.toUpperCase(),
     time:    time,
@@ -86,30 +89,92 @@ function addToHistory(reportText, riskLevel, prov, convId) {
   renderHistoryList();
 }
 
+// NEW — sidebar search
+function onChatSearch(val) {
+  chatSearchQuery = val.trim().toLowerCase();
+  renderHistoryList();
+}
+
 function renderHistoryList() {
   var list  = document.getElementById('sbHistList');
   var empty = document.getElementById('sbHistEmpty');
-  if (empty) empty.style.display = historyArr.length ? 'none' : 'block';
+
+  var filtered = historyArr.filter(function(item) {
+    if (!chatSearchQuery) return true;
+    var title = (item.title || item.preview || '').toLowerCase();
+    return title.indexOf(chatSearchQuery) !== -1;
+  });
+
+  if (empty) {
+    empty.style.display = filtered.length ? 'none' : 'block';
+    empty.textContent = historyArr.length ? 'No matching chats' : 'No chats yet';
+  }
+
   list.querySelectorAll('.sh-item').forEach(function(el){ el.remove(); });
 
-  historyArr.forEach(function(item) {
+  filtered.forEach(function(item) {
     var rLabel = item.risk==='high'   ? '🔴 High risk'
                : item.risk==='medium' ? '🟡 Medium risk'
                : item.risk==='low'    ? '🟢 Low risk'
                :                        '⚪ Unknown';
+    var displayTitle = item.title || item.preview;
     var div = document.createElement('div');
     div.className = 'sh-item' + (item.id === activeConversationId ? ' active' : '');
     div.style.cursor = 'pointer';
     div.onclick = function(){ loadConversation(item.id); };
     div.innerHTML =
-      '<div class="sh-top">'
+      '<div class="sh-item-actions">'
+        + '<button class="sh-icon-btn sh-edit" title="Rename" onclick="event.stopPropagation(); renameConversation(\''+item.id+'\')">'
+          + '<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M7.5 1.5l2 2L3.5 9.5H1.5v-2z" stroke="currentColor" stroke-width="1.1"/></svg>'
+        + '</button>'
+        + '<button class="sh-icon-btn sh-delete" title="Delete" onclick="event.stopPropagation(); deleteConversation(\''+item.id+'\')">'
+          + '<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 3h7M4 3V1.8h3V3M3 3l.5 6.5h4L8 3" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>'
+        + '</button>'
+      + '</div>'
+      + '<div class="sh-top sh-title-row">'
         + '<span class="sh-prov">'+item.prov+'</span>'
         + '<span class="sh-time">'+item.time+'</span>'
       + '</div>'
-      + '<div class="sh-preview">'+escHtml(item.preview)+'…</div>'
+      + '<div class="sh-preview">'+escHtml(displayTitle)+'…</div>'
       + '<div class="sh-risk '+item.risk+'">'+rLabel+'</div>';
     list.appendChild(div);
   });
+}
+
+// NEW — rename a conversation
+function renameConversation(convId) {
+  var item = historyArr.find(function(h){ return h.id === convId; });
+  if (!item) return;
+  var newTitle = prompt('Rename this chat:', item.title || item.preview);
+  if (newTitle === null || !newTitle.trim()) return;
+
+  fetch('/conversation/' + convId + '/rename', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title: newTitle.trim() })
+  })
+    .then(function(res){ return res.json(); })
+    .then(function(){
+      item.title = newTitle.trim();
+      renderHistoryList();
+    })
+    .catch(function(){ showErr('Could not rename chat.'); });
+}
+
+// NEW — delete a conversation
+function deleteConversation(convId) {
+  if (!confirm('Delete this chat? This cannot be undone.')) return;
+
+  fetch('/conversation/' + convId, { method: 'DELETE' })
+    .then(function(res){ return res.json(); })
+    .then(function(){
+      historyArr = historyArr.filter(function(h){ return h.id !== convId; });
+      if (convId === activeConversationId) {
+        onNewReport();
+      }
+      renderHistoryList();
+    })
+    .catch(function(){ showErr('Could not delete chat.'); });
 }
 
 // ─────────────────────────────────────────
@@ -567,6 +632,15 @@ function renderBotResult(d) {
   if (provider === 'ollama') {
     pTag = ollamaModel === 'mistral' ? '🧠 MISTRAL' : '⚡ LLAMA3.2:1B';
   }
+   // verification badge
+  var verifyHtml = '';
+  if (d.verification && d.verification.checked_count > 0) {
+    if (d.verification.passed) {
+      verifyHtml = '<div class="verify-badge verify-pass">✓ Verified against ' + d.verification.checked_count + ' confirmed finding(s)</div>';
+    } else {
+      verifyHtml = '<div class="verify-badge verify-fail">⚠ ' + d.verification.failed_terms.length + ' finding(s) need review: ' + escHtml(d.verification.failed_terms.join(', ')) + '</div>';
+    }
+  }
   var findHtml = '';
   if (d.findings && d.findings.length) {
     findHtml = '<div><div class="rs-title"><span class="rs-dot blue"></span>Key Findings</div>'
@@ -596,6 +670,7 @@ function renderBotResult(d) {
         + '<div><div class="rs-title"><span class="rs-dot teal"></span>Plain-Language Summary</div>'
         + '<div class="rs-content">'+(d.summary||'')+'</div></div>'
         + findHtml + termHtml
+        + verifyHtml
       + '</div>'
       + '<div class="bot-actions">'
         + '<button class="ba-btn" onclick="window.print()">🖨 Print</button>'
