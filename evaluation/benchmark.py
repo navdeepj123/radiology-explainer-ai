@@ -76,6 +76,10 @@ FAILURE_MARKERS = [
     "did not return a response",
 ]
 
+# Signs a failure was a rate limit rather than a real problem - worth a
+# short wait and a retry rather than giving up immediately.
+RATE_LIMIT_MARKERS = ["429", "rate limit", "rate_limit", "too many requests"]
+
 # ── Approximate public pricing, USD per 1M tokens ($/1M in, $/1M out) ────────
 # These are ballpark figures and change over time - update before quoting
 # them in a report. "openai" here actually routes through OpenRouter's free
@@ -152,12 +156,43 @@ def is_failure(summary_text):
     return any(marker.lower() in (summary_text or "").lower() for marker in FAILURE_MARKERS)
 
 
-def run_benchmark(providers, limit, all_rows, ollama_model, live_writer=None, live_file=None):
+def call_with_retry(report_text, provider, ollama_model, max_retries=2):
+    """Call generate_explanation, retrying with backoff if the failure looks
+    like a rate limit (very plausible when hammering a provider with 50
+    back-to-back calls) rather than a real problem with the provider."""
+    delay = 5
+    for attempt in range(max_retries + 1):
+        try:
+            result = generate_explanation(
+                report_text,
+                provider=provider,
+                ollama_model=ollama_model,
+                allow_fallback=False,
+            )
+            summary = result.get("summary", "")
+            if is_failure(summary) and any(m in summary.lower() for m in RATE_LIMIT_MARKERS) and attempt < max_retries:
+                print(f"    rate limited - waiting {delay}s before retry {attempt + 1}/{max_retries}")
+                time.sleep(delay)
+                delay *= 3
+                continue
+            return result
+        except Exception as e:
+            if any(m in str(e).lower() for m in RATE_LIMIT_MARKERS) and attempt < max_retries:
+                print(f"    rate limited - waiting {delay}s before retry {attempt + 1}/{max_retries}")
+                time.sleep(delay)
+                delay *= 3
+                continue
+            raise
+    return result
+
+
+def run_benchmark(providers, limit, all_rows, ollama_model, live_writer=None, live_file=None, call_delay=0.0):
     rows = load_dataset(limit=None if all_rows else (limit or 10))
     results = []
 
     total_calls = len(rows) * len(providers)
     call_num = 0
+    interrupted = False
 
     for provider in providers:
         for row in rows:
@@ -170,14 +205,7 @@ def run_benchmark(providers, limit, all_rows, ollama_model, live_writer=None, li
 
             start = time.perf_counter()
             try:
-                result = generate_explanation(
-                    report_text,
-                    provider=provider,
-                    ollama_model=ollama_model,
-                    allow_fallback=False,  # isolate this provider - don't let a
-                                           # failure secretly get answered by
-                                           # another provider under this label
-                )
+                result = call_with_retry(report_text, provider, ollama_model)
                 elapsed = time.perf_counter() - start
                 summary = result.get("summary", "")
                 risk_level = result.get("risk_level", "")
@@ -187,7 +215,8 @@ def run_benchmark(providers, limit, all_rows, ollama_model, live_writer=None, li
                 # collected instead of losing it.
                 print(f"\nInterrupted during {provider} id={row['id']} - "
                       f"keeping {len(results)} completed result(s).")
-                return results
+                interrupted = True
+                break
             except Exception as e:
                 elapsed = time.perf_counter() - start
                 summary = f"EXCEPTION: {e}"
@@ -224,7 +253,13 @@ def run_benchmark(providers, limit, all_rows, ollama_model, live_writer=None, li
                 live_writer.writerow(row_result)
                 live_file.flush()
 
-    return results
+            if call_delay:
+                time.sleep(call_delay)
+
+        if interrupted:
+            break
+
+    return results, (call_num if interrupted else total_calls), total_calls
 
 
 def write_results_csv(results, path):
@@ -245,8 +280,11 @@ def summarize(results):
     for provider, rows in by_provider.items():
         n = len(rows)
         successes = [r for r in rows if r["success"]]
-        recalls = [r["term_recall"] for r in rows if r["term_recall"] != ""]
-        matches = [r["severity_match"] for r in rows if r["severity_match"] != ""]
+        # Only score accuracy on calls that actually succeeded - a failed
+        # call is a reliability problem, not evidence the AI got the
+        # content wrong, so it shouldn't drag the accuracy average down.
+        recalls = [r["term_recall"] for r in successes if r["term_recall"] != ""]
+        matches = [r["severity_match"] for r in successes if r["severity_match"] != ""]
 
         summary_rows.append({
             "provider": provider,
@@ -298,6 +336,9 @@ def main():
                          help="Use the entire 50-report dataset instead of --limit.")
     parser.add_argument("--ollama-model", default="llama3.2:1b",
                          help="Ollama model to use if 'ollama' is in --providers.")
+    parser.add_argument("--delay", type=float, default=1.0,
+                         help="Seconds to wait between calls, to avoid rate limits on "
+                              "fast providers like Groq (default: 1.0). Use 0 to disable.")
     args = parser.parse_args()
 
     print(f"Testing providers: {args.providers}")
@@ -306,20 +347,29 @@ def main():
           f"interrupted (Ctrl+C, a hung provider, a crash) nothing already "
           f"completed is lost - just re-run with a smaller --providers list "
           f"for whichever provider didn't finish.\n")
+    print("IMPORTANT (Windows PowerShell/cmd): don't click inside this "
+          "terminal window while it's running - Quick Edit Mode will pause "
+          "or interrupt the script without any error message.\n")
 
     with open(RESULTS_CSV, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=RESULT_FIELDS)
         writer.writeheader()
         f.flush()
 
-        results = run_benchmark(
+        results, completed_calls, total_calls = run_benchmark(
             args.providers, args.limit, args.all, args.ollama_model,
-            live_writer=writer, live_file=f
+            live_writer=writer, live_file=f, call_delay=args.delay
         )
 
     if not results:
         print("No results collected.")
         return
+
+    if completed_calls < total_calls:
+        print(f"\n{'!' * 70}")
+        print(f"PARTIAL RUN - only {completed_calls}/{total_calls} calls completed "
+              f"before this stopped. The numbers below only reflect what ran.")
+        print(f"{'!' * 70}")
 
     summary_rows = summarize(results)
     write_results_csv(summary_rows, SUMMARY_CSV)
