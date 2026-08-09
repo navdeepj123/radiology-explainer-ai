@@ -59,6 +59,7 @@ from dotenv import load_dotenv
 load_dotenv(os.path.join(BACKEND_DIR, ".env"))
 
 from services.rag_service import generate_explanation  # noqa: E402
+from services.retriever import is_negated  # noqa: E402 - reuse the app's own negation logic
 
 DATASET_PATH = os.path.join(BACKEND_DIR, "data", "radiology_dataset.csv")
 RESULTS_CSV  = os.path.join(os.path.dirname(os.path.abspath(__file__)), "benchmark_results.csv")
@@ -107,13 +108,23 @@ def load_dataset(limit=None):
     return rows
 
 
-def expected_terms(medical_terms_field):
-    """'cardiomegaly: enlargement...; pleural effusion: fluid...' -> ['cardiomegaly', 'pleural effusion']"""
+def expected_terms(medical_terms_field, report_text=None):
+    """'cardiomegaly: enlargement...; pleural effusion: fluid...' -> ['cardiomegaly', 'pleural effusion']
+
+    If report_text is given, terms the report explicitly rules out (e.g.
+    "No pulmonary embolism") are EXCLUDED from the expected set. The app
+    deliberately never claims a negated finding as "confirmed" (see
+    services/retriever.py's is_negated()) - that's a safety feature, not a
+    miss - so the benchmark shouldn't penalise it as one.
+    """
     terms = []
     for chunk in (medical_terms_field or "").split(";"):
         name = chunk.split(":")[0].strip().lower()
-        if name:
-            terms.append(name)
+        if not name:
+            continue
+        if report_text and is_negated(name, report_text.lower()):
+            continue
+        terms.append(name)
     return terms
 
 
@@ -141,7 +152,7 @@ def is_failure(summary_text):
     return any(marker.lower() in (summary_text or "").lower() for marker in FAILURE_MARKERS)
 
 
-def run_benchmark(providers, limit, all_rows, ollama_model):
+def run_benchmark(providers, limit, all_rows, ollama_model, live_writer=None, live_file=None):
     rows = load_dataset(limit=None if all_rows else (limit or 10))
     results = []
 
@@ -152,7 +163,7 @@ def run_benchmark(providers, limit, all_rows, ollama_model):
         for row in rows:
             call_num += 1
             report_text = row["findings"]
-            terms_wanted = expected_terms(row["medical_terms"])
+            terms_wanted = expected_terms(row["medical_terms"], report_text)
             severity_wanted = expected_risk_level(row["severity"])
 
             print(f"[{call_num}/{total_calls}] {provider:8s} | id={row['id']:>3s} | {row['report_type']}")
@@ -171,6 +182,12 @@ def run_benchmark(providers, limit, all_rows, ollama_model):
                 summary = result.get("summary", "")
                 risk_level = result.get("risk_level", "")
                 failed = is_failure(summary)
+            except KeyboardInterrupt:
+                # Ctrl+C mid-call: stop cleanly and keep whatever we already
+                # collected instead of losing it.
+                print(f"\nInterrupted during {provider} id={row['id']} - "
+                      f"keeping {len(results)} completed result(s).")
+                return results
             except Exception as e:
                 elapsed = time.perf_counter() - start
                 summary = f"EXCEPTION: {e}"
@@ -185,7 +202,7 @@ def run_benchmark(providers, limit, all_rows, ollama_model):
 
             in_tok, out_tok, cost = estimate_cost(provider, report_text, summary)
 
-            results.append({
+            row_result = {
                 "id": row["id"],
                 "provider": provider,
                 "report_type": row["report_type"],
@@ -198,7 +215,14 @@ def run_benchmark(providers, limit, all_rows, ollama_model):
                 "est_prompt_tokens": in_tok,
                 "est_completion_tokens": out_tok,
                 "est_cost_usd": round(cost, 6),
-            })
+            }
+            results.append(row_result)
+
+            # Write to disk immediately so a later hang/crash/Ctrl+C doesn't
+            # lose the results we've already collected.
+            if live_writer is not None:
+                live_writer.writerow(row_result)
+                live_file.flush()
 
     return results
 
@@ -257,6 +281,13 @@ def print_summary_table(summary_rows):
     print(f"Summary table:         {SUMMARY_CSV}\n")
 
 
+RESULT_FIELDS = [
+    "id", "provider", "report_type", "latency_sec", "success", "term_recall",
+    "expected_severity", "actual_risk_level", "severity_match",
+    "est_prompt_tokens", "est_completion_tokens", "est_cost_usd",
+]
+
+
 def main():
     parser = argparse.ArgumentParser(description="Benchmark ClearScan's LLM providers.")
     parser.add_argument("--providers", nargs="+", choices=ALL_PROVIDERS, default=ALL_PROVIDERS,
@@ -271,10 +302,25 @@ def main():
 
     print(f"Testing providers: {args.providers}")
     print(f"Dataset: {'all 50 rows' if args.all else f'{args.limit} rows'}\n")
+    print(f"Results are saved to disk after every single call, so if this gets "
+          f"interrupted (Ctrl+C, a hung provider, a crash) nothing already "
+          f"completed is lost - just re-run with a smaller --providers list "
+          f"for whichever provider didn't finish.\n")
 
-    results = run_benchmark(args.providers, args.limit, args.all, args.ollama_model)
+    with open(RESULTS_CSV, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=RESULT_FIELDS)
+        writer.writeheader()
+        f.flush()
 
-    write_results_csv(results, RESULTS_CSV)
+        results = run_benchmark(
+            args.providers, args.limit, args.all, args.ollama_model,
+            live_writer=writer, live_file=f
+        )
+
+    if not results:
+        print("No results collected.")
+        return
+
     summary_rows = summarize(results)
     write_results_csv(summary_rows, SUMMARY_CSV)
     print_summary_table(summary_rows)

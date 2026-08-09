@@ -31,15 +31,37 @@ evidence instead of an opinion.
 
 - Term recall is a **substring** match, so it under-counts a provider that
   correctly explains a finding using different wording (e.g. "enlarged heart"
-  instead of "cardiomegaly"). It's a reasonable proxy but not perfect - a
-  natural next step is embedding-based similarity instead of exact substring
-  matching (see the semantic-RAG proposal in `docs/proposal.md`).
+  instead of "cardiomegaly"), or when the ground-truth term is a different
+  grammatical form of what's in the report (e.g. dataset lists "mediastinum"
+  as a separate term when the report only says "mediastinal shift"). It's a
+  reasonable proxy but not perfect - a natural next step is embedding-based
+  similarity instead of exact substring matching (see the semantic-RAG
+  proposal in `docs/proposal.md`).
 - Cost figures are estimates based on published rates at the time this was
   written and approximate token counts - re-check current pricing before
   quoting exact dollar figures in a report.
 - The dataset is synthetic/curated for this project, not real hospital data,
   so results describe relative provider performance on this task, not
   clinical accuracy in general.
+
+## Fix: negated findings were inflating "missed term" counts
+
+Early runs showed suspiciously low term recall (~54%) that was identical
+across providers on the same report - a sign the problem wasn't the LLMs.
+Investigating individual low-scoring rows (e.g. a Brain CT report reading
+"No acute intracranial hemorrhage. No mass effect... Mild cortical atrophy.")
+showed the dataset's `medical_terms` column lists every term mentioned in the
+findings text, including ones the radiologist explicitly **ruled out** with
+"No X". The app deliberately never claims a negated finding as "confirmed"
+(see `is_negated()` in `backend/services/retriever.py` - this exists to stop
+the AI telling a patient they have a finding the report says they don't have),
+so it was being marked "wrong" for correctly staying silent on ruled-out
+findings.
+
+`benchmark.py`'s `expected_terms()` now reuses the same `is_negated()` check
+to exclude negated terms from the expected set before scoring recall, so the
+metric measures what it's supposed to: did the AI catch the *real* positive
+findings, not "did it also hallucinate the ruled-out ones."
 
 ## How to run
 
