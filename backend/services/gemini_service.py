@@ -28,7 +28,7 @@ Do not contradict the detected terms under any circumstances.
     }
 
     body = {
-        "model": "google/gemini-2.0-flash-lite-001",
+        "model": "google/gemini-2.5-flash-lite",
         "messages": [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": prompt}

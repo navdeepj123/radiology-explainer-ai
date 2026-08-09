@@ -22,7 +22,7 @@ Your explanation MUST acknowledge ALL of these findings. Do NOT say any of them 
 {prompt}"""
 
 
-def generate_with_provider(prompt, provider="ollama", detected_terms=None, ollama_model="llama3.2:1b"):
+def generate_with_provider(prompt, provider="ollama", detected_terms=None, ollama_model="llama3.2:1b", allow_fallback=True):
     provider = provider.lower().strip()
 
     final_prompt = _build_prompt(prompt, detected_terms)
@@ -60,6 +60,19 @@ def generate_with_provider(prompt, provider="ollama", detected_terms=None, ollam
                 "3. Keep that window open and try again<br><br>"
                 "Or select Groq, Gemini, or OpenAI from the dropdown instead."
             )
+
+        if not allow_fallback:
+            # Benchmarking/testing a specific provider in isolation - surface
+            # the real failure instead of silently switching providers, so
+            # results for this provider aren't mislabeled as another one's.
+            return f"""
+<div class="ai-output">
+    <div class="risk-box">
+        <h3>AI Service Temporary Issue</h3>
+        <p>The {provider} provider failed and fallback was disabled: {str(e)}</p>
+    </div>
+</div>
+"""
 
         fallback_order = ["groq", "gemini", "openai"]
 
