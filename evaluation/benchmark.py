@@ -81,7 +81,7 @@ FAILURE_MARKERS = [
 # tier model (see backend/services/openai_service.py), so it's $0.
 PRICING = {
     "groq":   (0.59, 0.79),   # llama-3.3-70b-versatile on Groq
-    "gemini": (0.075, 0.30),  # gemini-2.0-flash-lite via OpenRouter
+    "gemini": (0.10, 0.40),   # gemini-2.5-flash-lite via OpenRouter (2.0 was shut down 1 Jun 2026)
     "openai": (0.0, 0.0),     # openrouter/free model
     "ollama": (0.0, 0.0),     # local - no per-token cost
 }
@@ -163,6 +163,9 @@ def run_benchmark(providers, limit, all_rows, ollama_model):
                     report_text,
                     provider=provider,
                     ollama_model=ollama_model,
+                    allow_fallback=False,  # isolate this provider - don't let a
+                                           # failure secretly get answered by
+                                           # another provider under this label
                 )
                 elapsed = time.perf_counter() - start
                 summary = result.get("summary", "")
