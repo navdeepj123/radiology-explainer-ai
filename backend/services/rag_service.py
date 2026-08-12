@@ -1,14 +1,14 @@
 import re
+import json
 from services.retriever import retrieve_relevant_info
 from services.llm_router import generate_with_provider
+from services.output_verifier import verify_output
 
 
 def _convert_to_html(text):
     """Plain text/markdown ko clean HTML mein convert karo"""
 
-    # Already HTML hai toh clean karke return karo
     if '<h3>' in text and '<li>' in text:
-        # leaked instructions hata do
         text = re.sub(r'Stop immediately.*', '', text, flags=re.DOTALL | re.IGNORECASE)
         text = re.sub(r'Important output rules.*', '', text, flags=re.DOTALL | re.IGNORECASE)
         last_div = text.rfind('</div>')
@@ -16,12 +16,10 @@ def _convert_to_html(text):
             text = text[:last_div + 6]
         return text.strip()
 
-    # Plain text / markdown → HTML
     lines  = text.split('\n')
     output = ['<div class="ai-output">']
     in_ul  = False
 
-    # Section heading aliases — model ke different heading names normalize karo
     heading_map = {
         'simple summary':           'Simple Summary',
         'summary':                  'Simple Summary',
@@ -48,14 +46,12 @@ def _convert_to_html(text):
         if not line:
             continue
 
-        # Remove leaked prompt text
         if any(x in line.lower() for x in [
             'stop immediately', 'do not add', 'return only',
             'important output', 'confirmed detected', 'must acknowledge'
         ]):
             continue
 
-        # ** Heading ** OR # Heading → <h3>
         heading_match = re.match(r'^\*\*(.+?)\*\*:?$', line) or \
                         re.match(r'^#+\s+(.+)', line)
 
@@ -64,11 +60,9 @@ def _convert_to_html(text):
                 output.append('</ul>')
                 in_ul = False
             raw_heading = heading_match.group(1).strip().rstrip(':')
-            # normalize karo
             normalized = heading_map.get(raw_heading.lower(), raw_heading)
             output.append(f'<h3>{normalized}</h3>')
 
-        # * bullet or - bullet or numbered → <li>
         elif re.match(r'^[\*\-\d]+[\.\)]\s+', line) or re.match(r'^\*\s', line):
             if not in_ul:
                 output.append('<ul>')
@@ -79,7 +73,6 @@ def _convert_to_html(text):
             content = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', content)
             output.append(f'  <li>{content}</li>')
 
-        # plain text → li
         else:
             if not in_ul:
                 output.append('<ul>')
@@ -111,12 +104,10 @@ def _filter_terms_actually_in_report(report_text, retrieved_terms):
         if not term_lower:
             continue
 
-        # exact phrase report mein hai?
         if term_lower in report_lower:
             verified.append(item)
             continue
 
-        # ya uske alternate/synonym forms report mein hain?
         synonyms = item.get("synonyms", [])
         found_synonym = False
         for syn in synonyms:
@@ -155,7 +146,149 @@ def _get_language_instruction(language):
     )
 
 
-def generate_explanation(report_text, provider="ollama", user_question="", ollama_model="llama3.2:1b", language="English", allow_fallback=True):
+def get_length_instruction(answer_length):
+    """
+    Answer Length ke hisaab se response kitna lamba ho, yeh
+    control karta hai.
+    """
+    mapping = {
+        "brief": (
+            "Keep the response VERY SHORT. Use only 1 short bullet point per "
+            "section. Maximum 8-10 words per bullet. Be extremely concise."
+        ),
+        "standard": (
+            "Use a moderate length response. 2-4 bullet points per section, "
+            "each bullet 1-2 sentences long."
+        ),
+        "intensive": (
+            "Provide a thorough, detailed response. Use 4-6 bullet points per "
+            "section, each with 2-3 sentences of explanation and context."
+        ),
+    }
+    return mapping.get((answer_length or "standard").lower(), mapping["standard"])
+
+
+def get_detail_instruction(detail_level):
+    """
+    Detail Level ke hisaab se explanation kitni technical/deep ho,
+    yeh control karta hai.
+    """
+    mapping = {
+        "basic": (
+            "Use very simple, everyday words only. Avoid all medical "
+            "terminology in explanations — describe things the way you'd "
+            "explain to a child or someone with zero medical knowledge."
+        ),
+        "medium": (
+            "Use simple language but you may mention the medical term once "
+            "alongside its plain-language meaning. Balance clarity with "
+            "enough detail to be genuinely useful."
+        ),
+        "high": (
+            "Provide more comprehensive explanations. You may include "
+            "additional relevant context (e.g. why a finding matters, common "
+            "causes, what typically happens next) while still keeping "
+            "language patient-friendly and avoiding diagnosis."
+        ),
+    }
+    return mapping.get((detail_level or "medium").lower(), mapping["medium"])
+
+
+def _translate_findings_and_terms(findings, retrieved_terms, language, provider, ollama_model):
+    """
+    Findings list aur term meanings ko bhi translate karta hai —
+    yeh knowledge_base.json se seedha English mein aate hain, isliye
+    inhe alag se AI se translate karwana padta hai.
+    Returns: (translated_findings, translated_terms)
+    """
+    if not language or language.strip().lower() == "english":
+        return findings, retrieved_terms
+
+    if not findings and not retrieved_terms:
+        return findings, retrieved_terms
+
+    language_instruction = _get_language_instruction(language)
+
+    payload = {
+        "findings": findings,
+        "terms": [
+            {"term": item.get("term", ""), "meaning": item.get("meaning", "")}
+            for item in retrieved_terms
+        ]
+    }
+
+    translate_prompt = f"""Translate ONLY the text values in this JSON into the target language below.
+
+{language_instruction}
+
+STRICT RULES:
+- Output MUST be valid JSON only.
+- Do NOT include any explanation, preamble, or text before or after the JSON.
+- Do NOT wrap the JSON in markdown code fences.
+- Keep the JSON structure EXACTLY the same (same keys, same array order, same number of items).
+- Only translate the "findings" array text and the "meaning" field inside "terms".
+- Keep the "term" field (medical term name) UNCHANGED — do not translate it.
+
+JSON to translate:
+{json.dumps(payload, ensure_ascii=False)}
+
+Respond with ONLY the translated JSON object, starting with {{ and ending with }}.
+"""
+
+    try:
+        raw = generate_with_provider(
+            translate_prompt,
+            provider,
+            detected_terms=[],
+            ollama_model=ollama_model
+        )
+
+        if not raw:
+            return findings, retrieved_terms
+
+        raw = str(raw).strip()
+        raw = raw.replace("```json", "").replace("```JSON", "").replace("```", "")
+        first_brace = raw.find("{")
+        last_brace  = raw.rfind("}")
+
+        if first_brace == -1 or last_brace == -1 or last_brace < first_brace:
+            return findings, retrieved_terms
+
+        json_str = raw[first_brace:last_brace + 1]
+        translated = json.loads(json_str)
+
+        translated_findings   = translated.get("findings", findings)
+        translated_terms_raw  = translated.get("terms", [])
+
+        translated_terms = []
+        for i, item in enumerate(retrieved_terms):
+            new_item = dict(item)
+            if i < len(translated_terms_raw):
+                new_item["meaning"] = translated_terms_raw[i].get("meaning", item.get("meaning", ""))
+            translated_terms.append(new_item)
+
+        if len(translated_findings) != len(findings):
+            translated_findings = findings
+        if len(translated_terms) != len(retrieved_terms):
+            translated_terms = retrieved_terms
+
+        return translated_findings, translated_terms
+
+    except Exception as e:
+        print(f"⚠️ Translation failed with error: {e}")
+        return findings, retrieved_terms
+
+
+def generate_explanation(
+    report_text,
+    provider="ollama",
+    user_question="",
+    ollama_model="llama3.2:1b",
+    language="English",
+    answer_length="standard",
+    detail_level="medium",
+    allow_fallback=True,
+):
 
     raw_retrieved_terms = retrieve_relevant_info(report_text)
 
@@ -180,6 +313,8 @@ def generate_explanation(report_text, provider="ollama", user_question="", ollam
         confirmed_terms_block = "No specific medical terms were detected."
 
     language_instruction = _get_language_instruction(language)
+    length_instruction    = get_length_instruction(answer_length)
+    detail_instruction    = get_detail_instruction(detail_level)
 
     # ── Small model ke liye simple plain-text prompt ──
     is_small_model = (provider == "ollama" and ollama_model in ["llama3.2:1b", "llama3.2:3b"])
@@ -188,6 +323,8 @@ def generate_explanation(report_text, provider="ollama", user_question="", ollam
         prompt = f"""You are a helpful assistant explaining a radiology report to a patient in simple language.
 
 IMPORTANT LANGUAGE INSTRUCTION: {language_instruction}
+IMPORTANT LENGTH INSTRUCTION: {length_instruction}
+IMPORTANT DETAIL LEVEL INSTRUCTION: {detail_instruction}
 
 Report:
 {report_text}
@@ -214,12 +351,13 @@ You are a radiology report explanation assistant for normal patients.
 
 Rules:
 - Use simple language only
-- Use short bullet points
 - Do not diagnose
 - Do not give treatment or medicine advice
 - Explain like the reader has no medical background
 - CRITICAL: Every term in Confirmed Detected Terms MUST appear as a real finding
 - IMPORTANT LANGUAGE INSTRUCTION: {language_instruction}
+- IMPORTANT LENGTH INSTRUCTION: {length_instruction}
+- IMPORTANT DETAIL LEVEL INSTRUCTION: {detail_instruction}
 
 Radiology Report:
 {report_text}
@@ -229,7 +367,7 @@ Medical Context:
 
 {confirmed_terms_block}
 
-Return ONLY this HTML, nothing else (but write the actual text content in the language specified above):
+Return ONLY this HTML, nothing else (but write the actual text content in the language specified above, following the length and detail instructions):
 
 <div class="ai-output">
 
@@ -278,10 +416,12 @@ Return ONLY this HTML, nothing else (but write the actual text content in the la
     ai_summary = ai_summary.replace("```html", "").replace("```HTML", "").replace("```Html", "").replace("```", "")
     ai_summary = ai_summary.strip()
 
-    # ── Convert to clean HTML ──
     ai_summary = _convert_to_html(ai_summary)
 
-    # ── Risk level — dataset ke severity/urgency/red_flag se ──
+    findings, retrieved_terms = _translate_findings_and_terms(
+        findings, retrieved_terms, language, provider, ollama_model
+    )
+
     risk_level = "Low"
 
     for item in retrieved_terms:
@@ -298,6 +438,8 @@ Return ONLY this HTML, nothing else (but write the actual text content in the la
     if risk_level == "Low" and len(retrieved_terms) >= 3:
         risk_level = "Medium"
 
+    verification = verify_output(ai_summary, retrieved_terms)
+
     return {
         "summary":        ai_summary,
         "risk_level":     risk_level,
@@ -306,5 +448,6 @@ Return ONLY this HTML, nothing else (but write the actual text content in the la
         "terms":          retrieved_terms,
         "detected_terms": retrieved_terms,
         "provider":       provider,
-        "question":       user_question
+        "question":       user_question,
+        "verification":   verification,
     }

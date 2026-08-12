@@ -1,21 +1,13 @@
 """
 ClearScan — Radiology Report Explainer
 3-page Flask app: Home → Analyze → Results + Chatbot
-MongoDB-backed conversations: every "Analyse New Report" creates its
-own conversation (report + chat thread), permanently saved, reopenable from
-the sidebar even after a server restart or new browser session on the same
-device (via a long-lived anon_id cookie — no login required yet).
-Also supports per-conversation answer_length + detail_level preferences.
-Now with output verification: every AI-generated explanation and chat reply
-is checked against confirmed dataset terms, and results are logged to
-MongoDB for accuracy/hallucination-rate analysis.
-Also supports renaming and deleting conversations from the sidebar.
 """
 
 import os
 import re
 import io
 import uuid
+import certifi
 import pdfplumber
 from datetime import datetime
 from dotenv import load_dotenv
@@ -40,15 +32,18 @@ CORS(app, supports_credentials=True)
 
 # ── MONGODB CONNECTION ──────────────────────────────────────────────────────
 MONGO_URI = os.environ.get("MONGO_URI")
-mongo_client = MongoClient(MONGO_URI)
+mongo_client = MongoClient(
+    MONGO_URI,
+    tlsCAFile=certifi.where(),
+    serverSelectionTimeoutMS=10000,
+    connectTimeoutMS=10000,
+    socketTimeoutMS=10000,
+    retryWrites=True,
+)
 db = mongo_client["clearscan"]
 conversations_col = db["conversations"]
-verification_logs_col = db["verification_logs"]   # stores every verification check result
+verification_logs_col = db["verification_logs"]
 
-# Owner cookie: identifies "this browser" so history persists across visits
-# without requiring login. When real login (Epic 5) is added later, this
-# same owner_id field just gets set to the logged-in user's id instead —
-# nothing else in this file needs to change.
 OWNER_COOKIE_NAME = "cs_owner_id"
 OWNER_COOKIE_MAX_AGE = 60 * 60 * 24 * 365  # 1 year
 
