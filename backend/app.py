@@ -7,6 +7,9 @@ import os
 import re
 import io
 import uuid
+import time
+import signal
+import subprocess
 import certifi
 import pdfplumber
 from datetime import datetime
@@ -17,7 +20,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 from services.output_verifier import verify_output
 
-load_dotenv()
+load_dotenv(override=True)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -30,19 +33,73 @@ app = Flask(
 app.secret_key = os.environ.get("FLASK_SECRET", "clearscan-secret-key-2025")
 CORS(app, supports_credentials=True)
 
-# ── MONGODB CONNECTION ──────────────────────────────────────────────────────
+# ── MONGODB CONNECTION (auto DNS-flush + retry + clean Ctrl+C) ─────────────
+
+def _flush_dns():
+    """Windows DNS cache clear karta hai — stale connection issues rokta hai."""
+    try:
+        subprocess.run(["ipconfig", "/flushdns"], capture_output=True, timeout=5)
+    except Exception:
+        pass  # agar Windows nahi hai ya command fail ho, chup-chaap ignore karo
+
+
+def _connect_mongo_with_retry(uri, max_attempts=3):
+    """
+    MongoDB se connect karta hai, aur agar fail ho to DNS flush karke
+    dubara try karta hai — bina user ko manually kuch karna pade.
+    """
+    for attempt in range(1, max_attempts + 1):
+        try:
+            client = MongoClient(
+                uri,
+                tlsCAFile=certifi.where(),
+                serverSelectionTimeoutMS=8000,
+                connectTimeoutMS=8000,
+                socketTimeoutMS=8000,
+                retryWrites=True,
+            )
+            client.admin.command("ping")  # turant test karo connection sahi hai ya nahi
+            print(f"✅ MongoDB connected (attempt {attempt})")
+            return client
+        except Exception as e:
+            print(f"⚠️ MongoDB connection attempt {attempt} failed: {e}")
+            if attempt < max_attempts:
+                print("   Flushing DNS and retrying...")
+                _flush_dns()
+                time.sleep(2)
+    print("❌ MongoDB could not connect after retries. App will run, but history/verification features will be unavailable until connection is restored.")
+    return None
+
+
+def _connect_mongo_safely(uri, max_attempts=3):
+    """
+    MongoDB se connect karta hai, DNS lookup ke waqt Ctrl+C ka
+    messy traceback na aaye isliye SIGINT ko thodi der ke liye hold karta hai.
+    """
+    original_handler = signal.getsignal(signal.SIGINT)
+
+    def _quiet_interrupt_handler(signum, frame):
+        raise SystemExit(0)  # clean exit, koi traceback nahi
+
+    try:
+        signal.signal(signal.SIGINT, _quiet_interrupt_handler)
+    except (ValueError, OSError):
+        pass  # kuch environments me signal set nahi hota, ignore karo
+
+    try:
+        return _connect_mongo_with_retry(uri, max_attempts)
+    finally:
+        try:
+            signal.signal(signal.SIGINT, original_handler)  # normal Ctrl+C wapas laga do
+        except (ValueError, OSError):
+            pass
+
+
 MONGO_URI = os.environ.get("MONGO_URI")
-mongo_client = MongoClient(
-    MONGO_URI,
-    tlsCAFile=certifi.where(),
-    serverSelectionTimeoutMS=10000,
-    connectTimeoutMS=10000,
-    socketTimeoutMS=10000,
-    retryWrites=True,
-)
-db = mongo_client["clearscan"]
-conversations_col = db["conversations"]
-verification_logs_col = db["verification_logs"]
+mongo_client = _connect_mongo_safely(MONGO_URI)
+db = mongo_client["clearscan"] if mongo_client is not None else None
+conversations_col = db["conversations"] if db is not None else None
+verification_logs_col = db["verification_logs"] if db is not None else None
 
 OWNER_COOKIE_NAME = "cs_owner_id"
 OWNER_COOKIE_MAX_AGE = 60 * 60 * 24 * 365  # 1 year
@@ -232,6 +289,8 @@ def log_verification(conv_id, provider, language, verification, source):
     Yehi tumhara research data hai — /verification-stats isi collection se
     accuracy numbers nikalta hai.
     """
+    if verification_logs_col is None:
+        return
     try:
         verification_logs_col.insert_one({
             "conv_id":       conv_id,
@@ -254,8 +313,12 @@ def create_conversation(owner_id, report_text, provider, ollama_model, language,
     """
     Inserts a new conversation document into MongoDB, trims this owner's
     conversations to MAX_CONVERSATIONS (deletes oldest if over), and
-    returns the new conversation's id as a string.
+    returns the new conversation's id as a string. Returns None if MongoDB
+    is currently unavailable — the caller handles this gracefully.
     """
+    if conversations_col is None:
+        return None
+
     detected_terms = results.get("detected_terms", []) if isinstance(results, dict) else []
 
     doc = {
@@ -281,18 +344,22 @@ def create_conversation(owner_id, report_text, provider, ollama_model, language,
         "timestamp":     datetime.utcnow(),
     }
 
-    result = conversations_col.insert_one(doc)
-    conv_id = str(result.inserted_id)
+    try:
+        result = conversations_col.insert_one(doc)
+        conv_id = str(result.inserted_id)
 
-    # keep only the most recent MAX_CONVERSATIONS for this owner
-    owner_convs = list(
-        conversations_col.find({"owner_id": owner_id}).sort("timestamp", -1)
-    )
-    if len(owner_convs) > MAX_CONVERSATIONS:
-        for extra in owner_convs[MAX_CONVERSATIONS:]:
-            conversations_col.delete_one({"_id": extra["_id"]})
+        # keep only the most recent MAX_CONVERSATIONS for this owner
+        owner_convs = list(
+            conversations_col.find({"owner_id": owner_id}).sort("timestamp", -1)
+        )
+        if len(owner_convs) > MAX_CONVERSATIONS:
+            for extra in owner_convs[MAX_CONVERSATIONS:]:
+                conversations_col.delete_one({"_id": extra["_id"]})
 
-    return conv_id
+        return conv_id
+    except Exception as e:
+        print(f"⚠️ MongoDB unavailable, conversation not saved: {e}")
+        return None
 
 
 def serialize_conv(doc):
@@ -446,7 +513,7 @@ def analyze_ajax():
     log_verification(conv_id, provider, language, explanation_verification, source="explanation")
 
     return jsonify({
-        "conversation_id": conv_id,   # ← frontend saves this and sends it back on /chat
+        "conversation_id": conv_id,   # ← frontend saves this and sends it back on /chat; may be None if DB is down
         "risk_level":  results.get("risk_level",  "unknown"),
         "risk_reason": results.get("risk_reason", ""),
         "summary":     results.get("summary",     ""),
@@ -460,25 +527,33 @@ def analyze_ajax():
 
 @app.route("/conversations", methods=["GET"])
 def list_conversations():
-    docs = conversations_col.find({"owner_id": g.owner_id}).sort("timestamp", -1)
-    items = [
-        {
-            "id":         str(d["_id"]),
-            "preview":    d["preview"],
-            "title":      d.get("custom_title"),   # NEW — renamed title, if set
-            "provider":   d["provider"],
-            "risk_level": d["risk_level"],
-            "date":       d["date"],
-        }
-        for d in docs
-    ]
-    return jsonify({"conversations": items})
+    if conversations_col is None:
+        return jsonify({"conversations": [], "warning": "History temporarily unavailable"})
+    try:
+        docs = conversations_col.find({"owner_id": g.owner_id}).sort("timestamp", -1)
+        items = [
+            {
+                "id":         str(d["_id"]),
+                "preview":    d["preview"],
+                "title":      d.get("custom_title"),   # NEW — renamed title, if set
+                "provider":   d["provider"],
+                "risk_level": d["risk_level"],
+                "date":       d["date"],
+            }
+            for d in docs
+        ]
+        return jsonify({"conversations": items})
+    except Exception as e:
+        print(f"⚠️ MongoDB unavailable: {e}")
+        return jsonify({"conversations": [], "warning": "History temporarily unavailable"})
 
 
 # ── CONVERSATIONS: reload one full conversation (report + chat) ───────────
 
 @app.route("/conversation/<conv_id>", methods=["GET"])
 def get_conversation(conv_id):
+    if conversations_col is None:
+        return jsonify({"error": "Database temporarily unavailable"}), 503
     try:
         doc = conversations_col.find_one({"_id": ObjectId(conv_id), "owner_id": g.owner_id})
     except Exception:
@@ -494,6 +569,8 @@ def get_conversation(conv_id):
 
 @app.route("/conversation/<conv_id>", methods=["DELETE"])
 def delete_conversation(conv_id):
+    if conversations_col is None:
+        return jsonify({"error": "Database temporarily unavailable"}), 503
     try:
         result = conversations_col.delete_one({"_id": ObjectId(conv_id), "owner_id": g.owner_id})
     except Exception:
@@ -507,6 +584,8 @@ def delete_conversation(conv_id):
 
 @app.route("/conversation/<conv_id>/rename", methods=["POST"])
 def rename_conversation(conv_id):
+    if conversations_col is None:
+        return jsonify({"error": "Database temporarily unavailable"}), 503
     data = request.get_json(silent=True) or {}
     title = (data.get("title") or "").strip()[:100]
     if not title:
@@ -531,7 +610,7 @@ def chat():
     user_msg = data.get("message", "").strip()
     conv_id  = data.get("conversation_id")
 
-    if not conv_id:
+    if not conv_id or conversations_col is None:
         return jsonify({"reply": "I don't have your report loaded. Please go back and submit your report first."})
 
     try:
@@ -606,15 +685,18 @@ def chat():
     chat_messages.append({"role": "assistant", "content": reply})
     chat_messages = chat_messages[-(MAX_CHAT_TURNS * 2):]
 
-    conversations_col.update_one(
-        {"_id": ObjectId(conv_id)},
-        {"$set": {
-            "chat_messages": chat_messages,
-            "language": language,
-            "answer_length": answer_length,
-            "detail_level": detail_level
-        }}
-    )
+    try:
+        conversations_col.update_one(
+            {"_id": ObjectId(conv_id)},
+            {"$set": {
+                "chat_messages": chat_messages,
+                "language": language,
+                "answer_length": answer_length,
+                "detail_level": detail_level
+            }}
+        )
+    except Exception as e:
+        print(f"⚠️ Could not save chat turn to MongoDB: {e}")
 
     return jsonify({
         "reply": reply,
@@ -626,6 +708,8 @@ def chat():
 
 @app.route("/verification-stats", methods=["GET"])
 def verification_stats():
+    if verification_logs_col is None:
+        return jsonify({"stats": [], "warning": "Database temporarily unavailable"})
     pipeline = [
         {"$group": {
             "_id": {"provider": "$provider", "source": "$source"},
