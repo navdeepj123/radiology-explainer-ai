@@ -2,6 +2,7 @@ import re
 import json
 from services.retriever import retrieve_relevant_info
 from services.llm_router import generate_with_provider
+from services.output_verifier import verify_output
 
 
 def _convert_to_html(text):
@@ -286,6 +287,7 @@ def generate_explanation(
     language="English",
     answer_length="standard",
     detail_level="medium",
+    allow_fallback=True,
 ):
 
     raw_retrieved_terms = retrieve_relevant_info(report_text)
@@ -398,7 +400,8 @@ Return ONLY this HTML, nothing else (but write the actual text content in the la
         prompt,
         provider,
         detected_terms=retrieved_terms,
-        ollama_model=ollama_model
+        ollama_model=ollama_model,
+        allow_fallback=allow_fallback
     )
 
     if ai_summary is None:
@@ -435,6 +438,8 @@ Return ONLY this HTML, nothing else (but write the actual text content in the la
     if risk_level == "Low" and len(retrieved_terms) >= 3:
         risk_level = "Medium"
 
+    verification = verify_output(ai_summary, retrieved_terms)
+
     return {
         "summary":        ai_summary,
         "risk_level":     risk_level,
@@ -443,5 +448,6 @@ Return ONLY this HTML, nothing else (but write the actual text content in the la
         "terms":          retrieved_terms,
         "detected_terms": retrieved_terms,
         "provider":       provider,
-        "question":       user_question
+        "question":       user_question,
+        "verification":   verification,
     }

@@ -1,0 +1,64 @@
+id,provider,report_type,latency_sec,success,term_recall,expected_severity,actual_risk_level,severity_match,est_prompt_tokens,est_completion_tokens,est_cost_usd
+1,groq,Chest X-Ray,2.037,True,0.75,Medium,Medium,True,43,331,0.000287
+2,groq,Chest X-Ray,1.089,True,0.0,Low,Low,True,31,376,0.000315
+3,groq,Chest X-Ray,1.225,True,0.75,Medium,Medium,True,27,329,0.000276
+4,groq,Chest X-Ray,1.017,True,0.5,Medium,Low,False,29,343,0.000288
+5,groq,Chest X-Ray,0.82,True,0.333,High,Medium,False,20,244,0.000205
+6,groq,Chest X-Ray,0.87,True,0.333,High,High,True,28,291,0.000246
+7,groq,Chest X-Ray,0.991,True,0.75,High,Low,False,24,292,0.000245
+8,groq,Chest CT,1.0,True,0.0,Medium,High,False,30,314,0.000266
+9,groq,Chest CT,0.882,True,0.2,High,High,True,28,324,0.000272
+10,groq,Brain CT,0.824,True,0.0,Low,Low,True,33,242,0.000211
+11,groq,Brain CT,1.146,True,0.0,High,High,True,29,331,0.000279
+12,groq,Brain CT,1.431,True,1.0,High,High,True,36,374,0.000317
+13,groq,Brain CT,0.139,False,0.0,High,High,True,37,222,0.000197
+14,groq,Brain MRI,0.129,False,0.0,Low,Low,True,30,222,0.000193
+15,groq,Brain MRI,0.134,False,0.0,Medium,Medium,True,32,224,0.000196
+16,groq,Brain MRI,0.134,False,0.0,High,High,True,32,222,0.000194
+17,groq,Abdominal CT,0.13,False,,Low,Low,True,32,222,0.000194
+18,groq,Abdominal CT,0.128,False,0.0,High,Low,False,38,222,0.000198
+19,groq,Abdominal CT,0.138,False,0.0,High,High,True,31,222,0.000194
+20,groq,Abdominal CT,0.142,False,0.0,High,High,True,34,222,0.000195
+21,groq,Abdominal Ultrasound,0.126,False,0.0,Low,Low,True,40,222,0.000199
+22,groq,Abdominal Ultrasound,0.154,False,0.0,High,Low,False,39,224,0.0002
+23,groq,Abdominal Ultrasound,0.118,False,0.0,Medium,Medium,True,29,222,0.000192
+24,groq,Spine MRI Lumbar,0.145,False,0.0,Medium,Medium,True,35,222,0.000196
+25,groq,Spine MRI Lumbar,0.148,False,0.0,High,Medium,False,39,222,0.000198
+26,groq,Spine MRI Cervical,0.142,False,0.0,High,Medium,False,34,222,0.000195
+27,groq,Knee MRI,0.129,False,0.0,High,Low,False,40,222,0.000199
+28,groq,Knee MRI,0.136,False,0.0,Medium,Medium,True,37,222,0.000197
+29,groq,Hip MRI,0.146,False,0.0,High,Medium,False,33,222,0.000195
+30,groq,Pelvis X-Ray,0.127,False,0.0,High,Low,False,28,222,0.000192
+31,groq,Shoulder MRI,0.124,False,0.0,High,Medium,False,39,222,0.000198
+32,groq,Cardiac MRI,0.138,False,0.0,High,Medium,False,41,222,0.0002
+33,groq,Cardiac MRI,0.128,False,0.0,Low,Low,True,36,222,0.000197
+34,groq,Cardiac CT,0.116,False,0.0,High,Low,False,26,222,0.000191
+35,groq,Abdominal CT,0.159,False,0.0,High,High,True,33,222,0.000195
+36,groq,Chest CT,0.139,False,0.0,Medium,Medium,True,33,222,0.000195
+37,groq,Wrist X-Ray,0.13,False,0.0,Medium,Low,False,29,222,0.000192
+38,groq,Ankle X-Ray,0.148,False,0.0,High,High,True,31,222,0.000194
+39,groq,Cervical Spine X-Ray,0.151,False,0.0,High,High,True,29,222,0.000192
+40,groq,Chest X-Ray,0.127,False,0.0,High,High,True,32,223,0.000195
+41,groq,Chest X-Ray,0.147,False,0.0,Medium,High,False,38,222,0.000198
+42,groq,Abdominal CT,0.125,False,0.0,High,Low,False,28,222,0.000192
+43,groq,Brain MRI,0.139,False,0.0,High,Low,False,26,222,0.000191
+44,groq,Pelvis X-Ray,0.135,False,0.0,High,Low,False,37,224,0.000199
+45,groq,Spine MRI Thoracic,0.116,False,0.0,Medium,High,False,24,222,0.00019
+46,groq,Knee X-Ray,0.122,False,0.0,High,Low,False,29,222,0.000192
+47,groq,Abdominal Ultrasound,0.133,False,0.0,Low,Low,True,34,224,0.000197
+48,groq,Chest X-Ray,0.113,False,0.0,High,Medium,False,34,222,0.000195
+49,groq,Knee MRI,0.115,False,0.0,High,Low,False,34,222,0.000195
+50,groq,Chest CT,0.118,False,0.0,High,Low,False,31,222,0.000194
+1,gemini,Chest X-Ray,5.308,True,0.75,Medium,Medium,True,43,330,0.000136
+2,gemini,Chest X-Ray,3.094,True,1.0,Low,Low,True,31,386,0.000158
+3,gemini,Chest X-Ray,3.828,True,0.75,Medium,Medium,True,27,352,0.000144
+4,gemini,Chest X-Ray,2.955,True,0.75,Medium,Low,False,29,450,0.000183
+5,gemini,Chest X-Ray,2.522,True,0.333,High,Medium,False,20,234,9.6e-05
+6,gemini,Chest X-Ray,3.826,True,1.0,High,High,True,28,322,0.000132
+7,gemini,Chest X-Ray,2.928,True,0.75,High,Low,False,24,409,0.000166
+8,gemini,Chest CT,3.069,True,0.0,Medium,High,False,30,287,0.000118
+9,gemini,Chest CT,2.762,True,0.4,High,High,True,28,360,0.000147
+10,gemini,Brain CT,2.562,True,0.0,Low,Low,True,33,233,9.7e-05
+11,gemini,Brain CT,3.27,True,0.0,High,High,True,29,337,0.000138
+12,gemini,Brain CT,3.068,True,1.0,High,High,True,36,361,0.000148
+13,gemini,Brain CT,2.762,True,1.0,High,High,True,37,289,0.000119

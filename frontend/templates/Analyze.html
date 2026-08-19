@@ -33,6 +33,15 @@
       <div class="sb-sub">Patient Health Tools</div>
     </div>
     <div class="sb-tool"><span>🫁</span><span>Radiology Explainer</span></div>
+
+    <!-- Prominent New Report button -->
+    <div class="sb-new-wrap">
+      <button class="sb-new-btn" onclick="onNewReport()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        New Report
+      </button>
+    </div>
+
     <div class="sb-sec">AI Provider</div>
     <div class="sb-row">
       <div class="sb-lbl">Select model</div>
@@ -77,9 +86,13 @@
       </select>
     </div>
 
-    <div class="sb-hist-sec">Recent Reports</div>
+    <!-- CHATS — search + list with edit/delete on hover -->
+    <div class="sb-hist-sec">Chats</div>
+    <div class="sb-search-wrap">
+      <input type="text" class="sb-search-input" id="chatSearchInput" placeholder="🔍 Search chats…" oninput="onChatSearch(this.value)">
+    </div>
     <div class="sb-hist-list" id="sbHistList">
-      <div class="sb-hist-empty" id="sbHistEmpty">No reports yet</div>
+      <div class="sb-hist-empty" id="sbHistEmpty">No chats yet</div>
     </div>
     <div class="sb-privacy"><strong>🔒 Private</strong><br>Never stored on our servers.</div>
   </aside>
