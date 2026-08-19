@@ -34,6 +34,7 @@ var selFile      = null;
 var isAnalyzed   = false;
 var savedText    = '';
 var historyArr   = [];
+var activeConversationId = null;
 var lastText     = '';
 var lastFile     = null;
 
@@ -50,29 +51,55 @@ var ollamaHints = {
 };
 
 // ─────────────────────────────────────────
-// HISTORY
+// FLOATING CHAT PANEL TOGGLE
 // ─────────────────────────────────────────
-function addToHistory(reportText, riskLevel, prov) {
+function toggleChatPanel() {
+  var panel = document.getElementById('chatSidebar');
+  var overlay = document.getElementById('chatOverlay');
+  if (panel.classList.contains('open')) {
+    closeChatPanel();
+  } else {
+    panel.classList.add('open');
+    overlay.classList.add('show');
+  }
+}
+function closeChatPanel() {
+  document.getElementById('chatSidebar').classList.remove('open');
+  document.getElementById('chatOverlay').classList.remove('show');
+}
+
+// ─────────────────────────────────────────
+// HISTORY (multi-conversation sidebar)
+// ─────────────────────────────────────────
+function addToHistory(reportText, riskLevel, prov, convId) {
   var now  = new Date();
   var time = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
   historyArr.unshift({
     preview: reportText.substring(0, 80).trim(),
     risk:    (riskLevel || 'unknown').toLowerCase(),
     prov:    prov.toUpperCase(),
-    time:    time
+    time:    time,
+    id:      convId
   });
   if (historyArr.length > 5) historyArr.pop();
+  renderHistoryList();
+}
+
+function renderHistoryList() {
   var list  = document.getElementById('sbHistList');
   var empty = document.getElementById('sbHistEmpty');
-  if (empty) empty.style.display = 'none';
+  if (empty) empty.style.display = historyArr.length ? 'none' : 'block';
   list.querySelectorAll('.sh-item').forEach(function(el){ el.remove(); });
+
   historyArr.forEach(function(item) {
     var rLabel = item.risk==='high'   ? '🔴 High risk'
                : item.risk==='medium' ? '🟡 Medium risk'
                : item.risk==='low'    ? '🟢 Low risk'
                :                        '⚪ Unknown';
     var div = document.createElement('div');
-    div.className = 'sh-item';
+    div.className = 'sh-item' + (item.id === activeConversationId ? ' active' : '');
+    div.style.cursor = 'pointer';
+    div.onclick = function(){ loadConversation(item.id); };
     div.innerHTML =
       '<div class="sh-top">'
         + '<span class="sh-prov">'+item.prov+'</span>'
@@ -98,10 +125,14 @@ function onProviderChange(val) {
   document.getElementById('sbOllamaWrap').style.display = (val === 'ollama') ? 'block' : 'none';
 
   var sidebar = document.getElementById('chatSidebar');
+  var fab = document.getElementById('chatFab');
   if (val === 'ollama') {
     sidebar.classList.add('hidden');
+    closeChatPanel();
+    fab.classList.add('hide');
   } else {
     sidebar.classList.remove('hidden');
+    fab.classList.remove('hide');
   }
 }
 
@@ -165,8 +196,12 @@ function onMainSend() {
     showErr('Please paste your report or attach a file.');
     return;
   }
+
   hideErr();
-  removeEmpty();
+  // fresh report = fresh visual thread — purani conversation ka view clear karo
+  document.getElementById('msgs').innerHTML = '';
+  resetChatPanel();   // csMsgs ko bhi "submit your report" notice pe wapas laata hai
+
   savedText = text;
   lastText  = text;
   lastFile  = selFile;
@@ -201,7 +236,8 @@ function runAnalysis(text, file) {
       } else {
         renderBotResult(data);
         activateChatbot();
-        addToHistory(savedText, data.risk_level, provider);
+        activeConversationId = data.conversation_id;
+        addToHistory(savedText, data.risk_level, provider, data.conversation_id);
         isAnalyzed = true;
         document.getElementById('statusPill').textContent = 'Analysis complete';
         document.getElementById('inputArea').style.display    = 'none';
@@ -263,6 +299,8 @@ function onCopyUser(btn) {
 function onNewReport() {
   isAnalyzed = false;
   savedText  = '';
+  activeConversationId = null;
+  document.getElementById('msgs').innerHTML = '';
   document.getElementById('inputArea').style.display    = 'block';
   document.getElementById('newReportBar').style.display = 'none';
   document.getElementById('mainTa').value        = '';
@@ -271,6 +309,7 @@ function onNewReport() {
   document.getElementById('statusPill').textContent     = 'Ready';
   document.getElementById('mainSendBtn').disabled       = false;
   document.getElementById('mainTa').focus();
+  closeChatPanel();
   document.getElementById('csMsgs').innerHTML =
     '<div class="cs-notice" id="csNotice">'
     + '<div class="cs-notice-icon">🫁</div>'
@@ -281,6 +320,53 @@ function onNewReport() {
     + '</div>';
   document.getElementById('csTa').disabled      = true;
   document.getElementById('csSendBtn').disabled = true;
+  renderHistoryList();   // active highlight hata do kyunki koi active chat nahi hai ab
+}
+
+function loadConversation(convId) {
+  if (!convId || convId === activeConversationId) return;
+
+  fetch('/conversation/' + convId)
+    .then(function(res){ return res.json(); })
+    .then(function(conv) {
+      if (conv.error) { showErr('Could not load that report.'); return; }
+
+      activeConversationId = convId;
+      provider = conv.provider;
+      onProviderChange(provider);
+
+      if (conv.ollama_model) {
+        ollamaModel = conv.ollama_model;
+        var ollamaSel = document.getElementById('ollamaModelSel');
+        if (ollamaSel) ollamaSel.value = ollamaModel;
+        document.getElementById('ollamaModelHint').textContent = ollamaHints[ollamaModel] || '';
+      }
+
+      answerLength = conv.answer_length || 'standard';
+      detailLevel  = conv.detail_level  || 'medium';
+      var lenSel = document.getElementById('lengthSel');
+      var detSel = document.getElementById('detailSel');
+      if (lenSel) lenSel.value = answerLength;
+      if (detSel) detSel.value = detailLevel;
+
+      document.getElementById('msgs').innerHTML = '';
+      appendUserBubble(conv.report_text.substring(0, 150), null);
+      renderBotResult(conv.results);
+      activateChatbot();
+
+      document.getElementById('csMsgs').innerHTML = '';
+      conv.chat_messages.forEach(function(m) {
+        csAppend(m.content, m.role === 'user' ? 'user' : 'bot');
+      });
+
+      isAnalyzed = true;
+      document.getElementById('inputArea').style.display    = 'none';
+      document.getElementById('newReportBar').style.display = 'flex';
+      document.getElementById('statusPill').textContent     = 'Analysis complete';
+
+      renderHistoryList();
+    })
+    .catch(function(){ showErr('Could not load that report.'); });
 }
 
 // ─────────────────────────────────────────
@@ -333,6 +419,9 @@ function activateChatbot() {
   document.getElementById('csTa').disabled      = false;
   document.getElementById('csTa').placeholder   = 'Ask about your report…';
   document.getElementById('csSendBtn').disabled = false;
+
+  // panel khud khul jaaye jab analysis ready ho
+  toggleChatPanel();
 }
 
 // ─────────────────────────────────────────
@@ -371,6 +460,9 @@ function onOcSend() {
     body: JSON.stringify({
       message: msg,
       language: ClearScanControls.getLanguageName(),
+      conversation_id: activeConversationId,
+      provider: provider,
+      ollama_model: ollamaModel,
       answer_length: answerLength,
       detail_level: detailLevel
     })
@@ -546,6 +638,7 @@ function onCsSend() {
     body: JSON.stringify({
       message: msg,
       language: ClearScanControls.getLanguageName(),
+      conversation_id: activeConversationId,
       answer_length: answerLength,
       detail_level: detailLevel
     })

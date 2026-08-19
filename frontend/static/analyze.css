@@ -219,8 +219,52 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 .oc-send:disabled{background:var(--dim);cursor:not-allowed}
 
 /* RIGHT CHAT SIDEBAR */
-.chat-sidebar{width:280px;flex-shrink:0;background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transition:width .25s ease}
-.chat-sidebar.hidden{width:0;border-left:none;overflow:hidden}
+/* FLOATING CHAT TOGGLE BUTTON */
+.chat-fab{
+  position:fixed;right:0;top:50%;transform:translateY(-50%);
+  width:38px;height:130px;
+  background:var(--blue);color:#fff;
+  border:none;border-radius:10px 0 0 10px;
+  cursor:pointer;z-index:200;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:-2px 0 12px rgba(0,0,0,.25);
+  transition:background .15s,width .15s;
+}
+.chat-fab:hover{background:var(--blue-dk)}
+.chat-fab.hide{display:none}
+.chat-fab-text{
+  writing-mode:vertical-rl;transform:rotate(180deg);
+  font-size:.78rem;font-weight:600;letter-spacing:.03em;
+  display:flex;align-items:center;gap:6px;
+}
+.chat-fab-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;flex-shrink:0}
+
+/* FLOATING CHAT PANEL (was sidebar, now overlay) */
+.chat-sidebar{
+  position:fixed;right:0;top:0;bottom:0;
+  width:340px;max-width:90vw;
+  background:var(--bg2);border-left:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:-8px 0 32px rgba(0,0,0,.35);
+  z-index:300;
+  transform:translateX(100%);
+  transition:transform .25s ease;
+}
+.chat-sidebar.open{transform:translateX(0)}
+.chat-sidebar.hidden{display:none}
+
+.chat-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.35);
+  z-index:250;display:none;
+}
+.chat-overlay.show{display:block}
+
+.chat-close-btn{
+  width:26px;height:26px;display:flex;align-items:center;justify-content:center;
+  background:transparent;border:none;color:var(--muted);cursor:pointer;
+  border-radius:6px;transition:background .15s,color .15s;
+}
+.chat-close-btn:hover{background:var(--card2);color:var(--text)}
 .cs-topbar{height:40px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 .85rem;border-bottom:1px solid var(--border);background:var(--bg2)}
 .cs-title-wrap{display:flex;align-items:center;gap:.5rem}
 .cs-avatar{width:26px;height:26px;border-radius:50%;background:var(--blue-soft);border:1px solid var(--blue-soft-b);display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0}

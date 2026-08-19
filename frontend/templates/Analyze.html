@@ -155,46 +155,57 @@
     </div>
   </div>
 
-  <!-- RIGHT CHAT SIDEBAR -->
-  <aside class="chat-sidebar" id="chatSidebar">
-    <div class="cs-topbar">
-      <div class="cs-title-wrap">
-        <div class="cs-avatar">💬</div>
-        <div>
-          <div class="cs-name">ClearScan Assistant</div>
-          <div class="cs-status"><span class="cs-dot"></span>Online · Report-aware</div>
-        </div>
-      </div>
-      <span class="cs-provider-tag" id="csChatTag">GROQ</span>
-    </div>
-    <div class="cs-msgs" id="csMsgs">
-      <div class="cs-notice" id="csNotice">
-        <div class="cs-notice-icon">🫁</div>
-        <p>Submit your radiology report first, then I'll be able to answer your questions about it.</p>
-        <small>Powered by <span id="csNoticeProv">Groq</span></small>
-      </div>
-    </div>
-    <div class="cs-input-wrap">
-      <div class="cs-limit">🔒 Only answers questions about your report</div>
-      <div class="cs-input-row">
-        <textarea class="cs-ta" id="csTa" rows="1"
-          placeholder="Ask about your report…"
-          onkeydown="onCsKey(event)"
-          oninput="onCsGrow(this)"
-          disabled></textarea>
-        <button class="mic-btn" id="csMicBtn" type="button" title="Speak your question"
-                onclick="ClearScanVoice.toggleMic('csTa','csMicBtn','onCsGrow')">
-        </button>
-        <button class="cs-send" id="csSendBtn" onclick="onCsSend()" disabled>
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path d="M1 6h10M7 2l4 4-4 4" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </aside>
-
 </div>
+
+<!-- FLOATING CHAT TOGGLE -->
+<button class="chat-fab" id="chatFab" onclick="toggleChatPanel()">
+  <span class="chat-fab-text"><span class="chat-fab-dot"></span>Assistant</span>
+</button>
+
+<!-- OVERLAY (click bahar karo toh band ho jaye) -->
+<div class="chat-overlay" id="chatOverlay" onclick="closeChatPanel()"></div>
+
+<!-- FLOATING CHAT PANEL -->
+<aside class="chat-sidebar" id="chatSidebar">
+  <div class="cs-topbar">
+    <div class="cs-title-wrap">
+      <div class="cs-avatar">💬</div>
+      <div>
+        <div class="cs-name">ClearScan Assistant</div>
+        <div class="cs-status"><span class="cs-dot"></span>Online · Report-aware</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:.4rem;">
+      <span class="cs-provider-tag" id="csChatTag">GROQ</span>
+      <button class="chat-close-btn" onclick="closeChatPanel()" title="Close">✕</button>
+    </div>
+  </div>
+  <div class="cs-msgs" id="csMsgs">
+    <div class="cs-notice" id="csNotice">
+      <div class="cs-notice-icon">🫁</div>
+      <p>Submit your radiology report first, then I'll be able to answer your questions about it.</p>
+      <small>Powered by <span id="csNoticeProv">Groq</span></small>
+    </div>
+  </div>
+  <div class="cs-input-wrap">
+    <div class="cs-limit">🔒 Only answers questions about your report</div>
+    <div class="cs-input-row">
+      <textarea class="cs-ta" id="csTa" rows="1"
+        placeholder="Ask about your report…"
+        onkeydown="onCsKey(event)"
+        oninput="onCsGrow(this)"
+        disabled></textarea>
+      <button class="mic-btn" id="csMicBtn" type="button" title="Speak your question"
+              onclick="ClearScanVoice.toggleMic('csTa','csMicBtn','onCsGrow')">
+      </button>
+      <button class="cs-send" id="csSendBtn" onclick="onCsSend()" disabled>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M1 6h10M7 2l4 4-4 4" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</aside>
 
 <script src="{{ url_for('static', filename='analyze.js') }}"></script>
 </body>
