@@ -208,7 +208,14 @@
   </aside>
 
 </div>
-
+<div class="term-popup-overlay" id="termPopupOverlay">
+  <div class="term-popup">
+    <button class="term-popup-close" onclick="closeTermPopup()">&times;</button>
+    <h3 id="termPopupTitle"></h3>
+    <p id="termPopupDefinition"></p>
+    <img id="termPopupImage" src="" alt="" style="display:none;">
+  </div>
+</div>
 <script src="{{ url_for('static', filename='analyze.js') }}"></script>
 </body>
 </html>
