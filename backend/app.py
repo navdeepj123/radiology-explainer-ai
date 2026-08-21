@@ -336,6 +336,8 @@ def create_conversation(owner_id, report_text, provider, ollama_model, language,
             "summary":     results.get("summary",     "")        if isinstance(results, dict) else str(results),
             "findings":    results.get("findings",    [])        if isinstance(results, dict) else [],
             "terms":       results.get("terms",       [])        if isinstance(results, dict) else [],
+                "highlighted_terms": results.get("highlighted_terms", [])  if isinstance(results, dict) else [],
+
         },
         "chat_messages": [],
         "preview":       clean_history_text(report_text[:80]),
@@ -513,13 +515,16 @@ def analyze_ajax():
     log_verification(conv_id, provider, language, explanation_verification, source="explanation")
 
     return jsonify({
-        "conversation_id": conv_id,   # ← frontend saves this and sends it back on /chat; may be None if DB is down
-        "risk_level":  results.get("risk_level",  "unknown"),
-        "risk_reason": results.get("risk_reason", ""),
-        "summary":     results.get("summary",     ""),
-        "findings":    results.get("findings",    []),
-        "terms":       results.get("terms",       []),
-        "verification": explanation_verification,
+         "conversation_id":   conv_id,
+        "report_text":       report_text,                              # NEW — ye line missing thi
+        "risk_level":        results.get("risk_level",  "unknown"),
+        "risk_reason":       results.get("risk_reason", ""),
+        "summary":           results.get("summary",     ""),
+        "findings":          results.get("findings",    []),
+        "terms":             results.get("terms",       []),
+        "verification":      explanation_verification,
+        "highlighted_terms": results.get("highlighted_terms", []),
+
     })
 
 
