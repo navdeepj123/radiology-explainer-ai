@@ -1,6 +1,6 @@
 import re
 import json
-from services.retriever import retrieve_relevant_info
+from services.retriever import retrieve_relevant_info, find_term_positions
 from services.llm_router import generate_with_provider
 from services.output_verifier import verify_output
 
@@ -90,32 +90,16 @@ def _convert_to_html(text):
 def _filter_terms_actually_in_report(report_text, retrieved_terms):
     """
     Sirf woh terms rakho jo report_text mein ACTUALLY likhe
-    hain. Isse retriever ke false-positive matches (jaise
-    semantic similarity se aaye galat terms) AI ke summary
-    ya chatbot mein "confirmed finding" ban ke nahi aayenge.
+    hain (main term ya koi matched synonym). Isse retriever ke
+    false-positive matches AI ke summary/highlighting mein
+    "confirmed finding" ban ke nahi aayenge.
     """
     report_lower = report_text.lower()
     verified = []
 
     for item in retrieved_terms:
-        term = item.get("term", "")
-        term_lower = term.lower().strip()
-
-        if not term_lower:
-            continue
-
-        if term_lower in report_lower:
-            verified.append(item)
-            continue
-
-        synonyms = item.get("synonyms", [])
-        found_synonym = False
-        for syn in synonyms:
-            if syn.lower().strip() in report_lower:
-                found_synonym = True
-                break
-
-        if found_synonym:
+        matched_text = item.get("matched_text", "") or item.get("term", "")
+        if matched_text.lower().strip() in report_lower:
             verified.append(item)
 
     return verified
@@ -295,6 +279,10 @@ def generate_explanation(
     # ── SAFETY FILTER — sirf report mein actually likhe terms rakho ──
     retrieved_terms = _filter_terms_actually_in_report(report_text, raw_retrieved_terms)
 
+    # ── HIGHLIGHTING — original English report par positions nikalo, ──
+    # ── translation se pehle, kyunki positions original text ke hisaab se hain ──
+    highlighted_terms = find_term_positions(report_text, retrieved_terms)
+
     findings      = []
     context_lines = []
 
@@ -441,13 +429,14 @@ Return ONLY this HTML, nothing else (but write the actual text content in the la
     verification = verify_output(ai_summary, retrieved_terms)
 
     return {
-        "summary":        ai_summary,
-        "risk_level":     risk_level,
-        "risk_reason":    "Based on the report findings.",
-        "findings":       findings,
-        "terms":          retrieved_terms,
-        "detected_terms": retrieved_terms,
-        "provider":       provider,
-        "question":       user_question,
-        "verification":   verification,
+        "summary":           ai_summary,
+        "risk_level":        risk_level,
+        "risk_reason":       "Based on the report findings.",
+        "findings":          findings,
+        "terms":             retrieved_terms,
+        "detected_terms":    retrieved_terms,
+        "provider":          provider,
+        "question":          user_question,
+        "verification":      verification,
+        "highlighted_terms": highlighted_terms,
     }
