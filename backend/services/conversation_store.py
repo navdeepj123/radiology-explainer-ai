@@ -165,6 +165,31 @@ class ConversationStore:
             print(f"⚠️ MongoDB unavailable: {e}")
             return []
 
+    # ---- full list for trend/analytics views ------------------------------
+
+    def list_full_for_owner(self, owner_id):
+        """
+        /trends ke liye — sidebar wale list_for_owner() ke ulat, ye poore
+        conversation docs deta hai (detected_terms, risk_level, date samet),
+        oldest -> newest order me, taaki chart left-to-right padha jaye.
+        Guest aur logged-in dono owners ke liye kaam karta hai.
+        """
+        if self.is_guest_owner(owner_id):
+            _purge_expired_guests()
+            with _guest_lock:
+                convs = list(_guest_store.get(owner_id, {}).values())
+            convs.sort(key=lambda d: d["timestamp"])
+            return [dict(d) for d in convs]
+
+        if self.conversations_col is None:
+            return []
+        try:
+            docs = self.conversations_col.find({"owner_id": owner_id}).sort("timestamp", 1)
+            return list(docs)
+        except Exception as e:
+            print(f"⚠️ MongoDB unavailable: {e}")
+            return []
+
     # ---- get one ---------------------------------------------------------
 
     def get(self, conv_id, owner_id):
