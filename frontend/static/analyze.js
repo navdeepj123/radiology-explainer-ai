@@ -213,9 +213,9 @@ function onProviderChange(val) {
   safeSetText('csChatTag', d.shortTag);
   safeSetText('csNoticeProv', d.name);
 
-  var sidebar = document.getElementById('chatSidebar');
-  var ollamaWrap = document.getElementById('sbOllamaWrap');
-  if (ollamaWrap) ollamaWrap.style.display = (val === 'ollama') ? 'block' : 'none';
+    var sidebar = document.getElementById('chatSidebar');
+    var ollamaSel = document.getElementById('ollamaModelSel');
+    if (ollamaSel) ollamaSel.style.display = (val === 'ollama') ? 'inline-block' : 'none';
 
   if (val === 'ollama') {
     if (sidebar) sidebar.classList.add('hidden');

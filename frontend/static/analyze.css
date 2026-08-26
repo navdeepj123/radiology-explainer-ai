@@ -343,7 +343,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 .sh-title-row{padding-right:44px}
 
 @media(max-width:900px){.settings-sidebar{display:none}}
-@media(max-width:900px){.settings-sidebar{display:none}}
 @media(max-width:700px){
   .chat-sidebar{width:100%;right:-100%}
   .chat-sidebar.open{right:0}
@@ -360,3 +359,27 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 .term-popup img{width:100%;border-radius:8px;margin-top:10px}
 .term-popup-close{position:absolute;top:10px;right:14px;cursor:pointer;font-size:1.3rem;color:var(--muted);background:none;border:none}
 .term-popup-close:hover{color:var(--text)}
+
+/* Inline toolbar inside the input box (Claude-style pickers) */
+.input-toolbar{
+  order:-2;
+  flex-basis:100%;
+  display:flex;
+  flex-wrap:wrap;
+  gap:.4rem;
+  margin-bottom:.5rem;
+}
+.pill-sel{
+  padding:.32rem .6rem;
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:100px;
+  color:var(--text);
+  font-size:.71rem;
+  font-family:'DM Sans',sans-serif;
+  cursor:pointer;
+  outline:none;
+  transition:border-color .15s;
+}
+.pill-sel:hover{ border-color:var(--hover-border); }
+.pill-sel:focus{ border-color:var(--blue); }
