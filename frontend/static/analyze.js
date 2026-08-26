@@ -452,6 +452,7 @@ function loadConversation(convId) {
 
       document.getElementById('msgs').innerHTML = '';
       appendUserBubble(conv.report_text.substring(0, 150), null);
+      conv.results.report_text = conv.report_text;
       renderBotResult(conv.results);
       activateChatbot();   // removes csNotice and inserts the real messages
 
@@ -673,6 +674,15 @@ function renderBotResult(d) {
       verifyHtml = '<div class="verify-badge verify-fail">⚠ ' + d.verification.failed_terms.length + ' finding(s) need review: ' + escHtml(d.verification.failed_terms.join(', ')) + '</div>';
     }
   }
+
+   // NEW — original report with clickable highlighted terms
+  var reportContainerId = 'reportText-' + Date.now();
+  var reportHtml = '';
+  if (d.report_text) {
+    reportHtml = '<div><div class="rs-title"><span class="rs-dot amber"></span>Original Report (click highlighted terms)</div>'
+      + '<div class="report-text-block" id="' + reportContainerId + '"></div></div>';
+  }
+
   var findHtml = '';
   if (d.findings && d.findings.length) {
     findHtml = '<div><div class="rs-title"><span class="rs-dot blue"></span>Key Findings</div>'
@@ -680,6 +690,7 @@ function renderBotResult(d) {
       + d.findings.map(function(f){ return '<div class="fi"><span class="fi-dash">—</span><span>'+escHtml(f)+'</span></div>'; }).join('')
       + '</div></div>';
   }
+
   var termHtml = '';
   if (d.terms && d.terms.length) {
     termHtml = '<div><div class="rs-title"><span class="rs-dot amber"></span>Medical Terms Decoded</div>'
@@ -699,6 +710,7 @@ function renderBotResult(d) {
         + '<div class="risk-reason">'+escHtml(d.risk_reason||'See summary below.')+'</div>'
       + '</div>'
       + '<div class="bot-body">'
+       + reportHtml
         + '<div><div class="rs-title"><span class="rs-dot teal"></span>Plain-Language Summary</div>'
         + '<div class="rs-content">'+(d.summary||'')+'</div></div>'
         + findHtml + termHtml
@@ -713,6 +725,10 @@ function renderBotResult(d) {
     + '</div>'
     + '<div style="font-size:.63rem;color:var(--dim);padding:.15rem .2rem">⚠️ Educational use only. Always discuss with your healthcare provider.</div>';
   msgs.appendChild(row);
+
+    if (d.report_text) {
+    renderHighlightedReport(reportContainerId, d.report_text, d.highlighted_terms || []);
+  }
   scrollBottom();
 }
 function onCopyResult(btn) {
@@ -820,4 +836,61 @@ function hideErr() {
 }
 function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ─────────────────────────────────────────
+// MEDICAL TERM HIGHLIGHTING
+// ─────────────────────────────────────────
+function renderHighlightedReport(containerId, reportText, highlightedTerms) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+
+  if (!reportText) { container.textContent = ''; return; }
+  if (!highlightedTerms || highlightedTerms.length === 0) {
+    container.textContent = reportText;
+    return;
+  }
+
+  var sorted = highlightedTerms.slice().sort(function(a, b) { return a.start - b.start; });
+  var html = '';
+  var cursor = 0;
+
+  sorted.forEach(function(h, i) {
+    html += escHtml(reportText.slice(cursor, h.start));
+    html += '<span class="med-term" data-index="' + i + '">' + escHtml(h.matched_text) + '</span>';
+    cursor = h.end;
+  });
+  html += escHtml(reportText.slice(cursor));
+  container.innerHTML = html;
+
+  container.querySelectorAll('.med-term').forEach(function(span) {
+    span.addEventListener('click', function() {
+      var idx = parseInt(span.dataset.index, 10);
+      openTermPopup(sorted[idx]);
+    });
+  });
+}
+
+function openTermPopup(termData) {
+  document.getElementById('termPopupTitle').textContent = termData.term;
+  document.getElementById('termPopupDefinition').textContent = termData.meaning || 'No definition available.';
+  var img = document.getElementById('termPopupImage');
+  if (termData.image_url) {
+    img.src = termData.image_url;
+    img.style.display = 'block';
+  } else {
+    img.style.display = 'none';
+  }
+  document.getElementById('termPopupOverlay').classList.add('active');
+}
+
+function closeTermPopup() {
+  document.getElementById('termPopupOverlay').classList.remove('active');
+}
+
+var termPopupOverlayEl = document.getElementById('termPopupOverlay');
+if (termPopupOverlayEl) {
+  termPopupOverlayEl.addEventListener('click', function(e) {
+    if (e.target.id === 'termPopupOverlay') closeTermPopup();
+  });
 }

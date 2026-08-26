@@ -5,10 +5,10 @@ from groq import Groq
 load_dotenv()
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-
+GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
 def generate_with_groq(prompt):
     response = client.chat.completions.create(
-        model="openai/gpt-oss-120b",
+        model=GROQ_MODEL,
         messages=[
             {
                 "role": "system",

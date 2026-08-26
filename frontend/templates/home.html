@@ -369,6 +369,13 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:3.5rem 2
     <button class="nav-pill theme-btn" onclick="toggleTheme()" title="Toggle dark / light mode">
       <span id="themeIcon">🌙</span>
     </button>
+    {% if current_user.is_authenticated %}
+      <span class="nav-pill" style="cursor:default;">👤 {{ current_user.name }}</span>
+      <a href="/logout" class="nav-pill">Log Out</a>
+    {% else %}
+      <a href="/login" class="nav-pill">Log In</a>
+      <a href="/register" class="nav-pill">Sign Up</a>
+    {% endif %}
     <a href="/analyze" class="nav-menu">Open Tool →</a>
   </div>
 </nav>
