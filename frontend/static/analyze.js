@@ -683,6 +683,14 @@ function renderBotResult(d) {
       + '<div class="report-text-block" id="' + reportContainerId + '"></div></div>';
   }
 
+  // NEW — anatomical body map
+  var bodyMapContainerId = 'bodyMap-' + Date.now();
+  var bodyMapHtml = '';
+  if (d.terms && d.terms.length) {
+    bodyMapHtml = '<div><div class="rs-title"><span class="rs-dot blue"></span>Body Map</div>'
+      + '<div id="' + bodyMapContainerId + '"></div></div>';
+  }
+
   var findHtml = '';
   if (d.findings && d.findings.length) {
     findHtml = '<div><div class="rs-title"><span class="rs-dot blue"></span>Key Findings</div>'
@@ -711,6 +719,7 @@ function renderBotResult(d) {
       + '</div>'
       + '<div class="bot-body">'
        + reportHtml
+       + bodyMapHtml
         + '<div><div class="rs-title"><span class="rs-dot teal"></span>Plain-Language Summary</div>'
         + '<div class="rs-content">'+(d.summary||'')+'</div></div>'
         + findHtml + termHtml
@@ -728,6 +737,17 @@ function renderBotResult(d) {
 
     if (d.report_text) {
     renderHighlightedReport(reportContainerId, d.report_text, d.highlighted_terms || []);
+  }
+  if (d.terms && d.terms.length) {
+    renderBodyMap({
+      container: document.getElementById(bodyMapContainerId),
+      detectedTerms: d.terms,
+      reportText: d.report_text || '',
+      regionsUrl: '/static/data/body_regions.json',
+      onPinClick: function(term, definition) {
+        openTermPopup({ term: term, meaning: definition });
+      }
+    });
   }
   scrollBottom();
 }

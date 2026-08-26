@@ -746,7 +746,44 @@ def verification_stats():
         })
     return jsonify({"stats": stats})
 
-
+# ── TRENDS — risk-over-time + most frequent findings ──────────────────────
+ 
+RISK_SCORE = {"low": 1, "medium": 2, "high": 3, "unknown": 0}
+ 
+ 
+@app.route("/trends", methods=["GET"])
+def trends():
+    """
+    Returns this owner's report history in chronological order, for the
+    Trends tab: a risk-level-over-time line chart + a findings-frequency
+    bar chart. Works for both guest and logged-in owners.
+    """
+    docs = conv_store.list_full_for_owner(g.owner_id)
+ 
+    points = []
+    term_frequency = {}
+ 
+    for doc in docs:
+        # risk_level is stored as "Low"/"Medium"/"High" (see rag_service.py) —
+        # .lower() it before the RISK_SCORE lookup.
+        risk_level = str(doc.get("risk_level", "unknown")).lower()
+        detected_terms = doc.get("detected_terms", [])
+        term_names = [t.get("term", "") for t in detected_terms if t.get("term")]
+ 
+        for name in term_names:
+            term_frequency[name] = term_frequency.get(name, 0) + 1
+ 
+        points.append({
+            "date":       doc.get("date", ""),
+            "risk_level": risk_level,
+            "risk_score": RISK_SCORE.get(risk_level, 0),
+            "terms":      term_names,
+        })
+ 
+    return jsonify({"points": points, "term_frequency": term_frequency})
+ 
+ 
+# ── RUN ───────────────────────────────────────────────────────────────────────
 # ── RUN ───────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
