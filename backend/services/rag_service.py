@@ -6,7 +6,7 @@ from services.output_verifier import verify_output
 
 
 def _convert_to_html(text):
-    """Plain text/markdown ko clean HTML mein convert karo"""
+    """Convert plain text/markdown into clean HTML."""
 
     if '<h3>' in text and '<li>' in text:
         text = re.sub(r'Stop immediately.*', '', text, flags=re.DOTALL | re.IGNORECASE)
@@ -89,10 +89,10 @@ def _convert_to_html(text):
 
 def _filter_terms_actually_in_report(report_text, retrieved_terms):
     """
-    Sirf woh terms rakho jo report_text mein ACTUALLY likhe
-    hain (main term ya koi matched synonym). Isse retriever ke
-    false-positive matches AI ke summary/highlighting mein
-    "confirmed finding" ban ke nahi aayenge.
+    Keep only terms that are ACTUALLY present in report_text (the main
+    term or a matched synonym). This prevents retriever false-positive
+    matches from being surfaced as a "confirmed finding" in the AI
+    summary or highlighting.
     """
     report_lower = report_text.lower()
     verified = []
@@ -107,8 +107,8 @@ def _filter_terms_actually_in_report(report_text, retrieved_terms):
 
 def _get_language_instruction(language):
     """
-    Language ke hisaab se AI ko instruction deta hai.
-    Hinglish ek special casual style hai, baaki normal languages hain.
+    Give the AI a language instruction based on the selected language.
+    Hinglish is a special casual style, other languages are handled normally.
     """
     if not language or language.strip().lower() == "english":
         return "Write your entire response in English."
@@ -132,8 +132,8 @@ def _get_language_instruction(language):
 
 def get_length_instruction(answer_length):
     """
-    Answer Length ke hisaab se response kitna lamba ho, yeh
-    control karta hai.
+    Controls how long the response should be, based on the
+    selected Answer Length setting.
     """
     mapping = {
         "brief": (
@@ -145,8 +145,12 @@ def get_length_instruction(answer_length):
             "each bullet 1-2 sentences long."
         ),
         "intensive": (
-            "Provide a thorough, detailed response. Use 4-6 bullet points per "
-            "section, each with 2-3 sentences of explanation and context."
+            "Provide a thorough, detailed, clinical-style response. For EVERY "
+            "finding quoted from the report, give a technical 'What it means' "
+            "explanation followed by a simple 'In plain language' explanation. "
+            "Do not skip any finding, including normal/negative findings. Be "
+            "comprehensive — this should read like a detailed patient education "
+            "document, not a quick summary."
         ),
     }
     return mapping.get((answer_length or "standard").lower(), mapping["standard"])
@@ -154,8 +158,8 @@ def get_length_instruction(answer_length):
 
 def get_detail_instruction(detail_level):
     """
-    Detail Level ke hisaab se explanation kitni technical/deep ho,
-    yeh control karta hai.
+    Controls how technical/deep the explanation should be, based on
+    the selected Detail Level setting.
     """
     mapping = {
         "basic": (
@@ -180,9 +184,9 @@ def get_detail_instruction(detail_level):
 
 def _translate_findings_and_terms(findings, retrieved_terms, language, provider, ollama_model):
     """
-    Findings list aur term meanings ko bhi translate karta hai —
-    yeh knowledge_base.json se seedha English mein aate hain, isliye
-    inhe alag se AI se translate karwana padta hai.
+    Also translates the findings list and term meanings — these come
+    straight from knowledge_base.json in English, so they need to be
+    translated separately via the AI.
     Returns: (translated_findings, translated_terms)
     """
     if not language or language.strip().lower() == "english":
@@ -276,7 +280,7 @@ def generate_explanation(
 
     raw_retrieved_terms = retrieve_relevant_info(report_text)
 
-    # ── SAFETY FILTER — sirf report mein actually likhe terms rakho ──
+    # SAFETY FILTER — keep only terms that are actually present in the report
     retrieved_terms = _filter_terms_actually_in_report(report_text, raw_retrieved_terms)
 
     # ── HIGHLIGHTING — original English report par positions nikalo, ──
@@ -303,8 +307,9 @@ def generate_explanation(
     language_instruction = _get_language_instruction(language)
     length_instruction    = get_length_instruction(answer_length)
     detail_instruction    = get_detail_instruction(detail_level)
+    is_intensive          = (answer_length or "standard").lower() == "intensive"
 
-    # ── Small model ke liye simple plain-text prompt ──
+    # Simple plain-text prompt for small local models
     is_small_model = (provider == "ollama" and ollama_model in ["llama3.2:1b", "llama3.2:3b"])
 
     if is_small_model:
@@ -334,29 +339,40 @@ Write a short explanation with these 4 sections using bullet points:
 - tell the patient to discuss with their doctor
 """
     else:
-        prompt = f"""
-You are a radiology report explanation assistant for normal patients.
+        if is_intensive:
+            output_format = """
+<div class="ai-output">
 
-Rules:
-- Use simple language only
-- Do not diagnose
-- Do not give treatment or medicine advice
-- Explain like the reader has no medical background
-- CRITICAL: Every term in Confirmed Detected Terms MUST appear as a real finding
-- IMPORTANT LANGUAGE INSTRUCTION: {language_instruction}
-- IMPORTANT LENGTH INSTRUCTION: {length_instruction}
-- IMPORTANT DETAIL LEVEL INSTRUCTION: {detail_instruction}
+    <h3>Understanding Your Report</h3>
+    <ul>
+        <li>A brief intro to what kind of report this is and what it's used for.</li>
+    </ul>
 
-Radiology Report:
-{report_text}
+    <h3>What the Findings Mean</h3>
+    <ul>
+        <li><strong>"[exact finding quoted from the report]":</strong> What it means: [technical explanation of the term]. In plain language: [simple, everyday explanation].</li>
+        <li>Repeat this pattern for EVERY finding in the report, including normal/negative findings (e.g. "no fracture", "no pneumothorax") — do not skip any.</li>
+    </ul>
 
-Medical Context:
-{context}
+    <h3>Impression (Summary of Key Findings)</h3>
+    <ul>
+        <li>Restate each impression/summary point from the report in plain language.</li>
+    </ul>
 
-{confirmed_terms_block}
+    <h3>Overall Meaning of Your Report</h3>
+    <ul>
+        <li>What these findings together suggest for the patient, in plain non-diagnostic language.</li>
+    </ul>
 
-Return ONLY this HTML, nothing else (but write the actual text content in the language specified above, following the length and detail instructions):
+    <h3>Next Steps</h3>
+    <ul>
+        <li>What the patient can expect their doctor to discuss, check, or recommend next.</li>
+    </ul>
 
+</div>
+"""
+        else:
+            output_format = """
 <div class="ai-output">
 
     <h3>Simple Summary</h3>
@@ -382,6 +398,31 @@ Return ONLY this HTML, nothing else (but write the actual text content in the la
     </ul>
 
 </div>
+"""
+
+        prompt = f"""
+You are a radiology report explanation assistant for normal patients.
+
+Rules:
+- Use simple language only
+- Do not diagnose
+- Do not give treatment or medicine advice
+- Explain like the reader has no medical background
+- CRITICAL: Every term in Confirmed Detected Terms MUST appear as a real finding
+- IMPORTANT LANGUAGE INSTRUCTION: {language_instruction}
+- IMPORTANT LENGTH INSTRUCTION: {length_instruction}
+- IMPORTANT DETAIL LEVEL INSTRUCTION: {detail_instruction}
+
+Radiology Report:
+{report_text}
+
+Medical Context:
+{context}
+
+{confirmed_terms_block}
+
+Return ONLY this HTML, nothing else (but write the actual text content in the language specified above, following the length and detail instructions):
+{output_format}
 """
 
     ai_summary = generate_with_provider(

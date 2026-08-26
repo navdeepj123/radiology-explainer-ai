@@ -19,7 +19,7 @@ function toggleTheme() {
 
 ClearScanControls.init("#ctrlSlot");
 
-// ── voice mic icons load karo ──
+// load mic icons
 document.getElementById('mainMicBtn').innerHTML = ClearScanVoice.micSvg;
 document.getElementById('csMicBtn').innerHTML   = ClearScanVoice.micSvg;
 
@@ -37,7 +37,7 @@ var historyArr         = [];
 var lastText           = '';
 var lastFile            = null;
 var activeConversationId = null;   // MongoDB conversation currently open
-var chatSearchQuery    = '';       // NEW — sidebar search filter
+var chatSearchQuery    = '';       // sidebar search filter
 
 var provData = {
   groq:   { tag:'⚡ GROQ',   shortTag:'GROQ',   hint:'Fast and free. Report sent to Groq servers.',   name:'Groq'   },
@@ -52,6 +52,25 @@ var ollamaHints = {
 };
 
 // ─────────────────────────────────────────
+// FLOATING CHAT PANEL TOGGLE
+// ─────────────────────────────────────────
+function toggleChatPanel() {
+  var panel = document.getElementById('chatSidebar');
+  var overlay = document.getElementById('chatOverlay');
+  if (panel.classList.contains('open')) {
+    closeChatPanel();
+  } else {
+    panel.classList.add('open');
+    if (overlay) overlay.classList.add('show');
+  }
+}
+function closeChatPanel() {
+  document.getElementById('chatSidebar').classList.remove('open');
+  var overlay = document.getElementById('chatOverlay');
+  if (overlay) overlay.classList.remove('show');
+}
+
+// ─────────────────────────────────────────
 // LOAD SAVED HISTORY ON PAGE LOAD (from MongoDB)
 // ─────────────────────────────────────────
 fetch('/conversations')
@@ -60,7 +79,7 @@ fetch('/conversations')
     historyArr = (data.conversations || []).map(function(c) {
       return {
         preview: c.preview,
-        title:   c.title,           // NEW — custom rename, if set
+        title:   c.title,           // custom rename, if set
         risk:    (c.risk_level || 'unknown').toLowerCase(),
         prov:    c.provider.toUpperCase(),
         time:    c.date,
@@ -89,7 +108,7 @@ function addToHistory(reportText, riskLevel, prov, convId) {
   renderHistoryList();
 }
 
-// NEW — sidebar search
+// sidebar search
 function onChatSearch(val) {
   chatSearchQuery = val.trim().toLowerCase();
   renderHistoryList();
@@ -141,7 +160,7 @@ function renderHistoryList() {
   });
 }
 
-// NEW — rename a conversation
+// rename a conversation
 function renameConversation(convId) {
   var item = historyArr.find(function(h){ return h.id === convId; });
   if (!item) return;
@@ -161,7 +180,7 @@ function renameConversation(convId) {
     .catch(function(){ showErr('Could not rename chat.'); });
 }
 
-// NEW — delete a conversation
+// delete a conversation
 function deleteConversation(convId) {
   if (!confirm('Delete this chat? This cannot be undone.')) return;
 
@@ -183,18 +202,26 @@ function deleteConversation(convId) {
 function onProviderChange(val) {
   provider = val;
   var d = provData[val] || provData['groq'];
-  document.getElementById('sbHint').textContent       = d.hint;
-  document.getElementById('provTag').textContent      = d.tag;
-  document.getElementById('csChatTag').textContent    = d.shortTag;
-  document.getElementById('csNoticeProv').textContent = d.name;
 
-  document.getElementById('sbOllamaWrap').style.display = (val === 'ollama') ? 'block' : 'none';
+  function safeSetText(id, value) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = value;
+  }
+
+  safeSetText('sbHint', d.hint);
+  safeSetText('provTag', d.tag);
+  safeSetText('csChatTag', d.shortTag);
+  safeSetText('csNoticeProv', d.name);
 
   var sidebar = document.getElementById('chatSidebar');
+  var ollamaWrap = document.getElementById('sbOllamaWrap');
+  if (ollamaWrap) ollamaWrap.style.display = (val === 'ollama') ? 'block' : 'none';
+
   if (val === 'ollama') {
-    sidebar.classList.add('hidden');
+    if (sidebar) sidebar.classList.add('hidden');
+    closeChatPanel();
   } else {
-    sidebar.classList.remove('hidden');
+    if (sidebar) sidebar.classList.remove('hidden');
   }
 }
 
@@ -260,9 +287,9 @@ function onMainSend() {
   }
   hideErr();
 
-  // fresh report = fresh visual thread — purani conversation ka view clear karo
+  // fresh report = fresh visual thread — clear the old conversation view
   document.getElementById('msgs').innerHTML = '';
-  resetChatPanel();   // csMsgs ko bhi "submit your report" notice pe wapas laata hai
+  resetChatPanel();   // resets csMsgs back to "submit your report" notice
 
   savedText = text;
   lastText  = text;
@@ -362,7 +389,7 @@ function onNewReport() {
   isAnalyzed = false;
   savedText  = '';
   activeConversationId = null;
-  document.getElementById('msgs').innerHTML = '';   // purana result/chat hata do
+  document.getElementById('msgs').innerHTML = '';   // clear old result/chat
   document.getElementById('inputArea').style.display    = 'block';
   document.getElementById('newReportBar').style.display = 'none';
   document.getElementById('mainTa').value        = '';
@@ -371,6 +398,7 @@ function onNewReport() {
   document.getElementById('statusPill').textContent     = 'Ready';
   document.getElementById('mainSendBtn').disabled       = false;
   document.getElementById('mainTa').focus();
+  closeChatPanel();
   document.getElementById('csMsgs').innerHTML =
     '<div class="cs-notice" id="csNotice">'
     + '<div class="cs-notice-icon">🫁</div>'
@@ -381,7 +409,7 @@ function onNewReport() {
     + '</div>';
   document.getElementById('csTa').disabled      = true;
   document.getElementById('csSendBtn').disabled = true;
-  renderHistoryList();   // active highlight hata do kyunki koi active chat nahi hai ab
+  renderHistoryList();   // remove active highlight — no active chat now
 }
 
 // ─────────────────────────────────────────
@@ -401,8 +429,8 @@ function loadConversation(convId) {
       answerLength = conv.answer_length || 'standard';
       detailLevel  = conv.detail_level  || 'medium';
 
-      // pehle csMsgs ko default notice template pe reset karo, taaki
-      // csNoticeProv element wapas exist kare onProviderChange chalne se pehle
+      // reset csMsgs to the default notice template first, so csNoticeProv
+      // exists again before onProviderChange runs
       document.getElementById('csMsgs').innerHTML =
         '<div class="cs-notice" id="csNotice">'
         + '<div class="cs-notice-icon">🫁</div>'
@@ -410,9 +438,9 @@ function loadConversation(convId) {
         + '<small>Powered by <span id="csNoticeProv"></span></small>'
         + '</div>';
 
-      onProviderChange(provider);   // ab safe hai — csNoticeProv exist karta hai
+      onProviderChange(provider);   // safe now — csNoticeProv exists
 
-      // dropdowns ko bhi is conversation ki saved values pe sync karo
+      // sync dropdowns to this conversation's saved values
       var provSel = document.getElementById('provSel');
       if (provSel) provSel.value = provider;
       var ollamaSel = document.getElementById('ollamaModelSel');
@@ -426,8 +454,9 @@ function loadConversation(convId) {
       appendUserBubble(conv.report_text.substring(0, 150), null);
       conv.results.report_text = conv.report_text;
       renderBotResult(conv.results);
-      activateChatbot();   // ye csNotice ko hata ke asli messages daalega
+      activateChatbot();   // removes csNotice and inserts the real messages
 
+      document.getElementById('csMsgs').innerHTML = '';
       conv.chat_messages.forEach(function(m) {
         csAppend(m.content, m.role === 'user' ? 'user' : 'bot');
       });
@@ -495,6 +524,9 @@ function activateChatbot() {
   document.getElementById('csTa').disabled      = false;
   document.getElementById('csTa').placeholder   = 'Ask about your report…';
   document.getElementById('csSendBtn').disabled = false;
+
+  // panel should open on its own once analysis is ready
+  toggleChatPanel();
 }
 
 // ─────────────────────────────────────────

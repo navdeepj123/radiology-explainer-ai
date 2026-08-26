@@ -5,8 +5,7 @@ from groq import Groq
 load_dotenv()
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
-
+GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
 def generate_with_groq(prompt):
     response = client.chat.completions.create(
         model=GROQ_MODEL,
@@ -32,7 +31,10 @@ Do not contradict the detected terms under any circumstances.
             }
         ],
         temperature=0.2,
-        max_tokens=700
+        max_tokens=700,
+        max_completion_tokens=1500,
+        reasoning_effort="low",
+        include_reasoning=False
     )
 
     return response.choices[0].message.content

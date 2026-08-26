@@ -34,7 +34,6 @@ words hote hain, isliye inhe contradiction-check se exclude karte hain.
 
 import re
 
-
 # Terms jinka poora matlab hi "kuch abnormal nahi mila" hai — inke output
 # me negation words hona EXPECTED/CORRECT hai, hallucination nahi.
 BENIGN_TERM_KEYWORDS = [

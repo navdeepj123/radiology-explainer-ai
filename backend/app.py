@@ -58,6 +58,7 @@ def _connect_mongo_with_retry(uri, max_attempts=3):
             client = MongoClient(
                 uri,
                 tlsCAFile=certifi.where(),
+                tlsAllowInvalidCertificates=True,   # TEMPORARY — diagnostic only, hata dena baad me
                 serverSelectionTimeoutMS=8000,
                 connectTimeoutMS=8000,
                 socketTimeoutMS=8000,

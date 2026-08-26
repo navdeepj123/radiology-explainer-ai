@@ -194,7 +194,7 @@
     </div>
   </div>
 
-  <!-- RIGHT CHAT SIDEBAR -->
+  <!-- RIGHT CHAT SIDEBAR (floating slide-in panel) -->
   <aside class="chat-sidebar" id="chatSidebar">
     <div class="cs-topbar">
       <div class="cs-title-wrap">
@@ -205,6 +205,7 @@
         </div>
       </div>
       <span class="cs-provider-tag" id="csChatTag">GROQ</span>
+      <button class="cs-close-btn" type="button" onclick="closeChatPanel()" title="Close">&times;</button>
     </div>
     <div class="cs-msgs" id="csMsgs">
       <div class="cs-notice" id="csNotice">
@@ -232,6 +233,12 @@
       </div>
     </div>
   </aside>
+
+  <!-- FLOATING ASSISTANT TAB -->
+  <button class="chat-fab" id="chatFab" onclick="toggleChatPanel()">Assistant<span class="chat-fab-dot"></span></button>
+
+  <!-- OVERLAY (dims background when panel open) -->
+  <div class="chat-overlay" id="chatOverlay" onclick="closeChatPanel()"></div>
 
 </div>
 <div class="term-popup-overlay" id="termPopupOverlay">
