@@ -33,13 +33,6 @@
 
 <div class="app">
 
-  {% if not current_user.is_authenticated %}
-  <div id="guestBanner" style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:10px;padding:9px 16px;background:var(--blue-soft,rgba(79,124,255,.12));border-bottom:1px solid var(--border);font-size:.82rem;color:var(--muted);">
-    <span>💬 You're browsing as a guest — your conversations won't be saved after this session.</span>
-    <a href="/register" style="color:var(--blue);font-weight:600;text-decoration:none;">Sign up to save your history →</a>
-  </div>
-  {% endif %}
-
   {% if request.args.get('welcome') %}
   <div id="welcomeBanner" style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:10px;padding:9px 16px;background:rgba(16,185,129,.12);border-bottom:1px solid var(--border);font-size:.82rem;color:var(--text);">
     {% set migrated = request.args.get('migrated', '0')|int %}
@@ -66,50 +59,6 @@
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         New Report
       </button>
-    </div>
-
-    <div class="sb-sec">AI Provider</div>
-    <div class="sb-row">
-      <div class="sb-lbl">Select model</div>
-      <select class="sb-sel" id="provSel" onchange="onProviderChange(this.value)">
-        <option value="groq">⚡ Groq — Fast, free</option>
-        <option value="gemini">✨ Gemini — OpenRouter</option>
-        <option value="openai">🤖 OpenAI — GPT-4o-mini</option>
-        <option value="ollama">🖥️ Ollama — Local</option>
-      </select>
-    </div>
-    <div class="sb-hint" id="sbHint">Fast and free. Report sent to Groq servers.</div>
-
-    <!-- OLLAMA MODEL SELECTOR — only shows when Ollama selected -->
-    <div class="sb-ollama-wrap" id="sbOllamaWrap">
-      <div class="sb-sec">Ollama Model</div>
-      <div class="sb-row">
-        <div class="sb-lbl">Select model</div>
-        <select class="sb-sel" id="ollamaModelSel" onchange="onOllamaModelChange(this.value)">
-          <option value="llama3.2:1b">⚡ llama3.2:1b — Fast</option>
-          <option value="mistral">🧠 mistral — Better quality</option>
-        </select>
-      </div>
-      <div class="sb-ollama-hint" id="ollamaModelHint">Fast responses, good for Q&amp;A.</div>
-    </div>
-
-    <!-- RESPONSE STYLE — Answer Length + Detail Level -->
-    <div class="sb-sec">Response Style</div>
-    <div class="sb-row">
-      <div class="sb-lbl">Answer length</div>
-      <select class="sb-sel" id="lengthSel" onchange="onLengthChange(this.value)">
-        <option value="brief">📝 Brief</option>
-        <option value="standard" selected>📄 Standard</option>
-        <option value="intensive">📚 Intensive</option>
-      </select>
-    </div>
-    <div class="sb-row">
-      <div class="sb-lbl">Detail level</div>
-      <select class="sb-sel" id="detailSel" onchange="onDetailChange(this.value)">
-        <option value="basic">🔵 Basic</option>
-        <option value="medium" selected>🟡 Medium</option>
-        <option value="high">🔴 High</option>
-      </select>
     </div>
 
     <!-- CHATS — search + list with edit/delete on hover -->
@@ -148,6 +97,34 @@
     <div class="input-area" id="inputArea">
       <div class="err-bar" id="errBar" style="display:none"></div>
       <div class="input-box">
+
+        <!-- INLINE TOOLBAR — model / length / detail pickers -->
+        <div class="input-toolbar">
+          <select class="pill-sel" id="provSel" onchange="onProviderChange(this.value)" title="AI Provider">
+            <option value="groq">⚡ Groq</option>
+            <option value="gemini">✨ Gemini</option>
+            <option value="openai">🤖 OpenAI</option>
+            <option value="ollama">🖥️ Ollama</option>
+          </select>
+
+          <select class="pill-sel" id="ollamaModelSel" onchange="onOllamaModelChange(this.value)" title="Ollama Model" style="display:none;">
+            <option value="llama3.2:1b">⚡ llama3.2:1b</option>
+            <option value="mistral">🧠 mistral</option>
+          </select>
+
+          <select class="pill-sel" id="lengthSel" onchange="onLengthChange(this.value)" title="Answer Length">
+            <option value="brief">📝 Brief</option>
+            <option value="standard" selected>📄 Standard</option>
+            <option value="intensive">📚 Intensive</option>
+          </select>
+
+          <select class="pill-sel" id="detailSel" onchange="onDetailChange(this.value)" title="Detail Level">
+            <option value="basic">🔵 Basic</option>
+            <option value="medium" selected>🟡 Medium</option>
+            <option value="high">🔴 High</option>
+          </select>
+        </div>
+
         <div class="att-row" id="attRow">
           <div class="att-card">
             <div class="att-name" id="attName"></div>

@@ -5,89 +5,577 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Log In — ClearScan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#080d1a; --bg2:#0d1326; --card:#111827; --card2:#141e30;
-  --border:#1e2d45; --blue:#4f7cff; --blue-dark:#3a63e8;
-  --text:#ffffff; --muted:#8b9cbd; --light:#5a6a82;
-  --err-bg:rgba(220,38,38,.1); --err-border:rgba(220,38,38,.3); --err-text:#f87171;
+  --bg:#050a14;
+  --panel:#070d18;
+  --card:#0b1220;
+  --field:#0d1526;
+  --border:#1a2740;
+  --border-lit:#243busy;
+  --blue:#4f7cff;
+  --blue-dark:#3a63e8;
+  --cyan:#22d3ee;
+  --text:#f0f4fa;
+  --muted:#7f91b0;
+  --dim:#4a5a75;
+  --err-bg:rgba(220,38,38,.1);
+  --err-border:rgba(220,38,38,.3);
+  --err-text:#f87171;
+  --accent-h:210;
 }
+html,body{height:100%;overflow:hidden}
 body{
-  font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);
-  min-height:100vh;display:flex;align-items:center;justify-content:center;
-  padding:2rem;-webkit-font-smoothing:antialiased;
-  background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(79,124,255,.12),transparent);
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  display:flex;
 }
-.auth-card{
-  width:100%;max-width:400px;background:var(--card);
-  border:1px solid var(--border);border-radius:16px;padding:2.5rem 2.25rem;
+
+/* ══════════ LEFT VISUAL PANEL ══════════ */
+.visual-panel{
+  position:relative;
+  flex:1 1 58%;
+  overflow:hidden;
+  background:
+    radial-gradient(ellipse 90% 70% at 25% 35%, hsla(var(--accent-h),90%,50%,.10), transparent 65%),
+    radial-gradient(ellipse 70% 60% at 75% 80%, hsla(calc(var(--accent-h) + 30),90%,50%,.07), transparent 60%),
+    var(--panel);
+  border-right:1px solid var(--border);
 }
+#viz{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+
+.viz-vignette{
+  position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(ellipse 75% 75% at 50% 50%, transparent 35%, rgba(5,10,20,.85) 100%);
+}
+
+/* HUD overlay */
+.hud{ position:absolute; inset:0; pointer-events:none; }
+.hud-corner{
+  position:absolute; width:26px; height:26px;
+  border-color:hsla(var(--accent-h),85%,60%,.45); border-style:solid; border-width:0;
+}
+.hud-corner.tl{ top:28px; left:28px; border-top-width:1.5px; border-left-width:1.5px; }
+.hud-corner.tr{ top:28px; right:28px; border-top-width:1.5px; border-right-width:1.5px; }
+.hud-corner.bl{ bottom:28px; left:28px; border-bottom-width:1.5px; border-left-width:1.5px; }
+.hud-corner.br{ bottom:28px; right:28px; border-bottom-width:1.5px; border-right-width:1.5px; }
+
+.hud-block{
+  position:absolute;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.62rem; letter-spacing:.1em; line-height:1.9;
+  color:hsla(var(--accent-h),70%,72%,.55);
+  text-transform:uppercase;
+}
+.hud-block.tl{ top:52px; left:52px; }
+.hud-block.br{ bottom:52px; right:52px; text-align:right; }
+.hud-key{ color:hsla(var(--accent-h),60%,60%,.4); }
+.hud-val{ color:hsla(var(--accent-h),90%,78%,.85); }
+
+.hud-status{
+  position:absolute; top:52px; right:52px;
+  display:flex; align-items:center; gap:8px;
+  font-family:'JetBrains Mono',monospace; font-size:.62rem;
+  letter-spacing:.12em; text-transform:uppercase;
+  color:hsla(var(--accent-h),80%,75%,.7);
+}
+.hud-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:#22c55e;
+  box-shadow:0 0 8px 2px rgba(34,197,94,.6);
+  animation:livePulse 2s ease-in-out infinite;
+}
+@keyframes livePulse{ 0%,100%{opacity:1} 50%{opacity:.35} }
+
+/* brand block bottom-left of visual panel */
+.viz-brand{
+  position:absolute; bottom:52px; left:52px; max-width:340px;
+}
+.viz-brand h2{
+  font-family:'Libre Baskerville',serif;
+  font-size:1.55rem; font-weight:700; line-height:1.35;
+  margin-bottom:.55rem;
+  background:linear-gradient(100deg,#fff, hsla(var(--accent-h),90%,72%,1));
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.viz-brand p{
+  font-size:.85rem; color:var(--muted); line-height:1.65;
+}
+
+/* ══════════ RIGHT FORM PANEL ══════════ */
+.form-panel{
+  flex:0 0 min(480px, 42%);
+  display:flex; align-items:center; justify-content:center;
+  padding:2.5rem 3rem;
+  background:var(--bg);
+  position:relative;
+}
+.form-inner{ width:100%; max-width:340px; }
+
 .logo{
-  display:block;text-align:center;font-family:'Libre Baskerville',serif;
-  font-weight:700;font-size:1.35rem;color:var(--blue);text-decoration:none;
-  margin-bottom:.4rem;
+  display:inline-flex; align-items:center; gap:9px;
+  font-family:'Libre Baskerville',serif; font-weight:700; font-size:1.15rem;
+  color:var(--text); text-decoration:none; margin-bottom:2.5rem;
+}
+.logo-mark{
+  width:26px;height:26px;border-radius:7px;flex-shrink:0;
+  background:linear-gradient(135deg, hsl(var(--accent-h),90%,62%), hsl(calc(var(--accent-h) + 35),85%,52%));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 3px 14px hsla(var(--accent-h),90%,55%,.4);
+}
+.logo-mark svg{ display:block; }
+
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.6rem; letter-spacing:.18em; text-transform:uppercase;
+  color:hsla(var(--accent-h),75%,68%,.85); margin-bottom:.7rem;
 }
 h1{
-  font-family:'Libre Baskerville',serif;font-size:1.5rem;font-weight:700;
-  text-align:center;margin-bottom:.4rem;
+  font-family:'Libre Baskerville',serif;
+  font-size:1.85rem; font-weight:700; letter-spacing:-.01em;
+  margin-bottom:.5rem;
 }
-.subtitle{text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:1.75rem}
-.field{margin-bottom:1.1rem}
-label{display:block;font-size:.82rem;color:var(--muted);margin-bottom:.4rem}
+.subtitle{ color:var(--muted); font-size:.88rem; line-height:1.6; margin-bottom:2rem; }
+
+.field{ margin-bottom:1.15rem; position:relative; }
+label{
+  display:block; font-size:.72rem; font-weight:500;
+  letter-spacing:.05em; text-transform:uppercase;
+  color:var(--dim); margin-bottom:.5rem;
+}
 input{
-  width:100%;padding:11px 14px;background:var(--bg2);
-  border:1px solid var(--border);border-radius:8px;color:var(--text);
-  font-family:inherit;font-size:.92rem;transition:border-color .15s;
+  width:100%; padding:12px 14px;
+  background:var(--field);
+  border:1px solid var(--border); border-radius:10px;
+  color:var(--text); font-family:inherit; font-size:.92rem;
+  transition:border-color .18s, box-shadow .18s, background .18s;
 }
-input:focus{outline:none;border-color:var(--blue)}
+input::placeholder{ color:var(--dim); }
+input:focus{
+  outline:none;
+  border-color:hsl(var(--accent-h),85%,60%);
+  background:#0f1829;
+  box-shadow:0 0 0 3px hsla(var(--accent-h),85%,55%,.13);
+}
+
 .submit-btn{
-  width:100%;padding:12px;margin-top:.5rem;
-  background:var(--blue);color:#fff;font-weight:600;font-size:.95rem;
-  border:none;border-radius:8px;cursor:pointer;transition:background .15s;
+  width:100%; padding:13px; margin-top:.65rem;
+  background:linear-gradient(135deg, hsl(var(--accent-h),88%,62%), hsl(calc(var(--accent-h) + 25),82%,54%));
+  color:#fff; font-family:inherit; font-weight:600; font-size:.93rem;
+  border:none; border-radius:10px; cursor:pointer;
+  position:relative; overflow:hidden;
+  box-shadow:0 4px 20px hsla(var(--accent-h),88%,55%,.3);
+  transition:transform .12s, box-shadow .18s, filter .18s;
 }
-.submit-btn:hover{background:var(--blue-dark)}
+.submit-btn:hover{ filter:brightness(1.08); box-shadow:0 6px 26px hsla(var(--accent-h),88%,55%,.42); }
+.submit-btn:active{ transform:translateY(1px); }
+.submit-btn::after{
+  content:''; position:absolute; top:0; left:-60%;
+  width:40%; height:100%;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent);
+  transform:skewX(-20deg);
+  animation:btnShine 3.4s ease-in-out infinite;
+}
+@keyframes btnShine{
+  0%,72%{ left:-60%; }
+  100%{ left:130%; }
+}
+
 .error-box{
-  background:var(--err-bg);border:1px solid var(--err-border);color:var(--err-text);
-  padding:10px 14px;border-radius:8px;font-size:.85rem;margin-bottom:1.1rem;
+  background:var(--err-bg); border:1px solid var(--err-border);
+  color:var(--err-text); padding:11px 14px; border-radius:9px;
+  font-size:.84rem; margin-bottom:1.2rem;
 }
-.switch-link{text-align:center;margin-top:1.5rem;font-size:.87rem;color:var(--muted)}
-.switch-link a{color:var(--blue);text-decoration:none;font-weight:500}
-.switch-link a:hover{text-decoration:underline}
+
+.divider{
+  display:flex; align-items:center; gap:12px;
+  margin:1.75rem 0 1.25rem;
+  color:var(--dim); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase;
+  font-family:'JetBrains Mono',monospace;
+}
+.divider::before,.divider::after{
+  content:''; flex:1; height:1px; background:var(--border);
+}
+
+.switch-link{ text-align:center; font-size:.86rem; color:var(--muted); }
+.switch-link a{ color:hsl(var(--accent-h),85%,68%); text-decoration:none; font-weight:600; }
+.switch-link a:hover{ text-decoration:underline; }
+
 .guest-link{
-  display:block;text-align:center;margin-top:1rem;font-size:.85rem;
-  color:var(--light);text-decoration:none;
+  display:block; text-align:center; margin-top:1.1rem;
+  font-size:.82rem; color:var(--dim); text-decoration:none;
+  transition:color .15s;
 }
-.guest-link:hover{color:var(--muted)}
+.guest-link:hover{ color:var(--muted); }
+
+/* mobile */
+@media(max-width:900px){
+  html,body{ overflow:auto; }
+  body{ flex-direction:column; }
+  .visual-panel{ flex:0 0 220px; border-right:none; border-bottom:1px solid var(--border); }
+  .viz-brand{ bottom:24px; left:24px; max-width:70%; }
+  .viz-brand h2{ font-size:1.15rem; }
+  .viz-brand p{ display:none; }
+  .hud-block, .hud-status{ display:none; }
+  .hud-corner{ width:16px;height:16px; }
+  .hud-corner.tl,.hud-corner.tr{ top:16px; }
+  .hud-corner.bl,.hud-corner.br{ bottom:16px; }
+  .hud-corner.tl,.hud-corner.bl{ left:16px; }
+  .hud-corner.tr,.hud-corner.br{ right:16px; }
+  .form-panel{ flex:1; padding:2.5rem 1.75rem; }
+  .logo{ margin-bottom:1.75rem; }
+}
 </style>
 </head>
 <body>
 
-<div class="auth-card">
-  <a href="/" class="logo">ClearScan</a>
-  <h1>Welcome back</h1>
-  <p class="subtitle">Log in to access your saved report history</p>
+<!-- ══════════ LEFT: VISUALIZATION ══════════ -->
+<div class="visual-panel">
+  <canvas id="viz"></canvas>
+  <div class="viz-vignette"></div>
 
-  {% if error %}
-  <div class="error-box">{{ error }}</div>
-  {% endif %}
+  <div class="hud">
+    <div class="hud-corner tl"></div>
+    <div class="hud-corner tr"></div>
+    <div class="hud-corner bl"></div>
+    <div class="hud-corner br"></div>
 
-  <form method="POST" action="/login">
-    <div class="field">
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" value="{{ email or '' }}" required autofocus>
+    <div class="hud-block tl">
+      <div><span class="hud-key">MODE</span> &nbsp;<span class="hud-val" id="hudMode">—</span></div>
+      <div><span class="hud-key">RES</span> &nbsp;&nbsp;<span class="hud-val">2048 × 2048</span></div>
+      <div><span class="hud-key">DEPTH</span> <span class="hud-val">16-BIT</span></div>
     </div>
-    <div class="field">
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" required>
-    </div>
-    <button type="submit" class="submit-btn">Log In</button>
-  </form>
 
-  <div class="switch-link">Don't have an account? <a href="/register">Sign up</a></div>
-  <a href="/analyze" class="guest-link">Continue as guest instead →</a>
+    <div class="hud-status">
+      <span class="hud-dot"></span>
+      <span>System Online</span>
+    </div>
+
+    <div class="hud-block br">
+      <div><span class="hud-key">LATENCY</span> <span class="hud-val" id="hudLat">18 ms</span></div>
+      <div><span class="hud-key">NODES</span> &nbsp;&nbsp;<span class="hud-val" id="hudNodes">0</span></div>
+      <div><span class="hud-key">INTEGRITY</span> <span class="hud-val" id="hudInt">99.4%</span></div>
+    </div>
+  </div>
+
+  <div class="viz-brand">
+    <h2>Radiology reports,<br>in plain language.</h2>
+    <p>AI-assisted analysis with source-verified findings — built for patients, not clinicians.</p>
+  </div>
 </div>
+
+<!-- ══════════ RIGHT: LOGIN FORM ══════════ -->
+<div class="form-panel">
+  <div class="form-inner">
+    <a href="/" class="logo">
+      <span class="logo-mark">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 7h2.2l1.3-3.4L8 10.2l1.4-3.2H12" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      ClearScan
+    </a>
+
+    <div class="eyebrow">Secure Access</div>
+    <h1>Welcome back</h1>
+    <p class="subtitle">Log in to access your saved report history.</p>
+
+    {% if error %}
+    <div class="error-box">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="/login">
+      <div class="field">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" value="{{ email or '' }}" placeholder="you@example.com" required autofocus>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="submit-btn">Log In</button>
+    </form>
+
+    <div class="divider">or</div>
+
+    <div class="switch-link">Don't have an account? <a href="/register">Create one</a></div>
+    <a href="/analyze" class="guest-link">Continue as guest instead →</a>
+  </div>
+</div>
+
+<script>
+(function () {
+  // ── random accent hue per load (kept in blue→cyan→violet range for brand fit) ──
+  var hueChoices = [200, 210, 218, 227, 240, 255, 188];
+  var hue = hueChoices[Math.floor(Math.random() * hueChoices.length)];
+  document.documentElement.style.setProperty('--accent-h', hue);
+
+  var canvas = document.getElementById('viz');
+  var ctx = canvas.getContext('2d');
+  var W, H, DPR;
+
+  function resize() {
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    var rect = canvas.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width = W * DPR; canvas.height = H * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function c(l, a) { return 'hsla(' + hue + ',88%,' + l + '%,' + a + ')'; }
+
+  var modes = ['NEURAL MESH', 'AXIAL SWEEP', 'HELIX TRACE', 'WAVEFORM'];
+  var mode = Math.floor(Math.random() * 4);
+  document.getElementById('hudMode').textContent = modes[mode];
+
+  // ── shared: ambient dust particles ──
+  var dust = [];
+  for (var i = 0; i < 55; i++) {
+    dust.push({
+      x: Math.random(), y: Math.random(),
+      r: Math.random() * 1.1 + .3,
+      s: Math.random() * .00018 + .00004,
+      a: Math.random() * .35 + .1
+    });
+  }
+  function drawDust() {
+    for (var i = 0; i < dust.length; i++) {
+      var d = dust[i];
+      d.y -= d.s;
+      if (d.y < -.02) { d.y = 1.02; d.x = Math.random(); }
+      ctx.fillStyle = c(72, d.a);
+      ctx.beginPath();
+      ctx.arc(d.x * W, d.y * H, d.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  // ── shared: faint background grid ──
+  function drawGrid(t) {
+    var step = 46;
+    var off = (t * 6) % step;
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = c(60, .045);
+    for (var x = -step + off; x < W + step; x += step) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+    }
+    for (var y = -step + off; y < H + step; y += step) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+  }
+
+  var t = 0;
+  var nodeCount = 0;
+
+  // ═══ MODE 0: NEURAL MESH — connected particle network ═══
+  var mesh = [];
+  if (mode === 0) {
+    var n = Math.max(34, Math.min(70, Math.floor((W * H) / 16000)));
+    for (var i = 0; i < n; i++) {
+      mesh.push({
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - .5) * .32, vy: (Math.random() - .5) * .32,
+        pr: Math.random() * Math.PI * 2
+      });
+    }
+    nodeCount = n;
+  }
+
+  // ═══ MODE 2: HELIX ═══
+  // ═══ MODE 3: WAVEFORM (ECG-like) ═══
+  var ecgTrail = [];
+
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    drawGrid(t);
+
+    // ─── MODE 0 ───
+    if (mode === 0) {
+      for (var i = 0; i < mesh.length; i++) {
+        var p = mesh[i];
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+      }
+      for (var i = 0; i < mesh.length; i++) {
+        for (var j = i + 1; j < mesh.length; j++) {
+          var dx = mesh[i].x - mesh[j].x, dy = mesh[i].y - mesh[j].y;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 155) {
+            var alpha = (1 - dist / 155) * .3;
+            ctx.strokeStyle = c(65, alpha);
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(mesh[i].x, mesh[i].y);
+            ctx.lineTo(mesh[j].x, mesh[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+      for (var i = 0; i < mesh.length; i++) {
+        var p = mesh[i];
+        var pulse = (Math.sin(t * 1.6 + p.pr) + 1) / 2;
+        ctx.shadowBlur = 10; ctx.shadowColor = c(70, .8);
+        ctx.fillStyle = c(78, .55 + pulse * .45);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 1.6 + pulse * 1.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    // ─── MODE 1: AXIAL SWEEP — concentric scan rings + sweeping radar arm ───
+    else if (mode === 1) {
+      var cx = W * .5, cy = H * .5;
+      var maxR = Math.min(W, H) * .42;
+
+      for (var r = maxR * .22; r <= maxR; r += maxR * .195) {
+        ctx.strokeStyle = c(60, .16);
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+      }
+      // crosshair
+      ctx.strokeStyle = c(60, .12);
+      ctx.beginPath(); ctx.moveTo(cx - maxR, cy); ctx.lineTo(cx + maxR, cy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx, cy - maxR); ctx.lineTo(cx, cy + maxR); ctx.stroke();
+
+      // sweeping arm with trailing gradient
+      var ang = t * .9;
+      var grad = ctx.createConicGradient ? null : null;
+      for (var k = 0; k < 26; k++) {
+        var a2 = ang - k * .035;
+        ctx.strokeStyle = c(70, .3 * (1 - k / 26));
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + Math.cos(a2) * maxR, cy + Math.sin(a2) * maxR);
+        ctx.stroke();
+      }
+      // leading edge
+      ctx.shadowBlur = 14; ctx.shadowColor = c(70, .9);
+      ctx.strokeStyle = c(82, .95); ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(ang) * maxR, cy + Math.sin(ang) * maxR);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // detected blips
+      var blips = [[.35, 1.2], [.62, 3.1], [.78, 4.7], [.5, 5.9], [.28, 2.3]];
+      for (var b = 0; b < blips.length; b++) {
+        var br = maxR * blips[b][0], ba = blips[b][1];
+        var diff = ((ang - ba) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+        var fade = Math.max(0, 1 - diff / 1.9);
+        if (fade > 0.02) {
+          ctx.shadowBlur = 12; ctx.shadowColor = c(75, fade);
+          ctx.fillStyle = c(80, fade * .95);
+          ctx.beginPath();
+          ctx.arc(cx + Math.cos(ba) * br, cy + Math.sin(ba) * br, 3, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+      }
+      nodeCount = 5;
+    }
+
+    // ─── MODE 2: HELIX TRACE ───
+    else if (mode === 2) {
+      var cx = W * .5;
+      var amp = Math.min(W * .17, 130);
+      var steps = 44;
+      var spacing = (H + 140) / steps;
+      for (var i = 0; i < steps; i++) {
+        var y = i * spacing - 70;
+        var phase = i * .42 + t * .9;
+        var x1 = cx + Math.sin(phase) * amp;
+        var x2 = cx + Math.sin(phase + Math.PI) * amp;
+        var d1 = (Math.cos(phase) + 1) / 2;
+        var d2 = (Math.cos(phase + Math.PI) + 1) / 2;
+
+        ctx.strokeStyle = c(60, .10 + Math.abs(d1 - d2) * .06);
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(x1, y); ctx.lineTo(x2, y); ctx.stroke();
+
+        ctx.shadowBlur = 8; ctx.shadowColor = c(70, .7);
+        ctx.fillStyle = c(72, .22 + d1 * .7);
+        ctx.beginPath(); ctx.arc(x1, y, 1.8 + d1 * 2.6, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = c(72, .22 + d2 * .7);
+        ctx.beginPath(); ctx.arc(x2, y, 1.8 + d2 * 2.6, 0, Math.PI * 2); ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+      nodeCount = steps * 2;
+    }
+
+    // ─── MODE 3: WAVEFORM — live ECG-style trace ───
+    else {
+      var baseY = H * .5;
+      var sw = W;
+      // build waveform points
+      ctx.lineWidth = 1.8;
+      ctx.strokeStyle = c(70, .85);
+      ctx.shadowBlur = 12; ctx.shadowColor = c(70, .8);
+      ctx.beginPath();
+      for (var x = 0; x <= sw; x += 2) {
+        var px = (x / sw) * 10 + t * 1.4;
+        var seg = px % 10;
+        var v = 0;
+        // ECG-ish morphology
+        if (seg < .8)      v = Math.sin(seg / .8 * Math.PI) * .16;         // P wave
+        else if (seg < 1.5) v = 0;
+        else if (seg < 1.7) v = -(seg - 1.5) / .2 * .22;                    // Q
+        else if (seg < 1.9) v = ((seg - 1.7) / .2) * 1.15 - .22;            // R up
+        else if (seg < 2.1) v = .93 - ((seg - 1.9) / .2) * 1.25;            // S down
+        else if (seg < 2.4) v = -.32 + ((seg - 2.1) / .3) * .32;
+        else if (seg < 3.4) v = Math.sin((seg - 2.4) / 1.0 * Math.PI) * .26; // T wave
+        else v = Math.sin(px * 3.1) * .012;                                  // baseline noise
+        var y = baseY - v * (H * .3);
+        if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // secondary flat traces above/below for depth
+      ctx.lineWidth = 1;
+      for (var s = -1; s <= 1; s += 2) {
+        ctx.strokeStyle = c(60, .16);
+        ctx.beginPath();
+        for (var x = 0; x <= sw; x += 3) {
+          var px = (x / sw) * 14 + t * (s > 0 ? .9 : 1.7);
+          var y = baseY + s * H * .27 + Math.sin(px * 2.2) * 7 + Math.sin(px * 5.3) * 3;
+          if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+
+      // moving readout marker
+      var mx = (t * 90) % W;
+      ctx.strokeStyle = c(75, .35);
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(mx, H * .15); ctx.lineTo(mx, H * .85); ctx.stroke();
+      nodeCount = 3;
+    }
+
+    drawDust();
+    t += .016;
+    requestAnimationFrame(frame);
+  }
+  frame();
+
+  // ── live HUD readouts ──
+  document.getElementById('hudNodes').textContent = nodeCount || 48;
+  setInterval(function () {
+    document.getElementById('hudLat').textContent = (12 + Math.floor(Math.random() * 14)) + ' ms';
+    document.getElementById('hudInt').textContent = (98.6 + Math.random() * 1.3).toFixed(1) + '%';
+  }, 2200);
+})();
+</script>
 
 </body>
 </html>
