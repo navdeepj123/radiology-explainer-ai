@@ -21,10 +21,36 @@
     <button class="tbtn theme-btn" onclick="toggleTheme()" title="Toggle dark / light mode">
       <span id="themeIcon">🌙</span>
     </button>
+    {% if current_user.is_authenticated %}
+      <span class="tbtn" style="cursor:default;">👤 {{ current_user.name }}</span>
+      <a href="/logout" class="tbtn">Log Out</a>
+    {% else %}
+      <a href="/login" class="tbtn">Log In</a>
+      <a href="/register" class="tbtn">Sign Up</a>
+    {% endif %}
   </div>
 </div>
 
 <div class="app">
+
+  {% if not current_user.is_authenticated %}
+  <div id="guestBanner" style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:10px;padding:9px 16px;background:var(--blue-soft,rgba(79,124,255,.12));border-bottom:1px solid var(--border);font-size:.82rem;color:var(--muted);">
+    <span>💬 You're browsing as a guest — your conversations won't be saved after this session.</span>
+    <a href="/register" style="color:var(--blue);font-weight:600;text-decoration:none;">Sign up to save your history →</a>
+  </div>
+  {% endif %}
+
+  {% if request.args.get('welcome') %}
+  <div id="welcomeBanner" style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:10px;padding:9px 16px;background:rgba(16,185,129,.12);border-bottom:1px solid var(--border);font-size:.82rem;color:var(--text);">
+    {% set migrated = request.args.get('migrated', '0')|int %}
+    {% if migrated > 0 %}
+      ✓ Welcome, {{ current_user.name }}! {{ migrated }} conversation{{ 's' if migrated != 1 else '' }} from your guest session {{ 'were' if migrated != 1 else 'was' }} saved to your account.
+    {% else %}
+      ✓ Welcome, {{ current_user.name }}! Your reports will now be saved automatically.
+    {% endif %}
+  </div>
+  <script>setTimeout(function(){var b=document.getElementById('welcomeBanner'); if(b) b.style.display='none';}, 6000);</script>
+  {% endif %}
 
   <!-- LEFT SIDEBAR -->
   <aside class="settings-sidebar">

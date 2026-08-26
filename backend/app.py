@@ -14,11 +14,16 @@ import certifi
 import pdfplumber
 from datetime import datetime
 from dotenv import load_dotenv
-from flask import Flask, request, render_template, jsonify, g
+from flask import Flask, request, render_template, jsonify, g, redirect, url_for, flash
 from flask_cors import CORS
+from flask_login import (
+    LoginManager, login_user, logout_user, login_required, current_user
+)
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from services.output_verifier import verify_output
+from services.auth_service import AuthService
+from services.conversation_store import ConversationStore
 
 load_dotenv(override=True)
 
@@ -100,6 +105,28 @@ mongo_client = _connect_mongo_safely(MONGO_URI)
 db = mongo_client["clearscan"] if mongo_client is not None else None
 conversations_col = db["conversations"] if db is not None else None
 verification_logs_col = db["verification_logs"] if db is not None else None
+users_col = db["users"] if db is not None else None
+
+if users_col is not None:
+    try:
+        users_col.create_index("email", unique=True)
+    except Exception as e:
+        print(f"⚠️ Could not create unique index on users.email: {e}")
+
+auth_service = AuthService(users_col)
+conv_store = ConversationStore(conversations_col)
+
+# ── FLASK-LOGIN SETUP ────────────────────────────────────────────────────
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return auth_service.get_by_id(user_id)
+
 
 OWNER_COOKIE_NAME = "cs_owner_id"
 OWNER_COOKIE_MAX_AGE = 60 * 60 * 24 * 365  # 1 year
@@ -172,11 +199,28 @@ RULES:
 
 @app.before_request
 def load_owner_id():
+    """
+    Resolves g.owner_id — the key everything else uses to know which
+    conversations belong to this visitor.
+
+    - Logged in:  g.owner_id = "user:<mongo id>" (stable forever, backed by MongoDB)
+    - Guest:      g.owner_id = the anonymous cs_owner_id cookie (backed by the
+                  in-memory guest store — see conversation_store.py). We still
+                  track this even while logged in, so that if the user logs
+                  out again we don't accidentally resurrect an old identity,
+                  and so a guest's identity is stable enough to migrate from
+                  if they register/login mid-session.
+    """
     owner_id = request.cookies.get(OWNER_COOKIE_NAME)
     if not owner_id:
         owner_id = uuid.uuid4().hex
         g.new_owner_id = owner_id   # after_request will set the cookie
-    g.owner_id = owner_id
+    g.guest_owner_id = owner_id
+
+    if current_user.is_authenticated:
+        g.owner_id = current_user.owner_id
+    else:
+        g.owner_id = owner_id
 
 
 @app.after_request
@@ -191,6 +235,71 @@ def set_owner_cookie(response):
             samesite="Lax"
         )
     return response
+
+
+def _migrate_guest_conversations_if_any(user):
+    """Called right after a successful login/registration. If this browser
+    had guest conversations going, move them into the new account so
+    nothing is lost — this is what lets someone start chatting anonymously
+    and keep their history the moment they sign up."""
+    guest_owner_id = g.get("guest_owner_id")
+    if not guest_owner_id:
+        return 0
+    migrated = conv_store.migrate_guest_to_user(guest_owner_id, user.owner_id)
+    return migrated
+
+
+# ── AUTH: register / login / logout ─────────────────────────────────────
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for("analyze"))
+
+    if request.method == "GET":
+        return render_template("register.html")
+
+    email    = request.form.get("email", "")
+    password = request.form.get("password", "")
+    name     = request.form.get("name", "")
+
+    error = auth_service.validate_registration(email, password, name)
+    if error:
+        return render_template("register.html", error=error, email=email, name=name)
+
+    user = auth_service.register(email, password, name)
+    login_user(user, remember=True)
+    migrated = _migrate_guest_conversations_if_any(user)
+
+    return redirect(url_for("analyze", welcome=1, migrated=migrated))
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for("analyze"))
+
+    if request.method == "GET":
+        return render_template("login.html")
+
+    email    = request.form.get("email", "")
+    password = request.form.get("password", "")
+
+    user = auth_service.authenticate(email, password)
+    if not user:
+        return render_template("login.html", error="Incorrect email or password.", email=email)
+
+    login_user(user, remember=True)
+    migrated = _migrate_guest_conversations_if_any(user)
+
+    return redirect(url_for("analyze", welcome=1, migrated=migrated))
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("home"))
 
 
 def get_language_instruction(language):
@@ -306,63 +415,7 @@ def log_verification(conv_id, provider, language, verification, source):
         print(f"⚠️ Verification logging failed: {e}")
 
 
-# ── CONVERSATION HELPERS (MongoDB) ──────────────────────────────────────────
-
-def create_conversation(owner_id, report_text, provider, ollama_model, language,
-                         answer_length, detail_level, results):
-    """
-    Inserts a new conversation document into MongoDB, trims this owner's
-    conversations to MAX_CONVERSATIONS (deletes oldest if over), and
-    returns the new conversation's id as a string. Returns None if MongoDB
-    is currently unavailable — the caller handles this gracefully.
-    """
-    if conversations_col is None:
-        return None
-
-    detected_terms = results.get("detected_terms", []) if isinstance(results, dict) else []
-
-    doc = {
-        "owner_id":       owner_id,
-        "report_text":    report_text,
-        "provider":       provider,
-        "ollama_model":   ollama_model,
-        "language":       language,
-        "answer_length":  answer_length,
-        "detail_level":   detail_level,
-        "detected_terms": detected_terms,
-        "results": {
-            "risk_level":  results.get("risk_level",  "unknown") if isinstance(results, dict) else "unknown",
-            "risk_reason": results.get("risk_reason", "")        if isinstance(results, dict) else "",
-            "summary":     results.get("summary",     "")        if isinstance(results, dict) else str(results),
-            "findings":    results.get("findings",    [])        if isinstance(results, dict) else [],
-            "terms":       results.get("terms",       [])        if isinstance(results, dict) else [],
-                "highlighted_terms": results.get("highlighted_terms", [])  if isinstance(results, dict) else [],
-
-        },
-        "chat_messages": [],
-        "preview":       clean_history_text(report_text[:80]),
-        "risk_level":    results.get("risk_level", "unknown") if isinstance(results, dict) else "unknown",
-        "date":          datetime.now().strftime("%d %b %Y, %I:%M %p"),
-        "timestamp":     datetime.utcnow(),
-    }
-
-    try:
-        result = conversations_col.insert_one(doc)
-        conv_id = str(result.inserted_id)
-
-        # keep only the most recent MAX_CONVERSATIONS for this owner
-        owner_convs = list(
-            conversations_col.find({"owner_id": owner_id}).sort("timestamp", -1)
-        )
-        if len(owner_convs) > MAX_CONVERSATIONS:
-            for extra in owner_convs[MAX_CONVERSATIONS:]:
-                conversations_col.delete_one({"_id": extra["_id"]})
-
-        return conv_id
-    except Exception as e:
-        print(f"⚠️ MongoDB unavailable, conversation not saved: {e}")
-        return None
-
+# ── CONVERSATION SERIALIZATION (for /conversation/<id> GET) ────────────────
 
 def serialize_conv(doc):
     return {
@@ -431,7 +484,7 @@ def analyze():
         except TypeError:
             results = generate_explanation(report_text, provider)
 
-    conv_id = create_conversation(g.owner_id, report_text, provider, ollama_model, language,
+    conv_id = conv_store.create(g.owner_id, report_text, provider, ollama_model, language,
                                    answer_length, detail_level, results)
 
     # verify the explanation against confirmed terms and log it
@@ -502,7 +555,7 @@ def analyze_ajax():
             results = generate_explanation(report_text, provider)
 
     # Create a fresh conversation (report + its own chat thread)
-    conv_id = create_conversation(g.owner_id, report_text, provider, ollama_model, language,
+    conv_id = conv_store.create(g.owner_id, report_text, provider, ollama_model, language,
                                    answer_length, detail_level, results)
 
     # verify the explanation against confirmed terms and log it
@@ -532,41 +585,17 @@ def analyze_ajax():
 
 @app.route("/conversations", methods=["GET"])
 def list_conversations():
-    if conversations_col is None:
-        return jsonify({"conversations": [], "warning": "History temporarily unavailable"})
-    try:
-        docs = conversations_col.find({"owner_id": g.owner_id}).sort("timestamp", -1)
-        items = [
-            {
-                "id":         str(d["_id"]),
-                "preview":    d["preview"],
-                "title":      d.get("custom_title"),   # NEW — renamed title, if set
-                "provider":   d["provider"],
-                "risk_level": d["risk_level"],
-                "date":       d["date"],
-            }
-            for d in docs
-        ]
-        return jsonify({"conversations": items})
-    except Exception as e:
-        print(f"⚠️ MongoDB unavailable: {e}")
-        return jsonify({"conversations": [], "warning": "History temporarily unavailable"})
+    items = conv_store.list_for_owner(g.owner_id)
+    return jsonify({"conversations": items})
 
 
 # ── CONVERSATIONS: reload one full conversation (report + chat) ───────────
 
 @app.route("/conversation/<conv_id>", methods=["GET"])
 def get_conversation(conv_id):
-    if conversations_col is None:
-        return jsonify({"error": "Database temporarily unavailable"}), 503
-    try:
-        doc = conversations_col.find_one({"_id": ObjectId(conv_id), "owner_id": g.owner_id})
-    except Exception:
-        doc = None
-
+    doc = conv_store.get(conv_id, g.owner_id)
     if not doc:
         return jsonify({"error": "Conversation not found"}), 404
-
     return jsonify(serialize_conv(doc))
 
 
@@ -574,13 +603,10 @@ def get_conversation(conv_id):
 
 @app.route("/conversation/<conv_id>", methods=["DELETE"])
 def delete_conversation(conv_id):
-    if conversations_col is None:
+    result = conv_store.delete(conv_id, g.owner_id)
+    if result is None:
         return jsonify({"error": "Database temporarily unavailable"}), 503
-    try:
-        result = conversations_col.delete_one({"_id": ObjectId(conv_id), "owner_id": g.owner_id})
-    except Exception:
-        return jsonify({"error": "Invalid id"}), 400
-    if result.deleted_count == 0:
+    if not result:
         return jsonify({"error": "Not found"}), 404
     return jsonify({"deleted": True})
 
@@ -589,20 +615,14 @@ def delete_conversation(conv_id):
 
 @app.route("/conversation/<conv_id>/rename", methods=["POST"])
 def rename_conversation(conv_id):
-    if conversations_col is None:
-        return jsonify({"error": "Database temporarily unavailable"}), 503
     data = request.get_json(silent=True) or {}
     title = (data.get("title") or "").strip()[:100]
     if not title:
         return jsonify({"error": "Title required"}), 400
-    try:
-        result = conversations_col.update_one(
-            {"_id": ObjectId(conv_id), "owner_id": g.owner_id},
-            {"$set": {"custom_title": title}}
-        )
-    except Exception:
-        return jsonify({"error": "Invalid id"}), 400
-    if result.matched_count == 0:
+    result = conv_store.rename(conv_id, g.owner_id, title)
+    if result is None:
+        return jsonify({"error": "Database temporarily unavailable"}), 503
+    if not result:
         return jsonify({"error": "Not found"}), 404
     return jsonify({"title": title})
 
@@ -615,13 +635,10 @@ def chat():
     user_msg = data.get("message", "").strip()
     conv_id  = data.get("conversation_id")
 
-    if not conv_id or conversations_col is None:
+    if not conv_id:
         return jsonify({"reply": "I don't have your report loaded. Please go back and submit your report first."})
 
-    try:
-        doc = conversations_col.find_one({"_id": ObjectId(conv_id), "owner_id": g.owner_id})
-    except Exception:
-        doc = None
+    doc = conv_store.get(conv_id, g.owner_id)
 
     if not doc:
         return jsonify({"reply": "I don't have your report loaded. Please go back and submit your report first."})
@@ -691,17 +708,9 @@ def chat():
     chat_messages = chat_messages[-(MAX_CHAT_TURNS * 2):]
 
     try:
-        conversations_col.update_one(
-            {"_id": ObjectId(conv_id)},
-            {"$set": {
-                "chat_messages": chat_messages,
-                "language": language,
-                "answer_length": answer_length,
-                "detail_level": detail_level
-            }}
-        )
+        conv_store.update_chat(conv_id, g.owner_id, chat_messages, language, answer_length, detail_level)
     except Exception as e:
-        print(f"⚠️ Could not save chat turn to MongoDB: {e}")
+        print(f"⚠️ Could not save chat turn: {e}")
 
     return jsonify({
         "reply": reply,
