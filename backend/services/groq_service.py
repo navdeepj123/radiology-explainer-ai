@@ -8,7 +8,7 @@ client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 def generate_with_groq(prompt):
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model="openai/gpt-oss-120b",
         messages=[
             {
                 "role": "system",
@@ -31,7 +31,10 @@ Do not contradict the detected terms under any circumstances.
             }
         ],
         temperature=0.2,
-        max_tokens=700
+        max_tokens=700,
+        max_completion_tokens=1500,
+        reasoning_effort="low",
+        include_reasoning=False
     )
 
     return response.choices[0].message.content

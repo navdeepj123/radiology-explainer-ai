@@ -17,7 +17,6 @@ words hote hain, isliye inhe contradiction-check se exclude karte hain.
 
 import re
 
-
 NEGATION_WORDS = [
     "no ", "not ", "without ", "absent ",
     "negative for ", "no evidence of ",

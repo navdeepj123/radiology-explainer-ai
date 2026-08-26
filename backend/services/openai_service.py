@@ -10,17 +10,13 @@ client = OpenAI(
 )
 
 def generate_with_openai(prompt):
-
     response = client.chat.completions.create(
-
         model="openrouter/free",
-
         messages=[
             {
                 "role": "system",
                 "content": """
 You are a professional radiology explanation assistant for patients.
-
 Rules:
 - Use simple English
 - Use bullet points
@@ -38,9 +34,7 @@ Rules:
                 "content": prompt
             }
         ],
-
         temperature=0.2,
         max_tokens=900
     )
-
     return response.choices[0].message.content
