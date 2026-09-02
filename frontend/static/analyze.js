@@ -19,7 +19,6 @@ function toggleTheme() {
 
 ClearScanControls.init("#ctrlSlot");
 
-// load mic icons
 document.getElementById('mainMicBtn').innerHTML = ClearScanVoice.micSvg;
 document.getElementById('csMicBtn').innerHTML   = ClearScanVoice.micSvg;
 
@@ -36,8 +35,8 @@ var savedText          = '';
 var historyArr         = [];
 var lastText           = '';
 var lastFile            = null;
-var activeConversationId = null;   // MongoDB conversation currently open
-var chatSearchQuery    = '';       // sidebar search filter
+var activeConversationId = null;
+var chatSearchQuery    = '';
 
 var provData = {
   groq:   { tag:'⚡ GROQ',   shortTag:'GROQ',   hint:'Fast and free. Report sent to Groq servers.',   name:'Groq'   },
@@ -71,27 +70,29 @@ function closeChatPanel() {
 }
 
 // ─────────────────────────────────────────
-// LOAD SAVED HISTORY ON PAGE LOAD (from MongoDB)
+// LOAD SAVED HISTORY ON PAGE LOAD (radiology only)
 // ─────────────────────────────────────────
 fetch('/conversations')
   .then(function(res){ return res.json(); })
   .then(function(data){
-    historyArr = (data.conversations || []).map(function(c) {
-      return {
-        preview: c.preview,
-        title:   c.title,           // custom rename, if set
-        risk:    (c.risk_level || 'unknown').toLowerCase(),
-        prov:    c.provider.toUpperCase(),
-        time:    c.date,
-        id:      c.id
-      };
-    });
+    historyArr = (data.conversations || [])
+      .filter(function(c){ return !c.kind || c.kind === 'radiology'; })
+      .map(function(c) {
+        return {
+          preview: c.preview,
+          title:   c.title,
+          risk:    (c.risk_level || 'unknown').toLowerCase(),
+          prov:    c.provider.toUpperCase(),
+          time:    c.date,
+          id:      c.id
+        };
+      });
     renderHistoryList();
   })
-  .catch(function(){ /* silently ignore — sidebar just stays empty */ });
+  .catch(function(){ /* silently ignore */ });
 
 // ─────────────────────────────────────────
-// HISTORY
+// HISTORY (radiology)
 // ─────────────────────────────────────────
 function addToHistory(reportText, riskLevel, prov, convId) {
   var now  = new Date();
@@ -108,10 +109,13 @@ function addToHistory(reportText, riskLevel, prov, convId) {
   renderHistoryList();
 }
 
-// sidebar search
 function onChatSearch(val) {
   chatSearchQuery = val.trim().toLowerCase();
-  renderHistoryList();
+  if (typeof HT_ACTIVE !== 'undefined' && HT_ACTIVE) {
+    renderHtHistoryList(val);
+  } else {
+    renderHistoryList();
+  }
 }
 
 function renderHistoryList() {
@@ -160,7 +164,6 @@ function renderHistoryList() {
   });
 }
 
-// rename a conversation
 function renameConversation(convId) {
   var item = historyArr.find(function(h){ return h.id === convId; });
   if (!item) return;
@@ -180,7 +183,6 @@ function renameConversation(convId) {
     .catch(function(){ showErr('Could not rename chat.'); });
 }
 
-// delete a conversation
 function deleteConversation(convId) {
   if (!confirm('Delete this chat? This cannot be undone.')) return;
 
@@ -217,6 +219,14 @@ function onProviderChange(val) {
     var ollamaSel = document.getElementById('ollamaModelSel');
     if (ollamaSel) ollamaSel.style.display = (val === 'ollama') ? 'inline-block' : 'none';
 
+  var ollamaSelHt = document.getElementById('ollamaModelSelHt');
+  if (ollamaSelHt) ollamaSelHt.style.display = (val === 'ollama') ? 'inline-block' : 'none';
+
+  var provSelHt = document.getElementById('provSelHt');
+  if (provSelHt) provSelHt.value = val;
+  var provSel = document.getElementById('provSel');
+  if (provSel) provSel.value = val;
+
   if (val === 'ollama') {
     if (sidebar) sidebar.classList.add('hidden');
     closeChatPanel();
@@ -230,7 +240,8 @@ function onProviderChange(val) {
 // ─────────────────────────────────────────
 function onOllamaModelChange(val) {
   ollamaModel = val;
-  document.getElementById('ollamaModelHint').textContent = ollamaHints[val] || '';
+  var hintEl = document.getElementById('ollamaModelHint');
+  if (hintEl) hintEl.textContent = ollamaHints[val] || '';
 }
 
 // ─────────────────────────────────────────
@@ -238,9 +249,17 @@ function onOllamaModelChange(val) {
 // ─────────────────────────────────────────
 function onLengthChange(val) {
   answerLength = val;
+  var s1 = document.getElementById('lengthSel');
+  var s2 = document.getElementById('lengthSelHt');
+  if (s1) s1.value = val;
+  if (s2) s2.value = val;
 }
 function onDetailChange(val) {
   detailLevel = val;
+  var s1 = document.getElementById('detailSel');
+  var s2 = document.getElementById('detailSelHt');
+  if (s1) s1.value = val;
+  if (s2) s2.value = val;
 }
 
 // ─────────────────────────────────────────
@@ -287,9 +306,8 @@ function onMainSend() {
   }
   hideErr();
 
-  // fresh report = fresh visual thread — clear the old conversation view
   document.getElementById('msgs').innerHTML = '';
-  resetChatPanel();   // resets csMsgs back to "submit your report" notice
+  resetChatPanel();
 
   savedText = text;
   lastText  = text;
@@ -302,7 +320,6 @@ function onMainSend() {
   clearFile();
 }
 
-// Shared by the send button and the regenerate button
 function runAnalysis(text, file) {
   document.getElementById('mainSendBtn').disabled = true;
   document.getElementById('statusPill').textContent = 'Analyzing…';
@@ -389,7 +406,7 @@ function onNewReport() {
   isAnalyzed = false;
   savedText  = '';
   activeConversationId = null;
-  document.getElementById('msgs').innerHTML = '';   // clear old result/chat
+  document.getElementById('msgs').innerHTML = '';
   document.getElementById('inputArea').style.display    = 'block';
   document.getElementById('newReportBar').style.display = 'none';
   document.getElementById('mainTa').value        = '';
@@ -409,11 +426,11 @@ function onNewReport() {
     + '</div>';
   document.getElementById('csTa').disabled      = true;
   document.getElementById('csSendBtn').disabled = true;
-  renderHistoryList();   // remove active highlight — no active chat now
+  renderHistoryList();
 }
 
 // ─────────────────────────────────────────
-// LOAD PREVIOUS CONVERSATION (sidebar click)
+// LOAD PREVIOUS CONVERSATION (sidebar click) — radiology
 // ─────────────────────────────────────────
 function loadConversation(convId) {
   if (!convId || convId === activeConversationId) return;
@@ -429,8 +446,6 @@ function loadConversation(convId) {
       answerLength = conv.answer_length || 'standard';
       detailLevel  = conv.detail_level  || 'medium';
 
-      // reset csMsgs to the default notice template first, so csNoticeProv
-      // exists again before onProviderChange runs
       document.getElementById('csMsgs').innerHTML =
         '<div class="cs-notice" id="csNotice">'
         + '<div class="cs-notice-icon">🫁</div>'
@@ -438,9 +453,8 @@ function loadConversation(convId) {
         + '<small>Powered by <span id="csNoticeProv"></span></small>'
         + '</div>';
 
-      onProviderChange(provider);   // safe now — csNoticeProv exists
+      onProviderChange(provider);
 
-      // sync dropdowns to this conversation's saved values
       var provSel = document.getElementById('provSel');
       if (provSel) provSel.value = provider;
       var ollamaSel = document.getElementById('ollamaModelSel');
@@ -454,7 +468,7 @@ function loadConversation(convId) {
       appendUserBubble(conv.report_text.substring(0, 150), null);
       conv.results.report_text = conv.report_text;
       renderBotResult(conv.results);
-      activateChatbot();   // removes csNotice and inserts the real messages
+      activateChatbot();
 
       document.getElementById('csMsgs').innerHTML = '';
       conv.chat_messages.forEach(function(m) {
@@ -525,7 +539,6 @@ function activateChatbot() {
   document.getElementById('csTa').placeholder   = 'Ask about your report…';
   document.getElementById('csSendBtn').disabled = false;
 
-  // panel should open on its own once analysis is ready
   toggleChatPanel();
 }
 
@@ -665,7 +678,6 @@ function renderBotResult(d) {
   if (provider === 'ollama') {
     pTag = ollamaModel === 'mistral' ? '🧠 MISTRAL' : '⚡ LLAMA3.2:1B';
   }
-   // verification badge
   var verifyHtml = '';
   if (d.verification && d.verification.checked_count > 0) {
     if (d.verification.passed) {
@@ -675,7 +687,6 @@ function renderBotResult(d) {
     }
   }
 
-   // NEW — original report with clickable highlighted terms
   var reportContainerId = 'reportText-' + Date.now();
   var reportHtml = '';
   if (d.report_text) {
@@ -683,7 +694,6 @@ function renderBotResult(d) {
       + '<div class="report-text-block" id="' + reportContainerId + '"></div></div>';
   }
 
-  // NEW — anatomical body map
   var bodyMapContainerId = 'bodyMap-' + Date.now();
   var bodyMapHtml = '';
   if (d.terms && d.terms.length) {
@@ -760,7 +770,7 @@ function onCopyResult(btn) {
 }
 
 // ─────────────────────────────────────────
-// CLOUD CHATBOT SIDEBAR
+// CLOUD CHATBOT SIDEBAR (used by BOTH radiology and health tools)
 // ─────────────────────────────────────────
 function onCsGrow(el) {
   el.style.height = 'auto';
@@ -782,16 +792,30 @@ function onCsSend() {
   document.getElementById('csSendBtn').disabled = true;
   csAppend(msg, 'user');
   var tid = csTyping();
-  fetch('/chat', {
+
+  var isHt = (typeof HT_ACTIVE !== 'undefined' && HT_ACTIVE);
+  var url = isHt ? ('/api/health-tools/' + HT_ACTIVE + '/chat') : '/chat';
+  var body = isHt
+    ? {
+        message: msg,
+        conversation_id: (typeof htActiveConversationId !== 'undefined') ? htActiveConversationId : null,
+        provider: provider,
+        answer_length: answerLength,
+        detail_level: detailLevel,
+        ollama_model: ollamaModel
+      }
+    : {
+        message: msg,
+        language: ClearScanControls.getLanguageName(),
+        answer_length: answerLength,
+        detail_level: detailLevel,
+        conversation_id: activeConversationId
+      };
+
+  fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      message: msg,
-      language: ClearScanControls.getLanguageName(),
-      answer_length: answerLength,
-      detail_level: detailLevel,
-      conversation_id: activeConversationId
-    })
+    body: JSON.stringify(body)
   })
     .then(function(res){ return res.json(); })
     .then(function(data){
