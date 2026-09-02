@@ -24,6 +24,7 @@ from bson.objectid import ObjectId
 from services.output_verifier import verify_output
 from services.auth_service import AuthService
 from services.conversation_store import ConversationStore
+from routes.health_tools_routes import health_tools_bp
 
 load_dotenv(override=True)
 
@@ -37,6 +38,8 @@ app = Flask(
 
 app.secret_key = os.environ.get("FLASK_SECRET", "clearscan-secret-key-2025")
 CORS(app, supports_credentials=True)
+
+app.register_blueprint(health_tools_bp)
 
 # ── MONGODB CONNECTION (auto DNS-flush + retry + clean Ctrl+C) ─────────────
 
@@ -116,6 +119,7 @@ if users_col is not None:
 
 auth_service = AuthService(users_col)
 conv_store = ConversationStore(conversations_col)
+app.config['CONV_STORE'] = conv_store
 
 # ── FLASK-LOGIN SETUP ────────────────────────────────────────────────────
 
@@ -430,6 +434,9 @@ def serialize_conv(doc):
         "detected_terms": doc.get("detected_terms", []),
         "results":        doc["results"],
         "chat_messages":  doc.get("chat_messages", []),
+        "kind":           doc.get("kind", "radiology"),
+        "tool_id":        doc.get("tool_id"),
+        "tool_name":      doc.get("tool_name"),
     }
 
 

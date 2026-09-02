@@ -1,33 +1,6 @@
 """
 conversation_store.py — Dual-backend conversation persistence.
-
-Design
-------
-ClearScan supports optional login (like claude.ai): anyone can use the app
-without an account, but conversation history is only PERMANENTLY saved if
-they're logged in.
-
-Rather than scattering "if logged in / else" branches across every route in
-app.py, this module hides the two backends behind one small interface:
-
-  - Authenticated owners  (owner_id = "user:<mongo _id>")
-        -> persisted forever in MongoDB, same as before Flask-Login existed.
-
-  - Guest owners          (owner_id = the anonymous cs_owner_id cookie value)
-        -> held in an in-memory, per-process TTL store. Full functionality
-           (multi-turn chat, multiple conversations, rename/delete) works
-           exactly the same as a logged-in user during the browser session,
-           but nothing touches the database and everything is purged after
-           GUEST_TTL_SECONDS of inactivity or on server restart.
-
-When a guest registers or logs in, app.py calls migrate_guest_to_user() to
-move their in-memory conversations into MongoDB under their new account,
-so they don't lose what they were just doing.
-
-Note: the in-memory guest store is per-process. That's fine for a single
-Flask dev server (this project's deployment target), but a multi-worker
-production deployment would need a shared store (e.g. Redis with a TTL)
-instead — noted here as a known scaling limitation, not fixed by this store.
+Now supports both radiology reports and health-tool chats via `kind`.
 """
 
 import threading
@@ -35,11 +8,11 @@ import time
 import uuid
 from datetime import datetime
 
-GUEST_TTL_SECONDS = 60 * 60 * 6  # guest conversations expire after 6 hours idle
+GUEST_TTL_SECONDS = 60 * 60 * 6
 MAX_CONVERSATIONS = 5
 
 _guest_lock = threading.Lock()
-_guest_store = {}   # owner_id -> {conv_id: {..doc.., "_last_touched": epoch}}
+_guest_store = {}
 
 
 def _purge_expired_guests():
@@ -59,13 +32,8 @@ def _clean_history_text(text):
 
 
 class ConversationStore:
-    """Unified interface used by app.py — callers don't need to know or
-    care whether a given owner_id is backed by Mongo or the guest store."""
-
     def __init__(self, conversations_col):
         self.conversations_col = conversations_col
-
-    # ---- helpers -----------------------------------------------------
 
     @staticmethod
     def is_guest_owner(owner_id):
@@ -74,7 +42,8 @@ class ConversationStore:
     # ---- create --------------------------------------------------------
 
     def create(self, owner_id, report_text, provider, ollama_model, language,
-               answer_length, detail_level, results):
+               answer_length, detail_level, results,
+               kind="radiology", tool_id=None, tool_name=None):
         detected_terms = results.get("detected_terms", []) if isinstance(results, dict) else []
         doc = {
             "owner_id":       owner_id,
@@ -85,6 +54,9 @@ class ConversationStore:
             "answer_length":  answer_length,
             "detail_level":   detail_level,
             "detected_terms": detected_terms,
+            "kind":           kind,
+            "tool_id":        tool_id,
+            "tool_name":      tool_name,
             "results": {
                 "risk_level":  results.get("risk_level",  "unknown") if isinstance(results, dict) else "unknown",
                 "risk_reason": results.get("risk_reason", "")        if isinstance(results, dict) else "",
@@ -146,6 +118,8 @@ class ConversationStore:
                 {
                     "id": d["_id"], "preview": d["preview"], "title": d.get("custom_title"),
                     "provider": d["provider"], "risk_level": d["risk_level"], "date": d["date"],
+                    "kind": d.get("kind", "radiology"), "tool_id": d.get("tool_id"),
+                    "tool_name": d.get("tool_name"),
                 }
                 for d in convs
             ]
@@ -158,6 +132,8 @@ class ConversationStore:
                 {
                     "id": str(d["_id"]), "preview": d["preview"], "title": d.get("custom_title"),
                     "provider": d["provider"], "risk_level": d["risk_level"], "date": d["date"],
+                    "kind": d.get("kind", "radiology"), "tool_id": d.get("tool_id"),
+                    "tool_name": d.get("tool_name"),
                 }
                 for d in docs
             ]
@@ -165,15 +141,7 @@ class ConversationStore:
             print(f"⚠️ MongoDB unavailable: {e}")
             return []
 
-    # ---- full list for trend/analytics views ------------------------------
-
     def list_full_for_owner(self, owner_id):
-        """
-        /trends ke liye — sidebar wale list_for_owner() ke ulat, ye poore
-        conversation docs deta hai (detected_terms, risk_level, date samet),
-        oldest -> newest order me, taaki chart left-to-right padha jaye.
-        Guest aur logged-in dono owners ke liye kaam karta hai.
-        """
         if self.is_guest_owner(owner_id):
             _purge_expired_guests()
             with _guest_lock:
@@ -221,7 +189,7 @@ class ConversationStore:
             return False
 
         if self.conversations_col is None:
-            return None  # signals "db unavailable" to caller
+            return None
         try:
             from bson.objectid import ObjectId
             result = self.conversations_col.delete_one({"_id": ObjectId(conv_id), "owner_id": owner_id})
@@ -252,7 +220,7 @@ class ConversationStore:
             return False
         return result.matched_count > 0
 
-    # ---- update chat (after each /chat turn) ----------------------------
+    # ---- update chat -----------------------------------------------------
 
     def update_chat(self, conv_id, owner_id, chat_messages, language, answer_length, detail_level):
         if self.is_guest_owner(owner_id):
@@ -282,14 +250,9 @@ class ConversationStore:
         except Exception as e:
             print(f"⚠️ Could not save chat turn to MongoDB: {e}")
 
-    # ---- guest -> account migration (the "sign in mid-chat" feature) ----
+    # ---- guest -> account migration --------------------------------------
 
     def migrate_guest_to_user(self, guest_owner_id, user_owner_id):
-        """
-        Moves every conversation a guest built up during this browser
-        session into MongoDB under their new account, the moment they
-        register or log in. Returns how many conversations were migrated.
-        """
         if self.conversations_col is None:
             return 0
 
@@ -310,7 +273,6 @@ class ConversationStore:
             except Exception as e:
                 print(f"⚠️ Could not migrate a guest conversation: {e}")
 
-        # re-apply the MAX_CONVERSATIONS cap now that migrated ones are in
         try:
             owner_convs = list(
                 self.conversations_col.find({"owner_id": user_owner_id}).sort("timestamp", -1)

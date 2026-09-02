@@ -9,6 +9,52 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='analyze.css') }}">
 <script src="{{ url_for('static', filename='controls.js') }}"></script>
 <script src="{{ url_for('static', filename='voice.js') }}"></script>
+<style>
+  #sbToolSwitch { position: relative; }
+  #modeMenu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    width: 260px;
+    z-index: 50;
+    background: var(--card, #131c2b);
+    border: 1px solid var(--border2, #2a3850);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.4);
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  .mode-menu-item {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    padding: 8px 10px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border, #1a2436);
+  }
+  .mode-menu-item:last-child { border-bottom: none; }
+  .mode-menu-item:hover { background: var(--card2, #1c2942); }
+  .mode-menu-item.active { background: var(--card2, #16233a); }
+  .mm-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .mm-title {
+    font-weight: 600;
+    font-size: .74rem;
+    color: var(--text, #fff);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .mm-desc {
+    font-size: .64rem;
+    color: var(--muted, #7a8aaa);
+    margin-top: 1px;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
 </head>
 <body>
 
@@ -51,34 +97,46 @@
       <div class="sb-title">ClearScan</div>
       <div class="sb-sub">Patient Health Tools</div>
     </div>
-    <div class="sb-tool"><span>🫁</span><span>Radiology Explainer</span></div>
 
-    <!-- Prominent New Report button -->
-    <div class="sb-new-wrap">
+    <div class="sb-tool" id="sbToolSwitch" onclick="toggleModeMenu(event)" style="cursor:pointer;justify-content:space-between;">
+      <span><span id="sbToolIcon">🫁</span> <span id="sbToolLabel">Radiology Explainer</span></span>
+      <span style="font-size:.75rem;color:var(--accent,#7ea6ff);">switch ▾</span>
+
+      <div id="modeMenu" style="display:none;"></div>
+    </div>
+
+    <div class="sb-new-wrap" id="radNewWrap">
       <button class="sb-new-btn" onclick="onNewReport()">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         New Report
       </button>
     </div>
+    <div class="sb-new-wrap" id="htNewWrap" style="display:none;">
+      <button class="sb-new-btn" onclick="onHtNewChat()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        New Chat
+      </button>
+    </div>
 
-    <!-- CHATS — search + list with edit/delete on hover -->
-    <div class="sb-hist-sec">Chats</div>
-    <div class="sb-search-wrap">
+    <div class="sb-hist-sec" id="chatsSecLabel">Chats</div>
+    <div class="sb-search-wrap" id="chatsSearchWrap">
       <input type="text" class="sb-search-input" id="chatSearchInput" placeholder="🔍 Search chats…" oninput="onChatSearch(this.value)">
     </div>
     <div class="sb-hist-list" id="sbHistList">
       <div class="sb-hist-empty" id="sbHistEmpty">No chats yet</div>
     </div>
+
     <div class="sb-privacy"><strong>🔒 Private</strong><br>Never stored on our servers.</div>
   </aside>
 
   <!-- CENTER -->
   <div class="main">
     <div class="main-top">
-      <span class="main-top-title">Radiology Report Explainer</span>
+      <span class="main-top-title" id="mainTopTitle">Radiology Report Explainer</span>
       <span class="tpill" id="statusPill">Ready</span>
     </div>
 
+    <!-- RADIOLOGY MSGS -->
     <div class="msgs" id="msgs">
       <div class="empty" id="emptyState">
         <div class="e-icon">🫁</div>
@@ -94,11 +152,21 @@
       </div>
     </div>
 
+    <!-- HEALTH TOOLS MSGS -->
+    <div class="msgs" id="htMsgsWrap" style="display:none;">
+      <div class="empty" id="htEmptyState">
+        <div class="e-icon" id="htEmptyIcon">💊</div>
+        <div class="e-eyebrow" id="htEmptyEyebrow">Health Tool</div>
+        <div class="e-title" id="htEmptyTitle">ClearScan</div>
+        <p class="e-sub" id="htEmptySub">Ask your question below.</p>
+        <div class="chips" id="htChips"></div>
+      </div>
+    </div>
+
+    <!-- RADIOLOGY INPUT AREA -->
     <div class="input-area" id="inputArea">
       <div class="err-bar" id="errBar" style="display:none"></div>
       <div class="input-box">
-
-        <!-- INLINE TOOLBAR — model / length / detail pickers -->
         <div class="input-toolbar">
           <select class="pill-sel" id="provSel" onchange="onProviderChange(this.value)" title="AI Provider">
             <option value="groq">⚡ Groq</option>
@@ -106,18 +174,15 @@
             <option value="openai">🤖 OpenAI</option>
             <option value="ollama">🖥️ Ollama</option>
           </select>
-
           <select class="pill-sel" id="ollamaModelSel" onchange="onOllamaModelChange(this.value)" title="Ollama Model" style="display:none;">
             <option value="llama3.2:1b">⚡ llama3.2:1b</option>
             <option value="mistral">🧠 mistral</option>
           </select>
-
           <select class="pill-sel" id="lengthSel" onchange="onLengthChange(this.value)" title="Answer Length">
             <option value="brief">📝 Brief</option>
             <option value="standard" selected>📄 Standard</option>
             <option value="intensive">📚 Intensive</option>
           </select>
-
           <select class="pill-sel" id="detailSel" onchange="onDetailChange(this.value)" title="Detail Level">
             <option value="basic">🔵 Basic</option>
             <option value="medium" selected>🟡 Medium</option>
@@ -160,9 +225,56 @@
       </div>
     </div>
 
+    <!-- HEALTH TOOLS INPUT AREA -->
+    <div class="input-area" id="htInputArea" style="display:none;">
+      <div class="err-bar" id="htErrBar" style="display:none"></div>
+      <div class="input-box">
+        <div class="input-toolbar">
+          <select class="pill-sel" id="provSelHt" onchange="onProviderChange(this.value)" title="AI Provider">
+            <option value="groq">⚡ Groq</option>
+            <option value="gemini">✨ Gemini</option>
+            <option value="openai">🤖 OpenAI</option>
+            <option value="ollama">🖥️ Ollama</option>
+          </select>
+          <select class="pill-sel" id="ollamaModelSelHt" onchange="onOllamaModelChange(this.value)" title="Ollama Model" style="display:none;">
+            <option value="llama3.2:1b">⚡ llama3.2:1b</option>
+            <option value="mistral">🧠 mistral</option>
+          </select>
+          <select class="pill-sel" id="lengthSelHt" onchange="onLengthChange(this.value)" title="Answer Length">
+            <option value="brief">📝 Brief</option>
+            <option value="standard" selected>📄 Standard</option>
+            <option value="intensive">📚 Intensive</option>
+          </select>
+          <select class="pill-sel" id="detailSelHt" onchange="onDetailChange(this.value)" title="Detail Level">
+            <option value="basic">🔵 Basic</option>
+            <option value="medium" selected>🟡 Medium</option>
+            <option value="high">🔴 High</option>
+          </select>
+        </div>
+
+        <button class="mic-btn" id="htMicBtn" type="button" title="Speak"
+                onclick="ClearScanVoice.toggleMic('htTa','htMicBtn','onHtGrow')">
+        </button>
+        <textarea id="htTa"
+          placeholder="Ask a health tool…"
+          oninput="onHtGrow(this)"></textarea>
+        <button class="send-btn" id="htSendBtn" onclick="onHtSend()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M1.5 7h11M8 3l4.5 4L8 11" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="input-meta">
+        <span class="meta-note">🔒 Processed securely · Never stored</span>
+        <div class="meta-r">
+          <button class="sample-btn" id="htSampleBtn" onclick="onLoadHtSample()">↺ Sample question</button>
+        </div>
+      </div>
+    </div>
+
     <div class="new-report-bar" id="newReportBar">
-      <span class="analyzed-note">✓ Report analyzed — ask questions in the chat →</span>
-      <button class="new-report-btn" onclick="onNewReport()">
+      <span class="analyzed-note" id="newReportBarNote">✓ Report analyzed — ask questions in the chat →</span>
+      <button class="new-report-btn" id="newReportBarBtn" onclick="onNewReport()">
         <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
           <path d="M2 6.5a4.5 4.5 0 104.5-4.5H4M4 2L2 4l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -171,13 +283,13 @@
     </div>
   </div>
 
-  <!-- RIGHT CHAT SIDEBAR (floating slide-in panel) -->
+  <!-- RIGHT CHAT SIDEBAR — shared by radiology & health tools -->
   <aside class="chat-sidebar" id="chatSidebar">
     <div class="cs-topbar">
       <div class="cs-title-wrap">
-        <div class="cs-avatar">💬</div>
+        <div class="cs-avatar" id="csAvatar">💬</div>
         <div>
-          <div class="cs-name">ClearScan Assistant</div>
+          <div class="cs-name" id="csName">ClearScan Assistant</div>
           <div class="cs-status"><span class="cs-dot"></span>Online · Report-aware</div>
         </div>
       </div>
@@ -192,7 +304,7 @@
       </div>
     </div>
     <div class="cs-input-wrap">
-      <div class="cs-limit">🔒 Only answers questions about your report</div>
+      <div class="cs-limit" id="csLimitNote">🔒 Only answers questions about your report</div>
       <div class="cs-input-row">
         <textarea class="cs-ta" id="csTa" rows="1"
           placeholder="Ask about your report…"
@@ -211,10 +323,8 @@
     </div>
   </aside>
 
-  <!-- FLOATING ASSISTANT TAB -->
   <button class="chat-fab" id="chatFab" onclick="toggleChatPanel()">Assistant<span class="chat-fab-dot"></span></button>
 
-  <!-- OVERLAY (dims background when panel open) -->
   <div class="chat-overlay" id="chatOverlay" onclick="closeChatPanel()"></div>
 
 </div>
@@ -229,5 +339,480 @@
 <script src="{{ url_for('static', filename='body_map.js') }}"></script>
 <script src="{{ url_for('static', filename='trend_chart.js') }}"></script>
 <script src="{{ url_for('static', filename='analyze.js') }}"></script>
+
+<script>
+/* ============ HEALTH TOOLS — full parity with radiology mode ============ */
+
+let HT_CONFIG = {};
+let HT_ACTIVE = null;
+let htActiveConversationId = null;
+let htHistoryArr = [];
+let htSearchQuery = '';
+
+const HT_ICONS = {
+  jargon_explainer: "📖",
+  diagnosis_explainer: "🩺",
+  drug_explainer: "💊",
+  ecg_explainer: "❤️",
+  fever_converter: "🌡️",
+};
+
+const HT_SAMPLES = {
+  jargon_explainer: "cardiomegaly",
+  diagnosis_explainer: "Type 2 diabetes mellitus",
+  drug_explainer: "Metformin",
+  ecg_explainer: "Sinus tachycardia with occasional PVCs",
+  fever_converter: "101 F",
+};
+
+const HT_CHIPS = {
+  jargon_explainer: ["cardiomegaly", "atelectasis", "pleural effusion"],
+  diagnosis_explainer: ["Type 2 diabetes", "Hypertension", "Asthma"],
+  drug_explainer: ["Paracetamol", "Metformin", "Amoxicillin"],
+  ecg_explainer: ["Sinus tachycardia", "Atrial fibrillation", "ST elevation"],
+  fever_converter: ["101 F", "38.5 C", "104 F"],
+};
+
+async function toggleModeMenu(e) {
+  e.stopPropagation();
+  const menu = document.getElementById("modeMenu");
+  const opening = menu.style.display === "none";
+  if (opening) {
+    if (Object.keys(HT_CONFIG).length === 0) await loadHealthTools();
+    renderModeMenu();
+  }
+  menu.style.display = opening ? "block" : "none";
+}
+
+document.addEventListener("click", (e) => {
+  const switchBox = document.getElementById("sbToolSwitch");
+  const menu = document.getElementById("modeMenu");
+  if (menu.style.display === "block" && !switchBox.contains(e.target)) {
+    menu.style.display = "none";
+  }
+});
+
+async function loadHealthTools() {
+  const res = await fetch("/api/health-tools/list");
+  const data = await res.json();
+  HT_CONFIG = data.tools;
+}
+
+function renderModeMenu() {
+  const menu = document.getElementById("modeMenu");
+  menu.innerHTML = "";
+
+  const radItem = document.createElement("div");
+  radItem.className = "mode-menu-item" + (HT_ACTIVE === null ? " active" : "");
+  radItem.onclick = (ev) => { ev.stopPropagation(); switchToRadiology(); };
+  radItem.innerHTML = `
+    <div class="mm-icon">🫁</div>
+    <div>
+      <div class="mm-title">Radiology Explainer</div>
+      <div class="mm-desc">Paste a radiology report for a plain-language explanation.</div>
+    </div>`;
+  menu.appendChild(radItem);
+
+  Object.keys(HT_CONFIG).forEach(toolId => {
+    const cfg = HT_CONFIG[toolId];
+    const item = document.createElement("div");
+    item.className = "mode-menu-item" + (HT_ACTIVE === toolId ? " active" : "");
+    item.onclick = (ev) => { ev.stopPropagation(); switchToHealthTool(toolId); };
+    item.innerHTML = `
+      <div class="mm-icon">${HT_ICONS[toolId] || "🔹"}</div>
+      <div>
+        <div class="mm-title">${cfg.name}</div>
+        <div class="mm-desc">${cfg.description}</div>
+      </div>`;
+    menu.appendChild(item);
+  });
+}
+
+function switchToRadiology() {
+  HT_ACTIVE = null;
+  htActiveConversationId = null;
+  document.getElementById("modeMenu").style.display = "none";
+
+  document.getElementById("sbToolIcon").textContent = "🫁";
+  document.getElementById("sbToolLabel").textContent = "Radiology Explainer";
+  document.getElementById("mainTopTitle").textContent = "Radiology Report Explainer";
+
+  document.getElementById("radNewWrap").style.display = "";
+  document.getElementById("htNewWrap").style.display = "none";
+
+  document.getElementById("msgs").style.display = "";
+  document.getElementById("htMsgsWrap").style.display = "none";
+  document.getElementById("inputArea").style.display = "";
+  document.getElementById("htInputArea").style.display = "none";
+  document.getElementById("newReportBarNote").textContent = "✓ Report analyzed — ask questions in the chat →";
+  document.getElementById("newReportBarBtn").innerHTML =
+    '<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5a4.5 4.5 0 104.5-4.5H4M4 2L2 4l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Analyse New Report';
+  document.getElementById("newReportBarBtn").setAttribute("onclick", "onNewReport()");
+
+  document.getElementById("chatFab").style.display = "";
+  document.getElementById("csName").textContent = "ClearScan Assistant";
+  document.getElementById("csAvatar").textContent = "💬";
+  document.getElementById("csLimitNote").textContent = "🔒 Only answers questions about your report";
+
+  chatSearchQuery = '';
+  document.getElementById('chatSearchInput').value = '';
+  renderHistoryList();
+}
+
+function switchToHealthTool(toolId) {
+  HT_ACTIVE = toolId;
+  htActiveConversationId = null;
+  document.getElementById("modeMenu").style.display = "none";
+
+  const cfg = HT_CONFIG[toolId];
+  const icon = HT_ICONS[toolId] || "🔹";
+
+  document.getElementById("sbToolIcon").textContent = icon;
+  document.getElementById("sbToolLabel").textContent = cfg.name;
+  document.getElementById("mainTopTitle").textContent = cfg.name;
+  document.getElementById("htTa").placeholder = "Ask " + cfg.name + "…";
+
+  document.getElementById("radNewWrap").style.display = "none";
+  document.getElementById("htNewWrap").style.display = "";
+
+  document.getElementById("msgs").style.display = "none";
+  document.getElementById("htMsgsWrap").style.display = "";
+  document.getElementById("inputArea").style.display = "none";
+  document.getElementById("htInputArea").style.display = "";
+  document.getElementById("newReportBar").style.display = "none";
+
+  document.getElementById("chatFab").style.display = "";
+  document.getElementById("csName").textContent = cfg.name + " Assistant";
+  document.getElementById("csAvatar").textContent = icon;
+  document.getElementById("csLimitNote").textContent = "🔒 Only answers questions about " + cfg.name;
+  closeChatPanel();
+
+  resetHtChat();
+  htSearchQuery = '';
+  document.getElementById('chatSearchInput').value = '';
+  loadHtHistory();
+}
+
+function resetHtChat() {
+  const cfg = HT_CONFIG[HT_ACTIVE];
+  const icon = HT_ICONS[HT_ACTIVE] || "🔹";
+  const chips = HT_CHIPS[HT_ACTIVE] || [];
+
+  const wrap = document.getElementById("htMsgsWrap");
+  wrap.innerHTML = `
+    <div class="empty" id="htEmptyState">
+      <div class="e-icon">${icon}</div>
+      <div class="e-eyebrow">${cfg.name}</div>
+      <div class="e-title">ClearScan</div>
+      <p class="e-sub">${cfg.description}</p>
+      <div class="chips" id="htChips">
+        ${chips.map(c => `<span class="chip" onclick="onFillHtInput('${c.replace(/'/g, "\\'")}')">${c}</span>`).join("")}
+      </div>
+    </div>`;
+  document.getElementById("htTa").value = "";
+  onHtGrow(document.getElementById("htTa"));
+  hideHtErr();
+  document.getElementById("htInputArea").style.display = "";
+  document.getElementById("newReportBar").style.display = "none";
+
+  document.getElementById('csMsgs').innerHTML =
+    '<div class="cs-notice" id="csNotice"><div class="cs-notice-icon">' + icon + '</div>'
+    + '<p>Ask your first question in the main box, then I\'ll be able to continue the conversation here.</p>'
+    + '<small>Powered by <span id="csNoticeProv">' + (provData[provider]||provData['groq']).name + '</span></small></div>';
+  document.getElementById('csTa').disabled = true;
+  document.getElementById('csSendBtn').disabled = true;
+}
+
+function onHtNewChat() {
+  htActiveConversationId = null;
+  resetHtChat();
+  renderHtHistoryList();
+}
+
+function onFillHtInput(text) {
+  const ta = document.getElementById("htTa");
+  ta.value = text;
+  onHtGrow(ta);
+  ta.focus();
+}
+function onLoadHtSample() {
+  onFillHtInput(HT_SAMPLES[HT_ACTIVE] || "");
+}
+function onHtGrow(el) {
+  el.style.height = "auto";
+  el.style.height = Math.min(el.scrollHeight, 150) + "px";
+}
+function showHtErr(msg) {
+  const e = document.getElementById("htErrBar");
+  e.textContent = "⚠ " + msg;
+  e.style.display = "block";
+}
+function hideHtErr() {
+  document.getElementById("htErrBar").style.display = "none";
+}
+
+function buildHtInput(cfg, message) {
+  const input = {};
+  if (HT_ACTIVE === "fever_converter") {
+    const match = message.match(/(-?\d+\.?\d*)\s*°?\s*([CcFf])/);
+    if (!match) return { error: "Please include a number and unit, e.g. '101 F' or '38.5 C'." };
+    input.value = match[1];
+    input.unit = match[2].toUpperCase();
+    return { input };
+  }
+  const primaryField = cfg.input_fields.find(f => f.required) || cfg.input_fields[0];
+  input[primaryField.key] = message;
+  return { input };
+}
+
+function htAppendUserBubble(text) {
+  const wrap = document.getElementById("htMsgsWrap");
+  const empty = document.getElementById("htEmptyState");
+  if (empty) empty.remove();
+
+  const now = new Date();
+  const time = now.getHours().toString().padStart(2,"0") + ":" + now.getMinutes().toString().padStart(2,"0");
+
+  const row = document.createElement("div");
+  row.className = "msg-row user";
+  row.innerHTML = `
+    <div class="msg-meta">You</div>
+    <div class="user-bubble">${text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>
+    <div class="ub-actions"><span class="ub-time">${time}</span></div>`;
+  wrap.appendChild(row);
+  wrap.scrollTop = wrap.scrollHeight;
+}
+
+function htShowTyping() {
+  const wrap = document.getElementById("htMsgsWrap");
+  const id = "httyp-" + Date.now();
+  const el = document.createElement("div");
+  el.id = id;
+  el.className = "typing-row";
+  el.innerHTML = '<div class="t-ring"></div><span class="t-txt">Analyzing…</span>';
+  wrap.appendChild(el);
+  wrap.scrollTop = wrap.scrollHeight;
+  return id;
+}
+function htRemoveTyping(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+function htRenderResult(cfg, bodyText) {
+  const wrap = document.getElementById("htMsgsWrap");
+  const icon = HT_ICONS[HT_ACTIVE] || "🔹";
+
+  const row = document.createElement("div");
+  row.className = "msg-row bot";
+  row.innerHTML = `
+    <div class="msg-meta">ClearScan · ${cfg.name}</div>
+    <div class="bot-card">
+      <div class="bot-body">
+        <div>
+          <div class="rs-title"><span class="rs-dot teal"></span>${icon} Explanation</div>
+          <div class="rs-content"></div>
+        </div>
+      </div>
+      <div class="bot-actions">
+        <button class="ba-btn" onclick="window.print()">🖨 Print</button>
+        <button class="ba-btn" onclick="onHtCopyResult(this)">📋 Copy</button>
+        <button class="ba-btn speak-btn" onclick="ClearScanVoice.speakText(this.closest('.bot-card').querySelector('.rs-content').innerHTML, this)">🔊 Read Aloud</button>
+      </div>
+    </div>
+    <div style="font-size:.63rem;color:var(--dim);padding:.15rem .2rem">⚠️ Educational use only. Always discuss with your healthcare provider.</div>`;
+  row.querySelector(".rs-content").textContent = bodyText;
+  wrap.appendChild(row);
+  wrap.scrollTop = wrap.scrollHeight;
+}
+
+function onHtCopyResult(btn) {
+  const card = btn.closest(".bot-card");
+  navigator.clipboard.writeText(card.innerText).then(function() {
+    btn.textContent = "✓ Copied";
+    setTimeout(function(){ btn.textContent = "📋 Copy"; }, 2000);
+  });
+}
+
+function htActivateChatbot() {
+  const notice = document.getElementById('csNotice');
+  if (notice) notice.remove();
+  const cfg = HT_CONFIG[HT_ACTIVE];
+  const wrap = document.createElement('div');
+  wrap.className = 'cs-row';
+  wrap.innerHTML = '<div class="cs-bubble bot">Hi! Ask me follow-up questions about this — I\'ll stay focused on ' + cfg.name + '. 😊</div>'
+    + '<div class="cs-who">' + cfg.name + ' Assistant</div>';
+  document.getElementById('csMsgs').appendChild(wrap);
+  document.getElementById('csMsgs').scrollTop = 99999;
+  document.getElementById('csTa').disabled = false;
+  document.getElementById('csTa').placeholder = 'Ask about ' + cfg.name + '…';
+  document.getElementById('csSendBtn').disabled = false;
+  toggleChatPanel();
+}
+
+async function onHtSend() {
+  const ta = document.getElementById("htTa");
+  const message = ta.value.trim();
+  if (!message || !HT_ACTIVE) { showHtErr("Please type something first."); return; }
+  hideHtErr();
+
+  const cfg = HT_CONFIG[HT_ACTIVE];
+  const isFollowUp = !!htActiveConversationId;
+
+  htAppendUserBubble(message);
+  ta.value = "";
+  ta.style.height = "auto";
+
+  if (isFollowUp) {
+    // route through the same restricted chat endpoint as the Assistant panel
+    document.getElementById("htSendBtn").disabled = true;
+    const typId = htShowTyping();
+    try {
+      const res = await fetch(`/api/health-tools/${HT_ACTIVE}/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message, conversation_id: htActiveConversationId,
+          provider, answer_length: answerLength, detail_level: detailLevel, ollama_model: ollamaModel
+        })
+      });
+      const data = await res.json();
+      htRemoveTyping(typId);
+      htRenderResult(cfg, data.reply);
+      csAppend(message, 'user');
+      csAppend(data.reply, 'bot');
+    } catch (err) {
+      htRemoveTyping(typId);
+      showHtErr("Something went wrong.");
+    } finally {
+      document.getElementById("htSendBtn").disabled = false;
+    }
+    return;
+  }
+
+  const built = buildHtInput(cfg, message);
+  if (built.error) { showHtErr(built.error); return; }
+
+  document.getElementById("htSendBtn").disabled = true;
+  document.getElementById("statusPill").textContent = "Analyzing…";
+  const typId = htShowTyping();
+
+  try {
+    const res = await fetch(`/api/health-tools/${HT_ACTIVE}/analyze`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        input: built.input, provider, answer_length: answerLength, detail_level: detailLevel
+      })
+    });
+    const data = await res.json();
+    htRemoveTyping(typId);
+
+    if (!data.success) {
+      showHtErr(data.errors ? data.errors.join(", ") : "Unknown error");
+      document.getElementById("statusPill").textContent = "Error";
+    } else {
+      let bodyText;
+      if (HT_ACTIVE === "fever_converter") {
+        bodyText = `${data.result.celsius}°C / ${data.result.fahrenheit}°F\n\n${data.result.explanation}`;
+      } else {
+        bodyText = data.result;
+      }
+      htRenderResult(cfg, bodyText);
+      htActiveConversationId = data.conversation_id || null;
+      document.getElementById("statusPill").textContent = "Analysis complete";
+      htActivateChatbot();
+      addToHtHistory(message, htActiveConversationId, cfg.name);
+    }
+  } catch (err) {
+    htRemoveTyping(typId);
+    showHtErr("Something went wrong. Please check your connection and try again.");
+    document.getElementById("statusPill").textContent = "Error";
+  } finally {
+    document.getElementById("htSendBtn").disabled = false;
+  }
+}
+
+/* ---- health-tool sidebar history ---- */
+
+function addToHtHistory(preview, convId, toolName) {
+  if (!convId) return;
+  const now = new Date();
+  const time = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+  htHistoryArr.unshift({ id: convId, preview: preview.substring(0,80), tool_id: HT_ACTIVE, tool_name: toolName, time });
+  renderHtHistoryList();
+}
+
+async function loadHtHistory() {
+  try {
+    const res = await fetch('/conversations');
+    const data = await res.json();
+    htHistoryArr = (data.conversations || [])
+      .filter(c => c.kind === 'health_tool' && c.tool_id === HT_ACTIVE)
+      .map(c => ({ id: c.id, preview: c.preview, tool_id: c.tool_id, tool_name: c.tool_name, time: c.date }));
+    renderHtHistoryList();
+  } catch (e) {
+    renderHtHistoryList();
+  }
+}
+
+function renderHtHistoryList(filter) {
+  htSearchQuery = (filter !== undefined ? filter : htSearchQuery).trim().toLowerCase();
+  const list = document.getElementById('sbHistList');
+  const empty = document.getElementById('sbHistEmpty');
+
+  const filtered = htHistoryArr.filter(item => {
+    if (!htSearchQuery) return true;
+    return (item.preview || '').toLowerCase().indexOf(htSearchQuery) !== -1;
+  });
+
+  empty.style.display = filtered.length ? 'none' : 'block';
+  empty.textContent = htHistoryArr.length ? 'No matching chats' : 'No chats yet';
+
+  list.querySelectorAll('.sh-item').forEach(el => el.remove());
+
+  filtered.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'sh-item' + (item.id === htActiveConversationId ? ' active' : '');
+    div.style.cursor = 'pointer';
+    div.onclick = () => loadHtConversation(item.id);
+    div.innerHTML =
+      '<div class="sh-top sh-title-row"><span class="sh-prov">' + (HT_ICONS[HT_ACTIVE]||'🔹') + '</span></div>'
+      + '<div class="sh-preview">' + escHtml(item.preview) + '…</div>';
+    list.appendChild(div);
+  });
+}
+
+async function loadHtConversation(convId) {
+  if (!convId || convId === htActiveConversationId) return;
+  try {
+    const res = await fetch('/conversation/' + convId);
+    const conv = await res.json();
+    if (conv.error) { showHtErr('Could not load that chat.'); return; }
+
+    htActiveConversationId = convId;
+    const cfg = HT_CONFIG[HT_ACTIVE];
+
+    document.getElementById('htMsgsWrap').innerHTML = '';
+    htAppendUserBubble(conv.report_text || '');
+    htRenderResult(cfg, conv.results.summary || '');
+
+    document.getElementById('csMsgs').innerHTML = '';
+    (conv.chat_messages || []).forEach(m => csAppend(m.content, m.role === 'user' ? 'user' : 'bot'));
+    if (!conv.chat_messages || !conv.chat_messages.length) {
+      htActivateChatbot();
+      closeChatPanel();
+    } else {
+      document.getElementById('csTa').disabled = false;
+      document.getElementById('csSendBtn').disabled = false;
+    }
+
+    renderHtHistoryList();
+  } catch (e) {
+    showHtErr('Could not load that chat.');
+  }
+}
+</script>
+
 </body>
 </html>
