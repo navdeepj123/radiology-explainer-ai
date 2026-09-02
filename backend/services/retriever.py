@@ -50,6 +50,42 @@ def _remove_redundant_term_matches(found_terms):
     return kept
 
 
+def _extract_context_sentence(matched_variant, report_text):
+    """
+    Us sentence ko nikalta hai jisme term mila tha.
+
+    Body map ise use karta hai: agar term generic hai (jaise "lesion",
+    jiska body_system "General" hai aur isliye body_regions.json ke
+    term_map mein uski koi fixed entry nahi hoti), toh is sentence mein
+    anatomical hints dhoondh ke approximate region decide kiya jaata hai.
+
+    Example: "A small area of abnormal signal intensity is present in
+    the left frontal white matter" -> is sentence se "white matter"
+    hint milta hai -> head region.
+    """
+    if not matched_variant or not report_text:
+        return ""
+
+    lower = report_text.lower()
+    idx = lower.find(matched_variant.lower())
+
+    if idx == -1:
+        return ""
+
+    start = max(
+        lower.rfind(".", 0, idx),
+        lower.rfind(";", 0, idx),
+        lower.rfind("\n", 0, idx),
+        lower.rfind("*", 0, idx),
+    ) + 1
+
+    end = lower.find(".", idx)
+    if end == -1:
+        end = len(lower)
+
+    return report_text[start:end].strip()
+
+
 def retrieve_relevant_info(report_text):
 
     base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -101,6 +137,16 @@ def retrieve_relevant_info(report_text):
                 "matched_text":         matched_variant,
                 "image_url":            item.get("image_url"),
                 "all_matched_variants": all_variants,   # used for highlighting all occurrences
+
+                # ── Body-map support ──────────────────────────────────
+                # body_system: knowledge_base.json ka apna field. Body map
+                # ise use karta hai jab term_map mein direct entry na ho.
+                "body_system":          item.get("body_system", ""),
+
+                # context_sentence: report ka wo sentence jisme term mila.
+                # Generic terms (body_system == "General") ke liye body map
+                # isi sentence mein anatomy hints dhoondhta hai.
+                "context_sentence":     _extract_context_sentence(matched_variant, report_text),
             })
 
     # Remove redundant matches where one term's matched text is fully
