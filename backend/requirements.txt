@@ -10,3 +10,4 @@ pymongo
 certifi
 flask-login
 gunicorn
+pdfplumber
