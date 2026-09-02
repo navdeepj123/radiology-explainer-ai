@@ -5,107 +5,776 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sign Up — ClearScan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#080d1a; --bg2:#0d1326; --card:#111827; --card2:#141e30;
-  --border:#1e2d45; --blue:#4f7cff; --blue-dark:#3a63e8;
-  --text:#ffffff; --muted:#8b9cbd; --light:#5a6a82;
-  --err-bg:rgba(220,38,38,.1); --err-border:rgba(220,38,38,.3); --err-text:#f87171;
-  --check-bg:rgba(79,124,255,.15);
+  --bg:#050a14;
+  --panel:#070d18;
+  --field:#0d1526;
+  --border:#1a2740;
+  --text:#f0f4fa;
+  --muted:#7f91b0;
+  --dim:#4a5a75;
+  --err-bg:rgba(220,38,38,.1);
+  --err-border:rgba(220,38,38,.3);
+  --err-text:#f87171;
+  --accent-h:210;
 }
+html,body{height:100%;overflow:hidden}
 body{
-  font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);
-  min-height:100vh;display:flex;align-items:center;justify-content:center;
-  padding:2rem;-webkit-font-smoothing:antialiased;
-  background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(79,124,255,.12),transparent);
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  display:flex;
 }
-.auth-card{
-  width:100%;max-width:400px;background:var(--card);
-  border:1px solid var(--border);border-radius:16px;padding:2.5rem 2.25rem;
+
+/* ══════════ LEFT VISUAL PANEL ══════════ */
+.visual-panel{
+  position:relative;
+  flex:1 1 58%;
+  overflow:hidden;
+  background:
+    radial-gradient(ellipse 90% 70% at 30% 40%, hsla(var(--accent-h),90%,50%,.10), transparent 65%),
+    radial-gradient(ellipse 70% 60% at 75% 80%, hsla(calc(var(--accent-h) + 30),90%,50%,.07), transparent 60%),
+    var(--panel);
+  border-right:1px solid var(--border);
+  cursor:crosshair;
 }
+#viz{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+
+.viz-vignette{
+  position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(ellipse 78% 78% at 50% 50%, transparent 38%, rgba(5,10,20,.88) 100%);
+}
+.scanlines{
+  position:absolute; inset:0; pointer-events:none; opacity:.35;
+  background:repeating-linear-gradient(
+    to bottom, transparent 0px, transparent 2px,
+    rgba(0,0,0,.22) 3px, rgba(0,0,0,.22) 4px);
+  mix-blend-mode:multiply;
+}
+.scan-flicker{
+  position:absolute; inset:0; pointer-events:none;
+  background:hsla(var(--accent-h),90%,60%,.03);
+  animation:flick 7s steps(1) infinite;
+}
+@keyframes flick{
+  0%,96%,100%{ opacity:0; } 97%{ opacity:1; } 98%{ opacity:0; } 99%{ opacity:.6; }
+}
+
+.hud{ position:absolute; inset:0; pointer-events:none; }
+.hud-corner{
+  position:absolute; width:26px; height:26px;
+  border-color:hsla(var(--accent-h),85%,60%,.45); border-style:solid; border-width:0; opacity:0;
+}
+.hud-corner.tl{ top:28px; left:28px; border-top-width:1.5px; border-left-width:1.5px; }
+.hud-corner.tr{ top:28px; right:28px; border-top-width:1.5px; border-right-width:1.5px; }
+.hud-corner.bl{ bottom:28px; left:28px; border-bottom-width:1.5px; border-left-width:1.5px; }
+.hud-corner.br{ bottom:28px; right:28px; border-bottom-width:1.5px; border-right-width:1.5px; }
+
+.hud-block{
+  position:absolute; font-family:'JetBrains Mono',monospace;
+  font-size:.62rem; letter-spacing:.1em; line-height:1.9;
+  color:hsla(var(--accent-h),70%,72%,.55); text-transform:uppercase;
+}
+.hud-block.tl{ top:52px; left:52px; }
+.hud-block.br{ bottom:52px; right:52px; text-align:right; }
+.hud-key{ color:hsla(var(--accent-h),60%,60%,.4); }
+.hud-val{ color:hsla(var(--accent-h),90%,78%,.85); }
+
+.hud-status{
+  position:absolute; top:52px; right:52px;
+  display:flex; align-items:center; gap:8px;
+  font-family:'JetBrains Mono',monospace; font-size:.62rem;
+  letter-spacing:.12em; text-transform:uppercase;
+  color:hsla(var(--accent-h),80%,75%,.7);
+}
+.hud-dot{
+  width:6px;height:6px;border-radius:50%; background:#22c55e;
+  box-shadow:0 0 8px 2px rgba(34,197,94,.6);
+  animation:livePulse 2s ease-in-out infinite;
+}
+@keyframes livePulse{ 0%,100%{opacity:1} 50%{opacity:.35} }
+
+.boot-log{
+  position:absolute; left:52px; top:140px;
+  font-family:'JetBrains Mono',monospace; font-size:.63rem;
+  line-height:1.95; letter-spacing:.04em;
+  color:hsla(var(--accent-h),70%,70%,.5); pointer-events:none;
+}
+.boot-log .ok{ color:#22c55e; }
+
+.viz-brand{ position:absolute; bottom:52px; left:52px; max-width:360px; }
+.viz-brand h2{
+  font-family:'Libre Baskerville',serif;
+  font-size:1.55rem; font-weight:700; line-height:1.35;
+  margin-bottom:.55rem; min-height:2.7em;
+  background:linear-gradient(100deg,#fff, hsla(var(--accent-h),90%,72%,1));
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.type-caret{
+  display:inline-block; width:2px; height:1em;
+  background:hsl(var(--accent-h),90%,68%);
+  vertical-align:-2px; margin-left:2px;
+  animation:caretBlink 1s steps(1) infinite;
+}
+@keyframes caretBlink{ 0%,50%{opacity:1} 51%,100%{opacity:0} }
+.viz-brand p{ font-size:.85rem; color:var(--muted); line-height:1.65; opacity:0; }
+
+/* ══════════ RIGHT FORM PANEL ══════════ */
+.form-panel{
+  flex:0 0 min(480px, 42%);
+  display:flex; align-items:center; justify-content:center;
+  padding:2rem 3rem; background:var(--bg); position:relative;
+  overflow-y:auto;
+}
+.form-inner{ width:100%; max-width:340px; }
+
 .logo{
-  display:block;text-align:center;font-family:'Libre Baskerville',serif;
-  font-weight:700;font-size:1.35rem;color:var(--blue);text-decoration:none;
-  margin-bottom:.4rem;
+  display:inline-flex; align-items:center; gap:9px;
+  font-family:'Libre Baskerville',serif; font-weight:700; font-size:1.15rem;
+  color:var(--text); text-decoration:none; margin-bottom:2rem;
+}
+.logo-mark{
+  width:26px;height:26px;border-radius:7px;flex-shrink:0;
+  background:linear-gradient(135deg, hsl(var(--accent-h),90%,62%), hsl(calc(var(--accent-h) + 35),85%,52%));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 3px 14px hsla(var(--accent-h),90%,55%,.4);
+}
+.logo-mark svg{ display:block; }
+
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.6rem; letter-spacing:.18em; text-transform:uppercase;
+  color:hsla(var(--accent-h),75%,68%,.85); margin-bottom:.7rem;
 }
 h1{
-  font-family:'Libre Baskerville',serif;font-size:1.5rem;font-weight:700;
-  text-align:center;margin-bottom:.4rem;
+  font-family:'Libre Baskerville',serif;
+  font-size:1.8rem; font-weight:700; letter-spacing:-.01em; margin-bottom:.5rem;
 }
-.subtitle{text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:1.5rem}
+.subtitle{ color:var(--muted); font-size:.88rem; line-height:1.6; margin-bottom:1.4rem; }
+
 .guest-banner{
-  display:flex;gap:10px;align-items:flex-start;
-  background:var(--check-bg);border:1px solid rgba(79,124,255,.3);
-  border-radius:10px;padding:12px 14px;margin-bottom:1.5rem;
-  font-size:.82rem;color:var(--muted);line-height:1.5;
+  display:flex; gap:10px; align-items:flex-start;
+  background:hsla(var(--accent-h),85%,55%,.09);
+  border:1px solid hsla(var(--accent-h),85%,55%,.24);
+  border-radius:10px; padding:12px 14px; margin-bottom:1.6rem;
+  font-size:.81rem; color:var(--muted); line-height:1.55;
 }
-.guest-banner strong{color:var(--text)}
-.field{margin-bottom:1.1rem}
-label{display:block;font-size:.82rem;color:var(--muted);margin-bottom:.4rem}
+.guest-banner strong{ color:var(--text); font-weight:600; }
+.guest-banner svg{ flex-shrink:0; margin-top:2px; }
+
+.field{ margin-bottom:1.1rem; position:relative; }
+label{
+  display:block; font-size:.72rem; font-weight:500;
+  letter-spacing:.05em; text-transform:uppercase;
+  color:var(--dim); margin-bottom:.5rem; transition:color .2s;
+}
+.field.is-focused label{ color:hsl(var(--accent-h),80%,68%); }
 input{
-  width:100%;padding:11px 14px;background:var(--bg2);
-  border:1px solid var(--border);border-radius:8px;color:var(--text);
-  font-family:inherit;font-size:.92rem;transition:border-color .15s;
+  width:100%; padding:12px 14px;
+  background:var(--field); border:1px solid var(--border); border-radius:10px;
+  color:var(--text); font-family:inherit; font-size:.92rem;
+  transition:border-color .18s, box-shadow .18s, background .18s;
 }
-input:focus{outline:none;border-color:var(--blue)}
-.hint{font-size:.76rem;color:var(--light);margin-top:.4rem}
+input::placeholder{ color:var(--dim); }
+input:focus{
+  outline:none; border-color:hsl(var(--accent-h),85%,60%); background:#0f1829;
+  box-shadow:0 0 0 3px hsla(var(--accent-h),85%,55%,.13);
+}
+.pw-wrap{ position:relative; }
+.pw-toggle{
+  position:absolute; right:10px; top:50%; transform:translateY(-50%);
+  width:30px;height:30px; display:flex;align-items:center;justify-content:center;
+  background:transparent;border:none;cursor:pointer;color:var(--dim);
+  border-radius:6px; transition:color .15s, background .15s;
+}
+.pw-toggle:hover{ color:var(--muted); background:rgba(255,255,255,.04); }
+
+/* password strength meter */
+.pw-meter{ margin-top:.6rem; }
+.pw-bar{
+  height:3px; background:var(--border); border-radius:3px; overflow:hidden;
+}
+.pw-fill{
+  height:100%; width:0%; border-radius:3px;
+  background:#ef4444; transition:background .3s;
+}
+.pw-label{
+  display:flex; justify-content:space-between; align-items:center;
+  margin-top:.42rem; font-size:.7rem; color:var(--dim);
+  font-family:'JetBrains Mono',monospace; letter-spacing:.05em;
+}
+.pw-strength{ font-weight:500; }
+.hint{ font-size:.74rem; color:var(--dim); margin-top:.45rem; line-height:1.5; }
+
 .submit-btn{
-  width:100%;padding:12px;margin-top:.5rem;
-  background:var(--blue);color:#fff;font-weight:600;font-size:.95rem;
-  border:none;border-radius:8px;cursor:pointer;transition:background .15s;
+  width:100%; padding:13px; margin-top:.9rem;
+  background:linear-gradient(135deg, hsl(var(--accent-h),88%,62%), hsl(calc(var(--accent-h) + 25),82%,54%));
+  color:#fff; font-family:inherit; font-weight:600; font-size:.93rem;
+  border:none; border-radius:10px; cursor:pointer;
+  position:relative; overflow:hidden;
+  box-shadow:0 4px 20px hsla(var(--accent-h),88%,55%,.3);
+  transition:box-shadow .18s, filter .18s;
 }
-.submit-btn:hover{background:var(--blue-dark)}
+.submit-btn:hover{ filter:brightness(1.08); box-shadow:0 6px 26px hsla(var(--accent-h),88%,55%,.42); }
+.submit-btn::after{
+  content:''; position:absolute; top:0; left:-60%; width:40%; height:100%;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent);
+  transform:skewX(-20deg); animation:btnShine 3.4s ease-in-out infinite;
+}
+@keyframes btnShine{ 0%,72%{ left:-60%; } 100%{ left:130%; } }
+.submit-btn.loading{ pointer-events:none; }
+.submit-btn .spinner{
+  display:none; width:16px;height:16px;
+  border:2px solid rgba(255,255,255,.35); border-top-color:#fff;
+  border-radius:50%; animation:spin .7s linear infinite; margin:0 auto;
+}
+.submit-btn.loading .spinner{ display:block; }
+.submit-btn.loading .btn-text{ display:none; }
+@keyframes spin{ to{ transform:rotate(360deg); } }
+
 .error-box{
-  background:var(--err-bg);border:1px solid var(--err-border);color:var(--err-text);
-  padding:10px 14px;border-radius:8px;font-size:.85rem;margin-bottom:1.1rem;
+  background:var(--err-bg); border:1px solid var(--err-border);
+  color:var(--err-text); padding:11px 14px; border-radius:9px;
+  font-size:.84rem; margin-bottom:1.2rem;
 }
-.switch-link{text-align:center;margin-top:1.5rem;font-size:.87rem;color:var(--muted)}
-.switch-link a{color:var(--blue);text-decoration:none;font-weight:500}
-.switch-link a:hover{text-decoration:underline}
+
+.divider{
+  display:flex; align-items:center; gap:12px; margin:1.6rem 0 1.15rem;
+  color:var(--dim); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase;
+  font-family:'JetBrains Mono',monospace;
+}
+.divider::before,.divider::after{ content:''; flex:1; height:1px; background:var(--border); }
+
+.switch-link{ text-align:center; font-size:.86rem; color:var(--muted); }
+.switch-link a{ color:hsl(var(--accent-h),85%,68%); text-decoration:none; font-weight:600; }
+.switch-link a:hover{ text-decoration:underline; }
+
 .guest-link{
-  display:block;text-align:center;margin-top:1rem;font-size:.85rem;
-  color:var(--light);text-decoration:none;
+  display:block; text-align:center; margin-top:1rem;
+  font-size:.82rem; color:var(--dim); text-decoration:none; transition:color .15s;
 }
-.guest-link:hover{color:var(--muted)}
+.guest-link:hover{ color:var(--muted); }
+
+@media(max-width:900px){
+  html,body{ overflow:auto; }
+  body{ flex-direction:column; }
+  .visual-panel{ flex:0 0 200px; border-right:none; border-bottom:1px solid var(--border); }
+  .viz-brand{ bottom:22px; left:22px; max-width:75%; }
+  .viz-brand h2{ font-size:1.05rem; min-height:auto; }
+  .viz-brand p, .hud-block, .hud-status, .boot-log{ display:none; }
+  .hud-corner{ width:16px;height:16px; }
+  .hud-corner.tl,.hud-corner.tr{ top:16px; }
+  .hud-corner.bl,.hud-corner.br{ bottom:16px; }
+  .hud-corner.tl,.hud-corner.bl{ left:16px; }
+  .hud-corner.tr,.hud-corner.br{ right:16px; }
+  .form-panel{ flex:1; padding:2.25rem 1.75rem; }
+  .logo{ margin-bottom:1.5rem; }
+}
 </style>
 </head>
 <body>
 
-<div class="auth-card">
-  <a href="/" class="logo">ClearScan</a>
-  <h1>Create your account</h1>
-  <p class="subtitle">Save your report history permanently</p>
+<!-- ══════════ LEFT: 3D VISUALIZATION ══════════ -->
+<div class="visual-panel" id="visualPanel">
+  <canvas id="viz"></canvas>
+  <div class="viz-vignette"></div>
+  <div class="scanlines"></div>
+  <div class="scan-flicker"></div>
 
-  <div class="guest-banner">
-    💬 <div>Already chatting as a guest? <strong>Signing up keeps your current conversation</strong> — nothing is lost.</div>
+  <div class="hud">
+    <div class="hud-corner tl"></div>
+    <div class="hud-corner tr"></div>
+    <div class="hud-corner bl"></div>
+    <div class="hud-corner br"></div>
+
+    <div class="hud-block tl">
+      <div><span class="hud-key">MODE</span> &nbsp;<span class="hud-val" id="hudMode">—</span></div>
+      <div><span class="hud-key">RENDER</span> <span class="hud-val">WEBGL</span></div>
+      <div><span class="hud-key">DEPTH</span> <span class="hud-val">16-BIT</span></div>
+    </div>
+
+    <div class="hud-status">
+      <span class="hud-dot"></span>
+      <span>Provisioning</span>
+    </div>
+
+    <div class="boot-log" id="bootLog"></div>
+
+    <div class="hud-block br">
+      <div><span class="hud-key">FPS</span> &nbsp;&nbsp;&nbsp;<span class="hud-val" id="hudFps">60</span></div>
+      <div><span class="hud-key">POINTS</span> <span class="hud-val" id="hudPts">0</span></div>
+      <div><span class="hud-key">ENTROPY</span> <span class="hud-val" id="hudEnt">0.0 bits</span></div>
+    </div>
   </div>
 
-  {% if error %}
-  <div class="error-box">{{ error }}</div>
-  {% endif %}
-
-  <form method="POST" action="/register">
-    <div class="field">
-      <label for="name">Name</label>
-      <input type="text" id="name" name="name" value="{{ name or '' }}" required autofocus>
-    </div>
-    <div class="field">
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" value="{{ email or '' }}" required>
-    </div>
-    <div class="field">
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" required>
-      <div class="hint">At least 8 characters, with one uppercase letter and one number.</div>
-    </div>
-    <button type="submit" class="submit-btn">Sign Up</button>
-  </form>
-
-  <div class="switch-link">Already have an account? <a href="/login">Log in</a></div>
-  <a href="/analyze" class="guest-link">Continue as guest instead →</a>
+  <div class="viz-brand">
+    <h2><span id="typeTarget"></span><span class="type-caret"></span></h2>
+    <p id="brandSub">Your reports, saved securely and explained clearly — every time you return.</p>
+  </div>
 </div>
+
+<!-- ══════════ RIGHT: REGISTER FORM ══════════ -->
+<div class="form-panel">
+  <div class="form-inner">
+    <a href="/" class="logo" data-reveal>
+      <span class="logo-mark">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 7h2.2l1.3-3.4L8 10.2l1.4-3.2H12" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      ClearScan
+    </a>
+
+    <div class="eyebrow" data-reveal>New Account</div>
+    <h1 data-reveal>Create your account</h1>
+    <p class="subtitle" data-reveal>Save your report history permanently.</p>
+
+    <div class="guest-banner" data-reveal>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M12 8.5A1.5 1.5 0 0110.5 10H4L1.5 12.5V3A1.5 1.5 0 013 1.5h7.5A1.5 1.5 0 0112 3v5.5z"
+              stroke="hsl(var(--accent-h),85%,68%)" stroke-width="1.2" stroke-linejoin="round"/>
+      </svg>
+      <div>Already chatting as a guest? <strong>Signing up keeps your current conversation</strong> — nothing is lost.</div>
+    </div>
+
+    {% if error %}
+    <div class="error-box" data-reveal>{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="/register" id="authForm">
+      <div class="field" data-reveal>
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" value="{{ name or '' }}" placeholder="Your name" required autofocus>
+      </div>
+      <div class="field" data-reveal>
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" value="{{ email or '' }}" placeholder="you@example.com" required>
+      </div>
+      <div class="field" data-reveal>
+        <label for="password">Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="password" name="password" placeholder="••••••••" required>
+          <button type="button" class="pw-toggle" id="pwToggle" title="Show password">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M1 8s2.5-4.5 7-4.5S15 8 15 8s-2.5 4.5-7 4.5S1 8 1 8z" stroke="currentColor" stroke-width="1.3"/>
+              <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.3"/>
+            </svg>
+          </button>
+        </div>
+        <div class="pw-meter">
+          <div class="pw-bar"><div class="pw-fill" id="pwFill"></div></div>
+          <div class="pw-label">
+            <span id="pwReq">8+ chars · 1 uppercase · 1 number</span>
+            <span class="pw-strength" id="pwStrength"></span>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="submit-btn" id="submitBtn" data-reveal>
+        <span class="btn-text">Sign Up</span>
+        <span class="spinner"></span>
+      </button>
+    </form>
+
+    <div class="divider" data-reveal>or</div>
+
+    <div class="switch-link" data-reveal>Already have an account? <a href="/login">Log in</a></div>
+    <a href="/analyze" class="guest-link" data-reveal>Continue as guest instead →</a>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   ClearScan — 3D auth visualization (register)
+   Same engine as the login page, with an extra strength-meter
+   link between the password field and the particle field.
+   ═══════════════════════════════════════════════════════════ */
+(function () {
+
+  var hueChoices = [196, 205, 212, 220, 228, 240, 252];
+  var hue = hueChoices[Math.floor(Math.random() * hueChoices.length)];
+  document.documentElement.style.setProperty('--accent-h', hue);
+
+  function hsl(l, s) { return new THREE.Color('hsl(' + hue + ',' + (s || 88) + '%,' + l + '%)'); }
+
+  // ═════════ THREE.JS SETUP ═════════
+  var panel  = document.getElementById('visualPanel');
+  var canvas = document.getElementById('viz');
+
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  var scene  = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(52, 1, 0.1, 100);
+  camera.position.set(0, 0, 7.4);
+
+  var group = new THREE.Group();
+  scene.add(group);
+
+  function sizeRenderer() {
+    var w = panel.clientWidth, h = panel.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', sizeRenderer);
+  sizeRenderer();
+
+  var MODES = ['SPHERE FIELD', 'HELIX TRACE', 'TORUS SCAN'];
+  var mode = Math.floor(Math.random() * MODES.length);
+  document.getElementById('hudMode').textContent = MODES[mode];
+
+  var COUNT = 2600;
+
+  function buildPositions() {
+    var pos = new Float32Array(COUNT * 3);
+    var i3, i;
+
+    if (mode === 0) {
+      var golden = Math.PI * (3 - Math.sqrt(5));
+      for (i = 0; i < COUNT; i++) {
+        i3 = i * 3;
+        var y = 1 - (i / (COUNT - 1)) * 2;
+        var r = Math.sqrt(Math.max(0, 1 - y * y));
+        var th = golden * i;
+        var rad = 2.35 + (Math.random() - .5) * .18;
+        pos[i3]     = Math.cos(th) * r * rad;
+        pos[i3 + 1] = y * rad;
+        pos[i3 + 2] = Math.sin(th) * r * rad;
+      }
+    } else if (mode === 1) {
+      for (i = 0; i < COUNT; i++) {
+        i3 = i * 3;
+        var t = (i / COUNT) * Math.PI * 11;
+        var strand = i % 2 === 0 ? 0 : Math.PI;
+        var yy = (i / COUNT) * 7.6 - 3.8;
+        var rr = 1.45;
+        if (i % 11 === 0) rr = 1.45 * (Math.random() * 2 - 1);
+        pos[i3]     = Math.cos(t + strand) * rr;
+        pos[i3 + 1] = yy;
+        pos[i3 + 2] = Math.sin(t + strand) * rr;
+      }
+    } else {
+      for (i = 0; i < COUNT; i++) {
+        i3 = i * 3;
+        var u = Math.random() * Math.PI * 2;
+        var v = Math.random() * Math.PI * 2;
+        var R = 2.1, tube = .62 + (Math.random() - .5) * .12;
+        pos[i3]     = (R + tube * Math.cos(v)) * Math.cos(u);
+        pos[i3 + 1] = tube * Math.sin(v);
+        pos[i3 + 2] = (R + tube * Math.cos(v)) * Math.sin(u);
+      }
+    }
+    return pos;
+  }
+
+  var basePos = buildPositions();
+  var scatter = new Float32Array(COUNT * 3);
+  var rands   = new Float32Array(COUNT);
+  for (var i = 0; i < COUNT; i++) {
+    var i3 = i * 3;
+    scatter[i3]     = (Math.random() - .5) * 11;
+    scatter[i3 + 1] = (Math.random() - .5) * 8;
+    scatter[i3 + 2] = (Math.random() - .5) * 11;
+    rands[i] = Math.random();
+  }
+
+  var geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(basePos, 3));
+  geo.setAttribute('aScatter', new THREE.BufferAttribute(scatter, 3));
+  geo.setAttribute('aRand',    new THREE.BufferAttribute(rands, 1));
+
+  var uniforms = {
+    uTime:     { value: 0 },
+    uMouse:    { value: new THREE.Vector3(999, 999, 999) },
+    uMouseAmt: { value: 0 },
+    uSize:     { value: 2.4 },
+    uEncrypt:  { value: 0 },
+    uColor:    { value: hsl(62) },
+    uHot:      { value: hsl(86, 95) }
+  };
+
+  var vertexShader = [
+    'uniform float uTime;',
+    'uniform vec3  uMouse;',
+    'uniform float uMouseAmt;',
+    'uniform float uSize;',
+    'uniform float uEncrypt;',
+    'attribute vec3  aScatter;',
+    'attribute float aRand;',
+    'varying float vGlow;',
+    'varying float vRand;',
+    'void main() {',
+    '  vec3 pos = position;',
+    '  float breathe = sin(uTime * 0.75 + aRand * 6.2831) * 0.055;',
+    '  pos *= 1.0 + breathe;',
+    '  pos.y += sin(uTime * 0.5 + pos.x * 0.7) * 0.06;',
+    '  pos = mix(pos, aScatter, uEncrypt);',
+    '  vec4 world = modelMatrix * vec4(pos, 1.0);',
+    '  float d = distance(world.xyz, uMouse);',
+    '  float infl = smoothstep(2.6, 0.0, d) * uMouseAmt;',
+    '  vec3 away = normalize(world.xyz - uMouse + vec3(0.0001));',
+    '  world.xyz += away * infl * 1.15;',
+    '  vGlow = infl;',
+    '  vRand = aRand;',
+    '  vec4 mv = viewMatrix * world;',
+    '  gl_PointSize = (uSize + infl * 7.0 + aRand * 1.3) * (300.0 / -mv.z);',
+    '  gl_Position = projectionMatrix * mv;',
+    '}'
+  ].join('\n');
+
+  var fragmentShader = [
+    'uniform vec3  uColor;',
+    'uniform vec3  uHot;',
+    'uniform float uTime;',
+    'varying float vGlow;',
+    'varying float vRand;',
+    'void main() {',
+    '  vec2 uv = gl_PointCoord - 0.5;',
+    '  float d = length(uv);',
+    '  float alpha = smoothstep(0.5, 0.0, d);',
+    '  alpha = pow(alpha, 2.2);',
+    '  float tw = 0.62 + 0.38 * sin(uTime * 1.6 + vRand * 24.0);',
+    '  vec3 col = mix(uColor, uHot, clamp(vGlow * 1.6, 0.0, 1.0));',
+    '  gl_FragColor = vec4(col, alpha * (0.34 + vGlow * 0.62) * tw);',
+    '}'
+  ].join('\n');
+
+  var mat = new THREE.ShaderMaterial({
+    uniforms: uniforms,
+    vertexShader: vertexShader,
+    fragmentShader: fragmentShader,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending
+  });
+
+  var points = new THREE.Points(geo, mat);
+  group.add(points);
+  document.getElementById('hudPts').textContent = COUNT.toLocaleString();
+
+  var core = new THREE.LineSegments(
+    new THREE.WireframeGeometry(new THREE.IcosahedronGeometry(1.15, 1)),
+    new THREE.LineBasicMaterial({ color: hsl(58), transparent: true, opacity: .22 })
+  );
+  group.add(core);
+
+  var rings = [];
+  for (var r = 0; r < 2; r++) {
+    var ring = new THREE.Mesh(
+      new THREE.RingGeometry(2.75 + r * .5, 2.77 + r * .5, 96),
+      new THREE.MeshBasicMaterial({ color: hsl(60), transparent: true, opacity: .16, side: THREE.DoubleSide })
+    );
+    ring.rotation.x = Math.PI / 2 + (r === 0 ? .35 : -.5);
+    ring.rotation.y = r === 0 ? .2 : -.35;
+    rings.push(ring);
+    group.add(ring);
+  }
+
+  // ═════════ MOUSE INTERACTION ═════════
+  var mouseNDC   = { x: 0, y: 0 };
+  var camTarget  = { x: 0, y: 0 };
+  var camCurrent = { x: 0, y: 0 };
+  var hovering   = false;
+
+  panel.addEventListener('pointermove', function (e) {
+    var rect = panel.getBoundingClientRect();
+    mouseNDC.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    mouseNDC.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    camTarget.x = mouseNDC.x * .45;
+    camTarget.y = mouseNDC.y * .32;
+    if (!hovering) {
+      hovering = true;
+      gsap.to(uniforms.uMouseAmt, { value: 1, duration: .6, ease: 'power2.out' });
+    }
+  });
+
+  panel.addEventListener('pointerleave', function () {
+    hovering = false;
+    gsap.to(uniforms.uMouseAmt, { value: 0, duration: .8, ease: 'power2.out' });
+  });
+
+  panel.addEventListener('pointerdown', function () {
+    gsap.timeline()
+      .to(uniforms.uMouseAmt, { value: 3.4, duration: .18, ease: 'power3.out' })
+      .to(uniforms.uMouseAmt, { value: hovering ? 1 : 0, duration: 1.1, ease: 'elastic.out(1, 0.45)' });
+    gsap.fromTo(uniforms.uSize, { value: 5.2 }, { value: 2.4, duration: .9, ease: 'power3.out' });
+  });
+
+  var raycastPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+  var raycaster = new THREE.Raycaster();
+  var hitPoint = new THREE.Vector3();
+
+  function updateMouseWorld() {
+    raycaster.setFromCamera(mouseNDC, camera);
+    if (raycaster.ray.intersectPlane(raycastPlane, hitPoint)) {
+      uniforms.uMouse.value.copy(hitPoint);
+    }
+  }
+
+  // ═════════ RENDER LOOP ═════════
+  var clock = new THREE.Clock();
+  var frames = 0, fpsTimer = 0;
+  var fpsEl = document.getElementById('hudFps');
+
+  function animate() {
+    var dt = clock.getDelta();
+    uniforms.uTime.value = clock.getElapsedTime();
+
+    camCurrent.x += (camTarget.x - camCurrent.x) * .045;
+    camCurrent.y += (camTarget.y - camCurrent.y) * .045;
+    camera.position.x = Math.sin(camCurrent.x) * 7.4;
+    camera.position.z = Math.cos(camCurrent.x) * 7.4;
+    camera.position.y = camCurrent.y * 3.2;
+    camera.lookAt(0, 0, 0);
+
+    updateMouseWorld();
+
+    group.rotation.y += dt * .085;
+    core.rotation.x  += dt * .22;
+    core.rotation.y  -= dt * .16;
+    rings[0].rotation.z += dt * .12;
+    rings[1].rotation.z -= dt * .08;
+
+    renderer.render(scene, camera);
+
+    frames++; fpsTimer += dt;
+    if (fpsTimer >= 1) { fpsEl.textContent = frames; frames = 0; fpsTimer = 0; }
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  // ═════════ GSAP ENTRANCE ═════════
+  gsap.timeline({ defaults: { ease: 'power3.out' } })
+    .from(group.scale, { x: .35, y: .35, z: .35, duration: 1.6, ease: 'power2.out' }, 0)
+    .from(uniforms.uSize, { value: 8, duration: 1.8, ease: 'power3.out' }, 0)
+    .to('.hud-corner', { opacity: 1, duration: .5, stagger: .08 }, .3)
+    .from('[data-reveal]', { y: 16, opacity: 0, duration: .65, stagger: .07 }, .25)
+    .to('#brandSub', { opacity: 1, duration: .8 }, 1.6);
+
+  (function typewriter() {
+    var text = 'Every report, kept and understood.';
+    var el = document.getElementById('typeTarget');
+    var i = 0;
+    setTimeout(function tick() {
+      if (i <= text.length) { el.textContent = text.slice(0, i); i++; setTimeout(tick, 34); }
+    }, 700);
+  })();
+
+  (function bootLog() {
+    var lines = [
+      '> secure channel established',
+      '> encryption: AES-256',
+      '> account provisioning ready',
+      '> history vault standing by',
+      '> awaiting registration'
+    ];
+    var box = document.getElementById('bootLog');
+    var i = 0;
+    (function next() {
+      if (i >= lines.length) return;
+      var d = document.createElement('div');
+      d.innerHTML = lines[i] + (i < lines.length - 1 ? ' <span class="ok">✓</span>' : '');
+      box.appendChild(d);
+      gsap.from(d, { opacity: 0, x: -8, duration: .4, ease: 'power2.out' });
+      i++;
+      setTimeout(next, 420);
+    })();
+  })();
+
+  // ═════════ FORM ↔ SCENE INTERACTION ═════════
+  document.querySelectorAll('.field').forEach(function (f) {
+    var input = f.querySelector('input');
+    if (!input) return;
+    input.addEventListener('focus', function () {
+      f.classList.add('is-focused');
+      gsap.to(uniforms.uSize, { value: 3.3, duration: .5, ease: 'power2.out' });
+    });
+    input.addEventListener('blur', function () {
+      f.classList.remove('is-focused');
+      gsap.to(uniforms.uSize, { value: 2.4, duration: .6, ease: 'power2.out' });
+    });
+  });
+
+  // ═════════ PASSWORD STRENGTH → drives the particle field ═════════
+  var pw       = document.getElementById('password');
+  var pwFill   = document.getElementById('pwFill');
+  var pwLabel  = document.getElementById('pwStrength');
+  var pwReq    = document.getElementById('pwReq');
+  var entEl    = document.getElementById('hudEnt');
+
+  var LEVELS = [
+    { pct: 0,   color: '#ef4444', text: '' },
+    { pct: 25,  color: '#ef4444', text: 'WEAK' },
+    { pct: 50,  color: '#f59e0b', text: 'FAIR' },
+    { pct: 75,  color: '#3b82f6', text: 'GOOD' },
+    { pct: 100, color: '#22c55e', text: 'STRONG' }
+  ];
+
+  function scorePassword(v) {
+    var s = 0;
+    if (v.length >= 8)         s++;
+    if (/[A-Z]/.test(v))       s++;
+    if (/[0-9]/.test(v))       s++;
+    if (/[^A-Za-z0-9]/.test(v) || v.length >= 14) s++;
+    return v.length === 0 ? 0 : s;
+  }
+
+  var encryptTween;
+  pw.addEventListener('input', function () {
+    var v = pw.value;
+    var score = scorePassword(v);
+    var lvl = LEVELS[score];
+
+    gsap.to(pwFill, { width: lvl.pct + '%', duration: .4, ease: 'power2.out' });
+    pwFill.style.background = lvl.color;
+    pwLabel.textContent = lvl.text;
+    pwLabel.style.color = lvl.color;
+
+    // requirement hint updates live
+    var ok = v.length >= 8 && /[A-Z]/.test(v) && /[0-9]/.test(v);
+    pwReq.textContent = ok ? 'All requirements met' : '8+ chars · 1 uppercase · 1 number';
+    pwReq.style.color = ok ? '#22c55e' : '';
+
+    // particle field scatters as entropy grows
+    var amt = Math.min(.4, v.length * .03);
+    if (encryptTween) encryptTween.kill();
+    encryptTween = gsap.to(uniforms.uEncrypt, { value: amt, duration: .45, ease: 'power2.out' });
+
+    // rough entropy estimate for the HUD
+    var pool = 0;
+    if (/[a-z]/.test(v)) pool += 26;
+    if (/[A-Z]/.test(v)) pool += 26;
+    if (/[0-9]/.test(v)) pool += 10;
+    if (/[^A-Za-z0-9]/.test(v)) pool += 32;
+    var bits = v.length && pool ? (v.length * Math.log2(pool)) : 0;
+    entEl.textContent = bits.toFixed(1) + ' bits';
+  });
+
+  pw.addEventListener('blur', function () {
+    if (encryptTween) encryptTween.kill();
+    gsap.to(uniforms.uEncrypt, { value: 0, duration: .9, ease: 'power2.inOut' });
+  });
+
+  document.getElementById('pwToggle').addEventListener('click', function () {
+    pw.type = pw.type === 'password' ? 'text' : 'password';
+    pw.focus();
+  });
+
+  document.getElementById('authForm').addEventListener('submit', function () {
+    document.getElementById('submitBtn').classList.add('loading');
+    gsap.to(uniforms.uEncrypt, { value: 1, duration: 1.1, ease: 'power2.in' });
+    gsap.to(group.rotation, { y: group.rotation.y + 3.2, duration: 1.2, ease: 'power2.in' });
+  });
+
+})();
+</script>
 
 </body>
 </html>
