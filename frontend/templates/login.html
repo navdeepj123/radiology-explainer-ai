@@ -6,18 +6,15 @@
 <title>Log In — ClearScan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#050a14;
   --panel:#070d18;
-  --card:#0b1220;
   --field:#0d1526;
   --border:#1a2740;
-  --border-lit:#243busy;
-  --blue:#4f7cff;
-  --blue-dark:#3a63e8;
-  --cyan:#22d3ee;
   --text:#f0f4fa;
   --muted:#7f91b0;
   --dim:#4a5a75;
@@ -41,16 +38,41 @@ body{
   flex:1 1 58%;
   overflow:hidden;
   background:
-    radial-gradient(ellipse 90% 70% at 25% 35%, hsla(var(--accent-h),90%,50%,.10), transparent 65%),
+    radial-gradient(ellipse 90% 70% at 30% 40%, hsla(var(--accent-h),90%,50%,.10), transparent 65%),
     radial-gradient(ellipse 70% 60% at 75% 80%, hsla(calc(var(--accent-h) + 30),90%,50%,.07), transparent 60%),
     var(--panel);
   border-right:1px solid var(--border);
+  cursor:crosshair;
 }
 #viz{ position:absolute; inset:0; width:100%; height:100%; display:block; }
 
 .viz-vignette{
   position:absolute; inset:0; pointer-events:none;
-  background:radial-gradient(ellipse 75% 75% at 50% 50%, transparent 35%, rgba(5,10,20,.85) 100%);
+  background:radial-gradient(ellipse 78% 78% at 50% 50%, transparent 38%, rgba(5,10,20,.88) 100%);
+}
+
+/* CRT scanline overlay */
+.scanlines{
+  position:absolute; inset:0; pointer-events:none; opacity:.35;
+  background:repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(0,0,0,.22) 3px,
+    rgba(0,0,0,.22) 4px
+  );
+  mix-blend-mode:multiply;
+}
+.scan-flicker{
+  position:absolute; inset:0; pointer-events:none;
+  background:hsla(var(--accent-h),90%,60%,.03);
+  animation:flick 7s steps(1) infinite;
+}
+@keyframes flick{
+  0%,96%,100%{ opacity:0; }
+  97%{ opacity:1; }
+  98%{ opacity:0; }
+  99%{ opacity:.6; }
 }
 
 /* HUD overlay */
@@ -58,6 +80,7 @@ body{
 .hud-corner{
   position:absolute; width:26px; height:26px;
   border-color:hsla(var(--accent-h),85%,60%,.45); border-style:solid; border-width:0;
+  opacity:0;
 }
 .hud-corner.tl{ top:28px; left:28px; border-top-width:1.5px; border-left-width:1.5px; }
 .hud-corner.tr{ top:28px; right:28px; border-top-width:1.5px; border-right-width:1.5px; }
@@ -91,21 +114,36 @@ body{
 }
 @keyframes livePulse{ 0%,100%{opacity:1} 50%{opacity:.35} }
 
-/* brand block bottom-left of visual panel */
+/* boot sequence terminal log */
+.boot-log{
+  position:absolute; left:52px; top:140px;
+  font-family:'JetBrains Mono',monospace; font-size:.63rem;
+  line-height:1.95; letter-spacing:.04em;
+  color:hsla(var(--accent-h),70%,70%,.5);
+  pointer-events:none;
+}
+.boot-log .ok{ color:#22c55e; }
+
+/* brand block */
 .viz-brand{
-  position:absolute; bottom:52px; left:52px; max-width:340px;
+  position:absolute; bottom:52px; left:52px; max-width:360px;
 }
 .viz-brand h2{
   font-family:'Libre Baskerville',serif;
   font-size:1.55rem; font-weight:700; line-height:1.35;
-  margin-bottom:.55rem;
+  margin-bottom:.55rem; min-height:2.7em;
   background:linear-gradient(100deg,#fff, hsla(var(--accent-h),90%,72%,1));
   -webkit-background-clip:text; background-clip:text;
   -webkit-text-fill-color:transparent;
 }
-.viz-brand p{
-  font-size:.85rem; color:var(--muted); line-height:1.65;
+.type-caret{
+  display:inline-block; width:2px; height:1em;
+  background:hsl(var(--accent-h),90%,68%);
+  vertical-align:-2px; margin-left:2px;
+  animation:caretBlink 1s steps(1) infinite;
 }
+@keyframes caretBlink{ 0%,50%{opacity:1} 51%,100%{opacity:0} }
+.viz-brand p{ font-size:.85rem; color:var(--muted); line-height:1.65; opacity:0; }
 
 /* ══════════ RIGHT FORM PANEL ══════════ */
 .form-panel{
@@ -147,7 +185,9 @@ label{
   display:block; font-size:.72rem; font-weight:500;
   letter-spacing:.05em; text-transform:uppercase;
   color:var(--dim); margin-bottom:.5rem;
+  transition:color .2s;
 }
+.field.is-focused label{ color:hsl(var(--accent-h),80%,68%); }
 input{
   width:100%; padding:12px 14px;
   background:var(--field);
@@ -162,6 +202,14 @@ input:focus{
   background:#0f1829;
   box-shadow:0 0 0 3px hsla(var(--accent-h),85%,55%,.13);
 }
+.pw-wrap{ position:relative; }
+.pw-toggle{
+  position:absolute; right:10px; top:50%; transform:translateY(-50%);
+  width:30px;height:30px; display:flex;align-items:center;justify-content:center;
+  background:transparent;border:none;cursor:pointer;color:var(--dim);
+  border-radius:6px; transition:color .15s, background .15s;
+}
+.pw-toggle:hover{ color:var(--muted); background:rgba(255,255,255,.04); }
 
 .submit-btn{
   width:100%; padding:13px; margin-top:.65rem;
@@ -170,10 +218,9 @@ input:focus{
   border:none; border-radius:10px; cursor:pointer;
   position:relative; overflow:hidden;
   box-shadow:0 4px 20px hsla(var(--accent-h),88%,55%,.3);
-  transition:transform .12s, box-shadow .18s, filter .18s;
+  transition:box-shadow .18s, filter .18s;
 }
 .submit-btn:hover{ filter:brightness(1.08); box-shadow:0 6px 26px hsla(var(--accent-h),88%,55%,.42); }
-.submit-btn:active{ transform:translateY(1px); }
 .submit-btn::after{
   content:''; position:absolute; top:0; left:-60%;
   width:40%; height:100%;
@@ -181,10 +228,17 @@ input:focus{
   transform:skewX(-20deg);
   animation:btnShine 3.4s ease-in-out infinite;
 }
-@keyframes btnShine{
-  0%,72%{ left:-60%; }
-  100%{ left:130%; }
+@keyframes btnShine{ 0%,72%{ left:-60%; } 100%{ left:130%; } }
+.submit-btn.loading{ pointer-events:none; }
+.submit-btn .spinner{
+  display:none; width:16px;height:16px;
+  border:2px solid rgba(255,255,255,.35); border-top-color:#fff;
+  border-radius:50%; animation:spin .7s linear infinite;
+  margin:0 auto;
 }
+.submit-btn.loading .spinner{ display:block; }
+.submit-btn.loading .btn-text{ display:none; }
+@keyframes spin{ to{ transform:rotate(360deg); } }
 
 .error-box{
   background:var(--err-bg); border:1px solid var(--err-border);
@@ -198,9 +252,7 @@ input:focus{
   color:var(--dim); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase;
   font-family:'JetBrains Mono',monospace;
 }
-.divider::before,.divider::after{
-  content:''; flex:1; height:1px; background:var(--border);
-}
+.divider::before,.divider::after{ content:''; flex:1; height:1px; background:var(--border); }
 
 .switch-link{ text-align:center; font-size:.86rem; color:var(--muted); }
 .switch-link a{ color:hsl(var(--accent-h),85%,68%); text-decoration:none; font-weight:600; }
@@ -217,11 +269,10 @@ input:focus{
 @media(max-width:900px){
   html,body{ overflow:auto; }
   body{ flex-direction:column; }
-  .visual-panel{ flex:0 0 220px; border-right:none; border-bottom:1px solid var(--border); }
-  .viz-brand{ bottom:24px; left:24px; max-width:70%; }
-  .viz-brand h2{ font-size:1.15rem; }
-  .viz-brand p{ display:none; }
-  .hud-block, .hud-status{ display:none; }
+  .visual-panel{ flex:0 0 240px; border-right:none; border-bottom:1px solid var(--border); }
+  .viz-brand{ bottom:24px; left:24px; max-width:75%; }
+  .viz-brand h2{ font-size:1.1rem; min-height:auto; }
+  .viz-brand p, .hud-block, .hud-status, .boot-log{ display:none; }
   .hud-corner{ width:16px;height:16px; }
   .hud-corner.tl,.hud-corner.tr{ top:16px; }
   .hud-corner.bl,.hud-corner.br{ bottom:16px; }
@@ -234,10 +285,12 @@ input:focus{
 </head>
 <body>
 
-<!-- ══════════ LEFT: VISUALIZATION ══════════ -->
-<div class="visual-panel">
+<!-- ══════════ LEFT: 3D VISUALIZATION ══════════ -->
+<div class="visual-panel" id="visualPanel">
   <canvas id="viz"></canvas>
   <div class="viz-vignette"></div>
+  <div class="scanlines"></div>
+  <div class="scan-flicker"></div>
 
   <div class="hud">
     <div class="hud-corner tl"></div>
@@ -247,7 +300,7 @@ input:focus{
 
     <div class="hud-block tl">
       <div><span class="hud-key">MODE</span> &nbsp;<span class="hud-val" id="hudMode">—</span></div>
-      <div><span class="hud-key">RES</span> &nbsp;&nbsp;<span class="hud-val">2048 × 2048</span></div>
+      <div><span class="hud-key">RENDER</span> <span class="hud-val">WEBGL</span></div>
       <div><span class="hud-key">DEPTH</span> <span class="hud-val">16-BIT</span></div>
     </div>
 
@@ -256,23 +309,25 @@ input:focus{
       <span>System Online</span>
     </div>
 
+    <div class="boot-log" id="bootLog"></div>
+
     <div class="hud-block br">
-      <div><span class="hud-key">LATENCY</span> <span class="hud-val" id="hudLat">18 ms</span></div>
-      <div><span class="hud-key">NODES</span> &nbsp;&nbsp;<span class="hud-val" id="hudNodes">0</span></div>
+      <div><span class="hud-key">FPS</span> &nbsp;&nbsp;&nbsp;<span class="hud-val" id="hudFps">60</span></div>
+      <div><span class="hud-key">POINTS</span> <span class="hud-val" id="hudPts">0</span></div>
       <div><span class="hud-key">INTEGRITY</span> <span class="hud-val" id="hudInt">99.4%</span></div>
     </div>
   </div>
 
   <div class="viz-brand">
-    <h2>Radiology reports,<br>in plain language.</h2>
-    <p>AI-assisted analysis with source-verified findings — built for patients, not clinicians.</p>
+    <h2><span id="typeTarget"></span><span class="type-caret"></span></h2>
+    <p id="brandSub">AI-assisted analysis with source-verified findings — built for patients, not clinicians.</p>
   </div>
 </div>
 
 <!-- ══════════ RIGHT: LOGIN FORM ══════════ -->
 <div class="form-panel">
   <div class="form-inner">
-    <a href="/" class="logo">
+    <a href="/" class="logo" data-reveal>
       <span class="logo-mark">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
           <path d="M2 7h2.2l1.3-3.4L8 10.2l1.4-3.2H12" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -281,299 +336,420 @@ input:focus{
       ClearScan
     </a>
 
-    <div class="eyebrow">Secure Access</div>
-    <h1>Welcome back</h1>
-    <p class="subtitle">Log in to access your saved report history.</p>
+    <div class="eyebrow" data-reveal>Secure Access</div>
+    <h1 data-reveal>Welcome back</h1>
+    <p class="subtitle" data-reveal>Log in to access your saved report history.</p>
 
     {% if error %}
-    <div class="error-box">{{ error }}</div>
+    <div class="error-box" data-reveal>{{ error }}</div>
     {% endif %}
 
-    <form method="POST" action="/login">
-      <div class="field">
+    <form method="POST" action="/login" id="authForm">
+      <div class="field" data-reveal>
         <label for="email">Email address</label>
         <input type="email" id="email" name="email" value="{{ email or '' }}" placeholder="you@example.com" required autofocus>
       </div>
-      <div class="field">
+      <div class="field" data-reveal>
         <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="••••••••" required>
+        <div class="pw-wrap">
+          <input type="password" id="password" name="password" placeholder="••••••••" required>
+          <button type="button" class="pw-toggle" id="pwToggle" title="Show password">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M1 8s2.5-4.5 7-4.5S15 8 15 8s-2.5 4.5-7 4.5S1 8 1 8z" stroke="currentColor" stroke-width="1.3"/>
+              <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.3"/>
+            </svg>
+          </button>
+        </div>
       </div>
-      <button type="submit" class="submit-btn">Log In</button>
+      <button type="submit" class="submit-btn" id="submitBtn" data-reveal>
+        <span class="btn-text">Log In</span>
+        <span class="spinner"></span>
+      </button>
     </form>
 
-    <div class="divider">or</div>
+    <div class="divider" data-reveal>or</div>
 
-    <div class="switch-link">Don't have an account? <a href="/register">Create one</a></div>
-    <a href="/analyze" class="guest-link">Continue as guest instead →</a>
+    <div class="switch-link" data-reveal>Don't have an account? <a href="/register">Create one</a></div>
+    <a href="/analyze" class="guest-link" data-reveal>Continue as guest instead →</a>
   </div>
 </div>
 
 <script>
+/* ═══════════════════════════════════════════════════════════
+   ClearScan — 3D auth visualization
+   Three.js particle field + wireframe core, GPU shader glow,
+   mouse-reactive physics, GSAP entrance choreography.
+   ═══════════════════════════════════════════════════════════ */
 (function () {
-  // ── random accent hue per load (kept in blue→cyan→violet range for brand fit) ──
-  var hueChoices = [200, 210, 218, 227, 240, 255, 188];
+
+  // ── random accent hue per load, kept inside the brand palette ──
+  var hueChoices = [196, 205, 212, 220, 228, 240, 252];
   var hue = hueChoices[Math.floor(Math.random() * hueChoices.length)];
   document.documentElement.style.setProperty('--accent-h', hue);
 
+  function hsl(l, s) { return new THREE.Color('hsl(' + hue + ',' + (s || 88) + '%,' + l + '%)'); }
+
+  // ═════════ THREE.JS SETUP ═════════
+  var panel  = document.getElementById('visualPanel');
   var canvas = document.getElementById('viz');
-  var ctx = canvas.getContext('2d');
-  var W, H, DPR;
 
-  function resize() {
-    DPR = Math.min(window.devicePixelRatio || 1, 2);
-    var rect = canvas.getBoundingClientRect();
-    W = rect.width; H = rect.height;
-    canvas.width = W * DPR; canvas.height = H * DPR;
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  var scene  = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(52, 1, 0.1, 100);
+  camera.position.set(0, 0, 7.4);
+
+  var group = new THREE.Group();
+  scene.add(group);
+
+  function sizeRenderer() {
+    var w = panel.clientWidth, h = panel.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
   }
-  window.addEventListener('resize', resize);
-  resize();
+  window.addEventListener('resize', sizeRenderer);
+  sizeRenderer();
 
-  function c(l, a) { return 'hsla(' + hue + ',88%,' + l + '%,' + a + ')'; }
+  // ═════════ SHAPE MODES — random per load ═════════
+  var MODES = ['SPHERE FIELD', 'HELIX TRACE', 'TORUS SCAN'];
+  var mode = Math.floor(Math.random() * MODES.length);
+  document.getElementById('hudMode').textContent = MODES[mode];
 
-  var modes = ['NEURAL MESH', 'AXIAL SWEEP', 'HELIX TRACE', 'WAVEFORM'];
-  var mode = Math.floor(Math.random() * 4);
-  document.getElementById('hudMode').textContent = modes[mode];
+  var COUNT = 1400;
 
-  // ── shared: ambient dust particles ──
-  var dust = [];
-  for (var i = 0; i < 55; i++) {
-    dust.push({
-      x: Math.random(), y: Math.random(),
-      r: Math.random() * 1.1 + .3,
-      s: Math.random() * .00018 + .00004,
-      a: Math.random() * .35 + .1
-    });
-  }
-  function drawDust() {
-    for (var i = 0; i < dust.length; i++) {
-      var d = dust[i];
-      d.y -= d.s;
-      if (d.y < -.02) { d.y = 1.02; d.x = Math.random(); }
-      ctx.fillStyle = c(72, d.a);
-      ctx.beginPath();
-      ctx.arc(d.x * W, d.y * H, d.r, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
+  // Build base positions for the chosen shape
+  function buildPositions() {
+    var pos = new Float32Array(COUNT * 3);
+    var i3, i;
 
-  // ── shared: faint background grid ──
-  function drawGrid(t) {
-    var step = 46;
-    var off = (t * 6) % step;
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = c(60, .045);
-    for (var x = -step + off; x < W + step; x += step) {
-      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
-    }
-    for (var y = -step + off; y < H + step; y += step) {
-      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
-    }
-  }
-
-  var t = 0;
-  var nodeCount = 0;
-
-  // ═══ MODE 0: NEURAL MESH — connected particle network ═══
-  var mesh = [];
-  if (mode === 0) {
-    var n = Math.max(34, Math.min(70, Math.floor((W * H) / 16000)));
-    for (var i = 0; i < n; i++) {
-      mesh.push({
-        x: Math.random() * W, y: Math.random() * H,
-        vx: (Math.random() - .5) * .32, vy: (Math.random() - .5) * .32,
-        pr: Math.random() * Math.PI * 2
-      });
-    }
-    nodeCount = n;
-  }
-
-  // ═══ MODE 2: HELIX ═══
-  // ═══ MODE 3: WAVEFORM (ECG-like) ═══
-  var ecgTrail = [];
-
-  function frame() {
-    ctx.clearRect(0, 0, W, H);
-    drawGrid(t);
-
-    // ─── MODE 0 ───
     if (mode === 0) {
-      for (var i = 0; i < mesh.length; i++) {
-        var p = mesh[i];
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < 0 || p.x > W) p.vx *= -1;
-        if (p.y < 0 || p.y > H) p.vy *= -1;
+      // Fibonacci sphere — even distribution over a shell
+      var golden = Math.PI * (3 - Math.sqrt(5));
+      for (i = 0; i < COUNT; i++) {
+        i3 = i * 3;
+        var y = 1 - (i / (COUNT - 1)) * 2;
+        var r = Math.sqrt(Math.max(0, 1 - y * y));
+        var th = golden * i;
+        var rad = 2.35 + (Math.random() - .5) * .18;
+        pos[i3]     = Math.cos(th) * r * rad;
+        pos[i3 + 1] = y * rad;
+        pos[i3 + 2] = Math.sin(th) * r * rad;
       }
-      for (var i = 0; i < mesh.length; i++) {
-        for (var j = i + 1; j < mesh.length; j++) {
-          var dx = mesh[i].x - mesh[j].x, dy = mesh[i].y - mesh[j].y;
-          var dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 155) {
-            var alpha = (1 - dist / 155) * .3;
-            ctx.strokeStyle = c(65, alpha);
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(mesh[i].x, mesh[i].y);
-            ctx.lineTo(mesh[j].x, mesh[j].y);
-            ctx.stroke();
-          }
-        }
+    } else if (mode === 1) {
+      // Double helix — two intertwined strands plus rungs
+      for (i = 0; i < COUNT; i++) {
+        i3 = i * 3;
+        var t = (i / COUNT) * Math.PI * 11;
+        var strand = i % 2 === 0 ? 0 : Math.PI;
+        var yy = (i / COUNT) * 7.6 - 3.8;
+        var rr = 1.45;
+        if (i % 11 === 0) rr = 1.45 * (Math.random() * 2 - 1); // rung particles
+        pos[i3]     = Math.cos(t + strand) * rr;
+        pos[i3 + 1] = yy;
+        pos[i3 + 2] = Math.sin(t + strand) * rr;
       }
-      for (var i = 0; i < mesh.length; i++) {
-        var p = mesh[i];
-        var pulse = (Math.sin(t * 1.6 + p.pr) + 1) / 2;
-        ctx.shadowBlur = 10; ctx.shadowColor = c(70, .8);
-        ctx.fillStyle = c(78, .55 + pulse * .45);
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, 1.6 + pulse * 1.5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.shadowBlur = 0;
+    } else {
+      // Torus — scanning ring volume
+      for (i = 0; i < COUNT; i++) {
+        i3 = i * 3;
+        var u = Math.random() * Math.PI * 2;
+        var v = Math.random() * Math.PI * 2;
+        var R = 2.1, tube = .62 + (Math.random() - .5) * .12;
+        pos[i3]     = (R + tube * Math.cos(v)) * Math.cos(u);
+        pos[i3 + 1] = tube * Math.sin(v);
+        pos[i3 + 2] = (R + tube * Math.cos(v)) * Math.sin(u);
       }
     }
-
-    // ─── MODE 1: AXIAL SWEEP — concentric scan rings + sweeping radar arm ───
-    else if (mode === 1) {
-      var cx = W * .5, cy = H * .5;
-      var maxR = Math.min(W, H) * .42;
-
-      for (var r = maxR * .22; r <= maxR; r += maxR * .195) {
-        ctx.strokeStyle = c(60, .16);
-        ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
-      }
-      // crosshair
-      ctx.strokeStyle = c(60, .12);
-      ctx.beginPath(); ctx.moveTo(cx - maxR, cy); ctx.lineTo(cx + maxR, cy); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(cx, cy - maxR); ctx.lineTo(cx, cy + maxR); ctx.stroke();
-
-      // sweeping arm with trailing gradient
-      var ang = t * .9;
-      var grad = ctx.createConicGradient ? null : null;
-      for (var k = 0; k < 26; k++) {
-        var a2 = ang - k * .035;
-        ctx.strokeStyle = c(70, .3 * (1 - k / 26));
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(cx, cy);
-        ctx.lineTo(cx + Math.cos(a2) * maxR, cy + Math.sin(a2) * maxR);
-        ctx.stroke();
-      }
-      // leading edge
-      ctx.shadowBlur = 14; ctx.shadowColor = c(70, .9);
-      ctx.strokeStyle = c(82, .95); ctx.lineWidth = 1.6;
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.lineTo(cx + Math.cos(ang) * maxR, cy + Math.sin(ang) * maxR);
-      ctx.stroke();
-      ctx.shadowBlur = 0;
-
-      // detected blips
-      var blips = [[.35, 1.2], [.62, 3.1], [.78, 4.7], [.5, 5.9], [.28, 2.3]];
-      for (var b = 0; b < blips.length; b++) {
-        var br = maxR * blips[b][0], ba = blips[b][1];
-        var diff = ((ang - ba) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
-        var fade = Math.max(0, 1 - diff / 1.9);
-        if (fade > 0.02) {
-          ctx.shadowBlur = 12; ctx.shadowColor = c(75, fade);
-          ctx.fillStyle = c(80, fade * .95);
-          ctx.beginPath();
-          ctx.arc(cx + Math.cos(ba) * br, cy + Math.sin(ba) * br, 3, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.shadowBlur = 0;
-        }
-      }
-      nodeCount = 5;
-    }
-
-    // ─── MODE 2: HELIX TRACE ───
-    else if (mode === 2) {
-      var cx = W * .5;
-      var amp = Math.min(W * .17, 130);
-      var steps = 44;
-      var spacing = (H + 140) / steps;
-      for (var i = 0; i < steps; i++) {
-        var y = i * spacing - 70;
-        var phase = i * .42 + t * .9;
-        var x1 = cx + Math.sin(phase) * amp;
-        var x2 = cx + Math.sin(phase + Math.PI) * amp;
-        var d1 = (Math.cos(phase) + 1) / 2;
-        var d2 = (Math.cos(phase + Math.PI) + 1) / 2;
-
-        ctx.strokeStyle = c(60, .10 + Math.abs(d1 - d2) * .06);
-        ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(x1, y); ctx.lineTo(x2, y); ctx.stroke();
-
-        ctx.shadowBlur = 8; ctx.shadowColor = c(70, .7);
-        ctx.fillStyle = c(72, .22 + d1 * .7);
-        ctx.beginPath(); ctx.arc(x1, y, 1.8 + d1 * 2.6, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = c(72, .22 + d2 * .7);
-        ctx.beginPath(); ctx.arc(x2, y, 1.8 + d2 * 2.6, 0, Math.PI * 2); ctx.fill();
-        ctx.shadowBlur = 0;
-      }
-      nodeCount = steps * 2;
-    }
-
-    // ─── MODE 3: WAVEFORM — live ECG-style trace ───
-    else {
-      var baseY = H * .5;
-      var sw = W;
-      // build waveform points
-      ctx.lineWidth = 1.8;
-      ctx.strokeStyle = c(70, .85);
-      ctx.shadowBlur = 12; ctx.shadowColor = c(70, .8);
-      ctx.beginPath();
-      for (var x = 0; x <= sw; x += 2) {
-        var px = (x / sw) * 10 + t * 1.4;
-        var seg = px % 10;
-        var v = 0;
-        // ECG-ish morphology
-        if (seg < .8)      v = Math.sin(seg / .8 * Math.PI) * .16;         // P wave
-        else if (seg < 1.5) v = 0;
-        else if (seg < 1.7) v = -(seg - 1.5) / .2 * .22;                    // Q
-        else if (seg < 1.9) v = ((seg - 1.7) / .2) * 1.15 - .22;            // R up
-        else if (seg < 2.1) v = .93 - ((seg - 1.9) / .2) * 1.25;            // S down
-        else if (seg < 2.4) v = -.32 + ((seg - 2.1) / .3) * .32;
-        else if (seg < 3.4) v = Math.sin((seg - 2.4) / 1.0 * Math.PI) * .26; // T wave
-        else v = Math.sin(px * 3.1) * .012;                                  // baseline noise
-        var y = baseY - v * (H * .3);
-        if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-      }
-      ctx.stroke();
-      ctx.shadowBlur = 0;
-
-      // secondary flat traces above/below for depth
-      ctx.lineWidth = 1;
-      for (var s = -1; s <= 1; s += 2) {
-        ctx.strokeStyle = c(60, .16);
-        ctx.beginPath();
-        for (var x = 0; x <= sw; x += 3) {
-          var px = (x / sw) * 14 + t * (s > 0 ? .9 : 1.7);
-          var y = baseY + s * H * .27 + Math.sin(px * 2.2) * 7 + Math.sin(px * 5.3) * 3;
-          if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-      }
-
-      // moving readout marker
-      var mx = (t * 90) % W;
-      ctx.strokeStyle = c(75, .35);
-      ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(mx, H * .15); ctx.lineTo(mx, H * .85); ctx.stroke();
-      nodeCount = 3;
-    }
-
-    drawDust();
-    t += .016;
-    requestAnimationFrame(frame);
+    return pos;
   }
-  frame();
 
-  // ── live HUD readouts ──
-  document.getElementById('hudNodes').textContent = nodeCount || 48;
+  var basePos = buildPositions();
+
+  // Scatter target — where each point flies to during the "encrypt" burst
+  var scatter = new Float32Array(COUNT * 3);
+  var rands   = new Float32Array(COUNT);
+  for (var i = 0; i < COUNT; i++) {
+    var i3 = i * 3;
+    scatter[i3]     = (Math.random() - .5) * 11;
+    scatter[i3 + 1] = (Math.random() - .5) * 8;
+    scatter[i3 + 2] = (Math.random() - .5) * 11;
+    rands[i] = Math.random();
+  }
+
+  var geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(basePos, 3));
+  geo.setAttribute('aScatter', new THREE.BufferAttribute(scatter, 3));
+  geo.setAttribute('aRand',    new THREE.BufferAttribute(rands, 1));
+
+  // ── GPU shader: displacement, mouse repulsion, soft radial glow ──
+  var uniforms = {
+    uTime:      { value: 0 },
+    uMouse:     { value: new THREE.Vector3(999, 999, 999) },
+    uMouseAmt:  { value: 0 },
+    uSize:      { value: 2.4 },
+    uEncrypt:   { value: 0 },
+    uColor:     { value: hsl(62) },
+    uHot:       { value: hsl(86, 95) }
+  };
+
+  var vertexShader = [
+    'uniform float uTime;',
+    'uniform vec3  uMouse;',
+    'uniform float uMouseAmt;',
+    'uniform float uSize;',
+    'uniform float uEncrypt;',
+    'attribute vec3  aScatter;',
+    'attribute float aRand;',
+    'varying float vGlow;',
+    'varying float vRand;',
+    'void main() {',
+    '  vec3 pos = position;',
+    // organic breathing so the field never looks frozen
+    '  float breathe = sin(uTime * 0.75 + aRand * 6.2831) * 0.055;',
+    '  pos *= 1.0 + breathe;',
+    '  pos.y += sin(uTime * 0.5 + pos.x * 0.7) * 0.06;',
+    // scatter burst while the password is being typed
+    '  pos = mix(pos, aScatter, uEncrypt);',
+    '  vec4 world = modelMatrix * vec4(pos, 1.0);',
+    // mouse repulsion in world space — real reactive physics
+    '  float d = distance(world.xyz, uMouse);',
+    '  float infl = smoothstep(2.6, 0.0, d) * uMouseAmt;',
+    '  vec3 away = normalize(world.xyz - uMouse + vec3(0.0001));',
+    '  world.xyz += away * infl * 1.15;',
+    '  vGlow = infl;',
+    '  vRand = aRand;',
+    '  vec4 mv = viewMatrix * world;',
+    '  gl_PointSize = (uSize + infl * 7.0 + aRand * 1.3) * (300.0 / -mv.z);',
+    '  gl_Position = projectionMatrix * mv;',
+    '}'
+  ].join('\n');
+
+   var fragmentShader = [
+    'uniform vec3  uColor;',
+    'uniform vec3  uHot;',
+    'uniform float uTime;',
+    'varying float vGlow;',
+    'varying float vRand;',
+    'void main() {',
+    '  vec2 uv = gl_PointCoord - 0.5;',
+    '  float d = length(uv);',
+    '  if (d > 0.5) discard;',
+    '  float alpha = smoothstep(0.5, 0.15, d);',
+    '  float tw = 0.7 + 0.3 * sin(uTime * 1.4 + vRand * 24.0);',
+    '  vec3 col = mix(uColor, uHot, clamp(vGlow * 1.4, 0.0, 1.0));',
+    '  gl_FragColor = vec4(col, alpha * (0.16 + vGlow * 0.5) * tw);',
+    '}'
+  ].join('\n');
+
+  var mat = new THREE.ShaderMaterial({
+    uniforms: uniforms,
+    vertexShader: vertexShader,
+    fragmentShader: fragmentShader,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending
+  });
+
+  var points = new THREE.Points(geo, mat);
+  group.add(points);
+  document.getElementById('hudPts').textContent = COUNT.toLocaleString();
+
+  // ── wireframe core: gives the scene real 3D depth cues ──
+  var coreGeo = new THREE.IcosahedronGeometry(1.15, 1);
+  var core = new THREE.LineSegments(
+    new THREE.WireframeGeometry(coreGeo),
+    new THREE.LineBasicMaterial({ color: hsl(58), transparent: true, opacity: .22 })
+  );
+  group.add(core);
+
+  // ── orbital rings ──
+  var rings = [];
+  for (var r = 0; r < 2; r++) {
+    var ringGeo = new THREE.RingGeometry(2.75 + r * .5, 2.77 + r * .5, 96);
+    var ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({
+      color: hsl(60), transparent: true, opacity: .16, side: THREE.DoubleSide
+    }));
+    ring.rotation.x = Math.PI / 2 + (r === 0 ? .35 : -.5);
+    ring.rotation.y = r === 0 ? .2 : -.35;
+    rings.push(ring);
+    group.add(ring);
+  }
+
+  // ═════════ MOUSE INTERACTION ═════════
+  var mouseNDC   = { x: 0, y: 0 };
+  var camTarget  = { x: 0, y: 0 };
+  var camCurrent = { x: 0, y: 0 };
+  var hovering   = false;
+
+  panel.addEventListener('pointermove', function (e) {
+    var rect = panel.getBoundingClientRect();
+    mouseNDC.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    mouseNDC.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    camTarget.x = mouseNDC.x * .45;   // camera orbit target
+    camTarget.y = mouseNDC.y * .32;
+    if (!hovering) {
+      hovering = true;
+      gsap.to(uniforms.uMouseAmt, { value: 1, duration: .6, ease: 'power2.out' });
+    }
+  });
+
+  panel.addEventListener('pointerleave', function () {
+    hovering = false;
+    gsap.to(uniforms.uMouseAmt, { value: 0, duration: .8, ease: 'power2.out' });
+  });
+
+  // click = shockwave burst
+  panel.addEventListener('pointerdown', function () {
+    gsap.timeline()
+      .to(uniforms.uMouseAmt, { value: 3.4, duration: .18, ease: 'power3.out' })
+      .to(uniforms.uMouseAmt, { value: hovering ? 1 : 0, duration: 1.1, ease: 'elastic.out(1, 0.45)' });
+    gsap.fromTo(uniforms.uSize, { value: 5.2 }, { value: 2.4, duration: .9, ease: 'power3.out' });
+  });
+
+  var raycastPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+  var raycaster = new THREE.Raycaster();
+  var hitPoint = new THREE.Vector3();
+
+  function updateMouseWorld() {
+    raycaster.setFromCamera(mouseNDC, camera);
+    if (raycaster.ray.intersectPlane(raycastPlane, hitPoint)) {
+      uniforms.uMouse.value.copy(hitPoint);
+    }
+  }
+
+  // ═════════ RENDER LOOP ═════════
+  var clock = new THREE.Clock();
+  var frames = 0, fpsTimer = 0;
+  var fpsEl = document.getElementById('hudFps');
+
+  function animate() {
+    var dt = clock.getDelta();
+    var t  = clock.getElapsedTime();
+    uniforms.uTime.value = t;
+
+    // eased camera orbit toward mouse — real depth parallax
+    camCurrent.x += (camTarget.x - camCurrent.x) * .045;
+    camCurrent.y += (camTarget.y - camCurrent.y) * .045;
+    camera.position.x = Math.sin(camCurrent.x) * 7.4;
+    camera.position.z = Math.cos(camCurrent.x) * 7.4;
+    camera.position.y = camCurrent.y * 3.2;
+    camera.lookAt(0, 0, 0);
+
+    updateMouseWorld();
+
+    group.rotation.y += dt * .085;
+    core.rotation.x  += dt * .22;
+    core.rotation.y  -= dt * .16;
+    rings[0].rotation.z += dt * .12;
+    rings[1].rotation.z -= dt * .08;
+
+    renderer.render(scene, camera);
+
+    frames++; fpsTimer += dt;
+    if (fpsTimer >= 1) {
+      fpsEl.textContent = frames;
+      frames = 0; fpsTimer = 0;
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  // ═════════ GSAP ENTRANCE CHOREOGRAPHY ═════════
+  var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+  tl.from(group.scale, { x: .35, y: .35, z: .35, duration: 1.6, ease: 'power2.out' }, 0)
+    .from(uniforms.uSize, { value: 8, duration: 1.8, ease: 'power3.out' }, 0)
+    .to('.hud-corner', { opacity: 1, duration: .5, stagger: .08 }, .3)
+    .from('[data-reveal]', { y: 16, opacity: 0, duration: .65, stagger: .075 }, .25)
+    .to('#brandSub', { opacity: 1, duration: .8 }, 1.6);
+
+  // ── typewriter brand headline ──
+  (function typewriter() {
+    var text = 'Radiology reports, in plain language.';
+    var el = document.getElementById('typeTarget');
+    var i = 0;
+    setTimeout(function tick() {
+      if (i <= text.length) {
+        el.textContent = text.slice(0, i);
+        i++;
+        setTimeout(tick, 34);
+      }
+    }, 700);
+  })();
+
+  // ── boot sequence log ──
+  (function bootLog() {
+    var lines = [
+      '> initializing scan engine',
+      '> loading knowledge base',
+      '> 2,847 medical terms indexed',
+      '> verification layer active',
+      '> awaiting credentials'
+    ];
+    var box = document.getElementById('bootLog');
+    var i = 0;
+    (function next() {
+      if (i >= lines.length) return;
+      var d = document.createElement('div');
+      d.innerHTML = lines[i] + (i < lines.length - 1 ? ' <span class="ok">✓</span>' : '');
+      box.appendChild(d);
+      gsap.from(d, { opacity: 0, x: -8, duration: .4, ease: 'power2.out' });
+      i++;
+      setTimeout(next, 420);
+    })();
+  })();
+
+  // ═════════ FORM ↔ SCENE INTERACTION ═════════
+  var fields = document.querySelectorAll('.field');
+  fields.forEach(function (f) {
+    var input = f.querySelector('input');
+    if (!input) return;
+    input.addEventListener('focus', function () {
+      f.classList.add('is-focused');
+      gsap.to(uniforms.uSize, { value: 3.3, duration: .5, ease: 'power2.out' });
+    });
+    input.addEventListener('blur', function () {
+      f.classList.remove('is-focused');
+      gsap.to(uniforms.uSize, { value: 2.4, duration: .6, ease: 'power2.out' });
+    });
+  });
+
+  // password typing scatters the field — "encrypting" feedback
+  var pw = document.getElementById('password');
+  var encryptTween;
+  pw.addEventListener('input', function () {
+    var amt = Math.min(.34, pw.value.length * .028);
+    if (encryptTween) encryptTween.kill();
+    encryptTween = gsap.to(uniforms.uEncrypt, { value: amt, duration: .45, ease: 'power2.out' });
+    document.getElementById('hudInt').textContent = (99.9 - amt * 4).toFixed(1) + '%';
+  });
+  pw.addEventListener('blur', function () {
+    if (encryptTween) encryptTween.kill();
+    gsap.to(uniforms.uEncrypt, { value: 0, duration: .9, ease: 'power2.inOut' });
+  });
+
+  // show / hide password
+  document.getElementById('pwToggle').addEventListener('click', function () {
+    pw.type = pw.type === 'password' ? 'text' : 'password';
+    pw.focus();
+  });
+
+  // submit → collapse the field inward, spinner on the button
+  document.getElementById('authForm').addEventListener('submit', function () {
+    document.getElementById('submitBtn').classList.add('loading');
+    gsap.to(uniforms.uEncrypt, { value: 1, duration: 1.1, ease: 'power2.in' });
+    gsap.to(group.rotation, { y: group.rotation.y + 3.2, duration: 1.2, ease: 'power2.in' });
+  });
+
+  // ── drifting integrity readout ──
   setInterval(function () {
-    document.getElementById('hudLat').textContent = (12 + Math.floor(Math.random() * 14)) + ' ms';
-    document.getElementById('hudInt').textContent = (98.6 + Math.random() * 1.3).toFixed(1) + '%';
-  }, 2200);
+    if (document.activeElement !== pw) {
+      document.getElementById('hudInt').textContent = (98.8 + Math.random() * 1.1).toFixed(1) + '%';
+    }
+  }, 2400);
+
 })();
 </script>
 
