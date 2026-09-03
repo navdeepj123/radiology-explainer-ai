@@ -8,13 +8,14 @@ import re
 import io
 import uuid
 import time
+import base64
 import signal
 import subprocess
 import certifi
 import pdfplumber
 from datetime import datetime
 from dotenv import load_dotenv
-from flask import Flask, request, render_template, jsonify, g, redirect, url_for, flash
+from flask import Flask, request, render_template, jsonify, g, redirect, url_for, flash, Response
 from flask_cors import CORS
 from flask_login import (
     LoginManager, login_user, logout_user, login_required, current_user
@@ -41,33 +42,28 @@ CORS(app, supports_credentials=True)
 
 app.register_blueprint(health_tools_bp)
 
-# ── MONGODB CONNECTION (auto DNS-flush + retry + clean Ctrl+C) ─────────────
+# ── MONGODB CONNECTION ─────────────────────────────────────────
 
 def _flush_dns():
-    """Windows DNS cache clear karta hai — stale connection issues rokta hai."""
     try:
         subprocess.run(["ipconfig", "/flushdns"], capture_output=True, timeout=5)
     except Exception:
-        pass  # agar Windows nahi hai ya command fail ho, chup-chaap ignore karo
+        pass
 
 
 def _connect_mongo_with_retry(uri, max_attempts=3):
-    """
-    MongoDB se connect karta hai, aur agar fail ho to DNS flush karke
-    dubara try karta hai — bina user ko manually kuch karna pade.
-    """
     for attempt in range(1, max_attempts + 1):
         try:
             client = MongoClient(
                 uri,
                 tlsCAFile=certifi.where(),
-                tlsAllowInvalidCertificates=True,   # TEMPORARY — diagnostic only, hata dena baad me
+                tlsAllowInvalidCertificates=True,
                 serverSelectionTimeoutMS=8000,
                 connectTimeoutMS=8000,
                 socketTimeoutMS=8000,
                 retryWrites=True,
             )
-            client.admin.command("ping")  # turant test karo connection sahi hai ya nahi
+            client.admin.command("ping")
             print(f"✅ MongoDB connected (attempt {attempt})")
             return client
         except Exception as e:
@@ -76,30 +72,26 @@ def _connect_mongo_with_retry(uri, max_attempts=3):
                 print("   Flushing DNS and retrying...")
                 _flush_dns()
                 time.sleep(2)
-    print("❌ MongoDB could not connect after retries. App will run, but history/verification features will be unavailable until connection is restored.")
+    print("❌ MongoDB could not connect after retries.")
     return None
 
 
 def _connect_mongo_safely(uri, max_attempts=3):
-    """
-    MongoDB se connect karta hai, DNS lookup ke waqt Ctrl+C ka
-    messy traceback na aaye isliye SIGINT ko thodi der ke liye hold karta hai.
-    """
     original_handler = signal.getsignal(signal.SIGINT)
 
     def _quiet_interrupt_handler(signum, frame):
-        raise SystemExit(0)  # clean exit, koi traceback nahi
+        raise SystemExit(0)
 
     try:
         signal.signal(signal.SIGINT, _quiet_interrupt_handler)
     except (ValueError, OSError):
-        pass  # kuch environments me signal set nahi hota, ignore karo
+        pass
 
     try:
         return _connect_mongo_with_retry(uri, max_attempts)
     finally:
         try:
-            signal.signal(signal.SIGINT, original_handler)  # normal Ctrl+C wapas laga do
+            signal.signal(signal.SIGINT, original_handler)
         except (ValueError, OSError):
             pass
 
@@ -134,7 +126,7 @@ def load_user(user_id):
 
 
 OWNER_COOKIE_NAME = "cs_owner_id"
-OWNER_COOKIE_MAX_AGE = 60 * 60 * 24 * 365  # 1 year
+OWNER_COOKIE_MAX_AGE = 60 * 60 * 24 * 365
 
 from services.rag_service import generate_explanation, get_length_instruction, get_detail_instruction
 from services.llm_router import generate_with_provider
@@ -200,26 +192,14 @@ RULES:
 """
 
 
-# ── OWNER COOKIE (before/after request) ─────────────────────────────────────
+# ── OWNER COOKIE ─────────────────────────────────────────
 
 @app.before_request
 def load_owner_id():
-    """
-    Resolves g.owner_id — the key everything else uses to know which
-    conversations belong to this visitor.
-
-    - Logged in:  g.owner_id = "user:<mongo id>" (stable forever, backed by MongoDB)
-    - Guest:      g.owner_id = the anonymous cs_owner_id cookie (backed by the
-                  in-memory guest store — see conversation_store.py). We still
-                  track this even while logged in, so that if the user logs
-                  out again we don't accidentally resurrect an old identity,
-                  and so a guest's identity is stable enough to migrate from
-                  if they register/login mid-session.
-    """
     owner_id = request.cookies.get(OWNER_COOKIE_NAME)
     if not owner_id:
         owner_id = uuid.uuid4().hex
-        g.new_owner_id = owner_id   # after_request will set the cookie
+        g.new_owner_id = owner_id
     g.guest_owner_id = owner_id
 
     if current_user.is_authenticated:
@@ -243,10 +223,6 @@ def set_owner_cookie(response):
 
 
 def _migrate_guest_conversations_if_any(user):
-    """Called right after a successful login/registration. If this browser
-    had guest conversations going, move them into the new account so
-    nothing is lost — this is what lets someone start chatting anonymously
-    and keep their history the moment they sign up."""
     guest_owner_id = g.get("guest_owner_id")
     if not guest_owner_id:
         return 0
@@ -254,7 +230,7 @@ def _migrate_guest_conversations_if_any(user):
     return migrated
 
 
-# ── AUTH: register / login / logout ─────────────────────────────────────
+# ── AUTH ─────────────────────────────────────────
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -397,12 +373,6 @@ def extract_pdf_text(file_storage):
 # ── VERIFICATION LOGGING ─────────────────────────────────────────────────
 
 def log_verification(conv_id, provider, language, verification, source):
-    """
-    Har verification check ka result MongoDB me save karta hai.
-    source: "explanation" (initial report explanation) ya "chat" (chatbot reply)
-    Yehi tumhara research data hai — /verification-stats isi collection se
-    accuracy numbers nikalta hai.
-    """
     if verification_logs_col is None:
         return
     try:
@@ -420,7 +390,7 @@ def log_verification(conv_id, provider, language, verification, source):
         print(f"⚠️ Verification logging failed: {e}")
 
 
-# ── CONVERSATION SERIALIZATION (for /conversation/<id> GET) ────────────────
+# ── CONVERSATION SERIALIZATION ────────────────────
 
 def serialize_conv(doc):
     return {
@@ -437,17 +407,19 @@ def serialize_conv(doc):
         "kind":           doc.get("kind", "radiology"),
         "tool_id":        doc.get("tool_id"),
         "tool_name":      doc.get("tool_name"),
+        "pdf_filename":   doc.get("pdf_filename"),
+        "has_pdf":        bool(doc.get("pdf_base64")),
     }
 
 
-# ── HOME ──────────────────────────────────────────────────────────────────────
+# ── HOME ──────────────────────────────────────────────────────────────
 
 @app.route("/")
 def home():
     return render_template("home.html")
 
 
-# ── ANALYZE (original — renders results.html) ─────────────────────────────────
+# ── ANALYZE (original form POST) ─────────────────────────────────
 
 @app.route("/analyze", methods=["GET", "POST"])
 def analyze():
@@ -495,7 +467,6 @@ def analyze():
     conv_id = conv_store.create(g.owner_id, report_text, provider, ollama_model, language,
                                    answer_length, detail_level, results)
 
-    # verify the explanation against confirmed terms and log it
     explanation_verification = results.get("verification") if isinstance(results, dict) else None
     if explanation_verification is None:
         explanation_verification = verify_output(
@@ -515,17 +486,10 @@ def analyze():
     )
 
 
-# ── ANALYZE AJAX (single-page UI, PDF + language + MongoDB conversations) ──────
+# ── ANALYZE AJAX ──────────────────────────────
 
 @app.route("/analyze_ajax", methods=["POST"])
 def analyze_ajax():
-    """
-    Same logic as /analyze POST but returns JSON.
-    Called by Analyze.html via fetch() — no page reload needed.
-    Every call here creates a NEW conversation (fresh report + its own chat
-    thread), instead of overwriting the previous one.
-    """
-
     report_text   = request.form.get("report_text", "").strip()
     provider      = request.form.get("provider", "groq").strip()
     ollama_model  = request.form.get("ollama_model", "llama3.2:1b").strip()
@@ -534,13 +498,22 @@ def analyze_ajax():
     detail_level  = request.form.get("detail_level", "medium").strip()
     uploaded      = request.files.get("report_file")
 
+    pdf_base64 = None
+    pdf_filename = None
+
     if uploaded and uploaded.filename:
         filename_lower = uploaded.filename.lower()
         if filename_lower.endswith(".pdf"):
+            file_bytes = uploaded.read()
+            uploaded.seek(0)
             extracted_text, pdf_error = extract_pdf_text(uploaded)
             if pdf_error:
                 return jsonify({"error": pdf_error}), 400
             report_text = extracted_text
+
+            if current_user.is_authenticated:
+                pdf_base64 = base64.b64encode(file_bytes).decode("utf-8")
+                pdf_filename = uploaded.filename
         else:
             try:
                 report_text = uploaded.read().decode("utf-8", errors="ignore").strip()
@@ -562,11 +535,10 @@ def analyze_ajax():
         except TypeError:
             results = generate_explanation(report_text, provider)
 
-    # Create a fresh conversation (report + its own chat thread)
     conv_id = conv_store.create(g.owner_id, report_text, provider, ollama_model, language,
-                                   answer_length, detail_level, results)
+                                   answer_length, detail_level, results,
+                                   pdf_base64=pdf_base64, pdf_filename=pdf_filename)
 
-    # verify the explanation against confirmed terms and log it
     explanation_verification = results.get("verification") if isinstance(results, dict) else None
     if explanation_verification is None:
         explanation_verification = verify_output(
@@ -576,8 +548,9 @@ def analyze_ajax():
     log_verification(conv_id, provider, language, explanation_verification, source="explanation")
 
     return jsonify({
-         "conversation_id":   conv_id,
-        "report_text":       report_text,                              # NEW — ye line missing thi
+        "conversation_id":   conv_id,
+        "report_text":       report_text,
+        "pdf_filename":      pdf_filename,
         "risk_level":        results.get("risk_level",  "unknown"),
         "risk_reason":       results.get("risk_reason", ""),
         "summary":           results.get("summary",     ""),
@@ -585,19 +558,16 @@ def analyze_ajax():
         "terms":             results.get("terms",       []),
         "verification":      explanation_verification,
         "highlighted_terms": results.get("highlighted_terms", []),
-
     })
 
 
-# ── CONVERSATIONS: list for sidebar ────────────────────────────────────────
+# ── CONVERSATIONS ────────────────────────────────────────
 
 @app.route("/conversations", methods=["GET"])
 def list_conversations():
     items = conv_store.list_for_owner(g.owner_id)
     return jsonify({"conversations": items})
 
-
-# ── CONVERSATIONS: reload one full conversation (report + chat) ───────────
 
 @app.route("/conversation/<conv_id>", methods=["GET"])
 def get_conversation(conv_id):
@@ -607,7 +577,19 @@ def get_conversation(conv_id):
     return jsonify(serialize_conv(doc))
 
 
-# ── CONVERSATIONS: delete (NEW) ─────────────────────────────────────────
+@app.route("/conversation/<conv_id>/pdf", methods=["GET"])
+def get_conversation_pdf(conv_id):
+    doc = conv_store.get(conv_id, g.owner_id)
+    if not doc or not doc.get("pdf_base64"):
+        return jsonify({"error": "No PDF found"}), 404
+
+    pdf_bytes = base64.b64decode(doc["pdf_base64"])
+    return Response(
+        pdf_bytes,
+        mimetype="application/pdf",
+        headers={"Content-Disposition": f'inline; filename="{doc.get("pdf_filename","report.pdf")}"'}
+    )
+
 
 @app.route("/conversation/<conv_id>", methods=["DELETE"])
 def delete_conversation(conv_id):
@@ -618,8 +600,6 @@ def delete_conversation(conv_id):
         return jsonify({"error": "Not found"}), 404
     return jsonify({"deleted": True})
 
-
-# ── CONVERSATIONS: rename (NEW) ─────────────────────────────────────────
 
 @app.route("/conversation/<conv_id>/rename", methods=["POST"])
 def rename_conversation(conv_id):
@@ -635,7 +615,7 @@ def rename_conversation(conv_id):
     return jsonify({"title": title})
 
 
-# ── CHAT — reads/writes the given conversation's own chat thread ──────────
+# ── CHAT ──────────────────────────────
 
 @app.route("/chat", methods=["POST"])
 def chat():
@@ -707,7 +687,6 @@ def chat():
     reply = generate_with_provider(full_prompt, provider, detected_terms=detected_terms, ollama_model=ollama_model)
     reply = clean_ai_reply(reply)
 
-    # verify chatbot reply against confirmed terms and log it
     verification = verify_output(reply, detected_terms)
     log_verification(conv_id, provider, language, verification, source="chat")
 
@@ -726,7 +705,7 @@ def chat():
     })
 
 
-# ── VERIFICATION STATS — research/accuracy dashboard data ────────────
+# ── VERIFICATION STATS ────────────
 
 @app.route("/verification-stats", methods=["GET"])
 def verification_stats():
@@ -753,45 +732,37 @@ def verification_stats():
         })
     return jsonify({"stats": stats})
 
-# ── TRENDS — risk-over-time + most frequent findings ──────────────────────
- 
+# ── TRENDS ──────────────────────────────
+
 RISK_SCORE = {"low": 1, "medium": 2, "high": 3, "unknown": 0}
- 
- 
+
+
 @app.route("/trends", methods=["GET"])
 def trends():
-    """
-    Returns this owner's report history in chronological order, for the
-    Trends tab: a risk-level-over-time line chart + a findings-frequency
-    bar chart. Works for both guest and logged-in owners.
-    """
     docs = conv_store.list_full_for_owner(g.owner_id)
- 
+
     points = []
     term_frequency = {}
- 
+
     for doc in docs:
-        # risk_level is stored as "Low"/"Medium"/"High" (see rag_service.py) —
-        # .lower() it before the RISK_SCORE lookup.
         risk_level = str(doc.get("risk_level", "unknown")).lower()
         detected_terms = doc.get("detected_terms", [])
         term_names = [t.get("term", "") for t in detected_terms if t.get("term")]
- 
+
         for name in term_names:
             term_frequency[name] = term_frequency.get(name, 0) + 1
- 
+
         points.append({
             "date":       doc.get("date", ""),
             "risk_level": risk_level,
             "risk_score": RISK_SCORE.get(risk_level, 0),
             "terms":      term_names,
         })
- 
+
     return jsonify({"points": points, "term_frequency": term_frequency})
- 
- 
-# ── RUN ───────────────────────────────────────────────────────────────────────
-# ── RUN ───────────────────────────────────────────────────────────────────────
+
+
+# ── RUN ───────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

@@ -464,8 +464,12 @@ function loadConversation(convId) {
       var detailSel = document.getElementById('detailSel');
       if (detailSel) detailSel.value = detailLevel;
 
-      document.getElementById('msgs').innerHTML = '';
-      appendUserBubble(conv.report_text.substring(0, 150), null);
+            document.getElementById('msgs').innerHTML = '';
+      if (conv.has_pdf) {
+        appendUserBubble('', { name: conv.pdf_filename, isServerPdf: true, convId: convId });
+      } else {
+        appendUserBubble(conv.report_text, null);
+      }
       conv.results.report_text = conv.report_text;
       renderBotResult(conv.results);
       activateChatbot();
@@ -624,9 +628,9 @@ function appendUserBubble(txt, file) {
   var html = '<div class="msg-meta">You</div>';
 
   if (file) {
-    html += '<div class="bub-att">'
+    html += '<div class="bub-att" ' + (file.isServerPdf ? 'style="cursor:pointer"' : '') + '>'
           +   '<div class="bub-att-name">' + escHtml(file.name) + '</div>'
-          +   '<span class="bub-att-badge">' + fileExt(file.name) + '</span>'
+          +   '<span class="bub-att-badge">' + (file.isServerPdf ? 'PDF · View' : fileExt(file.name)) + '</span>'
           + '</div>';
   }
   if (txt) {
@@ -653,6 +657,16 @@ function appendUserBubble(txt, file) {
 
   row.innerHTML = html;
   msgs.appendChild(row);
+
+  if (file && file.isServerPdf) {
+    var attEl = row.querySelector('.bub-att');
+    if (attEl) {
+      attEl.addEventListener('click', function() {
+        window.open('/conversation/' + file.convId + '/pdf', '_blank');
+      });
+    }
+  }
+
   scrollBottom();
 }
 function showMainTyping() {
