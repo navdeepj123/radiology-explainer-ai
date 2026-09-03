@@ -434,6 +434,8 @@ def serialize_conv(doc):
         "detected_terms": doc.get("detected_terms", []),
         "results":        doc["results"],
         "chat_messages":  doc.get("chat_messages", []),
+          "source_type":        doc.get("source_type", "text"),
+        "original_filename":  doc.get("original_filename", ""),
         "kind":           doc.get("kind", "radiology"),
         "tool_id":        doc.get("tool_id"),
         "tool_name":      doc.get("tool_name"),
@@ -532,18 +534,40 @@ def analyze_ajax():
     language      = request.form.get("language", "English").strip()
     answer_length = request.form.get("answer_length", "standard").strip()
     detail_level  = request.form.get("detail_level", "medium").strip()
+    source_type   = request.form.get("source_type", "text").strip()
+    original_filename = request.form.get("original_filename", "").strip()
     uploaded      = request.files.get("report_file")
+
+     # ─────────────────────────────────────────────
+    # FILE UPLOAD
+    # ─────────────────────────────────────────────
 
     if uploaded and uploaded.filename:
         filename_lower = uploaded.filename.lower()
+
         if filename_lower.endswith(".pdf"):
+            # PDF ka original filename save karo
+            source_type = "pdf"
+            original_filename = uploaded.filename
+
+            # PDF text ONLY backend analysis/RAG/LLM ke liye
             extracted_text, pdf_error = extract_pdf_text(uploaded)
+
             if pdf_error:
                 return jsonify({"error": pdf_error}), 400
+
             report_text = extracted_text
+
         else:
+            # Other text file
+            source_type = "text"
+            original_filename = uploaded.filename
+
             try:
-                report_text = uploaded.read().decode("utf-8", errors="ignore").strip()
+                report_text = uploaded.read().decode(
+                    "utf-8",
+                    errors="ignore"
+                ).strip()
             except Exception:
                 pass
 
@@ -563,8 +587,12 @@ def analyze_ajax():
             results = generate_explanation(report_text, provider)
 
     # Create a fresh conversation (report + its own chat thread)
-    conv_id = conv_store.create(g.owner_id, report_text, provider, ollama_model, language,
-                                   answer_length, detail_level, results)
+    conv_id = conv_store.create(
+        g.owner_id, report_text, provider, ollama_model, language,
+        answer_length, detail_level, results,
+        source_type=source_type,
+        original_filename=original_filename
+    )
 
     # verify the explanation against confirmed terms and log it
     explanation_verification = results.get("verification") if isinstance(results, dict) else None
@@ -577,7 +605,9 @@ def analyze_ajax():
 
     return jsonify({
          "conversation_id":   conv_id,
-        "report_text":       report_text,                              # NEW — ye line missing thi
+        "report_text":       report_text,   
+    "source_type":       source_type,
+    "original_filename": original_filename,                           # NEW — ye line missing thi
         "risk_level":        results.get("risk_level",  "unknown"),
         "risk_reason":       results.get("risk_reason", ""),
         "summary":           results.get("summary",     ""),
