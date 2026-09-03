@@ -383,3 +383,118 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 }
 .pill-sel:hover{ border-color:var(--hover-border); }
 .pill-sel:focus{ border-color:var(--blue); }
+
+/* Health tools textarea — same style as radiology */
+#htTa{
+  flex:1;
+  background:transparent;
+  border:none;
+  outline:none;
+  resize:none;
+  font-family:'DM Sans',sans-serif;
+  font-size:.88rem;
+  color:var(--text);
+  line-height:1.6;
+  min-height:34px;
+  max-height:150px;
+  padding:.1rem 0;
+}
+#htTa::placeholder{color:var(--dim)}
+
+/* ── Health tools textarea (same as radiology) ── */
+#htTa{
+  flex:1;
+  background:transparent;
+  border:none;
+  outline:none;
+  resize:none;
+  font-family:'DM Sans',sans-serif;
+  font-size:.88rem;
+  color:var(--text);
+  line-height:1.6;
+  min-height:34px;
+  max-height:150px;
+  padding:.1rem 0;
+}
+#htTa::placeholder{color:var(--dim)}
+
+/* ── Claude-style model menu ── */
+.model-menu-wrap{
+  position:relative;
+  display:inline-flex;
+  margin-left:auto;
+}
+
+.model-menu-btn{
+  display:flex;
+  align-items:center;
+  gap:.35rem;
+  background:transparent;
+  border:none;
+  color:var(--muted);
+  font-size:.72rem;
+  font-family:'DM Sans',sans-serif;
+  cursor:pointer;
+  padding:.2rem .4rem;
+  border-radius:6px;
+  transition:color .15s, background .15s;
+}
+.model-menu-btn:hover{
+  color:var(--text);
+  background:var(--card);
+}
+
+.model-menu{
+  position:absolute;
+  bottom:100%;
+  right:0;
+  margin-bottom:6px;
+  min-width:210px;
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:12px;
+  padding:.4rem;
+  box-shadow:0 8px 30px rgba(0,0,0,.45);
+  z-index:200;
+}
+
+.mm-section-title{
+  font-size:.65rem;
+  color:var(--dim);
+  padding:.35rem .55rem .15rem;
+  text-transform:uppercase;
+  letter-spacing:.03em;
+}
+
+.mm-item{
+  padding:.4rem .55rem;
+  border-radius:7px;
+  font-size:.8rem;
+  color:var(--text);
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.mm-item:hover{background:rgba(255,255,255,.06)}
+.mm-item.active::after{
+  content:"✓";
+  color:var(--blue);
+  font-size:.75rem;
+  margin-left:.5rem;
+}
+
+.mm-divider{
+  height:1px;
+  background:var(--border);
+  margin:.35rem .3rem;
+}
+
+/* input-meta flex so menu sits on the right */
+.input-meta{
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  margin-top:.4rem;
+  flex-wrap:wrap;
+}

@@ -269,6 +269,128 @@ function onMainGrow(el) {
   el.style.height = 'auto';
   el.style.height = Math.min(el.scrollHeight, 150) + 'px';
 }
+function onHtGrow(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 150) + 'px';
+}
+
+/* ── Claude-style HT model menu ── */
+function toggleHtModelMenu(e) {
+  e.stopPropagation();
+  var menu = document.getElementById('htModelMenu');
+  if (!menu) return;
+  menu.style.display = (menu.style.display === 'none' || !menu.style.display) ? 'block' : 'none';
+}
+
+function selectHtModelOption(el) {
+  var type = el.getAttribute('data-type');
+  var value = el.getAttribute('data-value');
+
+  // same value clicked, do nothing
+  var menu = document.getElementById('htModelMenu');
+  menu.querySelectorAll('.mm-item[data-type="' + type + '"]').forEach(function(item) {
+    item.classList.remove('active');
+  });
+  el.classList.add('active');
+
+  if (type === 'provider') {
+    provider = value;
+    if (typeof onProviderChange === 'function') onProviderChange(value);
+  }
+  if (type === 'length') {
+    answerLength = value;
+    if (typeof onLengthChange === 'function') onLengthChange(value);
+  }
+  if (type === 'detail') {
+    detailLevel = value;
+    if (typeof onDetailChange === 'function') onDetailChange(value);
+  }
+
+  updateHtModelMenuLabel();
+}
+
+function updateHtModelMenuLabel() {
+  var labels = {
+    groq: '⚡ Groq',
+    gemini: '✨ Gemini',
+    openai: '🤖 OpenAI',
+    ollama: '🖥️ Ollama'
+  };
+  var p = labels[provider] || '⚡ Groq';
+  var l = (answerLength || 'standard');
+  l = l.charAt(0).toUpperCase() + l.slice(1);
+  var d = (detailLevel || 'medium');
+  d = d.charAt(0).toUpperCase() + d.slice(1);
+
+  var labelEl = document.getElementById('htModelMenuLabel');
+  if (labelEl) labelEl.textContent = p + ' · ' + l + ' · ' + d;
+}
+
+// click outside to close the menu
+document.addEventListener('click', function() {
+  var menu = document.getElementById('htModelMenu');
+  if (menu) menu.style.display = 'none';
+});
+
+/* ── Claude-style Radiology model menu ── */
+function toggleRadModelMenu(e) {
+  e.stopPropagation();
+  var menu = document.getElementById('radModelMenu');
+  if (!menu) return;
+  menu.style.display = (menu.style.display === 'none' || !menu.style.display) ? 'block' : 'none';
+}
+
+function selectRadModelOption(el) {
+  var type = el.getAttribute('data-type');
+  var value = el.getAttribute('data-value');
+
+  var menu = document.getElementById('radModelMenu');
+  menu.querySelectorAll('.mm-item[data-type="' + type + '"]').forEach(function(item) {
+    item.classList.remove('active');
+  });
+  el.classList.add('active');
+
+  if (type === 'provider') {
+    provider = value;
+    if (typeof onProviderChange === 'function') onProviderChange(value);
+  }
+  if (type === 'length') {
+    answerLength = value;
+    if (typeof onLengthChange === 'function') onLengthChange(value);
+  }
+  if (type === 'detail') {
+    detailLevel = value;
+    if (typeof onDetailChange === 'function') onDetailChange(value);
+  }
+
+  updateRadModelMenuLabel();
+}
+
+function updateRadModelMenuLabel() {
+  var labels = {
+    groq: '⚡ Groq',
+    gemini: '✨ Gemini',
+    openai: '🤖 OpenAI',
+    ollama: '🖥️ Ollama'
+  };
+  var p = labels[provider] || '⚡ Groq';
+  var l = (answerLength || 'standard');
+  l = l.charAt(0).toUpperCase() + l.slice(1);
+  var d = (detailLevel || 'medium');
+  d = d.charAt(0).toUpperCase() + d.slice(1);
+
+  var labelEl = document.getElementById('radModelMenuLabel');
+  if (labelEl) labelEl.textContent = p + ' · ' + l + ' · ' + d;
+}
+
+// click outside to close the menu
+document.addEventListener('click', function() {
+  var htMenu = document.getElementById('htModelMenu');
+  if (htMenu) htMenu.style.display = 'none';
+  var radMenu = document.getElementById('radModelMenu');
+  if (radMenu) radMenu.style.display = 'none';
+});
+
 function onFocusInput() {
   document.getElementById('mainTa').focus();
 }
@@ -309,10 +431,17 @@ function onMainSend() {
   document.getElementById('msgs').innerHTML = '';
   resetChatPanel();
 
-  savedText = text;
-  lastText  = text;
-  lastFile  = selFile;
-  appendUserBubble(text, selFile);
+savedText = text;
+lastText  = text;
+lastFile  = selFile;
+
+if (selFile) {
+  // PDF upload → sirf PDF file card dikhao
+  appendUserBubble('', selFile);
+} else {
+  // Normal pasted report → full text dikhao
+  appendUserBubble(text, null);
+}
   var ta = document.getElementById('mainTa');
   ta.value = '';
   ta.style.height = 'auto';
@@ -326,8 +455,13 @@ function runAnalysis(text, file) {
   var typId = showMainTyping();
   var fd = new FormData();
   if (text) fd.append('report_text', text);
-  if (file) fd.append('report_file', file);
-  fd.append('provider', provider);
+if (file) {
+    fd.append('report_file', file);
+    fd.append('original_filename', file.name);
+    fd.append('source_type', 'pdf');
+} else {
+    fd.append('source_type', 'text');
+}  fd.append('provider', provider);
   if (provider === 'ollama') fd.append('ollama_model', ollamaModel);
   fd.append('language', ClearScanControls.getLanguageName());
   fd.append('answer_length', answerLength);
@@ -464,12 +598,16 @@ function loadConversation(convId) {
       var detailSel = document.getElementById('detailSel');
       if (detailSel) detailSel.value = detailLevel;
 
-            document.getElementById('msgs').innerHTML = '';
-      if (conv.has_pdf) {
-        appendUserBubble('', { name: conv.pdf_filename, isServerPdf: true, convId: convId });
-      } else {
-        appendUserBubble(conv.report_text, null);
-      }
+      document.getElementById('msgs').innerHTML = '';
+    if (conv.source_type === 'pdf') {
+    // PDF upload → show filename
+    appendUserBubble('', {
+        name: conv.original_filename || 'report.pdf'
+    });
+} else {
+    // Normal text → complete text
+    appendUserBubble(conv.report_text || '', null);
+}
       conv.results.report_text = conv.report_text;
       renderBotResult(conv.results);
       activateChatbot();
