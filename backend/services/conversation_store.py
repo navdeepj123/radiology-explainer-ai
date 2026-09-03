@@ -1,6 +1,7 @@
 """
 conversation_store.py — Dual-backend conversation persistence.
-Now supports both radiology reports and health-tool chats via `kind`.
+Supports radiology reports, health-tool chats, and optional PDF storage
+(base64, logged-in users only) via `kind` / `pdf_base64`.
 """
 
 import threading
@@ -43,7 +44,8 @@ class ConversationStore:
 
     def create(self, owner_id, report_text, provider, ollama_model, language,
                answer_length, detail_level, results,
-               kind="radiology", tool_id=None, tool_name=None, source_type="text", original_filename=""):
+               kind="radiology", tool_id=None, tool_name=None,
+               pdf_base64=None, pdf_filename=None):
         detected_terms = results.get("detected_terms", []) if isinstance(results, dict) else []
         doc = {
             "owner_id":       owner_id,
@@ -57,6 +59,8 @@ class ConversationStore:
             "kind":           kind,
             "tool_id":        tool_id,
             "tool_name":      tool_name,
+            "pdf_base64":     pdf_base64,
+            "pdf_filename":   pdf_filename,
             "results": {
                 "risk_level":  results.get("risk_level",  "unknown") if isinstance(results, dict) else "unknown",
                 "risk_reason": results.get("risk_reason", "")        if isinstance(results, dict) else "",
@@ -70,8 +74,6 @@ class ConversationStore:
             "risk_level":    results.get("risk_level", "unknown") if isinstance(results, dict) else "unknown",
             "date":          datetime.now().strftime("%d %b %Y, %I:%M %p"),
             "timestamp":     datetime.utcnow(),
-            "source_type":   source_type,
-            "original_filename": original_filename,
         }
 
         if self.is_guest_owner(owner_id):

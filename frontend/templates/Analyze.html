@@ -75,21 +75,34 @@
       <a href="/register" class="tbtn">Sign Up</a>
     {% endif %}
   </div>
+
+  {% if request.args.get('welcome') %}
+  <div id="welcomeToast" style="position:absolute; top:calc(100% + 8px); right:16px; background:rgba(16,185,129,.15); border:1px solid rgba(16,185,129,.4); color:var(--text); font-size:.78rem; padding:8px 14px; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,.3); transform:translateX(120%); opacity:0; transition:transform .4s ease, opacity .4s ease; z-index:100; white-space:nowrap;">
+    {% set migrated = request.args.get('migrated', '0')|int %}
+    {% if migrated > 0 %}
+      ✓ Welcome, {{ current_user.name }}! {{ migrated }} conversation{{ 's' if migrated != 1 else '' }} saved.
+    {% else %}
+      ✓ Welcome, {{ current_user.name }}!
+    {% endif %}
+  </div>
+  <script>
+    (function(){
+      var t = document.getElementById('welcomeToast');
+      requestAnimationFrame(function(){
+        t.style.transform = 'translateX(0)';
+        t.style.opacity = '1';
+      });
+      setTimeout(function(){
+        t.style.transform = 'translateX(120%)';
+        t.style.opacity = '0';
+      }, 4000);
+      setTimeout(function(){ t.remove(); }, 4600);
+    })();
+  </script>
+  {% endif %}
 </div>
 
 <div class="app">
-
-  {% if request.args.get('welcome') %}
-  <div id="welcomeBanner" style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:10px;padding:9px 16px;background:rgba(16,185,129,.12);border-bottom:1px solid var(--border);font-size:.82rem;color:var(--text);">
-    {% set migrated = request.args.get('migrated', '0')|int %}
-    {% if migrated > 0 %}
-      ✓ Welcome, {{ current_user.name }}! {{ migrated }} conversation{{ 's' if migrated != 1 else '' }} from your guest session {{ 'were' if migrated != 1 else 'was' }} saved to your account.
-    {% else %}
-      ✓ Welcome, {{ current_user.name }}! Your reports will now be saved automatically.
-    {% endif %}
-  </div>
-  <script>setTimeout(function(){var b=document.getElementById('welcomeBanner'); if(b) b.style.display='none';}, 6000);</script>
-  {% endif %}
 
   <!-- LEFT SIDEBAR -->
   <aside class="settings-sidebar">
