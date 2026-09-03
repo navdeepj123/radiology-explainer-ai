@@ -43,7 +43,7 @@ class ConversationStore:
 
     def create(self, owner_id, report_text, provider, ollama_model, language,
                answer_length, detail_level, results,
-               kind="radiology", tool_id=None, tool_name=None):
+               kind="radiology", tool_id=None, tool_name=None, source_type="text", original_filename=""):
         detected_terms = results.get("detected_terms", []) if isinstance(results, dict) else []
         doc = {
             "owner_id":       owner_id,
@@ -70,6 +70,8 @@ class ConversationStore:
             "risk_level":    results.get("risk_level", "unknown") if isinstance(results, dict) else "unknown",
             "date":          datetime.now().strftime("%d %b %Y, %I:%M %p"),
             "timestamp":     datetime.utcnow(),
+            "source_type":   source_type,
+            "original_filename": original_filename,
         }
 
         if self.is_guest_owner(owner_id):

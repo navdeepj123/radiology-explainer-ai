@@ -164,32 +164,10 @@
     </div>
 
     <!-- RADIOLOGY INPUT AREA -->
+    <!-- RADIOLOGY INPUT AREA (Claude-style) -->
     <div class="input-area" id="inputArea">
       <div class="err-bar" id="errBar" style="display:none"></div>
       <div class="input-box">
-        <div class="input-toolbar">
-          <select class="pill-sel" id="provSel" onchange="onProviderChange(this.value)" title="AI Provider">
-            <option value="groq">⚡ Groq</option>
-            <option value="gemini">✨ Gemini</option>
-            <option value="openai">🤖 OpenAI</option>
-            <option value="ollama">🖥️ Ollama</option>
-          </select>
-          <select class="pill-sel" id="ollamaModelSel" onchange="onOllamaModelChange(this.value)" title="Ollama Model" style="display:none;">
-            <option value="llama3.2:1b">⚡ llama3.2:1b</option>
-            <option value="mistral">🧠 mistral</option>
-          </select>
-          <select class="pill-sel" id="lengthSel" onchange="onLengthChange(this.value)" title="Answer Length">
-            <option value="brief">📝 Brief</option>
-            <option value="standard" selected>📄 Standard</option>
-            <option value="intensive">📚 Intensive</option>
-          </select>
-          <select class="pill-sel" id="detailSel" onchange="onDetailChange(this.value)" title="Detail Level">
-            <option value="basic">🔵 Basic</option>
-            <option value="medium" selected>🟡 Medium</option>
-            <option value="high">🔴 High</option>
-          </select>
-        </div>
-
         <div class="att-row" id="attRow">
           <div class="att-card">
             <div class="att-name" id="attName"></div>
@@ -219,58 +197,102 @@
       </div>
       <div class="input-meta">
         <span class="meta-note">🔒 Processed securely · Never stored</span>
+
+        <!-- Claude-style menu for Radiology -->
+        <div class="model-menu-wrap" id="radModelMenuWrap">
+          <button type="button" class="model-menu-btn" id="radModelMenuBtn" onclick="toggleRadModelMenu(event)">
+            <span id="radModelMenuLabel">⚡ Groq · Standard · Medium</span>
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+              <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <div class="model-menu" id="radModelMenu" style="display:none;">
+            <div class="mm-section-title">Model</div>
+            <div class="mm-item active" data-type="provider" data-value="groq" onclick="selectRadModelOption(this)">⚡ Groq</div>
+            <div class="mm-item" data-type="provider" data-value="gemini" onclick="selectRadModelOption(this)">✨ Gemini</div>
+            <div class="mm-item" data-type="provider" data-value="openai" onclick="selectRadModelOption(this)">🤖 OpenAI</div>
+            <div class="mm-item" data-type="provider" data-value="ollama" onclick="selectRadModelOption(this)">🖥️ Ollama</div>
+
+            <div class="mm-divider"></div>
+
+            <div class="mm-section-title">Answer Length</div>
+            <div class="mm-item" data-type="length" data-value="brief" onclick="selectRadModelOption(this)">Brief</div>
+            <div class="mm-item active" data-type="length" data-value="standard" onclick="selectRadModelOption(this)">Standard</div>
+            <div class="mm-item" data-type="length" data-value="intensive" onclick="selectRadModelOption(this)">Intensive</div>
+
+            <div class="mm-divider"></div>
+
+            <div class="mm-section-title">Detail Level</div>
+            <div class="mm-item" data-type="detail" data-value="basic" onclick="selectRadModelOption(this)">Basic</div>
+            <div class="mm-item active" data-type="detail" data-value="medium" onclick="selectRadModelOption(this)">Medium</div>
+            <div class="mm-item" data-type="detail" data-value="high" onclick="selectRadModelOption(this)">High</div>
+          </div>
+        </div>
+
         <div class="meta-r">
           <button class="sample-btn" onclick="onLoadSample()">↺ Sample report</button>
         </div>
       </div>
     </div>
-
     <!-- HEALTH TOOLS INPUT AREA -->
-    <div class="input-area" id="htInputArea" style="display:none;">
-      <div class="err-bar" id="htErrBar" style="display:none"></div>
-      <div class="input-box">
-        <div class="input-toolbar">
-          <select class="pill-sel" id="provSelHt" onchange="onProviderChange(this.value)" title="AI Provider">
-            <option value="groq">⚡ Groq</option>
-            <option value="gemini">✨ Gemini</option>
-            <option value="openai">🤖 OpenAI</option>
-            <option value="ollama">🖥️ Ollama</option>
-          </select>
-          <select class="pill-sel" id="ollamaModelSelHt" onchange="onOllamaModelChange(this.value)" title="Ollama Model" style="display:none;">
-            <option value="llama3.2:1b">⚡ llama3.2:1b</option>
-            <option value="mistral">🧠 mistral</option>
-          </select>
-          <select class="pill-sel" id="lengthSelHt" onchange="onLengthChange(this.value)" title="Answer Length">
-            <option value="brief">📝 Brief</option>
-            <option value="standard" selected>📄 Standard</option>
-            <option value="intensive">📚 Intensive</option>
-          </select>
-          <select class="pill-sel" id="detailSelHt" onchange="onDetailChange(this.value)" title="Detail Level">
-            <option value="basic">🔵 Basic</option>
-            <option value="medium" selected>🟡 Medium</option>
-            <option value="high">🔴 High</option>
-          </select>
-        </div>
+    
+   <div class="input-area" id="htInputArea" style="display:none;">
+  <div class="err-bar" id="htErrBar" style="display:none"></div>
+  <div class="input-box">
+    <button class="mic-btn" id="htMicBtn" type="button" title="Speak"
+            onclick="ClearScanVoice.toggleMic('htTa','htMicBtn','onHtGrow')">
+    </button>
+    <textarea id="htTa"
+      placeholder="Ask a health tool…"
+      oninput="onHtGrow(this)"></textarea>
+    <button class="send-btn" id="htSendBtn" onclick="onHtSend()">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M1.5 7h11M8 3l4.5 4L8 11" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+  <div class="input-meta">
+    <span class="meta-note">🔒 Processed securely · Never stored</span>
 
-        <button class="mic-btn" id="htMicBtn" type="button" title="Speak"
-                onclick="ClearScanVoice.toggleMic('htTa','htMicBtn','onHtGrow')">
-        </button>
-        <textarea id="htTa"
-          placeholder="Ask a health tool…"
-          oninput="onHtGrow(this)"></textarea>
-        <button class="send-btn" id="htSendBtn" onclick="onHtSend()">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M1.5 7h11M8 3l4.5 4L8 11" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-      </div>
-      <div class="input-meta">
-        <span class="meta-note">🔒 Processed securely · Never stored</span>
-        <div class="meta-r">
-          <button class="sample-btn" id="htSampleBtn" onclick="onLoadHtSample()">↺ Sample question</button>
-        </div>
+    <div class="model-menu-wrap" id="htModelMenuWrap">
+      <button type="button" class="model-menu-btn" id="htModelMenuBtn" onclick="toggleHtModelMenu(event)">
+        <span id="htModelMenuLabel">⚡ Groq · Standard · Medium</span>
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="model-menu" id="htModelMenu" style="display:none;">
+        <div class="mm-section-title">Model</div>
+        <div class="mm-item active" data-type="provider" data-value="groq" onclick="selectHtModelOption(this)">⚡ Groq</div>
+        <div class="mm-item" data-type="provider" data-value="gemini" onclick="selectHtModelOption(this)">✨ Gemini</div>
+        <div class="mm-item" data-type="provider" data-value="openai" onclick="selectHtModelOption(this)">🤖 OpenAI</div>
+        <div class="mm-item" data-type="provider" data-value="ollama" onclick="selectHtModelOption(this)">🖥️ Ollama</div>
+
+        <div class="mm-divider"></div>
+
+        <div class="mm-section-title">Answer Length</div>
+        <div class="mm-item" data-type="length" data-value="brief" onclick="selectHtModelOption(this)">Brief</div>
+        <div class="mm-item active" data-type="length" data-value="standard" onclick="selectHtModelOption(this)">Standard</div>
+        <div class="mm-item" data-type="length" data-value="intensive" onclick="selectHtModelOption(this)">Intensive</div>
+
+        <div class="mm-divider"></div>
+
+        <div class="mm-section-title">Detail Level</div>
+        <div class="mm-item" data-type="detail" data-value="basic" onclick="selectHtModelOption(this)">Basic</div>
+        <div class="mm-item active" data-type="detail" data-value="medium" onclick="selectHtModelOption(this)">Medium</div>
+        <div class="mm-item" data-type="detail" data-value="high" onclick="selectHtModelOption(this)">High</div>
       </div>
     </div>
+
+    <div class="meta-r">
+      <button class="sample-btn" id="htSampleBtn" onclick="onLoadHtSample()">↺ Sample question</button>
+    </div>
+  </div>
+</div>
+
+       
 
     <div class="new-report-bar" id="newReportBar">
       <span class="analyzed-note" id="newReportBarNote">✓ Report analyzed — ask questions in the chat →</span>
