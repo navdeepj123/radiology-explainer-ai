@@ -2,7 +2,7 @@
   "_generated_from": "data/knowledge_base.json (body_system field)",
   "_total_kb_terms": 300,
   "_mapped_terms": 276,
-  "_anatomy_hints": 1762,
+  "_anatomy_hints": 1765,
   "_unmapped_terms_intentional": [
     "PET-avid lesion",
     "calcification",
@@ -7802,6 +7802,17 @@
         "arm_right"
       ],
       "default": "arm_left"
-    }
+    },
+    "kidney": {
+      "left": "kidney_left",
+      "right": "kidney_right",
+      "bilateral": [
+        "kidney_left",
+        "kidney_right"
+      ],
+      "default": "kidney_left"
+    },
+    "cyst": "abdomen",
+    "unremarkable": "abdomen"
   }
 }

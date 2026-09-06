@@ -1,0 +1,3002 @@
+[
+  {
+    "faiss_id": 0,
+    "id": "T001",
+    "term": "cardiomegaly",
+    "simple_meaning": "Enlarged heart",
+    "patient_explanation": "The heart appears larger than normal on the scan.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "cardiomegaly. Enlarged heart. The heart appears larger than normal on the scan.. Seen on chest X-rays. May indicate heart strain, cardiomyopathy, or fluid around the heart.. heart enlargement. cardiac enlargement. enlarged cardiac silhouette. cardiomegaly noted. increased cardiothoracic ratio"
+  },
+  {
+    "faiss_id": 1,
+    "id": "T002",
+    "term": "pleural effusion",
+    "simple_meaning": "Fluid around the lungs",
+    "patient_explanation": "There is extra fluid in the space around the lungs.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "pleural effusion. Fluid around the lungs. There is extra fluid in the space around the lungs.. Can result from heart failure, infection, malignancy, or inflammation. May cause breathlessness.. fluid around lung. pleural fluid. bilateral pleural effusions. small left pleural effusion. blunting of costophrenic angle"
+  },
+  {
+    "faiss_id": 2,
+    "id": "T003",
+    "term": "atelectasis",
+    "simple_meaning": "Part of the lung is not fully open",
+    "patient_explanation": "A small part of the lung is partly collapsed or not fully expanded.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "atelectasis. Part of the lung is not fully open. A small part of the lung is partly collapsed or not fully expanded.. Common post-operatively or due to mucus plugging. Usually temporary and reversible.. partial lung collapse. lung under-expansion. subsegmental atelectasis. discoid atelectasis. plate-like atelectasis. linear atelectasis. atelectatic changes. bibasal atelectasis. bibasal atelectatic changes. atelectatic"
+  },
+  {
+    "faiss_id": 3,
+    "id": "T004",
+    "term": "fracture",
+    "simple_meaning": "Broken bone",
+    "patient_explanation": "A bone is cracked or broken.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "fracture. Broken bone. A bone is cracked or broken.. Seen on X-rays after injury. Can be cortical, hairline, comminuted, or pathological.. broken bone. bone break. cortical break. acute fracture. hairline fracture. comminuted fracture. pathological fracture. cortical breach"
+  },
+  {
+    "faiss_id": 4,
+    "id": "T005",
+    "term": "consolidation",
+    "simple_meaning": "Area of lung filled with infection or fluid",
+    "patient_explanation": "Part of the lung appears denser than normal, often due to infection or inflammation.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "consolidation. Area of lung filled with infection or fluid. Part of the lung appears denser than normal, often due to infection or inflammation.. Often seen with pneumonia. Air is replaced by fluid, pus, or cells.. pneumonic consolidation. airspace disease. airspace consolidation. lobar consolidation. patchy consolidation. alveolar opacification"
+  },
+  {
+    "faiss_id": 5,
+    "id": "T006",
+    "term": "pneumothorax",
+    "simple_meaning": "Collapsed lung",
+    "patient_explanation": "Air is trapped around the lung, which can cause part of the lung to collapse.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "pneumothorax. Collapsed lung. Air is trapped around the lung, which can cause part of the lung to collapse.. Can be spontaneous or traumatic. Tension pneumothorax is a medical emergency.. collapsed lung. air in pleural space. tension pneumothorax. right-sided pneumothorax. small apical pneumothorax. tension pneumothorax"
+  },
+  {
+    "faiss_id": 6,
+    "id": "T007",
+    "term": "fibrosis",
+    "simple_meaning": "Scarring in tissue",
+    "patient_explanation": "There is scarring in part of the tissue seen on the scan.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "fibrosis. Scarring in tissue. There is scarring in part of the tissue seen on the scan.. Result of chronic inflammation. Can reduce lung flexibility.. scar tissue. lung scarring. pulmonary fibrosis. pulmonary fibrosis. interstitial fibrosis. honeycombing. reticular pattern. traction bronchiectasis"
+  },
+  {
+    "faiss_id": 7,
+    "id": "T008",
+    "term": "hemorrhage",
+    "simple_meaning": "Bleeding",
+    "patient_explanation": "Bleeding has been detected in the scanned area.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "hemorrhage. Bleeding. Bleeding has been detected in the scanned area.. In brain imaging this may include subdural, epidural, subarachnoid, or intracerebral bleeding.. bleed. brain bleed. intracranial hemorrhage. haematoma. acute hemorrhage. subdural haematoma. subarachnoid hemorrhage. intracerebral bleed. hyperdense collection"
+  },
+  {
+    "faiss_id": 8,
+    "id": "T009",
+    "term": "edema",
+    "simple_meaning": "Swelling caused by fluid",
+    "patient_explanation": "Extra fluid is causing swelling in the tissue.",
+    "body_system": "General",
+    "category": "General",
+    "text_used": "edema. Swelling caused by fluid. Extra fluid is causing swelling in the tissue.. Can occur in many areas. Significance depends on location and cause.. swelling. fluid build-up. cerebral edema. vasogenic edema. perilesional edema. cytotoxic edema. pitting edema on imaging"
+  },
+  {
+    "faiss_id": 9,
+    "id": "T010",
+    "term": "lesion",
+    "simple_meaning": "Abnormal area of tissue",
+    "patient_explanation": "An area looks different from normal tissue. It does not always mean cancer.",
+    "body_system": "General",
+    "category": "General",
+    "text_used": "lesion. Abnormal area of tissue. An area looks different from normal tissue. It does not always mean cancer.. Broad term covering any focal abnormality. Nature depends on size, location, and imaging features.. abnormal tissue. small abnormal spot. focal lesion. focal lesion. space-occupying lesion. hypodense lesion. enhancing lesion. ring-enhancing lesion"
+  },
+  {
+    "faiss_id": 10,
+    "id": "T011",
+    "term": "nodule",
+    "simple_meaning": "Small spot or growth",
+    "patient_explanation": "A small spot was seen on the scan.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "nodule. Small spot or growth. A small spot was seen on the scan.. Lung nodules are commonly monitored depending on size and appearance.. small growth. small spot. pulmonary nodule. lung nodule. pulmonary nodule. solid nodule. subsolid nodule. ground glass nodule. calcified nodule"
+  },
+  {
+    "faiss_id": 11,
+    "id": "T012",
+    "term": "calcification",
+    "simple_meaning": "Calcium build-up",
+    "patient_explanation": "There is calcium build-up in the tissue or blood vessel.",
+    "body_system": "General",
+    "category": "General",
+    "text_used": "calcification. Calcium build-up. There is calcium build-up in the tissue or blood vessel.. Can occur with aging, previous inflammation, or vascular disease.. calcium deposit. dystrophic calcification. calcified deposit. dystrophic calcification. vascular calcification. eggshell calcification. popcorn calcification"
+  },
+  {
+    "faiss_id": 12,
+    "id": "T013",
+    "term": "degenerative changes",
+    "simple_meaning": "Wear and tear changes",
+    "patient_explanation": "The scan shows changes that commonly happen over time with aging or joint use.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "degenerative changes. Wear and tear changes. The scan shows changes that commonly happen over time with aging or joint use.. Includes osteophytes, disc space narrowing, and subchondral sclerosis. Very common with age.. wear and tear. osteoarthritis. spondylosis. disc degeneration. degenerative disc disease. spondylotic changes. facet joint degeneration. subchondral sclerosis"
+  },
+  {
+    "faiss_id": 13,
+    "id": "T014",
+    "term": "unremarkable",
+    "simple_meaning": "Normal appearance",
+    "patient_explanation": "The scanned area looks normal and no significant problem was seen.",
+    "body_system": "General",
+    "category": "General",
+    "text_used": "unremarkable. Normal appearance. The scanned area looks normal and no significant problem was seen.. Standard radiology term for normal findings.. normal. no abnormality. within normal limits. WNL. within normal limits. no acute findings. no significant abnormality. grossly unremarkable"
+  },
+  {
+    "faiss_id": 14,
+    "id": "T015",
+    "term": "mass",
+    "simple_meaning": "Larger abnormal lump or growth",
+    "patient_explanation": "A larger abnormal lump or growth was seen on the scan.",
+    "body_system": "General",
+    "category": "General",
+    "text_used": "mass. Larger abnormal lump or growth. A larger abnormal lump or growth was seen on the scan.. Can be benign or malignant and often needs further characterization.. growth. abnormal mass. space-occupying lesion. soft tissue mass. heterogeneous mass. well-defined mass. lobulated mass. enhancing mass"
+  },
+  {
+    "faiss_id": 15,
+    "id": "T016",
+    "term": "infiltrate",
+    "simple_meaning": "Abnormal material in lung tissue",
+    "patient_explanation": "Part of the lung shows changes that may be due to infection, fluid, or inflammation.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "infiltrate. Abnormal material in lung tissue. Part of the lung shows changes that may be due to infection, fluid, or inflammation.. Non-specific term. Often requires clinical correlation.. lung infiltrate. inflammatory change. interstitial infiltrate. bilateral infiltrates. perihilar infiltrates. interstitial infiltrate. alveolar infiltrate"
+  },
+  {
+    "faiss_id": 16,
+    "id": "T017",
+    "term": "hyperinflation",
+    "simple_meaning": "Lungs look over-expanded",
+    "patient_explanation": "The lungs appear more inflated than usual on the scan.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "hyperinflation. Lungs look over-expanded. The lungs appear more inflated than usual on the scan.. Indicates air trapping and may be associated with COPD or asthma.. overinflated lungs. increased lung volume. air trapping. bilateral hyperinflation. barrel chest appearance. flattened hemidiaphragms. increased AP diameter"
+  },
+  {
+    "faiss_id": 17,
+    "id": "T018",
+    "term": "pleural thickening",
+    "simple_meaning": "Thickening around the lung lining",
+    "patient_explanation": "The lining around the lungs appears thicker than usual.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "pleural thickening. Thickening around the lung lining. The lining around the lungs appears thicker than usual.. Can occur after infection, inflammation, exposure, or injury.. thickened pleura. lung lining thickening. calcified pleura. bilateral pleural thickening. calcified pleural plaques. diffuse pleural thickening"
+  },
+  {
+    "faiss_id": 18,
+    "id": "T019",
+    "term": "emphysema",
+    "simple_meaning": "Damage to air spaces in the lungs",
+    "patient_explanation": "The scan shows changes in the lungs that can make breathing less efficient.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "emphysema. Damage to air spaces in the lungs. The scan shows changes in the lungs that can make breathing less efficient.. Permanent air-space damage. Often related to smoking or chronic lung irritation.. COPD changes. air space damage. bullous emphysema. centrilobular emphysema. panlobular emphysema. paraseptal emphysema. bullae. blebs"
+  },
+  {
+    "faiss_id": 19,
+    "id": "T020",
+    "term": "pulmonary edema",
+    "simple_meaning": "Fluid in the lungs",
+    "patient_explanation": "There is extra fluid in the lung tissue.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "pulmonary edema. Fluid in the lungs. There is extra fluid in the lung tissue.. Can be related to heart failure, kidney problems, or fluid overload.. fluid in lungs. lung edema. flash pulmonary edema. pulmonary congestion. bat-wing opacity. perihilar haziness. Kerley B lines"
+  },
+  {
+    "faiss_id": 20,
+    "id": "T021",
+    "term": "midline shift",
+    "simple_meaning": "Brain structures pushed from center",
+    "patient_explanation": "Some brain structures appear pushed away from their usual position.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "midline shift. Brain structures pushed from center. Some brain structures appear pushed away from their usual position.. Can happen when swelling, bleeding, or pressure pushes brain structures.. brain shift. mass effect. herniation. midline shift of Xmm. mass effect with midline shift. subfalcine herniation"
+  },
+  {
+    "faiss_id": 21,
+    "id": "T022",
+    "term": "ischemia",
+    "simple_meaning": "Reduced blood flow",
+    "patient_explanation": "An area may not be getting enough blood supply.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "ischemia. Reduced blood flow. An area may not be getting enough blood supply.. In brain imaging, this can relate to stroke-like changes.. reduced blood supply. lack of blood flow. cerebral ischemia. acute ischemic change. diffusion restriction. early ischemic changes. loss of grey-white differentiation"
+  },
+  {
+    "faiss_id": 22,
+    "id": "T023",
+    "term": "infarct",
+    "simple_meaning": "Tissue damage from reduced blood supply",
+    "patient_explanation": "An area of tissue may have been damaged because of reduced blood flow.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "infarct. Tissue damage from reduced blood supply. An area of tissue may have been damaged because of reduced blood flow.. In brain reports, this often refers to stroke-related damage.. stroke. tissue damage. old infarct. lacunar infarct. acute infarct. established infarct. lacunar infarct. cortical infarct. chronic infarct"
+  },
+  {
+    "faiss_id": 23,
+    "id": "T024",
+    "term": "atrophy",
+    "simple_meaning": "Shrinkage or loss of tissue volume",
+    "patient_explanation": "Some tissue appears smaller than expected.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "atrophy. Shrinkage or loss of tissue volume. Some tissue appears smaller than expected.. In brain imaging, mild atrophy can be age-related.. volume loss. brain shrinkage. cerebral atrophy. cortical atrophy. global cerebral atrophy. cortical atrophy. cerebellar atrophy. age-related volume loss"
+  },
+  {
+    "faiss_id": 24,
+    "id": "T025",
+    "term": "osteophyte",
+    "simple_meaning": "Bone spur",
+    "patient_explanation": "Small bony outgrowths have formed at the edges of a joint.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "osteophyte. Bone spur. Small bony outgrowths have formed at the edges of a joint.. A response to cartilage loss or wear-and-tear. Common with age.. bone spur. marginal osteophyte. spondylosis. marginal osteophytes. anterior osteophytes. bridging osteophytes. syndesmophytes"
+  },
+  {
+    "faiss_id": 25,
+    "id": "T026",
+    "term": "disc herniation",
+    "simple_meaning": "Slipped disc",
+    "patient_explanation": "One of the cushioning discs between spinal bones has bulged out of place.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "disc herniation. Slipped disc. One of the cushioning discs between spinal bones has bulged out of place.. Most common in lower spine. Can press on nerves and cause sciatica-like symptoms.. slipped disc. disc prolapse. herniated nucleus pulposus. disc protrusion. disc protrusion. disc extrusion. herniated nucleus pulposus. annular tear. posterior disc bulge"
+  },
+  {
+    "faiss_id": 26,
+    "id": "T027",
+    "term": "hydrocephalus",
+    "simple_meaning": "Fluid build-up in the brain",
+    "patient_explanation": "Too much cerebrospinal fluid has built up inside the brain cavities.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "hydrocephalus. Fluid build-up in the brain. Too much cerebrospinal fluid has built up inside the brain cavities.. Can increase pressure in the brain and may need urgent assessment.. water on the brain. dilated ventricles. CSF obstruction. dilated ventricles. ventriculomegaly. obstructive hydrocephalus. communicating hydrocephalus. NPH"
+  },
+  {
+    "faiss_id": 27,
+    "id": "T028",
+    "term": "lytic lesion",
+    "simple_meaning": "Bone being destroyed",
+    "patient_explanation": "An area of bone appears to be breaking down or being eaten away.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "lytic lesion. Bone being destroyed. An area of bone appears to be breaking down or being eaten away.. Can be aggressive and requires further assessment to find the cause.. bone destruction. osteolysis. metastatic lesion. lytic lesion. permeative lytic lesion. punched-out lesion. osteolytic metastasis"
+  },
+  {
+    "faiss_id": 28,
+    "id": "T029",
+    "term": "ground glass opacity",
+    "simple_meaning": "Hazy area in the lung",
+    "patient_explanation": "Part of the lung looks hazy, like frosted glass, while structures underneath may still be seen.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "ground glass opacity. Hazy area in the lung. Part of the lung looks hazy, like frosted glass, while structures underneath may still be seen.. Often reflects infection, inflammation, edema, or scarring depending on context.. GGO. hazy opacity. frosted glass. COVID-19 lung changes. bilateral ground glass opacities. GGO. hazy opacity. multifocal ground glass. crazy paving pattern"
+  },
+  {
+    "faiss_id": 29,
+    "id": "T030",
+    "term": "lymphadenopathy",
+    "simple_meaning": "Enlarged lymph nodes",
+    "patient_explanation": "The lymph nodes appear larger than normal.",
+    "body_system": "General",
+    "category": "General",
+    "text_used": "lymphadenopathy. Enlarged lymph nodes. The lymph nodes appear larger than normal.. Can occur with infection, inflammation, immune conditions, or cancer.. enlarged lymph nodes. lymph node enlargement. adenopathy. mediastinal lymphadenopathy. hilar adenopathy. axillary lymphadenopathy. necrotic lymph node"
+  },
+  {
+    "faiss_id": 30,
+    "id": "T031",
+    "term": "hepatomegaly",
+    "simple_meaning": "Enlarged liver",
+    "patient_explanation": "The liver appears larger than expected on the scan.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "hepatomegaly. Enlarged liver. The liver appears larger than expected on the scan.. Can be associated with fatty liver, hepatitis, heart failure, or infiltration.. enlarged liver. liver enlargement. hepatomegaly noted. liver span increased. enlarged hepatic parenchyma"
+  },
+  {
+    "faiss_id": 31,
+    "id": "T032",
+    "term": "splenomegaly",
+    "simple_meaning": "Enlarged spleen",
+    "patient_explanation": "The spleen appears larger than normal on the scan.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "splenomegaly. Enlarged spleen. The spleen appears larger than normal on the scan.. Can be linked with infection, liver disease, or blood conditions.. enlarged spleen. spleen enlargement. splenomegaly. enlarged splenic parenchyma. massive splenomegaly"
+  },
+  {
+    "faiss_id": 32,
+    "id": "T033",
+    "term": "cholelithiasis",
+    "simple_meaning": "Gallstones",
+    "patient_explanation": "Stones have been found inside the gallbladder.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "cholelithiasis. Gallstones. Stones have been found inside the gallbladder.. Often incidental unless causing pain or inflammation.. gallstones. gall bladder stones. cholelithiasis. echogenic foci in gallbladder. posterior acoustic shadowing. gallbladder calculi"
+  },
+  {
+    "faiss_id": 33,
+    "id": "T034",
+    "term": "renal calculus",
+    "simple_meaning": "Kidney stone",
+    "patient_explanation": "A stone has been found in the kidney or urinary tract.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "renal calculus. Kidney stone. A stone has been found in the kidney or urinary tract.. Most small stones pass naturally. Obstruction changes urgency.. kidney stone. urinary stone. nephrolithiasis. calculus. nephrolithiasis. ureterolithiasis. hyperdense calculus in ureter"
+  },
+  {
+    "faiss_id": 34,
+    "id": "T035",
+    "term": "hydronephrosis",
+    "simple_meaning": "Swelling of the kidney due to blocked urine flow",
+    "patient_explanation": "Urine is not draining properly from the kidney, causing it to swell.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "hydronephrosis. Swelling of the kidney due to blocked urine flow. Urine is not draining properly from the kidney, causing it to swell.. Can happen due to stone, stricture, tumour, enlarged prostate, or pregnancy.. kidney swelling. blocked kidney. dilated renal pelvis. mild hydronephrosis. moderate hydronephrosis. severe hydronephrosis. pelviectasis. dilated renal collecting system. hydroureter"
+  },
+  {
+    "faiss_id": 35,
+    "id": "T036",
+    "term": "aortic aneurysm",
+    "simple_meaning": "Bulging of the main artery",
+    "patient_explanation": "The main blood vessel in the body has ballooned or bulged in one area.",
+    "body_system": "Vascular",
+    "category": "Vascular",
+    "text_used": "aortic aneurysm. Bulging of the main artery. The main blood vessel in the body has ballooned or bulged in one area.. Size and symptoms determine urgency. Large aneurysms may need repair.. AAA. abdominal aortic aneurysm. thoracic aortic aneurysm. aortic aneurysm. AAA. fusiform aneurysm. saccular aneurysm. aortic dilatation"
+  },
+  {
+    "faiss_id": 36,
+    "id": "T037",
+    "term": "pulmonary embolism",
+    "simple_meaning": "Blood clot in the lung",
+    "patient_explanation": "A blood clot has blocked one of the arteries supplying the lungs.",
+    "body_system": "Vascular",
+    "category": "Vascular",
+    "text_used": "pulmonary embolism. Blood clot in the lung. A blood clot has blocked one of the arteries supplying the lungs.. CTPA is commonly used. Requires urgent medical treatment.. PE. lung clot. pulmonary thromboembolism. filling defect in pulmonary artery. bilateral PE. saddle embolus. subsegmental PE"
+  },
+  {
+    "faiss_id": 37,
+    "id": "T038",
+    "term": "deep vein thrombosis",
+    "simple_meaning": "Blood clot in a deep vein",
+    "patient_explanation": "A blood clot has formed in one of the deep veins, usually in the leg.",
+    "body_system": "Vascular",
+    "category": "Vascular",
+    "text_used": "deep vein thrombosis. Blood clot in a deep vein. A blood clot has formed in one of the deep veins, usually in the leg.. Doppler ultrasound is diagnostic. Untreated clots can travel to the lungs.. DVT. leg clot. venous thrombosis. non-compressible vein. echogenic thrombus. acute DVT. femoral vein thrombosis"
+  },
+  {
+    "faiss_id": 38,
+    "id": "T039",
+    "term": "stenosis",
+    "simple_meaning": "Narrowing of a blood vessel or passage",
+    "patient_explanation": "A blood vessel or opening has become narrower than normal, reducing flow through it.",
+    "body_system": "Vascular",
+    "category": "Vascular",
+    "text_used": "stenosis. Narrowing of a blood vessel or passage. A blood vessel or opening has become narrower than normal, reducing flow through it.. Significance depends on location and degree of narrowing.. narrowing. vascular narrowing. canal stenosis. spinal stenosis. significant stenosis. moderate stenosis. high-grade stenosis. critical stenosis"
+  },
+  {
+    "faiss_id": 39,
+    "id": "T040",
+    "term": "enhancement",
+    "simple_meaning": "Area that lights up with contrast dye",
+    "patient_explanation": "After contrast dye was injected, this area appeared brighter.",
+    "body_system": "General",
+    "category": "General",
+    "text_used": "enhancement. Area that lights up with contrast dye. After contrast dye was injected, this area appeared brighter.. Enhancement helps doctors assess blood supply or abnormal tissue behavior.. contrast enhancement. avid enhancement. ring enhancement. avidly enhancing. ring-enhancing lesion. heterogeneous enhancement. peripheral enhancement. post-contrast enhancement"
+  },
+  {
+    "faiss_id": 40,
+    "id": "T041",
+    "term": "fatty liver",
+    "simple_meaning": "Fat build-up in the liver",
+    "patient_explanation": "Too much fat has accumulated in the liver tissue.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "fatty liver. Fat build-up in the liver. Too much fat has accumulated in the liver tissue.. Common finding that can improve with lifestyle change.. steatosis. NAFLD. hepatic steatosis. hepatic steatosis. fatty infiltration of the liver. echogenic liver. increased liver echogenicity"
+  },
+  {
+    "faiss_id": 41,
+    "id": "T042",
+    "term": "ascites",
+    "simple_meaning": "Fluid in the abdomen",
+    "patient_explanation": "Free fluid has collected inside the abdomen.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "ascites. Fluid in the abdomen. Free fluid has collected inside the abdomen.. Can be due to liver disease, heart failure, cancer, or infection.. belly water. peritoneal fluid. free fluid abdomen. free fluid in abdomen. moderate ascites. large volume ascites. peritoneal fluid collection"
+  },
+  {
+    "faiss_id": 42,
+    "id": "T043",
+    "term": "pancreatic duct dilatation",
+    "simple_meaning": "Widened pancreatic drainage tube",
+    "patient_explanation": "The tube that drains the pancreas appears wider than normal.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "pancreatic duct dilatation. Widened pancreatic drainage tube. The tube that drains the pancreas appears wider than normal.. Can happen with obstruction, chronic pancreatitis, cystic lesions, stones, or tumour.. dilated pancreatic duct. wirsung duct dilatation. dilated pancreatic duct. pancreatic duct prominence. double duct sign"
+  },
+  {
+    "faiss_id": 43,
+    "id": "T044",
+    "term": "air under diaphragm",
+    "simple_meaning": "Free air in the abdomen — possible organ perforation",
+    "patient_explanation": "Air has been found in an area where it should not normally be.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "air under diaphragm. Free air in the abdomen — possible organ perforation. Air has been found in an area where it should not normally be.. Can suggest pneumoperitoneum and possible bowel or stomach perforation.. pneumoperitoneum. free air abdomen. perforated bowel. free air under diaphragm. pneumoperitoneum. subdiaphragmatic air"
+  },
+  {
+    "faiss_id": 44,
+    "id": "T045",
+    "term": "cortical thinning",
+    "simple_meaning": "Thin outer layer of kidney",
+    "patient_explanation": "The outer working layer of the kidney appears thinner than normal.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "cortical thinning. Thin outer layer of kidney. The outer working layer of the kidney appears thinner than normal.. Can indicate chronic kidney disease or long-standing obstruction.. renal cortical thinning. chronic kidney disease on imaging. bilateral cortical thinning. parenchymal thinning. reduced corticomedullary differentiation"
+  },
+  {
+    "faiss_id": 45,
+    "id": "T046",
+    "term": "spondylolisthesis",
+    "simple_meaning": "Slipped vertebra",
+    "patient_explanation": "One of the spinal bones has slipped forward over the bone below it.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "spondylolisthesis. Slipped vertebra. One of the spinal bones has slipped forward over the bone below it.. Can cause back pain or nerve symptoms depending on severity.. slipped vertebra. spinal instability. Grade I spondylolisthesis. anterolisthesis. retrolisthesis. degenerative spondylolisthesis"
+  },
+  {
+    "faiss_id": 46,
+    "id": "T047",
+    "term": "sclerosis",
+    "simple_meaning": "Hardening or thickening of tissue",
+    "patient_explanation": "An area of tissue or bone has become harder or denser than normal.",
+    "body_system": "General",
+    "category": "General",
+    "text_used": "sclerosis. Hardening or thickening of tissue. An area of tissue or bone has become harder or denser than normal.. In joints this is often from arthritis; elsewhere significance depends on context.. hardening. subchondral sclerosis. bone sclerosis. subchondral sclerosis. bony sclerosis. reactive sclerosis. diffuse sclerosis"
+  },
+  {
+    "faiss_id": 47,
+    "id": "T048",
+    "term": "cyst",
+    "simple_meaning": "Fluid-filled sac",
+    "patient_explanation": "A small sac filled with fluid was seen on the scan. These are usually harmless.",
+    "body_system": "General",
+    "category": "General",
+    "text_used": "cyst. Fluid-filled sac. A small sac filled with fluid was seen on the scan. These are usually harmless.. Simple cysts are usually benign. Complex cysts may need follow-up.. simple cyst. complex cyst. fluid collection. simple cyst. Bosniak I cyst. anechoic cyst. renal cortical cyst. hepatic cyst"
+  },
+  {
+    "faiss_id": 48,
+    "id": "T049",
+    "term": "perihilar haziness",
+    "simple_meaning": "Cloudiness around the centre of the lungs",
+    "patient_explanation": "The area around the centre of the lungs appears hazy or cloudy on the X-ray.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "perihilar haziness. Cloudiness around the centre of the lungs. The area around the centre of the lungs appears hazy or cloudy on the X-ray.. Can be seen with pulmonary edema, pulmonary hypertension, or infection.. hilar haze. bat-wing opacity. central haziness. perihilar haziness. bilateral perihilar infiltrates. hilar flare. bat-wing appearance"
+  },
+  {
+    "faiss_id": 49,
+    "id": "T050",
+    "term": "bowel obstruction",
+    "simple_meaning": "Blocked intestine",
+    "patient_explanation": "The intestine appears blocked, preventing normal passage of contents.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "bowel obstruction. Blocked intestine. The intestine appears blocked, preventing normal passage of contents.. Can cause abdominal pain, vomiting, swelling, and inability to pass gas/stool.. intestinal obstruction. SBO. LBO. ileus. dilated bowel loops. air-fluid levels. small bowel obstruction. large bowel obstruction"
+  },
+  {
+    "faiss_id": 50,
+    "id": "T051",
+    "term": "pericardial effusion",
+    "simple_meaning": "Fluid around the heart",
+    "patient_explanation": "There is extra fluid in the sac surrounding the heart.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "pericardial effusion. Fluid around the heart. There is extra fluid in the sac surrounding the heart.. Can be caused by infection, inflammation, cancer, or kidney failure; large amounts can affect heart function.. fluid around heart. pericardial fluid collection. small pericardial effusion"
+  },
+  {
+    "faiss_id": 51,
+    "id": "T052",
+    "term": "cardiac tamponade",
+    "simple_meaning": "Heart squeezed by fluid pressure",
+    "patient_explanation": "Fluid buildup around the heart is pressing on it, which can stop it working properly.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "cardiac tamponade. Heart squeezed by fluid pressure. Fluid buildup around the heart is pressing on it, which can stop it working properly.. A medical emergency where pericardial fluid raises pressure enough to impair heart filling.. tamponade physiology. cardiac tamponade"
+  },
+  {
+    "faiss_id": 52,
+    "id": "T053",
+    "term": "cardiomyopathy",
+    "simple_meaning": "Weakened or thickened heart muscle",
+    "patient_explanation": "The heart muscle isn't working or shaped the way it normally should.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "cardiomyopathy. Weakened or thickened heart muscle. The heart muscle isn't working or shaped the way it normally should.. Umbrella term covering dilated, hypertrophic, or restrictive patterns affecting heart pump function.. heart muscle disease. dilated cardiomyopathy. hypertrophic cardiomyopathy"
+  },
+  {
+    "faiss_id": 53,
+    "id": "T054",
+    "term": "left ventricular hypertrophy",
+    "simple_meaning": "Thickened wall of the heart's main pumping chamber",
+    "patient_explanation": "The main pumping chamber of the heart has thicker walls than normal.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "left ventricular hypertrophy. Thickened wall of the heart's main pumping chamber. The main pumping chamber of the heart has thicker walls than normal.. Commonly related to longstanding high blood pressure or valve disease increasing heart workload.. LVH. thick heart wall. LV hypertrophy. left ventricular wall thickening"
+  },
+  {
+    "faiss_id": 54,
+    "id": "T055",
+    "term": "mitral regurgitation",
+    "simple_meaning": "Leaky heart valve (mitral)",
+    "patient_explanation": "One of the heart's valves isn't closing fully, so some blood leaks backward.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "mitral regurgitation. Leaky heart valve (mitral). One of the heart's valves isn't closing fully, so some blood leaks backward.. Graded mild to severe; severe leakage can lead to heart enlargement or failure over time.. mitral valve leak. moderate mitral regurgitation. MR jet"
+  },
+  {
+    "faiss_id": 55,
+    "id": "T056",
+    "term": "aortic stenosis",
+    "simple_meaning": "Narrowed heart valve (aortic)",
+    "patient_explanation": "The valve that lets blood leave the heart's main chamber has become narrowed.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "aortic stenosis. Narrowed heart valve (aortic). The valve that lets blood leave the heart's main chamber has become narrowed.. Restricts blood flow out of the heart; severe cases can cause chest pain, fainting, or breathlessness.. aortic valve narrowing. moderate aortic stenosis. AV stenosis"
+  },
+  {
+    "faiss_id": 56,
+    "id": "T057",
+    "term": "coronary artery calcification",
+    "simple_meaning": "Calcium deposits in heart arteries",
+    "patient_explanation": "Small deposits of calcium have built up in the arteries that supply the heart.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "coronary artery calcification. Calcium deposits in heart arteries. Small deposits of calcium have built up in the arteries that supply the heart.. A marker of underlying atherosclerosis (artery hardening); often quantified with a calcium score.. coronary calcium. CAC score. coronary artery calcification noted. calcified coronary plaque"
+  },
+  {
+    "faiss_id": 57,
+    "id": "T058",
+    "term": "atrial enlargement",
+    "simple_meaning": "Enlarged upper heart chamber",
+    "patient_explanation": "One of the smaller, upper chambers of the heart appears larger than usual.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "atrial enlargement. Enlarged upper heart chamber. One of the smaller, upper chambers of the heart appears larger than usual.. Often reflects longstanding high pressure or valve disease affecting that chamber.. left atrial enlargement. atrial dilation. LA enlargement. left atrial dilatation"
+  },
+  {
+    "faiss_id": 58,
+    "id": "T059",
+    "term": "cor pulmonale",
+    "simple_meaning": "Right heart strain from lung disease",
+    "patient_explanation": "The right side of the heart is under strain, usually because of a lung problem.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "cor pulmonale. Right heart strain from lung disease. The right side of the heart is under strain, usually because of a lung problem.. Right ventricular enlargement/dysfunction secondary to chronic lung disease or pulmonary hypertension.. right heart strain. cor pulmonale. right ventricular strain pattern"
+  },
+  {
+    "faiss_id": 59,
+    "id": "T060",
+    "term": "pacemaker lead artifact",
+    "simple_meaning": "Wire from a heart device seen on imaging",
+    "patient_explanation": "A thin wire from a heart pacemaker or defibrillator is visible on the scan; this is expected if you have one.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "pacemaker lead artifact. Wire from a heart device seen on imaging. A thin wire from a heart pacemaker or defibrillator is visible on the scan; this is expected if you have one.. Not itself a finding of concern; position is usually checked for correct placement.. pacemaker wire. pacemaker lead in situ. ICD lead"
+  },
+  {
+    "faiss_id": 60,
+    "id": "T061",
+    "term": "tricuspid regurgitation",
+    "simple_meaning": "Leaky heart valve (tricuspid)",
+    "patient_explanation": "One of the heart's valves on the right side isn't closing fully, letting some blood flow backward.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "tricuspid regurgitation. Leaky heart valve (tricuspid). One of the heart's valves on the right side isn't closing fully, letting some blood flow backward.. Often mild and incidental, but can indicate right heart strain when moderate-severe.. tricuspid valve leak. mild tricuspid regurgitation. TR jet"
+  },
+  {
+    "faiss_id": 61,
+    "id": "T062",
+    "term": "aortic valve calcification",
+    "simple_meaning": "Calcium buildup on the aortic valve",
+    "patient_explanation": "The valve that controls blood leaving the heart has calcium deposits on it.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "aortic valve calcification. Calcium buildup on the aortic valve. The valve that controls blood leaving the heart has calcium deposits on it.. Can progress to aortic stenosis over time; often age-related.. aortic valve sclerosis. aortic valve calcification. calcified aortic valve"
+  },
+  {
+    "faiss_id": 62,
+    "id": "T063",
+    "term": "ventricular septal defect",
+    "simple_meaning": "Hole between the heart's lower chambers",
+    "patient_explanation": "There is a small opening in the wall separating the two main pumping chambers of the heart.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "ventricular septal defect. Hole between the heart's lower chambers. There is a small opening in the wall separating the two main pumping chambers of the heart.. May be congenital (present from birth) or, rarely, acquired after a heart attack; size determines significance.. VSD. septal hole. ventricular septal defect. VSD noted"
+  },
+  {
+    "faiss_id": 63,
+    "id": "T064",
+    "term": "cardiothoracic ratio increased",
+    "simple_meaning": "Heart appears large relative to chest",
+    "patient_explanation": "The heart's size compared to the chest cavity is larger than the usual range.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "cardiothoracic ratio increased. Heart appears large relative to chest. The heart's size compared to the chest cavity is larger than the usual range.. A simple screening sign on chest X-ray that can suggest cardiomegaly or fluid overload.. increased cardiothoracic ratio. CTR >0.5"
+  },
+  {
+    "faiss_id": 64,
+    "id": "T065",
+    "term": "myocardial scarring",
+    "simple_meaning": "Old heart muscle damage",
+    "patient_explanation": "There is evidence of old, healed damage to part of the heart muscle.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "myocardial scarring. Old heart muscle damage. There is evidence of old, healed damage to part of the heart muscle.. Typically reflects a prior heart attack or inflammatory event; can affect pump function.. old infarct. myocardial fibrosis. late gadolinium enhancement. myocardial scar"
+  },
+  {
+    "faiss_id": 65,
+    "id": "T066",
+    "term": "aortic regurgitation",
+    "simple_meaning": "Leaky heart valve (aortic)",
+    "patient_explanation": "The valve controlling blood leaving the heart's main chamber isn't sealing fully, letting blood leak backward.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "aortic regurgitation. Leaky heart valve (aortic). The valve controlling blood leaving the heart's main chamber isn't sealing fully, letting blood leak backward.. Can cause the heart's main chamber to enlarge over time if moderate-severe.. aortic valve leak. mild aortic regurgitation. AR jet"
+  },
+  {
+    "faiss_id": 66,
+    "id": "T067",
+    "term": "sternal wire artifact",
+    "simple_meaning": "Wires from prior heart surgery",
+    "patient_explanation": "Metal wires used to close the breastbone after previous heart surgery are visible; this is expected.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "sternal wire artifact. Wires from prior heart surgery. Metal wires used to close the breastbone after previous heart surgery are visible; this is expected.. Not a new finding of concern; confirms history of prior sternotomy (open-heart surgery).. sternotomy wires. sternal wires in situ. post-sternotomy changes"
+  },
+  {
+    "faiss_id": 67,
+    "id": "T068",
+    "term": "right ventricular enlargement",
+    "simple_meaning": "Enlarged right heart chamber",
+    "patient_explanation": "The right pumping chamber of the heart appears larger than normal.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "right ventricular enlargement. Enlarged right heart chamber. The right pumping chamber of the heart appears larger than normal.. Often related to lung disease, pulmonary hypertension, or valve problems raising pressure on that side.. RV enlargement. RV dilation. right ventricular dilatation. RV enlargement"
+  },
+  {
+    "faiss_id": 68,
+    "id": "T069",
+    "term": "ejection fraction reduced",
+    "simple_meaning": "Weaker heart pumping strength",
+    "patient_explanation": "The heart isn't pumping out as much blood with each beat as it normally would.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "ejection fraction reduced. Weaker heart pumping strength. The heart isn't pumping out as much blood with each beat as it normally would.. A key measure of heart failure severity, usually obtained on echocardiogram.. reduced EF. heart failure. EF 40%. reduced ejection fraction"
+  },
+  {
+    "faiss_id": 69,
+    "id": "T070",
+    "term": "aortic root dilation",
+    "simple_meaning": "Widened base of the main artery",
+    "patient_explanation": "The section of the main artery closest to the heart is wider than the usual range.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "aortic root dilation. Widened base of the main artery. The section of the main artery closest to the heart is wider than the usual range.. Monitored over time as significant enlargement raises risk of aortic dissection or rupture.. aortic root enlargement. mild aortic root dilation. aortic root 4.0cm"
+  },
+  {
+    "faiss_id": 70,
+    "id": "T071",
+    "term": "bronchiectasis",
+    "simple_meaning": "Widened, damaged airways",
+    "patient_explanation": "The tubes that carry air into the lungs are permanently widened and scarred.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "bronchiectasis. Widened, damaged airways. The tubes that carry air into the lungs are permanently widened and scarred.. Leads to mucus buildup and recurrent infections; can be localized or widespread.. airway widening. cylindrical bronchiectasis. bronchiectatic changes"
+  },
+  {
+    "faiss_id": 71,
+    "id": "T072",
+    "term": "interstitial lung disease",
+    "simple_meaning": "Scarring pattern in lung tissue",
+    "patient_explanation": "There are changes in the fine lung tissue that can make breathing less efficient over time.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "interstitial lung disease. Scarring pattern in lung tissue. There are changes in the fine lung tissue that can make breathing less efficient over time.. Umbrella term for many conditions causing lung scarring or inflammation of the interstitium.. lung scarring. interstitial changes. ILD pattern"
+  },
+  {
+    "faiss_id": 72,
+    "id": "T073",
+    "term": "pleural plaque",
+    "simple_meaning": "Thickened patch on lung lining",
+    "patient_explanation": "There's a small area of thickening on the lining that covers the lungs.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "pleural plaque. Thickened patch on lung lining. There's a small area of thickening on the lining that covers the lungs.. Frequently related to past asbestos exposure; usually benign but noted for monitoring.. calcified pleural plaque. pleural plaquing. calcified pleural plaques"
+  },
+  {
+    "faiss_id": 73,
+    "id": "T074",
+    "term": "pneumonia",
+    "simple_meaning": "Lung infection",
+    "patient_explanation": "There is an infection in part of the lung tissue.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "pneumonia. Lung infection. There is an infection in part of the lung tissue.. Common cause of consolidation on imaging; severity ranges from mild to life-threatening.. lung infection. community-acquired pneumonia. right lower lobe pneumonia"
+  },
+  {
+    "faiss_id": 74,
+    "id": "T075",
+    "term": "tree-in-bud opacities",
+    "simple_meaning": "Small branching pattern in the lungs",
+    "patient_explanation": "A pattern that looks like tiny budding branches shows up on the scan, often linked to small airway inflammation.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "tree-in-bud opacities. Small branching pattern in the lungs. A pattern that looks like tiny budding branches shows up on the scan, often linked to small airway inflammation.. Classically associated with infections that affect the small airways, including tuberculosis.. small airway disease. tree-in-bud pattern. centrilobular nodules with tree-in-bud"
+  },
+  {
+    "faiss_id": 75,
+    "id": "T076",
+    "term": "honeycombing",
+    "simple_meaning": "Cluster of small air-filled cysts in scarred lung",
+    "patient_explanation": "Part of the lung tissue has a pattern of small cyst-like spaces, usually a sign of advanced scarring.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "honeycombing. Cluster of small air-filled cysts in scarred lung. Part of the lung tissue has a pattern of small cyst-like spaces, usually a sign of advanced scarring.. A hallmark feature of advanced pulmonary fibrosis, particularly usual interstitial pneumonia pattern.. honeycomb lung. honeycombing. honeycomb pattern"
+  },
+  {
+    "faiss_id": 76,
+    "id": "T077",
+    "term": "cavitary lesion",
+    "simple_meaning": "Hollow space within a lung abnormality",
+    "patient_explanation": "There's an abnormal area in the lung that has a hollow, air-filled centre.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "cavitary lesion. Hollow space within a lung abnormality. There's an abnormal area in the lung that has a hollow, air-filled centre.. Can occur with infection (including tuberculosis), abscess, or certain tumours.. cavitation. lung cavity. cavitary lesion. cavitating mass"
+  },
+  {
+    "faiss_id": 77,
+    "id": "T078",
+    "term": "bulla",
+    "simple_meaning": "Large air-filled sac in the lung",
+    "patient_explanation": "There is a large air-filled pocket within the lung tissue, often from damaged, stretched lung.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "bulla. Large air-filled sac in the lung. There is a large air-filled pocket within the lung tissue, often from damaged, stretched lung.. Common in emphysema; large bullae can occasionally rupture causing pneumothorax.. bullous change. bulla noted. bullous emphysema"
+  },
+  {
+    "faiss_id": 78,
+    "id": "T079",
+    "term": "pneumomediastinum",
+    "simple_meaning": "Air in the chest cavity around the heart",
+    "patient_explanation": "There is air present in the central chest space around the heart and major vessels, which isn't normally there.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "pneumomediastinum. Air in the chest cavity around the heart. There is air present in the central chest space around the heart and major vessels, which isn't normally there.. Can result from airway or oesophageal injury, or spontaneously from a ruptured air sac.. mediastinal air. pneumomediastinum. free mediastinal air"
+  },
+  {
+    "faiss_id": 79,
+    "id": "T080",
+    "term": "miliary pattern",
+    "simple_meaning": "Widespread tiny nodules in the lungs",
+    "patient_explanation": "Many very small spots are scattered evenly throughout both lungs.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "miliary pattern. Widespread tiny nodules in the lungs. Many very small spots are scattered evenly throughout both lungs.. Classic pattern associated with disseminated infection (e.g. tuberculosis) spreading through the bloodstream.. miliary nodules. miliary pattern. miliary nodularity"
+  },
+  {
+    "faiss_id": 80,
+    "id": "T081",
+    "term": "reticular pattern",
+    "simple_meaning": "Net-like marking pattern in the lungs",
+    "patient_explanation": "A fine, web-like pattern of lines is visible across part of the lung tissue.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "reticular pattern. Net-like marking pattern in the lungs. A fine, web-like pattern of lines is visible across part of the lung tissue.. Often an early or associated feature of interstitial lung disease.. reticulation. reticular opacities. fine reticular pattern"
+  },
+  {
+    "faiss_id": 81,
+    "id": "T082",
+    "term": "air bronchogram",
+    "simple_meaning": "Visible airways within a lung abnormality",
+    "patient_explanation": "The small air tubes inside the lungs are visible within an area of abnormal lung tissue, which happens when the tissue around them fills with fluid or infection.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "air bronchogram. Visible airways within a lung abnormality. The small air tubes inside the lungs are visible within an area of abnormal lung tissue, which happens when the tissue around them fills with fluid or infection.. A useful sign that helps confirm consolidation (fluid/infection-filled lung) rather than other causes.. air bronchograms. air bronchogram sign"
+  },
+  {
+    "faiss_id": 82,
+    "id": "T083",
+    "term": "Kerley B lines",
+    "simple_meaning": "Short horizontal lines at lung edges",
+    "patient_explanation": "Small horizontal lines appear near the outer edges of the lungs, a sign linked to fluid buildup.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "Kerley B lines. Short horizontal lines at lung edges. Small horizontal lines appear near the outer edges of the lungs, a sign linked to fluid buildup.. Represents fluid in the tiny lymphatic channels of the lung, classically from heart failure.. septal lines. Kerley B lines. septal thickening"
+  },
+  {
+    "faiss_id": 83,
+    "id": "T084",
+    "term": "tension pneumothorax",
+    "simple_meaning": "Trapped air compressing the chest (emergency)",
+    "patient_explanation": "Air trapped outside the lung is building up pressure and pushing on the heart and the other lung.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "tension pneumothorax. Trapped air compressing the chest (emergency). Air trapped outside the lung is building up pressure and pushing on the heart and the other lung.. A life-threatening emergency requiring immediate needle or chest tube decompression.. tension pneumothorax. mediastinal shift with pneumothorax"
+  },
+  {
+    "faiss_id": 84,
+    "id": "T085",
+    "term": "hydropneumothorax",
+    "simple_meaning": "Air and fluid together outside the lung",
+    "patient_explanation": "There is both air and fluid trapped in the space around the lung.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "hydropneumothorax. Air and fluid together outside the lung. There is both air and fluid trapped in the space around the lung.. Can follow trauma, surgery, or infection with a fluid collection that has also released gas.. hydropneumothorax"
+  },
+  {
+    "faiss_id": 85,
+    "id": "T086",
+    "term": "mucus plugging",
+    "simple_meaning": "Airway blocked by thick mucus",
+    "patient_explanation": "Thick mucus is blocking part of an airway, which can cause the section of lung it supplies to collapse slightly.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "mucus plugging. Airway blocked by thick mucus. Thick mucus is blocking part of an airway, which can cause the section of lung it supplies to collapse slightly.. Common cause of atelectasis, especially post-operatively or in chronic airway disease.. mucous plugging. mucus plugging. mucoid impaction"
+  },
+  {
+    "faiss_id": 86,
+    "id": "T087",
+    "term": "pleural adhesion",
+    "simple_meaning": "Lung lining stuck to chest wall",
+    "patient_explanation": "Part of the lining around the lung has become stuck to the chest wall, usually from previous inflammation.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "pleural adhesion. Lung lining stuck to chest wall. Part of the lining around the lung has become stuck to the chest wall, usually from previous inflammation.. Typically a sign of prior pleural inflammation, infection, or surgery; usually not itself concerning.. pleural scarring. pleural adhesions. pleuroparenchymal scarring"
+  },
+  {
+    "faiss_id": 87,
+    "id": "T088",
+    "term": "apical scarring",
+    "simple_meaning": "Old healed scarring at the top of the lung",
+    "patient_explanation": "There's old scar tissue at the very top of one or both lungs, usually from a past infection.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "apical scarring. Old healed scarring at the top of the lung. There's old scar tissue at the very top of one or both lungs, usually from a past infection.. Commonly a residual finding from prior tuberculosis or other old infection; usually stable.. apical fibrosis. apical scarring. apical pleural thickening and scarring"
+  },
+  {
+    "faiss_id": 88,
+    "id": "T089",
+    "term": "subpleural nodule",
+    "simple_meaning": "Small spot near the lung surface",
+    "patient_explanation": "A small spot has been found just beneath the outer surface of the lung.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "subpleural nodule. Small spot near the lung surface. A small spot has been found just beneath the outer surface of the lung.. Location and size guide whether follow-up imaging or biopsy is recommended.. subpleural nodule. peripheral lung nodule"
+  },
+  {
+    "faiss_id": 89,
+    "id": "T090",
+    "term": "mediastinal widening",
+    "simple_meaning": "Enlarged central chest space",
+    "patient_explanation": "The central area of the chest between the lungs looks wider than expected.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "mediastinal widening. Enlarged central chest space. The central area of the chest between the lungs looks wider than expected.. Can be due to benign fat, lymph node enlargement, or more serious causes like aortic injury.. widened mediastinum. mediastinal widening"
+  },
+  {
+    "faiss_id": 90,
+    "id": "T091",
+    "term": "hilar prominence",
+    "simple_meaning": "Enlarged central lung structures",
+    "patient_explanation": "The area where the major airways and vessels enter the lung looks larger than usual.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "hilar prominence. Enlarged central lung structures. The area where the major airways and vessels enter the lung looks larger than usual.. Can reflect enlarged lymph nodes, prominent vessels, or, less often, a mass.. hilar enlargement. hilar prominence. prominent hila"
+  },
+  {
+    "faiss_id": 91,
+    "id": "T092",
+    "term": "pulmonary hypertension",
+    "simple_meaning": "High blood pressure in the lung arteries",
+    "patient_explanation": "The blood pressure in the arteries supplying the lungs is higher than normal.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "pulmonary hypertension. High blood pressure in the lung arteries. The blood pressure in the arteries supplying the lungs is higher than normal.. Increases strain on the right side of the heart; can be primary or secondary to lung/heart disease.. pulmonary artery hypertension. pulmonary hypertension. PA pressure elevated"
+  },
+  {
+    "faiss_id": 92,
+    "id": "T093",
+    "term": "bronchial wall thickening",
+    "simple_meaning": "Thickened airway walls",
+    "patient_explanation": "The walls of the breathing tubes in the lungs appear thicker than usual.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "bronchial wall thickening. Thickened airway walls. The walls of the breathing tubes in the lungs appear thicker than usual.. A nonspecific finding often related to inflammation, infection, or chronic airway disease.. airway wall thickening. bronchial wall thickening. peribronchial thickening"
+  },
+  {
+    "faiss_id": 93,
+    "id": "T094",
+    "term": "subsegmental pulmonary embolism",
+    "simple_meaning": "Small blood clot in a lung artery branch",
+    "patient_explanation": "A small blood clot is blocking one of the smaller branches of a lung artery.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "subsegmental pulmonary embolism. Small blood clot in a lung artery branch. A small blood clot is blocking one of the smaller branches of a lung artery.. Smaller than a main pulmonary embolism but still requires clinical assessment for treatment.. subsegmental PE. small subsegmental filling defect"
+  },
+  {
+    "faiss_id": 94,
+    "id": "T095",
+    "term": "emphysematous changes",
+    "simple_meaning": "Damaged, over-inflated lung tissue",
+    "patient_explanation": "Part of the lung tissue has lost its normal elastic structure and become over-inflated.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "emphysematous changes. Damaged, over-inflated lung tissue. Part of the lung tissue has lost its normal elastic structure and become over-inflated.. Reflects breakdown of lung air sacs, most often from smoking.. emphysema. emphysematous change. centrilobular emphysema"
+  },
+  {
+    "faiss_id": 95,
+    "id": "T096",
+    "term": "costophrenic angle blunting",
+    "simple_meaning": "Rounded edge at the base of the lung",
+    "patient_explanation": "The normally sharp angle at the bottom edge of the lung looks rounded rather than pointed.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "costophrenic angle blunting. Rounded edge at the base of the lung. The normally sharp angle at the bottom edge of the lung looks rounded rather than pointed.. A subtle early sign that can indicate a small amount of fluid around the lung.. pleural effusion. blunting of costophrenic angle. CP angle blunting"
+  },
+  {
+    "faiss_id": 96,
+    "id": "T097",
+    "term": "osteoarthritis",
+    "simple_meaning": "Wear-and-tear joint damage",
+    "patient_explanation": "The cushioning cartilage in a joint has worn down, which is a common part of joint ageing.",
+    "body_system": "Bone/Joint",
+    "category": "Musculoskeletal",
+    "text_used": "osteoarthritis. Wear-and-tear joint damage. The cushioning cartilage in a joint has worn down, which is a common part of joint ageing.. The most common form of arthritis, causing joint space narrowing, osteophytes, and stiffness.. degenerative joint disease. osteoarthritic changes. degenerative changes consistent with osteoarthritis"
+  },
+  {
+    "faiss_id": 97,
+    "id": "T098",
+    "term": "osteoporosis",
+    "simple_meaning": "Weakened, low-density bone",
+    "patient_explanation": "The bones have become thinner and more fragile than normal, raising the risk of fractures.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "osteoporosis. Weakened, low-density bone. The bones have become thinner and more fragile than normal, raising the risk of fractures.. A systemic condition reducing bone density, often assessed with a DEXA scan.. low bone density. osteopenia. osteoporotic changes. reduced bone mineral density"
+  },
+  {
+    "faiss_id": 98,
+    "id": "T099",
+    "term": "osteopenia",
+    "simple_meaning": "Mildly reduced bone density",
+    "patient_explanation": "Bone density is a little lower than normal, though not as low as osteoporosis.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "osteopenia. Mildly reduced bone density. Bone density is a little lower than normal, though not as low as osteoporosis.. Considered an early stage of bone density loss; monitored to prevent progression.. low bone density. osteopenic changes. mild osteopenia"
+  },
+  {
+    "faiss_id": 99,
+    "id": "T100",
+    "term": "compression fracture",
+    "simple_meaning": "Collapsed vertebral bone",
+    "patient_explanation": "One of the bones in the spine has partially collapsed, often becoming shorter or wedge-shaped.",
+    "body_system": "Spine",
+    "category": "Musculoskeletal",
+    "text_used": "compression fracture. Collapsed vertebral bone. One of the bones in the spine has partially collapsed, often becoming shorter or wedge-shaped.. Common in osteoporosis but can also follow trauma; may cause back pain and height loss.. vertebral compression fracture. compression fracture. wedge compression deformity"
+  },
+  {
+    "faiss_id": 100,
+    "id": "T101",
+    "term": "stress fracture",
+    "simple_meaning": "Small crack from repetitive strain",
+    "patient_explanation": "A tiny crack has formed in a bone due to repeated stress, rather than a single injury.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "stress fracture. Small crack from repetitive strain. A tiny crack has formed in a bone due to repeated stress, rather than a single injury.. Common in weight-bearing bones with repetitive activity, such as running.. fatigue fracture. stress fracture. stress reaction"
+  },
+  {
+    "faiss_id": 101,
+    "id": "T102",
+    "term": "avulsion fracture",
+    "simple_meaning": "Small bone fragment pulled off by a tendon/ligament",
+    "patient_explanation": "A small piece of bone has been pulled away from the main bone by a tendon or ligament.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "avulsion fracture. Small bone fragment pulled off by a tendon/ligament. A small piece of bone has been pulled away from the main bone by a tendon or ligament.. Occurs where a tendon or ligament attaches, often from sudden forceful contraction.. avulsion injury. avulsion fracture. bony avulsion"
+  },
+  {
+    "faiss_id": 102,
+    "id": "T103",
+    "term": "dislocation",
+    "simple_meaning": "Joint bones out of normal position",
+    "patient_explanation": "The bones that form a joint have moved out of their normal alignment.",
+    "body_system": "Joint",
+    "category": "Musculoskeletal",
+    "text_used": "dislocation. Joint bones out of normal position. The bones that form a joint have moved out of their normal alignment.. Requires prompt reduction (repositioning) to restore normal joint alignment and function.. joint dislocation. dislocation. frank dislocation"
+  },
+  {
+    "faiss_id": 103,
+    "id": "T104",
+    "term": "subluxation",
+    "simple_meaning": "Partial joint misalignment",
+    "patient_explanation": "The bones of a joint are partly out of position, but not fully dislocated.",
+    "body_system": "Joint",
+    "category": "Musculoskeletal",
+    "text_used": "subluxation. Partial joint misalignment. The bones of a joint are partly out of position, but not fully dislocated.. A milder form of joint displacement, still needing assessment to prevent recurrence or instability.. partial dislocation. subluxation. mild subluxation"
+  },
+  {
+    "faiss_id": 104,
+    "id": "T105",
+    "term": "meniscal tear",
+    "simple_meaning": "Torn knee cartilage cushion",
+    "patient_explanation": "The cartilage cushion inside the knee that absorbs shock has a tear.",
+    "body_system": "Joint",
+    "category": "Musculoskeletal",
+    "text_used": "meniscal tear. Torn knee cartilage cushion. The cartilage cushion inside the knee that absorbs shock has a tear.. Common knee injury from twisting movements or degeneration; severity varies widely.. knee cartilage tear. meniscal tear. medial meniscus tear"
+  },
+  {
+    "faiss_id": 105,
+    "id": "T106",
+    "term": "ACL tear",
+    "simple_meaning": "Torn knee ligament (ACL)",
+    "patient_explanation": "One of the main ligaments that stabilises the knee is torn.",
+    "body_system": "Joint",
+    "category": "Musculoskeletal",
+    "text_used": "ACL tear. Torn knee ligament (ACL). One of the main ligaments that stabilises the knee is torn.. A common sports injury that can cause knee instability; may need surgical reconstruction.. anterior cruciate ligament tear. ACL tear. complete ACL rupture"
+  },
+  {
+    "faiss_id": 106,
+    "id": "T107",
+    "term": "rotator cuff tear",
+    "simple_meaning": "Torn shoulder tendon group",
+    "patient_explanation": "One or more of the tendons that help move and stabilise the shoulder is torn.",
+    "body_system": "Joint",
+    "category": "Musculoskeletal",
+    "text_used": "rotator cuff tear. Torn shoulder tendon group. One or more of the tendons that help move and stabilise the shoulder is torn.. Common with age-related degeneration or after a fall/injury; severity ranges from partial to full-thickness.. shoulder tendon tear. rotator cuff tear. supraspinatus tear"
+  },
+  {
+    "faiss_id": 107,
+    "id": "T108",
+    "term": "labral tear",
+    "simple_meaning": "Torn joint rim cartilage",
+    "patient_explanation": "The ring of cartilage that deepens a joint socket (shoulder or hip) has a tear.",
+    "body_system": "Joint",
+    "category": "Musculoskeletal",
+    "text_used": "labral tear. Torn joint rim cartilage. The ring of cartilage that deepens a joint socket (shoulder or hip) has a tear.. Can cause pain, clicking, or instability in the affected joint.. labrum tear. labral tear. SLAP tear"
+  },
+  {
+    "faiss_id": 108,
+    "id": "T109",
+    "term": "bone marrow edema",
+    "simple_meaning": "Fluid signal inside bone",
+    "patient_explanation": "There is extra fluid within the bone itself, usually a sign of stress or minor injury.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "bone marrow edema. Fluid signal inside bone. There is extra fluid within the bone itself, usually a sign of stress or minor injury.. A sensitive but nonspecific MRI finding suggesting bone stress, bruising, or early fracture.. bone bruise. bone marrow edema. bone contusion"
+  },
+  {
+    "faiss_id": 109,
+    "id": "T110",
+    "term": "periosteal reaction",
+    "simple_meaning": "New bone forming on the bone surface",
+    "patient_explanation": "The lining of the bone is producing new bone tissue in response to irritation, injury, or infection.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "periosteal reaction. New bone forming on the bone surface. The lining of the bone is producing new bone tissue in response to irritation, injury, or infection.. Pattern of periosteal reaction can help distinguish benign from more concerning causes.. periosteal new bone. periosteal reaction. periosteal thickening"
+  },
+  {
+    "faiss_id": 110,
+    "id": "T111",
+    "term": "joint effusion",
+    "simple_meaning": "Extra fluid inside a joint",
+    "patient_explanation": "There is more fluid than usual inside a joint space.",
+    "body_system": "Joint",
+    "category": "Musculoskeletal",
+    "text_used": "joint effusion. Extra fluid inside a joint. There is more fluid than usual inside a joint space.. A nonspecific sign of joint irritation that can accompany injury, arthritis, or infection.. joint fluid. synovial effusion. joint effusion. small knee effusion"
+  },
+  {
+    "faiss_id": 111,
+    "id": "T112",
+    "term": "synovitis",
+    "simple_meaning": "Inflamed joint lining",
+    "patient_explanation": "The lining tissue inside a joint is inflamed.",
+    "body_system": "Joint",
+    "category": "Musculoskeletal",
+    "text_used": "synovitis. Inflamed joint lining. The lining tissue inside a joint is inflamed.. Can accompany arthritis, injury, or infection; often causes swelling and pain.. synovial inflammation. synovitis. synovial thickening"
+  },
+  {
+    "faiss_id": 112,
+    "id": "T113",
+    "term": "tendinosis",
+    "simple_meaning": "Degenerated tendon without acute tear",
+    "patient_explanation": "A tendon shows signs of long-term wear and thickening rather than a fresh injury.",
+    "body_system": "Soft tissue",
+    "category": "Musculoskeletal",
+    "text_used": "tendinosis. Degenerated tendon without acute tear. A tendon shows signs of long-term wear and thickening rather than a fresh injury.. Represents chronic degenerative change from repetitive stress, distinct from acute tendon inflammation.. tendinopathy. tendinosis. chronic tendinopathy"
+  },
+  {
+    "faiss_id": 113,
+    "id": "T114",
+    "term": "bursitis",
+    "simple_meaning": "Inflamed cushioning sac near a joint",
+    "patient_explanation": "A small fluid-filled sac that cushions a joint is inflamed and swollen.",
+    "body_system": "Soft tissue",
+    "category": "Musculoskeletal",
+    "text_used": "bursitis. Inflamed cushioning sac near a joint. A small fluid-filled sac that cushions a joint is inflamed and swollen.. Common around the shoulder, hip, elbow, or knee, often from repetitive friction or pressure.. bursal inflammation. bursitis. subacromial bursitis"
+  },
+  {
+    "faiss_id": 114,
+    "id": "T115",
+    "term": "chondromalacia",
+    "simple_meaning": "Softened cartilage under the kneecap",
+    "patient_explanation": "The cartilage on the underside of the kneecap has softened and is wearing down.",
+    "body_system": "Joint",
+    "category": "Musculoskeletal",
+    "text_used": "chondromalacia. Softened cartilage under the kneecap. The cartilage on the underside of the kneecap has softened and is wearing down.. A common cause of anterior knee pain, particularly in younger, active people.. patellofemoral chondromalacia. chondromalacia patellae. patellar cartilage softening"
+  },
+  {
+    "faiss_id": 115,
+    "id": "T116",
+    "term": "scoliosis",
+    "simple_meaning": "Sideways curve of the spine",
+    "patient_explanation": "The spine curves to one side more than the normal, straight alignment.",
+    "body_system": "Spine",
+    "category": "Musculoskeletal",
+    "text_used": "scoliosis. Sideways curve of the spine. The spine curves to one side more than the normal, straight alignment.. Can be mild and incidental or more significant, sometimes needing monitoring or bracing.. spinal curvature. scoliosis. mild thoracolumbar scoliosis"
+  },
+  {
+    "faiss_id": 116,
+    "id": "T117",
+    "term": "kyphosis",
+    "simple_meaning": "Excessive forward curve of the upper spine",
+    "patient_explanation": "The upper back curves forward more than normal, sometimes giving a rounded or hunched appearance.",
+    "body_system": "Spine",
+    "category": "Musculoskeletal",
+    "text_used": "kyphosis. Excessive forward curve of the upper spine. The upper back curves forward more than normal, sometimes giving a rounded or hunched appearance.. Can be postural, age-related, or due to compression fractures affecting the spine.. hyperkyphosis. kyphosis. increased thoracic kyphosis"
+  },
+  {
+    "faiss_id": 117,
+    "id": "T118",
+    "term": "spondylosis",
+    "simple_meaning": "General spinal degeneration",
+    "patient_explanation": "The spine shows general wear-and-tear changes that are common with age.",
+    "body_system": "Spine",
+    "category": "Musculoskeletal",
+    "text_used": "spondylosis. General spinal degeneration. The spine shows general wear-and-tear changes that are common with age.. An umbrella term for age-related degenerative changes affecting discs and joints of the spine.. spinal degeneration. spondylotic changes. multilevel spondylosis"
+  },
+  {
+    "faiss_id": 118,
+    "id": "T119",
+    "term": "facet joint arthropathy",
+    "simple_meaning": "Worn small spinal joints",
+    "patient_explanation": "The small joints at the back of the spine that guide movement show wear-and-tear changes.",
+    "body_system": "Spine",
+    "category": "Musculoskeletal",
+    "text_used": "facet joint arthropathy. Worn small spinal joints. The small joints at the back of the spine that guide movement show wear-and-tear changes.. A common source of back pain related to degenerative changes in the small spinal joints.. facet arthropathy. facet joint hypertrophy. facet arthropathy"
+  },
+  {
+    "faiss_id": 119,
+    "id": "T120",
+    "term": "spinal canal stenosis",
+    "simple_meaning": "Narrowed spinal canal",
+    "patient_explanation": "The channel in the spine that houses the spinal cord or nerves has become narrower than normal.",
+    "body_system": "Spine",
+    "category": "Musculoskeletal",
+    "text_used": "spinal canal stenosis. Narrowed spinal canal. The channel in the spine that houses the spinal cord or nerves has become narrower than normal.. Can compress nerves, causing pain, numbness, or weakness, particularly with standing or walking.. spinal stenosis. spinal canal stenosis. central canal narrowing"
+  },
+  {
+    "faiss_id": 120,
+    "id": "T121",
+    "term": "sacroiliitis",
+    "simple_meaning": "Inflammation of the lower back/pelvis joint",
+    "patient_explanation": "The joint connecting the base of the spine to the pelvis is inflamed.",
+    "body_system": "Joint",
+    "category": "Musculoskeletal",
+    "text_used": "sacroiliitis. Inflammation of the lower back/pelvis joint. The joint connecting the base of the spine to the pelvis is inflamed.. Can be linked to inflammatory arthritis conditions or mechanical strain.. SI joint inflammation. sacroiliitis. SI joint changes"
+  },
+  {
+    "faiss_id": 121,
+    "id": "T122",
+    "term": "osteomyelitis",
+    "simple_meaning": "Bone infection",
+    "patient_explanation": "There is an infection within the bone itself.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "osteomyelitis. Bone infection. There is an infection within the bone itself.. A serious infection requiring prompt antibiotic treatment, and sometimes surgery, to prevent bone damage.. bone infection. osteomyelitis. features consistent with osteomyelitis"
+  },
+  {
+    "faiss_id": 122,
+    "id": "T123",
+    "term": "bone cyst",
+    "simple_meaning": "Fluid-filled cavity in bone",
+    "patient_explanation": "There is a fluid-filled space within the bone, which is usually a benign, non-cancerous finding.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "bone cyst. Fluid-filled cavity in bone. There is a fluid-filled space within the bone, which is usually a benign, non-cancerous finding.. Most bone cysts are benign and found incidentally; monitored to ensure stability over time.. simple bone cyst. unicameral bone cyst. bone cyst"
+  },
+  {
+    "faiss_id": 123,
+    "id": "T124",
+    "term": "enchondroma",
+    "simple_meaning": "Benign cartilage growth inside bone",
+    "patient_explanation": "There is a small, usually harmless growth of cartilage tissue inside a bone.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "enchondroma. Benign cartilage growth inside bone. There is a small, usually harmless growth of cartilage tissue inside a bone.. One of the most common benign bone tumours, often found incidentally on imaging.. cartilage tumour. enchondroma. benign cartilaginous lesion"
+  },
+  {
+    "faiss_id": 124,
+    "id": "T125",
+    "term": "avascular necrosis",
+    "simple_meaning": "Bone tissue dying from lost blood supply",
+    "patient_explanation": "Part of a bone has lost its blood supply, causing the bone tissue in that area to die.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "avascular necrosis. Bone tissue dying from lost blood supply. Part of a bone has lost its blood supply, causing the bone tissue in that area to die.. Can lead to bone collapse over time if untreated; the hip is a commonly affected site.. osteonecrosis. avascular necrosis. AVN of the femoral head"
+  },
+  {
+    "faiss_id": 125,
+    "id": "T126",
+    "term": "cerebral microbleeds",
+    "simple_meaning": "Tiny old bleeds in the brain",
+    "patient_explanation": "Very small, old areas of bleeding are scattered within the brain tissue.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "cerebral microbleeds. Tiny old bleeds in the brain. Very small, old areas of bleeding are scattered within the brain tissue.. Often related to small blood vessel disease and are a marker of bleeding risk on certain scans.. microhemorrhages. cerebral microbleeds. microhemorrhage foci"
+  },
+  {
+    "faiss_id": 126,
+    "id": "T127",
+    "term": "white matter hyperintensities",
+    "simple_meaning": "Bright spots in the brain's white matter",
+    "patient_explanation": "Small bright areas are seen in the deeper white matter of the brain on certain scan sequences.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "white matter hyperintensities. Bright spots in the brain's white matter. Small bright areas are seen in the deeper white matter of the brain on certain scan sequences.. A common, often age-related finding linked to small blood vessel changes; significance depends on extent.. leukoaraiosis. white matter hyperintensities. T2/FLAIR white matter changes"
+  },
+  {
+    "faiss_id": 127,
+    "id": "T128",
+    "term": "leukoaraiosis",
+    "simple_meaning": "Age-related white matter changes",
+    "patient_explanation": "There are diffuse changes in the deep brain tissue that are commonly seen with ageing and small blood vessel changes.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "leukoaraiosis. Age-related white matter changes. There are diffuse changes in the deep brain tissue that are commonly seen with ageing and small blood vessel changes.. A descriptive term for chronic small vessel ischemic changes in the brain's white matter.. white matter disease. leukoaraiosis. chronic microvascular ischemic changes"
+  },
+  {
+    "faiss_id": 128,
+    "id": "T129",
+    "term": "subdural hematoma",
+    "simple_meaning": "Bleeding between the brain and its outer covering",
+    "patient_explanation": "There is a collection of blood between the brain surface and its outer protective layer.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "subdural hematoma. Bleeding between the brain and its outer covering. There is a collection of blood between the brain surface and its outer protective layer.. Can follow head trauma, especially in older adults; may require urgent surgical drainage if large.. SDH. subdural hematoma. acute subdural hemorrhage"
+  },
+  {
+    "faiss_id": 129,
+    "id": "T130",
+    "term": "epidural hematoma",
+    "simple_meaning": "Bleeding between the skull and brain covering",
+    "patient_explanation": "There is a collection of blood between the inner skull surface and the brain's outer covering.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "epidural hematoma. Bleeding between the skull and brain covering. There is a collection of blood between the inner skull surface and the brain's outer covering.. A neurosurgical emergency, often following skull fracture, that can rapidly raise brain pressure.. EDH. epidural hematoma. extradural hemorrhage"
+  },
+  {
+    "faiss_id": 130,
+    "id": "T131",
+    "term": "subarachnoid hemorrhage",
+    "simple_meaning": "Bleeding around the brain's surface",
+    "patient_explanation": "There is bleeding into the space surrounding the brain, between the brain and its covering membranes.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "subarachnoid hemorrhage. Bleeding around the brain's surface. There is bleeding into the space surrounding the brain, between the brain and its covering membranes.. A medical emergency, often from a ruptured aneurysm, presenting classically with sudden severe headache.. SAH. subarachnoid hemorrhage. SAH"
+  },
+  {
+    "faiss_id": 131,
+    "id": "T132",
+    "term": "intraventricular hemorrhage",
+    "simple_meaning": "Bleeding into the brain's fluid chambers",
+    "patient_explanation": "There is bleeding into the fluid-filled chambers deep inside the brain.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "intraventricular hemorrhage. Bleeding into the brain's fluid chambers. There is bleeding into the fluid-filled chambers deep inside the brain.. Can occur alongside other types of brain bleeding and may obstruct normal fluid drainage.. IVH. intraventricular hemorrhage. IVH extension"
+  },
+  {
+    "faiss_id": 132,
+    "id": "T133",
+    "term": "cerebral edema",
+    "simple_meaning": "Brain tissue swelling",
+    "patient_explanation": "There is swelling within the brain tissue.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "cerebral edema. Brain tissue swelling. There is swelling within the brain tissue.. Can raise pressure inside the skull and is often associated with injury, stroke, or tumour.. brain swelling. cerebral edema. vasogenic edema"
+  },
+  {
+    "faiss_id": 133,
+    "id": "T134",
+    "term": "mass effect",
+    "simple_meaning": "Brain structures pushed out of position",
+    "patient_explanation": "An abnormal area is large enough to be pushing on and displacing the normal brain structures nearby.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "mass effect. Brain structures pushed out of position. An abnormal area is large enough to be pushing on and displacing the normal brain structures nearby.. An important sign that guides urgency, as significant mass effect can raise pressure inside the skull.. mass effect. local mass effect"
+  },
+  {
+    "faiss_id": 134,
+    "id": "T135",
+    "term": "brain herniation",
+    "simple_meaning": "Brain tissue pushed out of its normal space",
+    "patient_explanation": "Part of the brain has been pushed out of its usual compartment due to pressure buildup.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "brain herniation. Brain tissue pushed out of its normal space. Part of the brain has been pushed out of its usual compartment due to pressure buildup.. A life-threatening emergency requiring immediate treatment to relieve pressure on the brain.. cerebral herniation. uncal herniation. tonsillar herniation"
+  },
+  {
+    "faiss_id": 135,
+    "id": "T136",
+    "term": "meningioma",
+    "simple_meaning": "Usually benign tumour of the brain's covering",
+    "patient_explanation": "There is a growth arising from the membranes covering the brain, which is usually non-cancerous.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "meningioma. Usually benign tumour of the brain's covering. There is a growth arising from the membranes covering the brain, which is usually non-cancerous.. The most common primary benign brain tumour; often monitored rather than immediately treated.. meningeal tumour. meningioma. extra-axial mass consistent with meningioma"
+  },
+  {
+    "faiss_id": 136,
+    "id": "T137",
+    "term": "glioma",
+    "simple_meaning": "Tumour arising from brain support cells",
+    "patient_explanation": "There is a growth arising from the supportive tissue cells within the brain.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "glioma. Tumour arising from brain support cells. There is a growth arising from the supportive tissue cells within the brain.. A category of brain tumours ranging from low-grade (slower growing) to high-grade (more aggressive).. brain tumour. glioma. infiltrative glial neoplasm"
+  },
+  {
+    "faiss_id": 137,
+    "id": "T138",
+    "term": "arachnoid cyst",
+    "simple_meaning": "Fluid-filled pocket near the brain surface",
+    "patient_explanation": "There is a fluid-filled sac between the brain and one of its covering membranes, usually present from birth.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "arachnoid cyst. Fluid-filled pocket near the brain surface. There is a fluid-filled sac between the brain and one of its covering membranes, usually present from birth.. Typically a benign, incidental finding that rarely causes symptoms unless large.. arachnoid cyst. arachnoid cyst. incidental arachnoid cyst"
+  },
+  {
+    "faiss_id": 138,
+    "id": "T139",
+    "term": "Chiari malformation",
+    "simple_meaning": "Brain tissue extending into the spinal canal",
+    "patient_explanation": "Part of the lower brain sits lower than usual, extending slightly into the top of the spinal canal.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "Chiari malformation. Brain tissue extending into the spinal canal. Part of the lower brain sits lower than usual, extending slightly into the top of the spinal canal.. Can be an incidental finding or cause symptoms like headache, depending on the degree of descent.. cerebellar tonsillar ectopia. Chiari I malformation. tonsillar ectopia"
+  },
+  {
+    "faiss_id": 139,
+    "id": "T140",
+    "term": "syrinx",
+    "simple_meaning": "Fluid-filled cavity in the spinal cord",
+    "patient_explanation": "There is a fluid-filled channel that has formed within the spinal cord.",
+    "body_system": "Spine",
+    "category": "Neurological",
+    "text_used": "syrinx. Fluid-filled cavity in the spinal cord. There is a fluid-filled channel that has formed within the spinal cord.. Can be associated with Chiari malformation, trauma, or spinal cord tumours.. syringomyelia. syrinx. syringomyelia"
+  },
+  {
+    "faiss_id": 140,
+    "id": "T141",
+    "term": "demyelination",
+    "simple_meaning": "Loss of the brain/spinal cord's protective nerve coating",
+    "patient_explanation": "Areas of the brain or spinal cord have lost some of the protective coating around nerve fibres.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "demyelination. Loss of the brain/spinal cord's protective nerve coating. Areas of the brain or spinal cord have lost some of the protective coating around nerve fibres.. A key feature of conditions like multiple sclerosis, though it can have other causes too.. demyelinating lesion. demyelinating plaque. demyelination"
+  },
+  {
+    "faiss_id": 141,
+    "id": "T142",
+    "term": "encephalomalacia",
+    "simple_meaning": "Old area of softened brain tissue",
+    "patient_explanation": "There is an area of the brain where tissue has softened, usually the result of an old injury or stroke.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "encephalomalacia. Old area of softened brain tissue. There is an area of the brain where tissue has softened, usually the result of an old injury or stroke.. Represents chronic tissue damage from a prior event such as stroke, trauma, or infection.. gliotic scar. encephalomalacia. gliotic encephalomalacia"
+  },
+  {
+    "faiss_id": 142,
+    "id": "T143",
+    "term": "ventriculomegaly",
+    "simple_meaning": "Enlarged brain fluid chambers",
+    "patient_explanation": "The fluid-filled chambers deep within the brain are larger than normal.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "ventriculomegaly. Enlarged brain fluid chambers. The fluid-filled chambers deep within the brain are larger than normal.. Can reflect hydrocephalus (fluid buildup) or, in some cases, brain volume loss.. enlarged ventricles. ventriculomegaly. mild ventricular enlargement"
+  },
+  {
+    "faiss_id": 143,
+    "id": "T144",
+    "term": "cerebellar atrophy",
+    "simple_meaning": "Shrinkage of the brain's coordination centre",
+    "patient_explanation": "The part of the brain that helps coordinate movement and balance has reduced in size.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "cerebellar atrophy. Shrinkage of the brain's coordination centre. The part of the brain that helps coordinate movement and balance has reduced in size.. Can occur with ageing or be linked to specific neurological conditions affecting balance and coordination.. cerebellar volume loss. cerebellar atrophy. cerebellar volume loss"
+  },
+  {
+    "faiss_id": 144,
+    "id": "T145",
+    "term": "pituitary microadenoma",
+    "simple_meaning": "Small benign growth on the pituitary gland",
+    "patient_explanation": "There is a small, usually benign growth on the pituitary gland at the base of the brain.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "pituitary microadenoma. Small benign growth on the pituitary gland. There is a small, usually benign growth on the pituitary gland at the base of the brain.. Very common and often incidental; some produce hormones that may need monitoring or treatment.. pituitary adenoma. pituitary microadenoma. small pituitary lesion"
+  },
+  {
+    "faiss_id": 145,
+    "id": "T146",
+    "term": "cerebral aneurysm",
+    "simple_meaning": "Bulge in a brain blood vessel wall",
+    "patient_explanation": "There is a small bulge or ballooning in the wall of one of the blood vessels in the brain.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "cerebral aneurysm. Bulge in a brain blood vessel wall. There is a small bulge or ballooning in the wall of one of the blood vessels in the brain.. Unruptured aneurysms are often monitored; risk of rupture depends on size and location.. intracranial aneurysm. cerebral aneurysm. unruptured saccular aneurysm"
+  },
+  {
+    "faiss_id": 146,
+    "id": "T147",
+    "term": "arteriovenous malformation",
+    "simple_meaning": "Tangled, abnormal blood vessels",
+    "patient_explanation": "There is an abnormal tangle of blood vessels where arteries connect directly to veins, bypassing normal tissue.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "arteriovenous malformation. Tangled, abnormal blood vessels. There is an abnormal tangle of blood vessels where arteries connect directly to veins, bypassing normal tissue.. Congenital vascular abnormality that carries a risk of bleeding and may need treatment.. AVM. arteriovenous malformation. AVM"
+  },
+  {
+    "faiss_id": 147,
+    "id": "T148",
+    "term": "diffusion restriction",
+    "simple_meaning": "Sign of very recent tissue injury",
+    "patient_explanation": "A pattern on the scan suggests an area of brain tissue has been recently and acutely injured.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "diffusion restriction. Sign of very recent tissue injury. A pattern on the scan suggests an area of brain tissue has been recently and acutely injured.. A key MRI finding used to identify acute stroke within hours of onset.. acute infarct. restricted diffusion. DWI positive lesion"
+  },
+  {
+    "faiss_id": 148,
+    "id": "T149",
+    "term": "watershed infarct",
+    "simple_meaning": "Stroke in a border-zone brain area",
+    "patient_explanation": "A stroke has occurred in an area of the brain that sits at the border between two blood supply territories.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "watershed infarct. Stroke in a border-zone brain area. A stroke has occurred in an area of the brain that sits at the border between two blood supply territories.. Often related to a period of low blood pressure or blood flow rather than a single blocked vessel.. border-zone infarct. watershed infarction. border-zone ischemic changes"
+  },
+  {
+    "faiss_id": 149,
+    "id": "T150",
+    "term": "lacunar infarct",
+    "simple_meaning": "Small deep stroke",
+    "patient_explanation": "A small area of the deep brain tissue has been damaged by a blocked tiny blood vessel.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "lacunar infarct. Small deep stroke. A small area of the deep brain tissue has been damaged by a blocked tiny blood vessel.. Common in people with longstanding high blood pressure or diabetes affecting small brain vessels.. lacunar stroke. lacunar infarct. small vessel infarct"
+  },
+  {
+    "faiss_id": 150,
+    "id": "T151",
+    "term": "thyroid nodule",
+    "simple_meaning": "Small lump in the thyroid gland",
+    "patient_explanation": "A small growth has been found in the gland at the front of your neck.",
+    "body_system": "Endocrine",
+    "category": "Endocrine",
+    "text_used": "thyroid nodule. Small lump in the thyroid gland. A small growth has been found in the gland at the front of your neck.. Very common; most thyroid nodules are benign but some need further testing.. thyroid lump. thyroid mass. solitary thyroid nodule. hypoechoic thyroid nodule. colloid nodule"
+  },
+  {
+    "faiss_id": 151,
+    "id": "T152",
+    "term": "goiter",
+    "simple_meaning": "Enlarged thyroid gland",
+    "patient_explanation": "The gland at the front of your neck is larger than normal.",
+    "body_system": "Endocrine",
+    "category": "Endocrine",
+    "text_used": "goiter. Enlarged thyroid gland. The gland at the front of your neck is larger than normal.. Can be diffuse or multinodular; often related to thyroid function or iodine levels.. thyroid enlargement. enlarged thyroid. multinodular goiter. diffuse thyromegaly. colloid goiter"
+  },
+  {
+    "faiss_id": 152,
+    "id": "T153",
+    "term": "adrenal adenoma",
+    "simple_meaning": "Benign growth on the adrenal gland",
+    "patient_explanation": "There is a small, usually harmless growth on the gland that sits above your kidney.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "adrenal adenoma. Benign growth on the adrenal gland. There is a small, usually harmless growth on the gland that sits above your kidney.. Very common incidental finding; almost always benign and non-functioning.. adrenal incidentaloma. adrenal adenoma. lipid-rich adenoma. adrenal incidentaloma"
+  },
+  {
+    "faiss_id": 153,
+    "id": "T154",
+    "term": "renal mass",
+    "simple_meaning": "Growth in the kidney",
+    "patient_explanation": "An abnormal growth has been found in the kidney that needs further evaluation.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "renal mass. Growth in the kidney. An abnormal growth has been found in the kidney that needs further evaluation.. Can range from benign cysts to renal cell carcinoma; characterization is important.. kidney mass. renal tumour. solid renal mass. enhancing renal lesion. renal cell carcinoma suspected"
+  },
+  {
+    "faiss_id": 154,
+    "id": "T155",
+    "term": "angiomyolipoma",
+    "simple_meaning": "Benign fatty kidney growth",
+    "patient_explanation": "There is a benign, fat-containing growth in the kidney.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "angiomyolipoma. Benign fatty kidney growth. There is a benign, fat-containing growth in the kidney.. Common benign renal tumour; large ones carry a small bleeding risk.. fat-containing renal lesion. renal AML. angiomyolipoma. fat-containing renal mass"
+  },
+  {
+    "faiss_id": 155,
+    "id": "T156",
+    "term": "horseshoe kidney",
+    "simple_meaning": "Kidneys joined together at the bottom",
+    "patient_explanation": "Your two kidneys are fused together at the bottom, forming a U-shape; this is present from birth.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "horseshoe kidney. Kidneys joined together at the bottom. Your two kidneys are fused together at the bottom, forming a U-shape; this is present from birth.. A congenital variant, usually incidental but can predispose to stones or infection.. fused kidneys. horseshoe kidney. renal fusion anomaly"
+  },
+  {
+    "faiss_id": 156,
+    "id": "T157",
+    "term": "polycystic kidney disease",
+    "simple_meaning": "Multiple fluid-filled cysts in the kidneys",
+    "patient_explanation": "Both kidneys contain many fluid-filled sacs, which can affect how well they work over time.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "polycystic kidney disease. Multiple fluid-filled cysts in the kidneys. Both kidneys contain many fluid-filled sacs, which can affect how well they work over time.. Often an inherited condition that can progress to kidney impairment.. PKD. polycystic kidneys. multiple bilateral renal cysts. ADPKD"
+  },
+  {
+    "faiss_id": 157,
+    "id": "T158",
+    "term": "uterine fibroid",
+    "simple_meaning": "Benign growth in the womb muscle",
+    "patient_explanation": "There is a non-cancerous growth in the muscle wall of the uterus.",
+    "body_system": "Pelvis",
+    "category": "Gynecological",
+    "text_used": "uterine fibroid. Benign growth in the womb muscle. There is a non-cancerous growth in the muscle wall of the uterus.. Very common benign finding; can vary in size and cause symptoms depending on location.. leiomyoma. fibroid. intramural fibroid. subserosal fibroid. submucosal fibroid"
+  },
+  {
+    "faiss_id": 158,
+    "id": "T159",
+    "term": "ovarian cyst",
+    "simple_meaning": "Fluid-filled sac on the ovary",
+    "patient_explanation": "A fluid-filled sac has formed on the ovary; these are usually harmless.",
+    "body_system": "Pelvis",
+    "category": "Gynecological",
+    "text_used": "ovarian cyst. Fluid-filled sac on the ovary. A fluid-filled sac has formed on the ovary; these are usually harmless.. Simple cysts are typically functional and resolve on their own; complex ones need follow-up.. functional cyst. simple ovarian cyst. simple ovarian cyst. corpus luteum cyst. hemorrhagic cyst"
+  },
+  {
+    "faiss_id": 159,
+    "id": "T160",
+    "term": "endometrial thickening",
+    "simple_meaning": "Thickened lining of the womb",
+    "patient_explanation": "The inner lining of the uterus appears thicker than expected.",
+    "body_system": "Pelvis",
+    "category": "Gynecological",
+    "text_used": "endometrial thickening. Thickened lining of the womb. The inner lining of the uterus appears thicker than expected.. Significance depends on age, menopausal status, and symptoms.. thickened endometrium. endometrial thickening. increased endometrial echo complex"
+  },
+  {
+    "faiss_id": 160,
+    "id": "T161",
+    "term": "adenomyosis",
+    "simple_meaning": "Womb lining tissue growing into the muscle wall",
+    "patient_explanation": "Tissue that normally lines the womb has grown into the muscular wall of the uterus.",
+    "body_system": "Pelvis",
+    "category": "Gynecological",
+    "text_used": "adenomyosis. Womb lining tissue growing into the muscle wall. Tissue that normally lines the womb has grown into the muscular wall of the uterus.. Common cause of heavy or painful periods; a benign condition.. adenomyosis. diffuse myometrial thickening"
+  },
+  {
+    "faiss_id": 161,
+    "id": "T162",
+    "term": "hydrosalpinx",
+    "simple_meaning": "Fluid-filled, blocked fallopian tube",
+    "patient_explanation": "One of the tubes connecting the ovary to the uterus is blocked and filled with fluid.",
+    "body_system": "Pelvis",
+    "category": "Gynecological",
+    "text_used": "hydrosalpinx. Fluid-filled, blocked fallopian tube. One of the tubes connecting the ovary to the uterus is blocked and filled with fluid.. Often related to past infection; can affect fertility.. blocked fallopian tube. hydrosalpinx. dilated fallopian tube"
+  },
+  {
+    "faiss_id": 162,
+    "id": "T163",
+    "term": "prostate enlargement",
+    "simple_meaning": "Enlarged prostate gland",
+    "patient_explanation": "The gland below the bladder in men is larger than normal.",
+    "body_system": "Pelvis",
+    "category": "Urological",
+    "text_used": "prostate enlargement. Enlarged prostate gland. The gland below the bladder in men is larger than normal.. Very common with age; can cause urinary symptoms by pressing on the bladder outlet.. BPH. enlarged prostate. benign prostatic hyperplasia. prostatomegaly"
+  },
+  {
+    "faiss_id": 163,
+    "id": "T164",
+    "term": "prostate lesion",
+    "simple_meaning": "Abnormal area in the prostate gland",
+    "patient_explanation": "An area in the prostate gland looks different from the surrounding tissue and needs further checking.",
+    "body_system": "Pelvis",
+    "category": "Urological",
+    "text_used": "prostate lesion. Abnormal area in the prostate gland. An area in the prostate gland looks different from the surrounding tissue and needs further checking.. Can range from benign changes to prostate cancer; further work-up guided by risk scoring.. prostate nodule. PI-RADS lesion. suspicious prostate lesion"
+  },
+  {
+    "faiss_id": 164,
+    "id": "T165",
+    "term": "seminal vesicle invasion",
+    "simple_meaning": "Abnormal tissue extending into nearby gland",
+    "patient_explanation": "An abnormal area appears to extend into the glands next to the prostate.",
+    "body_system": "Pelvis",
+    "category": "Urological",
+    "text_used": "seminal vesicle invasion. Abnormal tissue extending into nearby gland. An abnormal area appears to extend into the glands next to the prostate.. A sign used in staging prostate cancer if present.. seminal vesicle invasion. extraprostatic extension"
+  },
+  {
+    "faiss_id": 165,
+    "id": "T166",
+    "term": "breast mass",
+    "simple_meaning": "Lump in the breast",
+    "patient_explanation": "An abnormal lump or area has been found in the breast tissue.",
+    "body_system": "Breast",
+    "category": "Breast",
+    "text_used": "breast mass. Lump in the breast. An abnormal lump or area has been found in the breast tissue.. Can be benign or malignant; further imaging and possibly biopsy guide diagnosis.. breast lump. solid breast mass. irregular breast mass. BI-RADS 4 mass"
+  },
+  {
+    "faiss_id": 166,
+    "id": "T167",
+    "term": "fibroadenoma",
+    "simple_meaning": "Common benign breast lump",
+    "patient_explanation": "A non-cancerous, firm lump has been found in the breast; these are very common.",
+    "body_system": "Breast",
+    "category": "Breast",
+    "text_used": "fibroadenoma. Common benign breast lump. A non-cancerous, firm lump has been found in the breast; these are very common.. Most common benign breast tumour, especially in younger women.. fibroadenoma. well-circumscribed benign mass"
+  },
+  {
+    "faiss_id": 167,
+    "id": "T168",
+    "term": "breast calcifications",
+    "simple_meaning": "Small calcium deposits in the breast",
+    "patient_explanation": "Tiny calcium spots have been found in the breast tissue on your mammogram.",
+    "body_system": "Breast",
+    "category": "Breast",
+    "text_used": "breast calcifications. Small calcium deposits in the breast. Tiny calcium spots have been found in the breast tissue on your mammogram.. Pattern and distribution determine whether further work-up is needed.. microcalcifications. clustered calcifications. pleomorphic calcifications"
+  },
+  {
+    "faiss_id": 168,
+    "id": "T169",
+    "term": "breast cyst",
+    "simple_meaning": "Fluid-filled sac in the breast",
+    "patient_explanation": "A fluid-filled sac has been found in the breast; these are usually harmless.",
+    "body_system": "Breast",
+    "category": "Breast",
+    "text_used": "breast cyst. Fluid-filled sac in the breast. A fluid-filled sac has been found in the breast; these are usually harmless.. Very common, especially in women aged 35-50; simple cysts are benign.. simple breast cyst. anechoic breast cyst"
+  },
+  {
+    "faiss_id": 169,
+    "id": "T170",
+    "term": "axillary lymph node",
+    "simple_meaning": "Lymph node under the arm",
+    "patient_explanation": "A lymph node in the armpit area has been noted, which may appear enlarged.",
+    "body_system": "Breast",
+    "category": "Breast",
+    "text_used": "axillary lymph node. Lymph node under the arm. A lymph node in the armpit area has been noted, which may appear enlarged.. Can be reactive/benign or, in some contexts, related to breast cancer spread.. axillary lymphadenopathy. enlarged axillary lymph node. abnormal axillary node"
+  },
+  {
+    "faiss_id": 170,
+    "id": "T171",
+    "term": "diverticulitis",
+    "simple_meaning": "Infected or inflamed pouches in the colon",
+    "patient_explanation": "Small pouches in the wall of the colon have become inflamed or infected.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "diverticulitis. Infected or inflamed pouches in the colon. Small pouches in the wall of the colon have become inflamed or infected.. A complication of diverticulosis; severity ranges from mild to complicated with abscess or perforation.. colon infection. acute diverticulitis. pericolonic fat stranding with diverticulitis"
+  },
+  {
+    "faiss_id": 171,
+    "id": "T172",
+    "term": "appendicitis",
+    "simple_meaning": "Inflamed appendix",
+    "patient_explanation": "The small pouch attached to the large intestine is inflamed, often requiring urgent treatment.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "appendicitis. Inflamed appendix. The small pouch attached to the large intestine is inflamed, often requiring urgent treatment.. Common surgical emergency; can progress to rupture if untreated.. acute appendicitis. dilated appendix. periappendiceal fat stranding"
+  },
+  {
+    "faiss_id": 172,
+    "id": "T173",
+    "term": "pancreatitis",
+    "simple_meaning": "Inflamed pancreas",
+    "patient_explanation": "The gland that helps with digestion and blood sugar control is inflamed.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "pancreatitis. Inflamed pancreas. The gland that helps with digestion and blood sugar control is inflamed.. Can be mild or severe; common causes include gallstones and alcohol use.. acute pancreatitis. peripancreatic fat stranding. pancreatic edema"
+  },
+  {
+    "faiss_id": 173,
+    "id": "T174",
+    "term": "pancreatic cyst",
+    "simple_meaning": "Fluid-filled sac in the pancreas",
+    "patient_explanation": "A fluid-filled sac has been found in the pancreas; most are benign but some need monitoring.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "pancreatic cyst. Fluid-filled sac in the pancreas. A fluid-filled sac has been found in the pancreas; most are benign but some need monitoring.. Includes a range of cystic lesions; some subtypes carry malignant potential.. IPMN. pancreatic cystic lesion. IPMN. side-branch IPMN"
+  },
+  {
+    "faiss_id": 174,
+    "id": "T175",
+    "term": "biliary dilatation",
+    "simple_meaning": "Widened bile ducts",
+    "patient_explanation": "The tubes that carry bile from the liver appear wider than normal.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "biliary dilatation. Widened bile ducts. The tubes that carry bile from the liver appear wider than normal.. Often indicates a downstream blockage; cause needs to be identified.. dilated bile ducts. intrahepatic biliary dilatation. common bile duct dilatation"
+  },
+  {
+    "faiss_id": 175,
+    "id": "T176",
+    "term": "choledocholithiasis",
+    "simple_meaning": "Stone in the main bile duct",
+    "patient_explanation": "A stone has been found in the main tube that carries bile from the liver to the intestine.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "choledocholithiasis. Stone in the main bile duct. A stone has been found in the main tube that carries bile from the liver to the intestine.. Can cause blockage, infection, or jaundice; often needs endoscopic removal.. bile duct stone. choledocholithiasis. CBD calculus"
+  },
+  {
+    "faiss_id": 176,
+    "id": "T177",
+    "term": "cholecystitis",
+    "simple_meaning": "Inflamed gallbladder",
+    "patient_explanation": "The gallbladder is inflamed, often due to a blocked stone.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "cholecystitis. Inflamed gallbladder. The gallbladder is inflamed, often due to a blocked stone.. Common surgical condition; may need urgent removal of the gallbladder.. acute cholecystitis. gallbladder wall thickening with pericholecystic fluid"
+  },
+  {
+    "faiss_id": 177,
+    "id": "T178",
+    "term": "liver cirrhosis",
+    "simple_meaning": "Scarred, hardened liver",
+    "patient_explanation": "The liver shows widespread scarring, which affects how well it works.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "liver cirrhosis. Scarred, hardened liver. The liver shows widespread scarring, which affects how well it works.. End-stage of chronic liver disease; increases risk of complications.. cirrhotic liver. cirrhotic liver morphology. nodular liver contour"
+  },
+  {
+    "faiss_id": 178,
+    "id": "T179",
+    "term": "hepatocellular carcinoma",
+    "simple_meaning": "Liver cancer",
+    "patient_explanation": "An area in the liver shows features suspicious for a cancerous growth.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "hepatocellular carcinoma. Liver cancer. An area in the liver shows features suspicious for a cancerous growth.. Most common primary liver cancer; often develops in cirrhotic livers.. HCC. liver cancer. arterial enhancing liver lesion with washout. HCC"
+  },
+  {
+    "faiss_id": 179,
+    "id": "T180",
+    "term": "liver metastases",
+    "simple_meaning": "Cancer spread to the liver",
+    "patient_explanation": "There are areas in the liver that appear to be cancer that has spread from elsewhere in the body.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "liver metastases. Cancer spread to the liver. There are areas in the liver that appear to be cancer that has spread from elsewhere in the body.. Common site of spread for many cancers; guides staging and treatment planning.. liver mets. multiple hepatic metastases. hypodense hepatic lesions consistent with metastases"
+  },
+  {
+    "faiss_id": 180,
+    "id": "T181",
+    "term": "colorectal mass",
+    "simple_meaning": "Abnormal growth in the colon or rectum",
+    "patient_explanation": "An abnormal growth has been found in the large intestine that needs further evaluation.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "colorectal mass. Abnormal growth in the colon or rectum. An abnormal growth has been found in the large intestine that needs further evaluation.. Can be benign polyp or malignant tumour; colonoscopy and biopsy needed for diagnosis.. colon mass. rectal mass. colonic mass lesion. annular colonic mass. apple-core lesion"
+  },
+  {
+    "faiss_id": 181,
+    "id": "T182",
+    "term": "colonic polyp",
+    "simple_meaning": "Small growth on the colon lining",
+    "patient_explanation": "A small growth has been found on the inner lining of the colon.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "colonic polyp. Small growth on the colon lining. A small growth has been found on the inner lining of the colon.. Most are benign but some types can progress to cancer over time.. sessile polyp. pedunculated polyp"
+  },
+  {
+    "faiss_id": 182,
+    "id": "T183",
+    "term": "Crohn disease",
+    "simple_meaning": "Chronic inflammatory bowel condition",
+    "patient_explanation": "There are signs of ongoing inflammation in part of your digestive tract, consistent with a chronic bowel condition.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "Crohn disease. Chronic inflammatory bowel condition. There are signs of ongoing inflammation in part of your digestive tract, consistent with a chronic bowel condition.. A type of inflammatory bowel disease that can affect any part of the GI tract.. inflammatory bowel disease. IBD. bowel wall thickening consistent with Crohn disease. terminal ileitis"
+  },
+  {
+    "faiss_id": 183,
+    "id": "T184",
+    "term": "ulcerative colitis",
+    "simple_meaning": "Chronic inflammation of the colon lining",
+    "patient_explanation": "The lining of your large intestine shows ongoing inflammation.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "ulcerative colitis. Chronic inflammation of the colon lining. The lining of your large intestine shows ongoing inflammation.. A type of inflammatory bowel disease limited to the colon and rectum.. UC. colonic mucosal inflammation consistent with UC. lead-pipe colon"
+  },
+  {
+    "faiss_id": 184,
+    "id": "T185",
+    "term": "inguinal hernia",
+    "simple_meaning": "Bulge in the groin area",
+    "patient_explanation": "Part of the abdominal contents has pushed through a weak spot in the groin muscle wall.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "inguinal hernia. Bulge in the groin area. Part of the abdominal contents has pushed through a weak spot in the groin muscle wall.. Common finding; can sometimes become trapped (incarcerated), needing urgent repair.. groin hernia. reducible inguinal hernia. indirect inguinal hernia"
+  },
+  {
+    "faiss_id": 185,
+    "id": "T186",
+    "term": "incisional hernia",
+    "simple_meaning": "Bulge through a previous surgical scar",
+    "patient_explanation": "Part of the abdominal contents has pushed through a weak area at a prior surgery site.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "incisional hernia. Bulge through a previous surgical scar. Part of the abdominal contents has pushed through a weak area at a prior surgery site.. Common complication of abdominal surgery; can enlarge over time.. surgical hernia. incisional hernia at prior surgical site"
+  },
+  {
+    "faiss_id": 186,
+    "id": "T187",
+    "term": "gastric ulcer",
+    "simple_meaning": "Sore in the stomach lining",
+    "patient_explanation": "There is a break in the lining of the stomach, causing a sore area.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "gastric ulcer. Sore in the stomach lining. There is a break in the lining of the stomach, causing a sore area.. Can be caused by infection or medication use; usually treatable.. stomach ulcer. gastric ulceration. peptic ulcer disease"
+  },
+  {
+    "faiss_id": 187,
+    "id": "T188",
+    "term": "hiatal hernia",
+    "simple_meaning": "Stomach pushing up into the chest",
+    "patient_explanation": "Part of the stomach has moved up through the diaphragm into the chest cavity.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "hiatal hernia. Stomach pushing up into the chest. Part of the stomach has moved up through the diaphragm into the chest cavity.. Common finding, especially with age; can contribute to acid reflux symptoms.. sliding hiatal hernia. paraesophageal hernia"
+  },
+  {
+    "faiss_id": 188,
+    "id": "T189",
+    "term": "small bowel thickening",
+    "simple_meaning": "Thickened wall of the small intestine",
+    "patient_explanation": "The wall of the small intestine appears thicker than normal.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "small bowel thickening. Thickened wall of the small intestine. The wall of the small intestine appears thicker than normal.. Can be due to inflammation, infection, or, less commonly, tumour.. small bowel wall thickening. mural thickening of small bowel"
+  },
+  {
+    "faiss_id": 189,
+    "id": "T190",
+    "term": "mesenteric ischemia",
+    "simple_meaning": "Reduced blood flow to the intestines",
+    "patient_explanation": "The blood supply to part of the intestines appears reduced, which can be serious.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "mesenteric ischemia. Reduced blood flow to the intestines. The blood supply to part of the intestines appears reduced, which can be serious.. A medical emergency that can lead to bowel damage if untreated.. acute mesenteric ischemia. bowel wall hypoenhancement"
+  },
+  {
+    "faiss_id": 190,
+    "id": "T191",
+    "term": "splenic infarct",
+    "simple_meaning": "Area of dead tissue in the spleen from lost blood supply",
+    "patient_explanation": "Part of the spleen has been damaged due to a temporary loss of blood supply.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "splenic infarct. Area of dead tissue in the spleen from lost blood supply. Part of the spleen has been damaged due to a temporary loss of blood supply.. Can occur with blood clots or clotting disorders; usually managed conservatively.. splenic infarction. wedge-shaped splenic hypoenhancement"
+  },
+  {
+    "faiss_id": 191,
+    "id": "T192",
+    "term": "retroperitoneal lymphadenopathy",
+    "simple_meaning": "Enlarged lymph nodes behind the abdominal cavity",
+    "patient_explanation": "Lymph nodes located toward the back of your abdomen appear larger than normal.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "retroperitoneal lymphadenopathy. Enlarged lymph nodes behind the abdominal cavity. Lymph nodes located toward the back of your abdomen appear larger than normal.. Can reflect infection, inflammation, or malignancy; often needs further work-up.. retroperitoneal lymph node enlargement. para-aortic lymphadenopathy"
+  },
+  {
+    "faiss_id": 192,
+    "id": "T193",
+    "term": "gallbladder polyp",
+    "simple_meaning": "Small growth on the gallbladder wall",
+    "patient_explanation": "A small growth has been found on the inner wall of the gallbladder.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "gallbladder polyp. Small growth on the gallbladder wall. A small growth has been found on the inner wall of the gallbladder.. Most are benign cholesterol polyps; size guides whether monitoring or removal is needed.. gallbladder polyp. cholesterol polyp"
+  },
+  {
+    "faiss_id": 193,
+    "id": "T194",
+    "term": "abdominal wall hernia",
+    "simple_meaning": "Bulge through the abdominal wall muscles",
+    "patient_explanation": "Part of the abdominal contents has pushed through a weak area of the abdominal wall.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "abdominal wall hernia. Bulge through the abdominal wall muscles. Part of the abdominal contents has pushed through a weak area of the abdominal wall.. Can occur at various sites including umbilical, epigastric, or spigelian locations.. ventral hernia. epigastric hernia. spigelian hernia"
+  },
+  {
+    "faiss_id": 194,
+    "id": "T195",
+    "term": "solitary pulmonary nodule",
+    "simple_meaning": "One isolated small spot in the lung",
+    "patient_explanation": "A single small round spot has been found in your lung.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "solitary pulmonary nodule. One isolated small spot in the lung. A single small round spot has been found in your lung.. Very common finding; management depends on size, shape, and growth over time.. SPN. solitary pulmonary nodule. indeterminate pulmonary nodule"
+  },
+  {
+    "faiss_id": 195,
+    "id": "T196",
+    "term": "lung mass",
+    "simple_meaning": "Larger abnormal growth in the lung",
+    "patient_explanation": "A larger abnormal growth has been found in the lung that needs further evaluation.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "lung mass. Larger abnormal growth in the lung. A larger abnormal growth has been found in the lung that needs further evaluation.. Larger than a nodule (over 3cm); carries higher likelihood of malignancy and needs prompt work-up.. lung tumour. spiculated lung mass. lobulated pulmonary mass"
+  },
+  {
+    "faiss_id": 196,
+    "id": "T197",
+    "term": "mediastinal mass",
+    "simple_meaning": "Abnormal growth in the central chest space",
+    "patient_explanation": "An abnormal growth has been found in the central area of the chest, between the lungs.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "mediastinal mass. Abnormal growth in the central chest space. An abnormal growth has been found in the central area of the chest, between the lungs.. Can arise from many structures; location within the mediastinum helps narrow the cause.. anterior mediastinal mass. middle mediastinal mass"
+  },
+  {
+    "faiss_id": 197,
+    "id": "T198",
+    "term": "thymoma",
+    "simple_meaning": "Tumour of the thymus gland",
+    "patient_explanation": "There is a growth arising from a gland located in the upper chest behind the breastbone.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "thymoma. Tumour of the thymus gland. There is a growth arising from a gland located in the upper chest behind the breastbone.. Usually slow-growing; can sometimes be associated with autoimmune conditions.. anterior mediastinal mass consistent with thymoma"
+  },
+  {
+    "faiss_id": 198,
+    "id": "T199",
+    "term": "esophageal thickening",
+    "simple_meaning": "Thickened wall of the food pipe",
+    "patient_explanation": "The wall of the tube that carries food from your mouth to the stomach appears thicker than normal.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "esophageal thickening. Thickened wall of the food pipe. The wall of the tube that carries food from your mouth to the stomach appears thicker than normal.. Can be due to inflammation, infection, or tumour; further evaluation often needed.. esophageal wall thickening. circumferential esophageal thickening"
+  },
+  {
+    "faiss_id": 199,
+    "id": "T200",
+    "term": "diaphragmatic hernia",
+    "simple_meaning": "Abdominal contents pushed into the chest through the diaphragm",
+    "patient_explanation": "Part of the abdominal organs has moved up into the chest through a gap in the diaphragm.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "diaphragmatic hernia. Abdominal contents pushed into the chest through the diaphragm. Part of the abdominal organs has moved up into the chest through a gap in the diaphragm.. Can be congenital or acquired, often following trauma or surgery.. diaphragmatic defect with herniation. Bochdalek hernia"
+  },
+  {
+    "faiss_id": 200,
+    "id": "T201",
+    "term": "rib fracture",
+    "simple_meaning": "Broken rib",
+    "patient_explanation": "One or more of your rib bones is cracked or broken.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "rib fracture. Broken rib. One or more of your rib bones is cracked or broken.. Common after trauma; can be associated with underlying lung or organ injury.. acute rib fracture. multiple rib fractures"
+  },
+  {
+    "faiss_id": 201,
+    "id": "T202",
+    "term": "clavicle fracture",
+    "simple_meaning": "Broken collarbone",
+    "patient_explanation": "The bone connecting your shoulder to your breastbone is cracked or broken.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "clavicle fracture. Broken collarbone. The bone connecting your shoulder to your breastbone is cracked or broken.. Common injury, especially after falls onto the shoulder.. collarbone fracture. midshaft clavicle fracture. displaced clavicle fracture"
+  },
+  {
+    "faiss_id": 202,
+    "id": "T203",
+    "term": "hip fracture",
+    "simple_meaning": "Broken hip bone",
+    "patient_explanation": "The upper part of your thigh bone near the hip joint is broken.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "hip fracture. Broken hip bone. The upper part of your thigh bone near the hip joint is broken.. Common in older adults, especially after a fall; usually requires surgery.. femoral neck fracture. intracapsular hip fracture. intertrochanteric fracture"
+  },
+  {
+    "faiss_id": 203,
+    "id": "T204",
+    "term": "wrist fracture",
+    "simple_meaning": "Broken bone in the wrist area",
+    "patient_explanation": "A bone near your wrist is cracked or broken.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "wrist fracture. Broken bone in the wrist area. A bone near your wrist is cracked or broken.. Common after a fall onto an outstretched hand.. distal radius fracture. Colles fracture. distal radius fracture. Colles fracture. scaphoid fracture"
+  },
+  {
+    "faiss_id": 204,
+    "id": "T205",
+    "term": "ankle fracture",
+    "simple_meaning": "Broken bone in the ankle",
+    "patient_explanation": "One of the bones forming your ankle joint is cracked or broken.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "ankle fracture. Broken bone in the ankle. One of the bones forming your ankle joint is cracked or broken.. Common injury from twisting or falls; stability of the ankle joint guides treatment.. lateral malleolus fracture. bimalleolar fracture"
+  },
+  {
+    "faiss_id": 205,
+    "id": "T206",
+    "term": "pelvic fracture",
+    "simple_meaning": "Broken pelvis bone",
+    "patient_explanation": "One or more bones of your pelvis are cracked or broken.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "pelvic fracture. Broken pelvis bone. One or more bones of your pelvis are cracked or broken.. Can range from minor to life-threatening depending on associated bleeding and organ injury.. pubic ramus fracture. unstable pelvic ring fracture"
+  },
+  {
+    "faiss_id": 206,
+    "id": "T207",
+    "term": "skull fracture",
+    "simple_meaning": "Broken skull bone",
+    "patient_explanation": "There is a crack or break in one of the bones of your skull.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "skull fracture. Broken skull bone. There is a crack or break in one of the bones of your skull.. Can be associated with underlying brain injury; needs careful assessment.. linear skull fracture. depressed skull fracture"
+  },
+  {
+    "faiss_id": 207,
+    "id": "T208",
+    "term": "cervical spine fracture",
+    "simple_meaning": "Broken bone in the neck",
+    "patient_explanation": "One of the bones in your neck spine is cracked or broken.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "cervical spine fracture. Broken bone in the neck. One of the bones in your neck spine is cracked or broken.. A serious injury that can affect the spinal cord; requires careful stabilization.. neck fracture. C-spine fracture. odontoid fracture"
+  },
+  {
+    "faiss_id": 208,
+    "id": "T209",
+    "term": "spinal cord compression",
+    "simple_meaning": "Pressure on the spinal cord",
+    "patient_explanation": "Something is pressing on the spinal cord, which can affect nerve function.",
+    "body_system": "Bone",
+    "category": "Neurological",
+    "text_used": "spinal cord compression. Pressure on the spinal cord. Something is pressing on the spinal cord, which can affect nerve function.. A medical emergency that can cause permanent nerve damage if not treated promptly.. cord compression. severe canal stenosis with cord signal change"
+  },
+  {
+    "faiss_id": 209,
+    "id": "T210",
+    "term": "vertebral metastases",
+    "simple_meaning": "Cancer spread to the spine bones",
+    "patient_explanation": "There are areas in your spine bones that appear to be cancer that has spread from elsewhere.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "vertebral metastases. Cancer spread to the spine bones. There are areas in your spine bones that appear to be cancer that has spread from elsewhere.. Common site of cancer spread; can weaken bone and risk fracture or nerve compression.. spinal mets. metastatic disease involving the vertebral bodies. vertebral body metastases"
+  },
+  {
+    "faiss_id": 210,
+    "id": "T211",
+    "term": "pott's disease",
+    "simple_meaning": "Tuberculosis infection of the spine",
+    "patient_explanation": "There are signs of a tuberculosis infection affecting the bones of your spine.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "pott's disease. Tuberculosis infection of the spine. There are signs of a tuberculosis infection affecting the bones of your spine.. A form of skeletal tuberculosis that can cause bone destruction and deformity.. spinal tuberculosis. tuberculous spondylitis. vertebral body destruction with paraspinal abscess"
+  },
+  {
+    "faiss_id": 211,
+    "id": "T212",
+    "term": "discitis",
+    "simple_meaning": "Infection of a spinal disc",
+    "patient_explanation": "One of the cushioning discs in your spine appears to be infected.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "discitis. Infection of a spinal disc. One of the cushioning discs in your spine appears to be infected.. A serious infection that requires prompt antibiotic treatment.. discitis-osteomyelitis. infective spondylodiscitis"
+  },
+  {
+    "faiss_id": 212,
+    "id": "T213",
+    "term": "carotid artery stenosis",
+    "simple_meaning": "Narrowed neck artery supplying the brain",
+    "patient_explanation": "One of the main arteries in your neck that supplies blood to the brain has become narrowed.",
+    "body_system": "Vascular",
+    "category": "Vascular",
+    "text_used": "carotid artery stenosis. Narrowed neck artery supplying the brain. One of the main arteries in your neck that supplies blood to the brain has become narrowed.. A risk factor for stroke; severity determines whether intervention is needed.. internal carotid artery stenosis. carotid plaque with stenosis"
+  },
+  {
+    "faiss_id": 213,
+    "id": "T214",
+    "term": "aortic dissection",
+    "simple_meaning": "Tear in the wall of the main artery",
+    "patient_explanation": "There is a tear in the inner layer of your main blood vessel, which is a serious emergency.",
+    "body_system": "Vascular",
+    "category": "Vascular",
+    "text_used": "aortic dissection. Tear in the wall of the main artery. There is a tear in the inner layer of your main blood vessel, which is a serious emergency.. A life-threatening emergency requiring immediate treatment.. type A aortic dissection. type B aortic dissection. intimal flap"
+  },
+  {
+    "faiss_id": 214,
+    "id": "T215",
+    "term": "peripheral artery disease",
+    "simple_meaning": "Narrowed leg arteries",
+    "patient_explanation": "The arteries supplying blood to your legs have become narrowed, reducing blood flow.",
+    "body_system": "Vascular",
+    "category": "Vascular",
+    "text_used": "peripheral artery disease. Narrowed leg arteries. The arteries supplying blood to your legs have become narrowed, reducing blood flow.. Common in smokers and those with diabetes; can cause leg pain with walking.. PAD. multilevel arterial stenosis. atherosclerotic occlusive disease"
+  },
+  {
+    "faiss_id": 215,
+    "id": "T216",
+    "term": "varicose veins",
+    "simple_meaning": "Enlarged, twisted veins",
+    "patient_explanation": "Veins, usually in the legs, have become enlarged and twisted due to poor valve function.",
+    "body_system": "Vascular",
+    "category": "Vascular",
+    "text_used": "varicose veins. Enlarged, twisted veins. Veins, usually in the legs, have become enlarged and twisted due to poor valve function.. Common and usually benign; can cause discomfort or skin changes if severe.. venous reflux. incompetent great saphenous vein"
+  },
+  {
+    "faiss_id": 216,
+    "id": "T217",
+    "term": "pseudoaneurysm",
+    "simple_meaning": "Contained blood collection outside a vessel wall",
+    "patient_explanation": "A pocket of blood has formed outside the wall of a blood vessel, often after a procedure or injury.",
+    "body_system": "Vascular",
+    "category": "Vascular",
+    "text_used": "pseudoaneurysm. Contained blood collection outside a vessel wall. A pocket of blood has formed outside the wall of a blood vessel, often after a procedure or injury.. Can occur after catheter procedures or trauma; may need closure to prevent rupture.. femoral artery pseudoaneurysm. post-procedural pseudoaneurysm"
+  },
+  {
+    "faiss_id": 217,
+    "id": "T218",
+    "term": "sinusitis",
+    "simple_meaning": "Inflamed sinuses",
+    "patient_explanation": "The air-filled spaces around your nose and eyes appear inflamed, often due to infection.",
+    "body_system": "General",
+    "category": "ENT",
+    "text_used": "sinusitis. Inflamed sinuses. The air-filled spaces around your nose and eyes appear inflamed, often due to infection.. Very common; usually managed with medical treatment.. mucosal thickening consistent with sinusitis. pansinusitis"
+  },
+  {
+    "faiss_id": 218,
+    "id": "T219",
+    "term": "nasal septal deviation",
+    "simple_meaning": "Crooked wall inside the nose",
+    "patient_explanation": "The wall dividing the two sides of your nose is bent to one side.",
+    "body_system": "General",
+    "category": "ENT",
+    "text_used": "nasal septal deviation. Crooked wall inside the nose. The wall dividing the two sides of your nose is bent to one side.. Very common; can contribute to nasal breathing difficulty.. deviated nasal septum"
+  },
+  {
+    "faiss_id": 219,
+    "id": "T220",
+    "term": "mastoiditis",
+    "simple_meaning": "Infection of the bone behind the ear",
+    "patient_explanation": "The bony area behind your ear is infected, often following an ear infection.",
+    "body_system": "General",
+    "category": "ENT",
+    "text_used": "mastoiditis. Infection of the bone behind the ear. The bony area behind your ear is infected, often following an ear infection.. Can be a serious complication of ear infection requiring prompt treatment.. acute mastoiditis. mastoid air cell opacification"
+  },
+  {
+    "faiss_id": 220,
+    "id": "T221",
+    "term": "vocal cord lesion",
+    "simple_meaning": "Abnormal area on the voice box",
+    "patient_explanation": "An abnormal area has been found on one of your vocal cords.",
+    "body_system": "General",
+    "category": "ENT",
+    "text_used": "vocal cord lesion. Abnormal area on the voice box. An abnormal area has been found on one of your vocal cords.. Can be benign (nodules, polyps) or, less commonly, malignant.. vocal cord nodule. laryngeal mass"
+  },
+  {
+    "faiss_id": 221,
+    "id": "T222",
+    "term": "salivary gland stone",
+    "simple_meaning": "Stone blocking a saliva gland duct",
+    "patient_explanation": "A small stone is blocking the tube that carries saliva from a gland into your mouth.",
+    "body_system": "General",
+    "category": "ENT",
+    "text_used": "salivary gland stone. Stone blocking a saliva gland duct. A small stone is blocking the tube that carries saliva from a gland into your mouth.. Can cause swelling and pain, especially with eating.. sialolith. submandibular gland calculus. sialolithiasis"
+  },
+  {
+    "faiss_id": 222,
+    "id": "T223",
+    "term": "thyroglossal duct cyst",
+    "simple_meaning": "Congenital fluid-filled sac in the neck midline",
+    "patient_explanation": "There is a fluid-filled sac in the middle of your neck that has been present since birth.",
+    "body_system": "General",
+    "category": "ENT",
+    "text_used": "thyroglossal duct cyst. Congenital fluid-filled sac in the neck midline. There is a fluid-filled sac in the middle of your neck that has been present since birth.. A common congenital neck mass, usually benign.. thyroglossal duct cyst. midline neck cyst"
+  },
+  {
+    "faiss_id": 223,
+    "id": "T224",
+    "term": "orbital fracture",
+    "simple_meaning": "Broken eye socket bone",
+    "patient_explanation": "One of the bones surrounding your eye is cracked or broken.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "orbital fracture. Broken eye socket bone. One of the bones surrounding your eye is cracked or broken.. Often follows facial trauma; can affect eye movement if severe.. blowout fracture. orbital floor fracture. orbital blowout fracture"
+  },
+  {
+    "faiss_id": 224,
+    "id": "T225",
+    "term": "retinal detachment",
+    "simple_meaning": "Separation of the light-sensing layer at the back of the eye",
+    "patient_explanation": "The layer of the eye that senses light has separated from its normal position.",
+    "body_system": "General",
+    "category": "Ophthalmological",
+    "text_used": "retinal detachment. Separation of the light-sensing layer at the back of the eye. The layer of the eye that senses light has separated from its normal position.. A serious eye emergency that can cause vision loss if untreated.. retinal detachment. vitreoretinal traction"
+  },
+  {
+    "faiss_id": 225,
+    "id": "T226",
+    "term": "optic nerve enlargement",
+    "simple_meaning": "Swollen or thickened nerve to the eye",
+    "patient_explanation": "The nerve connecting your eye to the brain appears swollen or thickened.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "optic nerve enlargement. Swollen or thickened nerve to the eye. The nerve connecting your eye to the brain appears swollen or thickened.. Can relate to inflammation, increased pressure, or, less commonly, tumour.. optic nerve sheath enlargement. optic neuritis"
+  },
+  {
+    "faiss_id": 226,
+    "id": "T227",
+    "term": "dental abscess",
+    "simple_meaning": "Infection around a tooth root",
+    "patient_explanation": "There is a pocket of infection at the root of one of your teeth.",
+    "body_system": "General",
+    "category": "Dental",
+    "text_used": "dental abscess. Infection around a tooth root. There is a pocket of infection at the root of one of your teeth.. Common dental infection; needs prompt dental treatment.. periapical abscess. dental periapical lucency"
+  },
+  {
+    "faiss_id": 227,
+    "id": "T228",
+    "term": "temporomandibular joint dysfunction",
+    "simple_meaning": "Problem with the jaw joint",
+    "patient_explanation": "The joint that connects your jaw to your skull shows changes consistent with joint dysfunction.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "temporomandibular joint dysfunction. Problem with the jaw joint. The joint that connects your jaw to your skull shows changes consistent with joint dysfunction.. Common cause of jaw pain and clicking; usually managed conservatively.. TMJ dysfunction. TMJ disc displacement. TMJ degenerative changes"
+  },
+  {
+    "faiss_id": 228,
+    "id": "T229",
+    "term": "skin abscess",
+    "simple_meaning": "Pocket of infection under the skin",
+    "patient_explanation": "There is a collection of pus under your skin, indicating an infection.",
+    "body_system": "Soft tissue",
+    "category": "Musculoskeletal",
+    "text_used": "skin abscess. Pocket of infection under the skin. There is a collection of pus under your skin, indicating an infection.. Common soft tissue infection; may need drainage.. subcutaneous abscess. fluid collection with rim enhancement"
+  },
+  {
+    "faiss_id": 229,
+    "id": "T230",
+    "term": "cellulitis",
+    "simple_meaning": "Infection of the skin and soft tissue",
+    "patient_explanation": "The skin and tissue underneath appear inflamed due to an infection spreading through the area.",
+    "body_system": "Soft tissue",
+    "category": "Musculoskeletal",
+    "text_used": "cellulitis. Infection of the skin and soft tissue. The skin and tissue underneath appear inflamed due to an infection spreading through the area.. Common bacterial skin infection; usually treated with antibiotics.. soft tissue edema and stranding consistent with cellulitis"
+  },
+  {
+    "faiss_id": 230,
+    "id": "T231",
+    "term": "necrotizing fasciitis",
+    "simple_meaning": "Rapidly spreading, severe soft tissue infection",
+    "patient_explanation": "There are signs of a severe, fast-spreading infection affecting the deep tissue layers.",
+    "body_system": "Soft tissue",
+    "category": "Musculoskeletal",
+    "text_used": "necrotizing fasciitis. Rapidly spreading, severe soft tissue infection. There are signs of a severe, fast-spreading infection affecting the deep tissue layers.. A surgical emergency with high mortality if not treated immediately.. fascial gas and fluid concerning for necrotizing fasciitis"
+  },
+  {
+    "faiss_id": 231,
+    "id": "T232",
+    "term": "soft tissue mass",
+    "simple_meaning": "Growth in the muscle or fat tissue",
+    "patient_explanation": "An abnormal growth has been found in the soft tissue, such as muscle or fat.",
+    "body_system": "Soft tissue",
+    "category": "Musculoskeletal",
+    "text_used": "soft tissue mass. Growth in the muscle or fat tissue. An abnormal growth has been found in the soft tissue, such as muscle or fat.. Most are benign (lipomas), but characterization is needed to exclude sarcoma.. well-defined soft tissue mass. heterogeneous soft tissue mass"
+  },
+  {
+    "faiss_id": 232,
+    "id": "T233",
+    "term": "lipoma",
+    "simple_meaning": "Benign fatty lump",
+    "patient_explanation": "A soft, benign lump made of fatty tissue has been found.",
+    "body_system": "Soft tissue",
+    "category": "Musculoskeletal",
+    "text_used": "lipoma. Benign fatty lump. A soft, benign lump made of fatty tissue has been found.. Very common and almost always benign.. subcutaneous lipoma. intramuscular lipoma"
+  },
+  {
+    "faiss_id": 233,
+    "id": "T234",
+    "term": "sarcoma",
+    "simple_meaning": "Cancer of muscle, fat, or connective tissue",
+    "patient_explanation": "There is a growth that shows features suspicious for a cancer arising from soft tissue.",
+    "body_system": "Soft tissue",
+    "category": "Musculoskeletal",
+    "text_used": "sarcoma. Cancer of muscle, fat, or connective tissue. There is a growth that shows features suspicious for a cancer arising from soft tissue.. A rarer type of cancer arising from connective tissue; requires urgent specialist review.. soft tissue sarcoma. heterogeneous mass with necrosis suspicious for sarcoma"
+  },
+  {
+    "faiss_id": 234,
+    "id": "T235",
+    "term": "hematoma",
+    "simple_meaning": "Collection of blood outside blood vessels",
+    "patient_explanation": "A collection of blood has formed in the tissue, usually after injury.",
+    "body_system": "Soft tissue",
+    "category": "Musculoskeletal",
+    "text_used": "hematoma. Collection of blood outside blood vessels. A collection of blood has formed in the tissue, usually after injury.. Usually resolves on its own; large ones may need drainage.. bruise collection. organizing hematoma. soft tissue hematoma"
+  },
+  {
+    "faiss_id": 235,
+    "id": "T236",
+    "term": "seroma",
+    "simple_meaning": "Collection of clear fluid, usually after surgery",
+    "patient_explanation": "A pocket of clear fluid has formed, often at the site of a recent surgery.",
+    "body_system": "Soft tissue",
+    "category": "Musculoskeletal",
+    "text_used": "seroma. Collection of clear fluid, usually after surgery. A pocket of clear fluid has formed, often at the site of a recent surgery.. Common post-surgical finding; usually resolves on its own.. postoperative seroma. fluid collection at surgical site"
+  },
+  {
+    "faiss_id": 236,
+    "id": "T237",
+    "term": "gynecomastia",
+    "simple_meaning": "Enlarged breast tissue in men",
+    "patient_explanation": "There is enlarged glandular tissue in the male breast area.",
+    "body_system": "Breast",
+    "category": "Breast",
+    "text_used": "gynecomastia. Enlarged breast tissue in men. There is enlarged glandular tissue in the male breast area.. Common and usually benign, often related to hormonal changes.. gynecomastia. male breast glandular tissue"
+  },
+  {
+    "faiss_id": 237,
+    "id": "T238",
+    "term": "testicular mass",
+    "simple_meaning": "Growth in the testicle",
+    "patient_explanation": "An abnormal growth has been found in the testicle that needs further evaluation.",
+    "body_system": "Pelvis",
+    "category": "Urological",
+    "text_used": "testicular mass. Growth in the testicle. An abnormal growth has been found in the testicle that needs further evaluation.. Can be benign or malignant; ultrasound features help guide next steps.. solid testicular mass. heterogeneous testicular lesion"
+  },
+  {
+    "faiss_id": 238,
+    "id": "T239",
+    "term": "epididymal cyst",
+    "simple_meaning": "Fluid-filled sac near the testicle",
+    "patient_explanation": "A benign, fluid-filled sac has been found near the testicle.",
+    "body_system": "Pelvis",
+    "category": "Urological",
+    "text_used": "epididymal cyst. Fluid-filled sac near the testicle. A benign, fluid-filled sac has been found near the testicle.. Very common and benign finding.. spermatocele. epididymal cyst. spermatocele"
+  },
+  {
+    "faiss_id": 239,
+    "id": "T240",
+    "term": "hydrocele",
+    "simple_meaning": "Fluid buildup around the testicle",
+    "patient_explanation": "Fluid has collected in the sac surrounding the testicle.",
+    "body_system": "Pelvis",
+    "category": "Urological",
+    "text_used": "hydrocele. Fluid buildup around the testicle. Fluid has collected in the sac surrounding the testicle.. Common and usually benign, though large ones may need drainage.. simple hydrocele. communicating hydrocele"
+  },
+  {
+    "faiss_id": 240,
+    "id": "T241",
+    "term": "testicular torsion",
+    "simple_meaning": "Twisted testicle cutting off blood supply",
+    "patient_explanation": "The testicle has twisted, which can cut off its blood supply and is a medical emergency.",
+    "body_system": "Pelvis",
+    "category": "Urological",
+    "text_used": "testicular torsion. Twisted testicle cutting off blood supply. The testicle has twisted, which can cut off its blood supply and is a medical emergency.. A surgical emergency; prompt treatment is needed to save the testicle.. absent testicular blood flow consistent with torsion"
+  },
+  {
+    "faiss_id": 241,
+    "id": "T242",
+    "term": "bladder mass",
+    "simple_meaning": "Abnormal growth in the bladder",
+    "patient_explanation": "An abnormal growth has been found on the inner lining of the bladder.",
+    "body_system": "Pelvis",
+    "category": "Urological",
+    "text_used": "bladder mass. Abnormal growth in the bladder. An abnormal growth has been found on the inner lining of the bladder.. Requires further evaluation, usually with cystoscopy, to determine the cause.. bladder wall mass. papillary bladder lesion"
+  },
+  {
+    "faiss_id": 242,
+    "id": "T243",
+    "term": "bladder wall thickening",
+    "simple_meaning": "Thickened bladder wall",
+    "patient_explanation": "The wall of your bladder appears thicker than normal.",
+    "body_system": "Pelvis",
+    "category": "Urological",
+    "text_used": "bladder wall thickening. Thickened bladder wall. The wall of your bladder appears thicker than normal.. Can be due to chronic infection, outlet obstruction, or, less commonly, tumour.. diffuse bladder wall thickening. trabeculated bladder"
+  },
+  {
+    "faiss_id": 243,
+    "id": "T244",
+    "term": "urethral stricture",
+    "simple_meaning": "Narrowing of the urine tube",
+    "patient_explanation": "The tube that carries urine out of the body has become narrowed.",
+    "body_system": "Pelvis",
+    "category": "Urological",
+    "text_used": "urethral stricture. Narrowing of the urine tube. The tube that carries urine out of the body has become narrowed.. Can cause difficulty urinating; often needs urology treatment.. urethral stricture. narrowed urethral segment"
+  },
+  {
+    "faiss_id": 244,
+    "id": "T245",
+    "term": "ectopic pregnancy",
+    "simple_meaning": "Pregnancy developing outside the womb",
+    "patient_explanation": "A pregnancy is developing outside the uterus, most often in a fallopian tube.",
+    "body_system": "Pelvis",
+    "category": "Gynecological",
+    "text_used": "ectopic pregnancy. Pregnancy developing outside the womb. A pregnancy is developing outside the uterus, most often in a fallopian tube.. A medical emergency due to risk of internal bleeding if the tube ruptures.. tubal ectopic pregnancy. adnexal mass with free fluid"
+  },
+  {
+    "faiss_id": 245,
+    "id": "T246",
+    "term": "placenta previa",
+    "simple_meaning": "Placenta covering the birth canal opening",
+    "patient_explanation": "The placenta is positioned low in the uterus, covering or near the opening of the cervix.",
+    "body_system": "Pelvis",
+    "category": "Obstetric",
+    "text_used": "placenta previa. Placenta covering the birth canal opening. The placenta is positioned low in the uterus, covering or near the opening of the cervix.. Can cause bleeding in pregnancy; affects delivery planning.. complete placenta previa. marginal placenta previa"
+  },
+  {
+    "faiss_id": 246,
+    "id": "T247",
+    "term": "intrauterine growth restriction",
+    "simple_meaning": "Baby smaller than expected for gestational age",
+    "patient_explanation": "The baby appears smaller than expected for this stage of pregnancy.",
+    "body_system": "Pelvis",
+    "category": "Obstetric",
+    "text_used": "intrauterine growth restriction. Baby smaller than expected for gestational age. The baby appears smaller than expected for this stage of pregnancy.. Requires monitoring to check on baby's wellbeing and growth trend.. IUGR. fetal growth restriction. fetal growth restriction. small for gestational age"
+  },
+  {
+    "faiss_id": 247,
+    "id": "T248",
+    "term": "oligohydramnios",
+    "simple_meaning": "Low amniotic fluid",
+    "patient_explanation": "There is less amniotic fluid around the baby than expected.",
+    "body_system": "Pelvis",
+    "category": "Obstetric",
+    "text_used": "oligohydramnios. Low amniotic fluid. There is less amniotic fluid around the baby than expected.. Can be associated with various causes; requires further evaluation and monitoring.. reduced amniotic fluid index. oligohydramnios"
+  },
+  {
+    "faiss_id": 248,
+    "id": "T249",
+    "term": "polyhydramnios",
+    "simple_meaning": "Excess amniotic fluid",
+    "patient_explanation": "There is more amniotic fluid around the baby than expected.",
+    "body_system": "Pelvis",
+    "category": "Obstetric",
+    "text_used": "polyhydramnios. Excess amniotic fluid. There is more amniotic fluid around the baby than expected.. Can be associated with maternal diabetes or fetal conditions; needs further evaluation.. increased amniotic fluid index. polyhydramnios"
+  },
+  {
+    "faiss_id": 249,
+    "id": "T250",
+    "term": "nuchal translucency increased",
+    "simple_meaning": "Increased fluid at the back of baby's neck",
+    "patient_explanation": "A measurement at the back of the baby's neck is higher than the expected range for this stage.",
+    "body_system": "Pelvis",
+    "category": "Obstetric",
+    "text_used": "nuchal translucency increased. Increased fluid at the back of baby's neck. A measurement at the back of the baby's neck is higher than the expected range for this stage.. A screening marker used with blood tests to assess chromosomal risk.. increased nuchal translucency. NT above 95th percentile"
+  },
+  {
+    "faiss_id": 250,
+    "id": "T251",
+    "term": "fetal cardiac anomaly",
+    "simple_meaning": "Structural difference in the baby's heart",
+    "patient_explanation": "The scan shows a structural difference in the developing baby's heart.",
+    "body_system": "Pelvis",
+    "category": "Obstetric",
+    "text_used": "fetal cardiac anomaly. Structural difference in the baby's heart. The scan shows a structural difference in the developing baby's heart.. Requires detailed fetal cardiac assessment and specialist counselling.. congenital cardiac anomaly. ventricular septal defect (fetal)"
+  },
+  {
+    "faiss_id": 251,
+    "id": "T252",
+    "term": "molar pregnancy",
+    "simple_meaning": "Abnormal tissue growth instead of a normal pregnancy",
+    "patient_explanation": "The tissue in the uterus shows features of an abnormal type of pregnancy tissue growth rather than a developing baby.",
+    "body_system": "Pelvis",
+    "category": "Obstetric",
+    "text_used": "molar pregnancy. Abnormal tissue growth instead of a normal pregnancy. The tissue in the uterus shows features of an abnormal type of pregnancy tissue growth rather than a developing baby.. Requires prompt evaluation and treatment; monitored closely afterward.. hydatidiform mole. complete hydatidiform mole. snowstorm appearance of uterus"
+  },
+  {
+    "faiss_id": 252,
+    "id": "T253",
+    "term": "developmental dysplasia of the hip",
+    "simple_meaning": "Abnormal hip joint development in infants",
+    "patient_explanation": "The hip joint has not developed in the usual way, which is being checked in infancy.",
+    "body_system": "Bone",
+    "category": "Pediatric",
+    "text_used": "developmental dysplasia of the hip. Abnormal hip joint development in infants. The hip joint has not developed in the usual way, which is being checked in infancy.. Common paediatric finding, screened for in infancy; treatable if caught early.. DDH. hip dysplasia. shallow acetabulum. hip dysplasia"
+  },
+  {
+    "faiss_id": 253,
+    "id": "T254",
+    "term": "intussusception",
+    "simple_meaning": "One part of the bowel telescoping into another",
+    "patient_explanation": "Part of the bowel has folded into an adjacent section, like a telescope, causing a blockage.",
+    "body_system": "Abdomen",
+    "category": "Pediatric",
+    "text_used": "intussusception. One part of the bowel telescoping into another. Part of the bowel has folded into an adjacent section, like a telescope, causing a blockage.. A common cause of bowel obstruction in young children; needs urgent treatment.. ileocolic intussusception. target sign on ultrasound"
+  },
+  {
+    "faiss_id": 254,
+    "id": "T255",
+    "term": "pyloric stenosis",
+    "simple_meaning": "Thickened stomach outlet muscle in infants",
+    "patient_explanation": "The muscle at the outlet of the baby's stomach has thickened, making it hard for food to pass through.",
+    "body_system": "Abdomen",
+    "category": "Pediatric",
+    "text_used": "pyloric stenosis. Thickened stomach outlet muscle in infants. The muscle at the outlet of the baby's stomach has thickened, making it hard for food to pass through.. A common cause of vomiting in young infants; treated surgically.. hypertrophic pyloric stenosis. thickened pyloric muscle"
+  },
+  {
+    "faiss_id": 255,
+    "id": "T256",
+    "term": "cerebral palsy findings",
+    "simple_meaning": "Brain imaging changes associated with movement disorder",
+    "patient_explanation": "The scan shows changes in the brain that can be associated with a movement and coordination condition.",
+    "body_system": "Brain",
+    "category": "Pediatric",
+    "text_used": "cerebral palsy findings. Brain imaging changes associated with movement disorder. The scan shows changes in the brain that can be associated with a movement and coordination condition.. Findings vary widely; often related to injury around the time of birth.. periventricular leukomalacia. white matter injury of prematurity"
+  },
+  {
+    "faiss_id": 256,
+    "id": "T257",
+    "term": "craniosynostosis",
+    "simple_meaning": "Early fusion of skull bones in infants",
+    "patient_explanation": "One or more of the joints between the skull bones have closed earlier than usual.",
+    "body_system": "Bone",
+    "category": "Pediatric",
+    "text_used": "craniosynostosis. Early fusion of skull bones in infants. One or more of the joints between the skull bones have closed earlier than usual.. Can affect skull shape and, if severe, may need surgical correction.. sagittal suture synostosis. premature cranial suture fusion"
+  },
+  {
+    "faiss_id": 257,
+    "id": "T258",
+    "term": "wilms tumour",
+    "simple_meaning": "Kidney tumour in children",
+    "patient_explanation": "There is a growth in the kidney; this is the most common type of kidney tumour seen in young children.",
+    "body_system": "Abdomen",
+    "category": "Pediatric",
+    "text_used": "wilms tumour. Kidney tumour in children. There is a growth in the kidney; this is the most common type of kidney tumour seen in young children.. Usually presents in early childhood; often treatable with good outcomes.. nephroblastoma. Wilms tumour. nephroblastoma"
+  },
+  {
+    "faiss_id": 258,
+    "id": "T259",
+    "term": "neuroblastoma",
+    "simple_meaning": "Nerve tissue tumour, common in young children",
+    "patient_explanation": "There is a growth arising from nerve tissue, most often found in young children.",
+    "body_system": "Abdomen",
+    "category": "Pediatric",
+    "text_used": "neuroblastoma. Nerve tissue tumour, common in young children. There is a growth arising from nerve tissue, most often found in young children.. Commonly arises from the adrenal gland; requires urgent oncology evaluation.. adrenal mass consistent with neuroblastoma. calcified suprarenal mass"
+  },
+  {
+    "faiss_id": 259,
+    "id": "T260",
+    "term": "lymphoma",
+    "simple_meaning": "Cancer of the lymphatic system",
+    "patient_explanation": "There are findings suggestive of a cancer that affects the lymphatic system, often seen as enlarged lymph nodes.",
+    "body_system": "General",
+    "category": "Oncological",
+    "text_used": "lymphoma. Cancer of the lymphatic system. There are findings suggestive of a cancer that affects the lymphatic system, often seen as enlarged lymph nodes.. A group of cancers affecting lymphoid tissue; often treatable, especially if caught early.. lymphomatous lymphadenopathy. bulky mediastinal lymphoma"
+  },
+  {
+    "faiss_id": 260,
+    "id": "T261",
+    "term": "leukemic infiltration",
+    "simple_meaning": "Blood cancer cells affecting an organ",
+    "patient_explanation": "There are findings suggesting that abnormal blood cells have infiltrated an organ.",
+    "body_system": "General",
+    "category": "Oncological",
+    "text_used": "leukemic infiltration. Blood cancer cells affecting an organ. There are findings suggesting that abnormal blood cells have infiltrated an organ.. Seen in some blood cancers; findings guide staging and treatment.. leukemic bone marrow infiltration. diffuse marrow signal abnormality"
+  },
+  {
+    "faiss_id": 261,
+    "id": "T262",
+    "term": "PET-avid lesion",
+    "simple_meaning": "Area that lights up on a PET scan",
+    "patient_explanation": "An area was seen to be more metabolically active than expected on your PET scan.",
+    "body_system": "General",
+    "category": "Oncological",
+    "text_used": "PET-avid lesion. Area that lights up on a PET scan. An area was seen to be more metabolically active than expected on your PET scan.. Suggests increased cellular activity, which can indicate cancer, infection, or inflammation.. hypermetabolic lesion. FDG-avid lesion. hypermetabolic focus"
+  },
+  {
+    "faiss_id": 262,
+    "id": "T263",
+    "term": "complete metabolic response",
+    "simple_meaning": "No cancer activity seen after treatment",
+    "patient_explanation": "The scan shows no signs of remaining active cancer, which is a good sign after treatment.",
+    "body_system": "General",
+    "category": "Oncological",
+    "text_used": "complete metabolic response. No cancer activity seen after treatment. The scan shows no signs of remaining active cancer, which is a good sign after treatment.. A favorable finding on follow-up PET imaging after cancer treatment.. complete metabolic response. no FDG-avid disease"
+  },
+  {
+    "faiss_id": 263,
+    "id": "T264",
+    "term": "bone metastases",
+    "simple_meaning": "Cancer spread to the bones",
+    "patient_explanation": "There are areas in the bones that appear to be cancer that has spread from another part of the body.",
+    "body_system": "Bone",
+    "category": "Oncological",
+    "text_used": "bone metastases. Cancer spread to the bones. There are areas in the bones that appear to be cancer that has spread from another part of the body.. Common site of spread for many cancers; can weaken bone.. bone mets. osseous metastatic disease. multiple sclerotic bone lesions"
+  },
+  {
+    "faiss_id": 264,
+    "id": "T265",
+    "term": "sarcoidosis",
+    "simple_meaning": "Inflammatory condition causing small clusters of cells in organs",
+    "patient_explanation": "There are findings consistent with a condition that causes small clusters of inflammatory cells, often in the lungs and lymph nodes.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "sarcoidosis. Inflammatory condition causing small clusters of cells in organs. There are findings consistent with a condition that causes small clusters of inflammatory cells, often in the lungs and lymph nodes.. A systemic inflammatory condition that can affect multiple organs; often needs no treatment.. bilateral hilar lymphadenopathy consistent with sarcoidosis. sarcoid granulomas"
+  },
+  {
+    "faiss_id": 265,
+    "id": "T266",
+    "term": "tuberculosis",
+    "simple_meaning": "Bacterial lung infection",
+    "patient_explanation": "There are findings consistent with a bacterial infection that commonly affects the lungs.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "tuberculosis. Bacterial lung infection. There are findings consistent with a bacterial infection that commonly affects the lungs.. Requires prompt treatment with a course of antibiotics; can be infectious.. TB. cavitary upper lobe changes consistent with TB. active pulmonary tuberculosis"
+  },
+  {
+    "faiss_id": 266,
+    "id": "T267",
+    "term": "COVID-19 pneumonia pattern",
+    "simple_meaning": "Lung changes consistent with viral pneumonia",
+    "patient_explanation": "The lung pattern seen on your scan is consistent with a viral pneumonia infection.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "COVID-19 pneumonia pattern. Lung changes consistent with viral pneumonia. The lung pattern seen on your scan is consistent with a viral pneumonia infection.. A pattern that became common during the COVID-19 pandemic; correlates with clinical testing.. peripheral ground glass opacities typical of viral pneumonia"
+  },
+  {
+    "faiss_id": 267,
+    "id": "T268",
+    "term": "asbestosis",
+    "simple_meaning": "Lung scarring from asbestos exposure",
+    "patient_explanation": "There is lung scarring related to past exposure to asbestos fibers.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "asbestosis. Lung scarring from asbestos exposure. There is lung scarring related to past exposure to asbestos fibers.. A chronic occupational lung disease from asbestos inhalation.. basal predominant fibrosis with pleural plaques"
+  },
+  {
+    "faiss_id": 268,
+    "id": "T269",
+    "term": "silicosis",
+    "simple_meaning": "Lung scarring from silica dust exposure",
+    "patient_explanation": "There is lung scarring related to past exposure to silica dust, often from certain occupations.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "silicosis. Lung scarring from silica dust exposure. There is lung scarring related to past exposure to silica dust, often from certain occupations.. A chronic occupational lung disease.. upper lobe nodularity consistent with silicosis"
+  },
+  {
+    "faiss_id": 269,
+    "id": "T270",
+    "term": "diaphragmatic paralysis",
+    "simple_meaning": "One side of the breathing muscle not moving normally",
+    "patient_explanation": "One side of the muscle that helps you breathe is not moving as it normally should.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "diaphragmatic paralysis. One side of the breathing muscle not moving normally. One side of the muscle that helps you breathe is not moving as it normally should.. Can be caused by nerve injury or, less commonly, tumour compression.. elevated hemidiaphragm consistent with paralysis. paradoxical diaphragm motion"
+  },
+  {
+    "faiss_id": 270,
+    "id": "T271",
+    "term": "empyema",
+    "simple_meaning": "Pus collection around the lung",
+    "patient_explanation": "There is a collection of infected fluid (pus) in the space around your lung.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "empyema. Pus collection around the lung. There is a collection of infected fluid (pus) in the space around your lung.. A complication of pneumonia or infection; often requires drainage.. loculated pleural collection consistent with empyema. split pleura sign"
+  },
+  {
+    "faiss_id": 271,
+    "id": "T272",
+    "term": "lung abscess",
+    "simple_meaning": "Pus-filled cavity within the lung",
+    "patient_explanation": "There is a pocket of infection with pus forming a cavity within the lung tissue.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "lung abscess. Pus-filled cavity within the lung. There is a pocket of infection with pus forming a cavity within the lung tissue.. Usually related to severe infection; needs antibiotic treatment.. cavitating lung abscess with air-fluid level"
+  },
+  {
+    "faiss_id": 272,
+    "id": "T273",
+    "term": "chylothorax",
+    "simple_meaning": "Lymph fluid collection around the lung",
+    "patient_explanation": "There is a collection of lymphatic fluid in the space around your lung.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "chylothorax. Lymph fluid collection around the lung. There is a collection of lymphatic fluid in the space around your lung.. Can occur after surgery, trauma, or from tumour blockage of lymphatic vessels.. chylothorax. milky pleural effusion"
+  },
+  {
+    "faiss_id": 273,
+    "id": "T274",
+    "term": "cardiac arrhythmia device",
+    "simple_meaning": "Implanted heart rhythm device",
+    "patient_explanation": "A device that helps regulate your heart rhythm is visible on the scan; this is expected if you have one.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "cardiac arrhythmia device. Implanted heart rhythm device. A device that helps regulate your heart rhythm is visible on the scan; this is expected if you have one.. Not a finding of concern by itself; position and function usually checked separately.. implantable cardioverter-defibrillator in situ. dual-chamber pacemaker"
+  },
+  {
+    "faiss_id": 274,
+    "id": "T275",
+    "term": "atrial fibrillation findings",
+    "simple_meaning": "Heart chamber changes related to irregular rhythm",
+    "patient_explanation": "The scan shows heart chamber changes that can be associated with an irregular heartbeat.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "atrial fibrillation findings. Heart chamber changes related to irregular rhythm. The scan shows heart chamber changes that can be associated with an irregular heartbeat.. Often accompanies longstanding atrial fibrillation, causing chamber enlargement.. left atrial enlargement in the setting of atrial fibrillation"
+  },
+  {
+    "faiss_id": 275,
+    "id": "T276",
+    "term": "left atrial appendage thrombus",
+    "simple_meaning": "Blood clot in a small pouch of the heart",
+    "patient_explanation": "A blood clot has formed in a small pouch of the upper heart chamber.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "left atrial appendage thrombus. Blood clot in a small pouch of the heart. A blood clot has formed in a small pouch of the upper heart chamber.. A concerning finding that increases stroke risk, often related to atrial fibrillation.. LAA thrombus. thrombus within the left atrial appendage"
+  },
+  {
+    "faiss_id": 276,
+    "id": "T277",
+    "term": "endocarditis",
+    "simple_meaning": "Infection of the heart valve lining",
+    "patient_explanation": "There are signs of an infection affecting the inner lining of the heart, often involving a valve.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "endocarditis. Infection of the heart valve lining. There are signs of an infection affecting the inner lining of the heart, often involving a valve.. A serious infection requiring prompt antibiotic treatment.. vegetation on the mitral valve consistent with endocarditis"
+  },
+  {
+    "faiss_id": 277,
+    "id": "T278",
+    "term": "pericarditis",
+    "simple_meaning": "Inflammation of the sac around the heart",
+    "patient_explanation": "The sac surrounding the heart is inflamed.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "pericarditis. Inflammation of the sac around the heart. The sac surrounding the heart is inflamed.. Usually caused by viral infection; can cause chest pain but often resolves with treatment.. pericardial thickening with enhancement consistent with pericarditis"
+  },
+  {
+    "faiss_id": 278,
+    "id": "T279",
+    "term": "constrictive pericarditis",
+    "simple_meaning": "Stiffened sac around the heart restricting movement",
+    "patient_explanation": "The sac around your heart has become stiff and thickened, restricting how well the heart can fill.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "constrictive pericarditis. Stiffened sac around the heart restricting movement. The sac around your heart has become stiff and thickened, restricting how well the heart can fill.. A chronic condition that can impair heart function; may need surgical treatment.. pericardial thickening and calcification consistent with constriction"
+  },
+  {
+    "faiss_id": 279,
+    "id": "T280",
+    "term": "cardiac mass",
+    "simple_meaning": "Abnormal growth within or on the heart",
+    "patient_explanation": "An abnormal growth has been found in or on the heart that needs further evaluation.",
+    "body_system": "Heart",
+    "category": "Cardiac",
+    "text_used": "cardiac mass. Abnormal growth within or on the heart. An abnormal growth has been found in or on the heart that needs further evaluation.. Can be benign (myxoma) or, rarely, malignant; further characterization needed.. mobile mass attached to the atrial septum consistent with myxoma"
+  },
+  {
+    "faiss_id": 280,
+    "id": "T281",
+    "term": "hemothorax",
+    "simple_meaning": "Blood collection around the lung",
+    "patient_explanation": "There is a collection of blood in the space around your lung.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "hemothorax. Blood collection around the lung. There is a collection of blood in the space around your lung.. Usually related to trauma; can require drainage depending on size.. moderate hemothorax. hyperdense pleural collection consistent with blood"
+  },
+  {
+    "faiss_id": 281,
+    "id": "T282",
+    "term": "flail chest",
+    "simple_meaning": "Multiple rib fractures causing unstable chest wall",
+    "patient_explanation": "Several ribs are broken in a pattern that makes part of your chest wall unstable.",
+    "body_system": "Bone",
+    "category": "Musculoskeletal",
+    "text_used": "flail chest. Multiple rib fractures causing unstable chest wall. Several ribs are broken in a pattern that makes part of your chest wall unstable.. A serious traumatic injury that can affect breathing.. flail segment. multiple contiguous rib fractures"
+  },
+  {
+    "faiss_id": 282,
+    "id": "T283",
+    "term": "splenic laceration",
+    "simple_meaning": "Tear in the spleen",
+    "patient_explanation": "There is a tear in the tissue of your spleen, usually from an injury.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "splenic laceration. Tear in the spleen. There is a tear in the tissue of your spleen, usually from an injury.. Graded by severity; can cause internal bleeding requiring urgent treatment.. grade III splenic laceration. splenic injury with hemoperitoneum"
+  },
+  {
+    "faiss_id": 283,
+    "id": "T284",
+    "term": "liver laceration",
+    "simple_meaning": "Tear in the liver",
+    "patient_explanation": "There is a tear in the tissue of your liver, usually from an injury.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "liver laceration. Tear in the liver. There is a tear in the tissue of your liver, usually from an injury.. Graded by severity; can cause internal bleeding requiring urgent treatment.. grade II liver laceration. hepatic injury with perihepatic hematoma"
+  },
+  {
+    "faiss_id": 284,
+    "id": "T285",
+    "term": "renal laceration",
+    "simple_meaning": "Tear in the kidney",
+    "patient_explanation": "There is a tear in the tissue of your kidney, usually from an injury.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "renal laceration. Tear in the kidney. There is a tear in the tissue of your kidney, usually from an injury.. Graded by severity; management depends on extent of injury and bleeding.. grade III renal laceration. perinephric hematoma"
+  },
+  {
+    "faiss_id": 285,
+    "id": "T286",
+    "term": "traumatic brain injury",
+    "simple_meaning": "Brain injury from head trauma",
+    "patient_explanation": "There is evidence of injury to the brain following a head trauma.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "traumatic brain injury. Brain injury from head trauma. There is evidence of injury to the brain following a head trauma.. Ranges from mild concussion to severe injury; findings guide management.. TBI. concussion. diffuse axonal injury. traumatic contusion"
+  },
+  {
+    "faiss_id": 286,
+    "id": "T287",
+    "term": "concussion",
+    "simple_meaning": "Mild traumatic brain injury",
+    "patient_explanation": "You have had a mild brain injury following a knock to the head; the scan itself often looks normal.",
+    "body_system": "Brain",
+    "category": "Neurological",
+    "text_used": "concussion. Mild traumatic brain injury. You have had a mild brain injury following a knock to the head; the scan itself often looks normal.. Usually resolves with rest; imaging is often normal despite symptoms.. mild TBI. no acute intracranial abnormality (post-concussive)"
+  },
+  {
+    "faiss_id": 287,
+    "id": "T288",
+    "term": "pneumatocele",
+    "simple_meaning": "Thin-walled air-filled cyst in the lung",
+    "patient_explanation": "There is a thin-walled, air-filled cavity in the lung, often forming after infection or trauma.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "pneumatocele. Thin-walled air-filled cyst in the lung. There is a thin-walled, air-filled cavity in the lung, often forming after infection or trauma.. Usually resolves over time; monitored to ensure resolution.. pneumatocele formation post-pneumonia"
+  },
+  {
+    "faiss_id": 288,
+    "id": "T289",
+    "term": "fat embolism",
+    "simple_meaning": "Fat particles blocking small blood vessels",
+    "patient_explanation": "Small particles of fat have entered the bloodstream and are blocking tiny blood vessels, often after a fracture.",
+    "body_system": "Vascular",
+    "category": "Vascular",
+    "text_used": "fat embolism. Fat particles blocking small blood vessels. Small particles of fat have entered the bloodstream and are blocking tiny blood vessels, often after a fracture.. A serious complication that can occur after long bone fractures.. diffuse micronodular opacities consistent with fat embolism syndrome"
+  },
+  {
+    "faiss_id": 289,
+    "id": "T290",
+    "term": "acute respiratory distress syndrome",
+    "simple_meaning": "Severe lung inflammation affecting oxygen levels",
+    "patient_explanation": "There is widespread inflammation in both lungs that is affecting how well oxygen gets into your blood.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "acute respiratory distress syndrome. Severe lung inflammation affecting oxygen levels. There is widespread inflammation in both lungs that is affecting how well oxygen gets into your blood.. A serious condition often requiring intensive care support.. ARDS. bilateral diffuse airspace opacities consistent with ARDS"
+  },
+  {
+    "faiss_id": 290,
+    "id": "T291",
+    "term": "aspiration pneumonia",
+    "simple_meaning": "Lung infection from inhaled material",
+    "patient_explanation": "There are signs of a lung infection caused by food, liquid, or stomach contents being breathed into the lungs.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "aspiration pneumonia. Lung infection from inhaled material. There are signs of a lung infection caused by food, liquid, or stomach contents being breathed into the lungs.. Common in patients with swallowing difficulties or reduced consciousness.. dependent lower lobe consolidation consistent with aspiration"
+  },
+  {
+    "faiss_id": 291,
+    "id": "T292",
+    "term": "foreign body aspiration",
+    "simple_meaning": "Inhaled object stuck in the airway",
+    "patient_explanation": "An object appears to have been breathed into the airway and become lodged there.",
+    "body_system": "Lung",
+    "category": "Pulmonary",
+    "text_used": "foreign body aspiration. Inhaled object stuck in the airway. An object appears to have been breathed into the airway and become lodged there.. Common in young children; can cause airway obstruction requiring urgent removal.. radiopaque foreign body in the right main bronchus"
+  },
+  {
+    "faiss_id": 292,
+    "id": "T293",
+    "term": "esophageal foreign body",
+    "simple_meaning": "Object stuck in the food pipe",
+    "patient_explanation": "An object appears to be lodged in the tube that carries food from your mouth to your stomach.",
+    "body_system": "General",
+    "category": "ENT",
+    "text_used": "esophageal foreign body. Object stuck in the food pipe. An object appears to be lodged in the tube that carries food from your mouth to your stomach.. Common, especially in children; usually needs prompt removal.. radiopaque foreign body in the mid esophagus"
+  },
+  {
+    "faiss_id": 293,
+    "id": "T294",
+    "term": "esophageal perforation",
+    "simple_meaning": "Tear in the food pipe wall",
+    "patient_explanation": "There is a tear in the wall of the tube that carries food from your mouth to your stomach.",
+    "body_system": "General",
+    "category": "ENT",
+    "text_used": "esophageal perforation. Tear in the food pipe wall. There is a tear in the wall of the tube that carries food from your mouth to your stomach.. A serious emergency that can lead to infection of the chest cavity if untreated.. esophageal perforation with mediastinal air"
+  },
+  {
+    "faiss_id": 294,
+    "id": "T295",
+    "term": "bowel perforation",
+    "simple_meaning": "Hole in the intestine wall",
+    "patient_explanation": "There is a hole in the wall of your intestine, which can allow contents to leak into the abdomen.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "bowel perforation. Hole in the intestine wall. There is a hole in the wall of your intestine, which can allow contents to leak into the abdomen.. A surgical emergency requiring immediate treatment.. free intraperitoneal air consistent with perforation"
+  },
+  {
+    "faiss_id": 295,
+    "id": "T296",
+    "term": "volvulus",
+    "simple_meaning": "Twisted section of bowel",
+    "patient_explanation": "Part of your intestine has twisted on itself, which can block blood supply and cause obstruction.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "volvulus. Twisted section of bowel. Part of your intestine has twisted on itself, which can block blood supply and cause obstruction.. A surgical emergency requiring prompt treatment to prevent bowel damage.. sigmoid volvulus. whirl sign"
+  },
+  {
+    "faiss_id": 296,
+    "id": "T297",
+    "term": "ischemic bowel",
+    "simple_meaning": "Bowel tissue damaged from reduced blood flow",
+    "patient_explanation": "Part of your intestine shows signs of damage from reduced blood supply.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "ischemic bowel. Bowel tissue damaged from reduced blood flow. Part of your intestine shows signs of damage from reduced blood supply.. A serious condition that can progress to bowel death if untreated.. bowel wall pneumatosis consistent with ischemia. portal venous gas"
+  },
+  {
+    "faiss_id": 297,
+    "id": "T298",
+    "term": "abdominal compartment syndrome",
+    "simple_meaning": "Dangerously high pressure inside the abdomen",
+    "patient_explanation": "The pressure inside your abdomen has become dangerously high, which can affect organ function.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "abdominal compartment syndrome. Dangerously high pressure inside the abdomen. The pressure inside your abdomen has become dangerously high, which can affect organ function.. A critical care emergency, often following major trauma or surgery.. tense ascites with organ compression consistent with compartment syndrome"
+  },
+  {
+    "faiss_id": 298,
+    "id": "T299",
+    "term": "post-surgical fluid collection",
+    "simple_meaning": "Fluid buildup after an operation",
+    "patient_explanation": "There is a collection of fluid at the site of a recent surgery.",
+    "body_system": "General",
+    "category": "General",
+    "text_used": "post-surgical fluid collection. Fluid buildup after an operation. There is a collection of fluid at the site of a recent surgery.. Common after surgery; most resolve on their own unless infected.. postoperative fluid collection. surgical bed fluid collection"
+  },
+  {
+    "faiss_id": 299,
+    "id": "T300",
+    "term": "anastomotic leak",
+    "simple_meaning": "Leak at a surgical bowel connection",
+    "patient_explanation": "There are signs of a leak at the site where two parts of the bowel were surgically joined together.",
+    "body_system": "Abdomen",
+    "category": "Abdominal",
+    "text_used": "anastomotic leak. Leak at a surgical bowel connection. There are signs of a leak at the site where two parts of the bowel were surgically joined together.. A serious post-surgical complication requiring prompt evaluation.. extravasation of oral contrast at the anastomosis"
+  }
+]

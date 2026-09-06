@@ -261,6 +261,22 @@ def main():
 
     anatomy_hints = build_anatomy_hints(kb)
 
+    # ── Manual overrides ──────────────────────────────────────────
+    # Ye 3 terms auto-generation se drop ho jaate hain kyunki:
+    # - "cyst": HINT_STOPWORDS mein blacklisted hai (too generic)
+    # - "unremarkable": General body_system hai, koi doosra KB term
+    #   isko synonym/related_term mein use nahi karta, isliye kabhi
+    #   candidate hi nahi banta
+    # - "kidney": alag-alag KB entries mein "kidney" word alag regions
+    #   (adrenal, abdomen, kidney) se jud jaata hai — ambiguous
+    #   maan ke drop ho jaata hai, sirf "kidneys" (plural) bachta hai
+    MANUAL_HINT_OVERRIDES = {
+        "kidney": _lateral_spec("kidney"),
+        "cyst": "abdomen",
+        "unremarkable": "abdomen",
+    }
+    anatomy_hints.update(MANUAL_HINT_OVERRIDES)
+
     output = {
         "_generated_from": "data/knowledge_base.json (body_system field)",
         "_total_kb_terms": len(kb),
