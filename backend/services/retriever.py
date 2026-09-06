@@ -2,6 +2,8 @@ import json
 import os
 import re
 
+from services.embedding_retriever import embedding_search
+
 
 def is_negated(term, text):
     segments = re.split(r'[.!?\n]|(?:\s*\*\s*)', text)
@@ -29,11 +31,11 @@ def is_negated(term, text):
 
 def _remove_redundant_term_matches(found_terms):
     """
-    Kabhi-kabhi ek term ka matched text, doosre zyada specific term ke
-    matched text ke andar hi contained hota hai (jaise "pneumothorax"
-    "tension pneumothorax" ke andar). Jab dono ek saath match ho jayen,
-    hum sirf zyada specific (lamba) wala finding rakhte hain — generic
-    wala hata dete hain, taaki duplicate/redundant findings na dikhein.
+    Sometimes one term's matched text is fully contained inside
+    another, more specific term's matched text (e.g. "pneumothorax"
+    inside "tension pneumothorax"). When both match at once, we keep
+    only the more specific (longer) finding and drop the generic one,
+    so duplicate/redundant findings don't show up.
     """
     sorted_terms = sorted(found_terms, key=lambda x: -len(x["matched_text"]))
     kept = []
@@ -48,20 +50,51 @@ def _remove_redundant_term_matches(found_terms):
             kept.append(t)
 
     return kept
+def _find_sentence_period(text, start_idx):
+    """
+    Finds the next sentence-ending period after start_idx, skipping
+    decimal points (e.g. "2.1", "0.58") which are not sentence ends.
+    """
+    idx = start_idx
+    while True:
+        pos = text.find(".", idx)
+        if pos == -1:
+            return len(text)
+        # agar "." ke turant baad ek digit hai, ye decimal point hai
+        if pos + 1 < len(text) and text[pos + 1].isdigit():
+            idx = pos + 1
+            continue
+        return pos
 
+
+def _rfind_sentence_period(text, before_idx):
+    """
+    Finds the last sentence-ending period before before_idx, skipping
+    decimal points (e.g. "2.1", "0.58") which are not sentence ends.
+    """
+    search_end = before_idx
+    while True:
+        pos = text.rfind(".", 0, search_end)
+        if pos == -1:
+            return -1
+        # agar "." ke turant baad ek digit hai, ye decimal point hai
+        if pos + 1 < len(text) and text[pos + 1].isdigit():
+            search_end = pos
+            continue
+        return pos
 
 def _extract_context_sentence(matched_variant, report_text):
     """
-    Us sentence ko nikalta hai jisme term mila tha.
+  Extracts the sentence in which the term was found.
 
-    Body map ise use karta hai: agar term generic hai (jaise "lesion",
-    jiska body_system "General" hai aur isliye body_regions.json ke
-    term_map mein uski koi fixed entry nahi hoti), toh is sentence mein
-    anatomical hints dhoondh ke approximate region decide kiya jaata hai.
+    The body map uses this: if a term is generic (e.g. "lesion", whose
+    body_system is "General" and therefore has no fixed entry in
+    body_regions.json's term_map), anatomical hints are searched for
+    in this sentence to decide an approximate body region.
 
     Example: "A small area of abnormal signal intensity is present in
-    the left frontal white matter" -> is sentence se "white matter"
-    hint milta hai -> head region.
+    the left frontal white matter" -> this sentence gives the hint
+    "white matter" -> head region.
     """
     if not matched_variant or not report_text:
         return ""
@@ -73,17 +106,22 @@ def _extract_context_sentence(matched_variant, report_text):
         return ""
 
     start = max(
-        lower.rfind(".", 0, idx),
+        _rfind_sentence_period(lower, idx),
         lower.rfind(";", 0, idx),
         lower.rfind("\n", 0, idx),
         lower.rfind("*", 0, idx),
     ) + 1
 
-    end = lower.find(".", idx)
-    if end == -1:
-        end = len(lower)
+    end = _find_sentence_period(lower, idx)
 
     return report_text[start:end].strip()
+
+
+def _split_sentences(text):
+    """Splits the report into sentences — used for the embedding fallback."""
+    if not text:
+        return []
+    return [s.strip() for s in re.split(r'(?<=[.!?])\s+', text) if s.strip()]
 
 
 def retrieve_relevant_info(report_text):
@@ -139,19 +177,71 @@ def retrieve_relevant_info(report_text):
                 "all_matched_variants": all_variants,   # used for highlighting all occurrences
 
                 # ── Body-map support ──────────────────────────────────
-                # body_system: knowledge_base.json ka apna field. Body map
-                # ise use karta hai jab term_map mein direct entry na ho.
+                # body_system: knowledge_base.json's own field. The body
+                # map uses this when there is no direct entry in term_map.
                 "body_system":          item.get("body_system", ""),
 
-                # context_sentence: report ka wo sentence jisme term mila.
-                # Generic terms (body_system == "General") ke liye body map
-                # isi sentence mein anatomy hints dhoondhta hai.
+                # context_sentence: the sentence in the report where the
+                # term was found. For generic terms (body_system ==
+                # "General"), the body map looks for anatomy hints in
+                # this same sentence.
                 "context_sentence":     _extract_context_sentence(matched_variant, report_text),
+
+                "match_type":           "exact",
             })
 
     # Remove redundant matches where one term's matched text is fully
     # contained inside another term's matched text (e.g. "pneumothorax"
     # inside "tension pneumothorax") — keep only the more specific one.
+    found_terms = _remove_redundant_term_matches(found_terms)
+
+    # ── Embedding fallback (semantic) ─────────────────────────────────
+    #  Only runs on sentences where regex found no match. Every candidate
+    # must still pass the negation check — the embedding model itself
+    # does not understand negation ("no cardiomegaly" looks just as
+    # similar to it as "cardiomegaly").
+    matched_terms_lower = {t["term"].lower() for t in found_terms}
+    sentences = _split_sentences(report_text)
+
+    for sent in sentences:
+        sent_lower = sent.lower()
+
+        already_covered = any(
+            t["matched_text"].lower() in sent_lower for t in found_terms
+        )
+        if already_covered:
+            continue
+
+        try:
+            candidates = embedding_search(sent)
+        except Exception:
+            # embedding index missing/broken -> silently skip, regex
+            # results stay unaffected
+            candidates = []
+
+        for c in candidates:
+            term_lower = c["term"].lower()
+
+            if term_lower in matched_terms_lower:
+                continue
+            if is_negated(term_lower, sent_lower):
+                continue
+
+            matched_terms_lower.add(term_lower)
+            found_terms.append({
+                "term":                 c["term"],
+                "meaning":              c.get("patient_explanation", ""),
+                "severity":             "Low",
+                "urgency":              "Non-urgent",
+                "red_flag":             False,
+                "matched_text":         sent.strip(),
+                "image_url":            None,
+                "all_matched_variants": [c["term"]],
+                "body_system":          c.get("body_system", ""),
+                "context_sentence":     sent.strip(),
+                "match_type":           "semantic",
+            })
+
     found_terms = _remove_redundant_term_matches(found_terms)
 
     return found_terms
