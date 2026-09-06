@@ -1,6 +1,10 @@
+"""
+Hybrid tool: does deterministic temperature conversion locally (no LLM needed
+for math), then calls LLM only to explain severity in plain language.
+"""
+
 from services.health_tools.base_tool import BaseHealthTool
 from services.llm_router import generate_with_provider
-from services.rag_service import get_length_instruction, get_detail_instruction
 
 
 class FeverConverterTool(BaseHealthTool):
@@ -44,15 +48,20 @@ class FeverConverterTool(BaseHealthTool):
         unit = self.user_input["unit"].strip().upper()
         celsius, fahrenheit = self._convert(value, unit)
 
-        length_instr = get_length_instruction(self.options.get("answer_length", "standard"))
-        detail_instr = get_detail_instruction(self.options.get("detail_level", "medium"))
-
         prompt = (
-            f"A patient's temperature is {celsius}°C ({fahrenheit}°F). "
-            f"Explain in plain language whether this is normal, mild fever, "
-            f"moderate fever, or high fever, and whether they should seek "
-            f"medical attention. Do not give medication advice.\n\n"
-            f"{length_instr}\n{detail_instr}"
+            f"A patient's temperature reading is {celsius}°C ({fahrenheit}°F). "
+            f"Talk to them like a caring nurse would, in very simple words.\n\n"
+            f"STRICT RULES:\n"
+            f"1. In 2-3 short, warm sentences, say whether this is normal, a "
+            f"mild fever, a moderate fever, or a high fever — and whether they "
+            f"should consider seeing a doctor.\n"
+            f"2. If the number looks impossible for a living person (like "
+            f"above 45°C or below 30°C), gently say it's probably a measuring "
+            f"mistake and suggest they re-check with a working thermometer.\n"
+            f"3. NEVER use technical/scientific words.\n"
+            f"4. NO tables. NO markdown headers.\n"
+            f"5. Do NOT give medication advice.\n"
+            f"6. Keep it under 60 words total."
         )
 
         try:
