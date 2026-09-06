@@ -598,16 +598,18 @@ function loadConversation(convId) {
       var detailSel = document.getElementById('detailSel');
       if (detailSel) detailSel.value = detailLevel;
 
-      document.getElementById('msgs').innerHTML = '';
-    if (conv.source_type === 'pdf') {
-    // PDF upload → show filename
-    appendUserBubble('', {
-        name: conv.original_filename || 'report.pdf'
-    });
-} else {
-    // Normal text → complete text
-    appendUserBubble(conv.report_text || '', null);
-}
+            document.getElementById('msgs').innerHTML = '';
+      if (conv.has_pdf) {
+        appendUserBubble('', {
+          name: conv.pdf_filename || conv.original_filename || 'report.pdf',
+          isServerPdf: true,
+          convId: convId
+        });
+      } else if (conv.source_type === 'pdf') {
+        appendUserBubble('', { name: conv.original_filename || 'report.pdf' });
+      } else {
+        appendUserBubble(conv.report_text || '', null);
+      }
       conv.results.report_text = conv.report_text;
       renderBotResult(conv.results);
       activateChatbot();
