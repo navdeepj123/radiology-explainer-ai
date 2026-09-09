@@ -4,7 +4,7 @@ from services.retriever import retrieve_relevant_info, find_term_positions
 from services.llm_router import generate_with_provider
 from services.output_verifier import verify_output
 
-
+# Function to convert plain text/markdown into clean HTML
 def _convert_to_html(text):
     """Convert plain text/markdown into clean HTML."""
 
@@ -20,6 +20,7 @@ def _convert_to_html(text):
     output = ['<div class="explain-output">']
     in_ul  = False
 
+# Heading normalization map for various ways users might write section headings, mapping them to standard headings
     heading_map = {
         'simple summary':           'Simple Summary',
         'summary':                  'Simple Summary',
@@ -63,6 +64,7 @@ def _convert_to_html(text):
             normalized = heading_map.get(raw_heading.lower(), raw_heading)
             output.append(f'<h3>{normalized}</h3>')
 
+# List item detection: lines starting with bullet points, numbers, or asterisks
         elif re.match(r'^[\*\-\d]+[\.\)]\s+', line) or re.match(r'^\*\s', line):
             if not in_ul:
                 output.append('<ul>')
@@ -83,10 +85,11 @@ def _convert_to_html(text):
     if in_ul:
         output.append('</ul>')
 
+# Close the main div
     output.append('</div>')
     return '\n'.join(output)
 
-
+# Function to filter terms that are actually present in the report
 def _filter_terms_actually_in_report(report_text, retrieved_terms):
     """
     Keep only terms that are ACTUALLY present in report_text (the main
@@ -181,7 +184,7 @@ def get_detail_instruction(detail_level):
     }
     return mapping.get((detail_level or "medium").lower(), mapping["medium"])
 
-
+# Function to translate findings and terms into the target language
 def _translate_findings_and_terms(findings, retrieved_terms, language, provider, ollama_model):
     """
     Also translates the findings list and term meanings — these come

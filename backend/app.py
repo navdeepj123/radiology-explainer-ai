@@ -30,7 +30,7 @@ from routes.health_tools_routes import health_tools_bp
 load_dotenv(override=True)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+# Initialize the Flask app
 app = Flask(
     __name__,
     template_folder=os.path.join(BASE_DIR, "frontend", "templates"),
@@ -75,7 +75,7 @@ def _connect_mongo_with_retry(uri, max_attempts=3):
     print("❌ MongoDB could not connect after retries.")
     return None
 
-
+# function to connect to MongoDB safely, handling SIGINT gracefully
 def _connect_mongo_safely(uri, max_attempts=3):
     original_handler = signal.getsignal(signal.SIGINT)
 
@@ -95,7 +95,7 @@ def _connect_mongo_safely(uri, max_attempts=3):
         except (ValueError, OSError):
             pass
 
-
+# ── MONGODB SETUP ─────────────────────────────────────────
 MONGO_URI = os.environ.get("MONGO_URI")
 mongo_client = _connect_mongo_safely(MONGO_URI)
 db = mongo_client["clearscan"] if mongo_client is not None else None
@@ -124,13 +124,13 @@ login_manager.login_view = "login"
 def load_user(user_id):
     return auth_service.get_by_id(user_id)
 
-
+# ── OWNER COOKIE ─────────────────────────────────────────
 OWNER_COOKIE_NAME = "cs_owner_id"
 OWNER_COOKIE_MAX_AGE = 60 * 60 * 24 * 365
 
 from services.rag_service import generate_explanation, get_length_instruction, get_detail_instruction
 from services.llm_router import generate_with_provider
-
+# this import is for the mode name conversion functions, which are used to map between internal and public representations of providers and models
 from services.mode_names import (
     CLOUD_PROVIDERS,
     to_internal_provider,
@@ -139,14 +139,14 @@ from services.mode_names import (
     to_public_local_model,
 )
 
-
+# List of keywords that indicate a crisis situation
 CRISIS_KEYWORDS = [
     "suicidal", "suicide", "kill myself", "end my life", "don't want to live",
     "no reason to live", "better off dead", "self harm", "cut myself",
     "want to die", "can't go on", "hopeless", "harm myself",
     "not worth living", "give up on life", "end it all", "hurt myself"
 ]
-
+# Maximum number of chat turns allowed in a conversation
 MAX_CHAT_TURNS = 6
 MAX_CONVERSATIONS = 5
 
@@ -171,7 +171,7 @@ CRISIS_REPLY = (
     "Please reach out to someone you trust or a healthcare professional today. "
     "Your wellbeing matters more than this report. 💙"
 )
-
+# ── ASSISTANT SYSTEM INSTRUCTIONS ───────────────────────────────────────
 ASSISTANT_SYSTEM = """
 You are ClearScan Assistant — a warm, friendly guide that helps patients understand their radiology report.
 
@@ -229,7 +229,7 @@ def set_owner_cookie(response):
         )
     return response
 
-
+# Function to migrate guest conversations if any
 def _migrate_guest_conversations_if_any(user):
     guest_owner_id = g.get("guest_owner_id")
     if not guest_owner_id:
@@ -262,7 +262,7 @@ def register():
 
     return redirect(url_for("analyze", welcome=1, migrated=migrated))
 
-
+# Route for logging in
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
@@ -283,14 +283,14 @@ def login():
 
     return redirect(url_for("analyze", welcome=1, migrated=migrated))
 
-
+# Route for logging out
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for("home"))
 
-
+# Function to get language-specific instructions for the LLM
 def get_language_instruction(language):
     if not language or language.lower() == "english":
         return "Respond in English."
@@ -304,7 +304,7 @@ def get_language_instruction(language):
         )
 
     return f"Respond ONLY in {language} language. Translate all medical explanations into {language}."
-
+# the above function provides instructions for the language in which the assistant should respond, based on the user's preference. It supports English, Hinglish, and other specified languages, ensuring that medical explanations are translated appropriately.
 
 def clean_reply(reply):
     if reply is None:
@@ -548,7 +548,7 @@ def get_conversation_pdf(conv_id):
         headers={"Content-Disposition": f'inline; filename="{doc.get("pdf_filename","report.pdf")}"'}
     )
 
-
+# function to delete a conversation by its ID, returning appropriate HTTP status codes based on the outcome
 @app.route("/conversation/<conv_id>", methods=["DELETE"])
 def delete_conversation(conv_id):
     result = conv_store.delete(conv_id, g.owner_id)
@@ -602,10 +602,10 @@ def chat():
         return jsonify({"reply": "Please type a message."})
 
     lower = user_msg.lower()
-
+# check for crisis keywords first, then off-topic keywords, then if report is missing, then proceed to normal chat handling
     if any(keyword in lower for keyword in CRISIS_KEYWORDS):
         return jsonify({"reply": CRISIS_REPLY, "is_crisis": True})
-
+# check for off-topic keywords
     if any(keyword in lower for keyword in OFF_TOPIC_KEYWORDS):
         return jsonify({
             "reply": (
@@ -640,7 +640,7 @@ def chat():
     )
 
     conversation_context = build_conversation_context(chat_messages)
-
+# construct the full prompt for the LLM, including system instructions, conversation context, and the user's message
     full_prompt = system + "\n\n" + conversation_context + "\nPatient question: " + user_msg
     reply = generate_with_provider(full_prompt, provider, detected_terms=detected_terms, ollama_model=ollama_model)
     reply = clean_reply(reply)
