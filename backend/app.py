@@ -1,6 +1,6 @@
 """
 ClearScan — Radiology Report Explainer
-3-page Flask app: Home → Analyze → Results + Chatbot
+3-page Flask app: Home → Analyze → Results + Assistant
 """
 
 import os
@@ -131,6 +131,14 @@ OWNER_COOKIE_MAX_AGE = 60 * 60 * 24 * 365
 from services.rag_service import generate_explanation, get_length_instruction, get_detail_instruction
 from services.llm_router import generate_with_provider
 
+from services.mode_names import (
+    CLOUD_PROVIDERS,
+    to_internal_provider,
+    to_internal_local_model,
+    to_public_mode,
+    to_public_local_model,
+)
+
 
 CRISIS_KEYWORDS = [
     "suicidal", "suicide", "kill myself", "end my life", "don't want to live",
@@ -164,8 +172,8 @@ CRISIS_REPLY = (
     "Your wellbeing matters more than this report. 💙"
 )
 
-CHATBOT_SYSTEM = """
-You are ClearScan Assistant — a warm AI that helps patients understand their radiology report.
+ASSISTANT_SYSTEM = """
+You are ClearScan Assistant — a warm, friendly guide that helps patients understand their radiology report.
 
 The patient's radiology report is:
 ---
@@ -298,7 +306,7 @@ def get_language_instruction(language):
     return f"Respond ONLY in {language} language. Translate all medical explanations into {language}."
 
 
-def clean_ai_reply(reply):
+def clean_reply(reply):
     if reply is None:
         return "Sorry, I could not get a response. Please try again."
 
@@ -396,8 +404,8 @@ def serialize_conv(doc):
     return {
         "id":             str(doc["_id"]),
         "report_text":    doc["report_text"],
-        "provider":       doc["provider"],
-        "ollama_model":   doc["ollama_model"],
+        "provider":       to_public_mode(doc["provider"]),
+        "local_model":    to_public_local_model(doc["ollama_model"]),
         "language":       doc["language"],
         "answer_length":  doc.get("answer_length", "standard"),
         "detail_level":   doc.get("detail_level", "medium"),
@@ -419,71 +427,19 @@ def home():
     return render_template("home.html")
 
 
-# ── ANALYZE (original form POST) ─────────────────────────────────
+# ── ANALYZE (page shell) ─────────────────────────────────
+# The actual analysis is done entirely by /analyze_ajax below (the SPA
+# in Analyze.html submits there via fetch). This route only ever needs
+# to serve the page shell - it used to also accept a plain form POST as
+# a fallback and render a results.html that doesn't exist in this build
+# (nothing in the UI ever posts here directly, so that branch was dead
+# code that would 500 if anything ever hit it). Removed rather than
+# fixed, since duplicating the AJAX flow for a path nothing calls just
+# adds a second thing to keep in sync for no benefit.
 
-@app.route("/analyze", methods=["GET", "POST"])
+@app.route("/analyze", methods=["GET"])
 def analyze():
-
-    if request.method == "GET":
-        return render_template("Analyze.html")
-
-    report_text   = request.form.get("report_text", "").strip()
-    question      = request.form.get("question", "").strip()
-    provider      = request.form.get("provider", "groq").strip()
-    ollama_model  = request.form.get("ollama_model", "llama3.2:1b").strip()
-    language      = request.form.get("language", "English").strip()
-    answer_length = request.form.get("answer_length", "standard").strip()
-    detail_level  = request.form.get("detail_level", "medium").strip()
-    uploaded      = request.files.get("report_file")
-
-    if uploaded and uploaded.filename:
-        filename_lower = uploaded.filename.lower()
-        if filename_lower.endswith(".pdf"):
-            extracted_text, pdf_error = extract_pdf_text(uploaded)
-            if pdf_error:
-                return render_template("Analyze.html", error=pdf_error)
-            report_text = extracted_text
-        else:
-            try:
-                report_text = uploaded.read().decode("utf-8", errors="ignore").strip()
-            except Exception:
-                pass
-
-    if not report_text:
-        return render_template("Analyze.html", error="Please paste your report text or upload a file.")
-
-    try:
-        results = generate_explanation(
-            report_text, provider, question,
-            ollama_model=ollama_model, language=language,
-            answer_length=answer_length, detail_level=detail_level
-        )
-    except TypeError:
-        try:
-            results = generate_explanation(report_text, provider, question, ollama_model=ollama_model)
-        except TypeError:
-            results = generate_explanation(report_text, provider)
-
-    conv_id = conv_store.create(g.owner_id, report_text, provider, ollama_model, language,
-                                   answer_length, detail_level, results)
-
-    explanation_verification = results.get("verification") if isinstance(results, dict) else None
-    if explanation_verification is None:
-        explanation_verification = verify_output(
-            results.get("summary", "") if isinstance(results, dict) else str(results),
-            results.get("detected_terms", []) if isinstance(results, dict) else []
-        )
-    log_verification(conv_id, provider, language, explanation_verification, source="explanation")
-
-    show_chatbot = provider in ("groq", "gemini", "openai")
-
-    return render_template(
-        "results.html",
-        results=results,
-        provider=provider,
-        show_chatbot=show_chatbot,
-        question=question,
-    )
+    return render_template("Analyze.html")
 
 
 # ── ANALYZE AJAX ──────────────────────────────
@@ -491,8 +447,8 @@ def analyze():
 @app.route("/analyze_ajax", methods=["POST"])
 def analyze_ajax():
     report_text   = request.form.get("report_text", "").strip()
-    provider      = request.form.get("provider", "groq").strip()
-    ollama_model  = request.form.get("ollama_model", "llama3.2:1b").strip()
+    provider      = to_internal_provider(request.form.get("provider", "fast"))
+    ollama_model  = to_internal_local_model(request.form.get("local_model", "quick"))
     language      = request.form.get("language", "English").strip()
     answer_length = request.form.get("answer_length", "standard").strip()
     detail_level  = request.form.get("detail_level", "medium").strip()
@@ -566,6 +522,8 @@ def analyze_ajax():
 @app.route("/conversations", methods=["GET"])
 def list_conversations():
     items = conv_store.list_for_owner(g.owner_id)
+    for item in items:
+        item["provider"] = to_public_mode(item.get("provider"))
     return jsonify({"conversations": items})
 
 
@@ -673,7 +631,7 @@ def chat():
     length_instruction    = get_length_instruction(answer_length)
     detail_instruction    = get_detail_instruction(detail_level)
 
-    system = CHATBOT_SYSTEM.format(
+    system = ASSISTANT_SYSTEM.format(
         report=report,
         detected_terms_section=detected_terms_section,
         language_instruction=language_instruction,
@@ -685,7 +643,7 @@ def chat():
 
     full_prompt = system + "\n\n" + conversation_context + "\nPatient question: " + user_msg
     reply = generate_with_provider(full_prompt, provider, detected_terms=detected_terms, ollama_model=ollama_model)
-    reply = clean_ai_reply(reply)
+    reply = clean_reply(reply)
 
     verification = verify_output(reply, detected_terms)
     log_verification(conv_id, provider, language, verification, source="chat")
@@ -724,7 +682,7 @@ def verification_stats():
         total = r["total"]
         passed = r["passed"]
         stats.append({
-            "provider": r["_id"]["provider"],
+            "provider": to_public_mode(r["_id"]["provider"]),
             "source": r["_id"]["source"],
             "total_checks": total,
             "passed": passed,

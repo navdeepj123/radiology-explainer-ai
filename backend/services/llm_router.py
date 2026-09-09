@@ -2,6 +2,7 @@ from services.ollama_service import generate_with_ollama
 from services.groq_service import generate_with_groq
 from services.gemini_service import generate_with_gemini
 from services.openai_service import generate_with_openai
+from services.mode_names import to_internal_provider, to_public_mode
 
 
 def _is_valid_response(response):
@@ -23,7 +24,7 @@ Your explanation MUST acknowledge ALL of these findings. Do NOT say any of them 
 
 
 def generate_with_provider(prompt, provider="ollama", detected_terms=None, ollama_model="llama3.2:1b", allow_fallback=True):
-    provider = provider.lower().strip()
+    provider = to_internal_provider(provider)
 
     final_prompt = _build_prompt(prompt, detected_terms)
 
@@ -53,12 +54,10 @@ def generate_with_provider(prompt, provider="ollama", detected_terms=None, ollam
 
         if provider == "ollama":
             return (
-                "⚠️ Ollama is not running on your computer.<br><br>"
-                "To use Ollama:<br>"
-                "1. Open a new PowerShell window<br>"
-                "2. Type: <strong>ollama serve</strong><br>"
-                "3. Keep that window open and try again<br><br>"
-                "Or select Groq, Gemini, or OpenAI from the dropdown instead."
+                "⚠️ On-device mode is not available right now.<br><br>"
+                "This mode needs the local processing service running on your "
+                "computer. Start it, keep it running, and try again — or switch "
+                "to Fast, Balanced, or Enhanced mode from the menu instead."
             )
 
         if not allow_fallback:
@@ -66,10 +65,10 @@ def generate_with_provider(prompt, provider="ollama", detected_terms=None, ollam
             # the real failure instead of silently switching providers, so
             # results for this provider aren't mislabeled as another one's.
             return f"""
-<div class="ai-output">
+<div class="explain-output">
     <div class="risk-box">
-        <h3>AI Service Temporary Issue</h3>
-        <p>The {provider} provider failed and fallback was disabled: {str(e)}</p>
+        <h3>Service Temporarily Unavailable</h3>
+        <p>{to_public_mode(provider)} mode failed and fallback was disabled: {str(e)}</p>
     </div>
 </div>
 """
@@ -99,10 +98,10 @@ def generate_with_provider(prompt, provider="ollama", detected_terms=None, ollam
                 print(f"⚠️ Fallback {fallback_provider} failed: {str(fallback_error)}")
 
         return """
-<div class="ai-output">
+<div class="explain-output">
     <div class="risk-box">
-        <h3>AI Service Temporary Issue</h3>
-        <p>The selected AI provider is not responding right now. Please try again or choose another model.</p>
+        <h3>Service Temporarily Unavailable</h3>
+        <p>The selected processing mode is not responding right now. Please try again or choose another mode.</p>
     </div>
 </div>
 """

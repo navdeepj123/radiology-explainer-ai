@@ -1,3 +1,5 @@
 provider,calls,reliability_pct,avg_term_recall_pct,severity_match_pct,avg_latency_sec,total_est_cost_usd
-groq,50,24.0,9.4,52.0,0.37,0.0106
-gemini,13,100.0,59.5,69.2,3.23,0.0018
+groq,10,100.0,63.5,60.0,4.96,0.0018
+gemini,10,100.0,65.2,60.0,2.39,0.0012
+openai,10,70.0,64.3,57.1,14.44,0.0
+ollama,10,0.0,0,0,2.1,0.0

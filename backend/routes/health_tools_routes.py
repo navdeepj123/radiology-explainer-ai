@@ -9,6 +9,7 @@ from services.health_tools.tool_registry import get_tool_class, list_tools
 from services.health_tools.tools_config import TOOLS_CONFIG
 from services.llm_router import generate_with_provider
 from services.rag_service import get_length_instruction, get_detail_instruction
+from services.mode_names import to_internal_provider, to_internal_local_model
 
 health_tools_bp = Blueprint("health_tools", __name__, url_prefix="/api/health-tools")
 
@@ -29,13 +30,15 @@ def analyze(tool_id):
 
     payload = request.get_json(silent=True) or {}
     user_input = payload.get("input", {})
-    provider = payload.get("provider", "groq")
+    provider = to_internal_provider(payload.get("provider", "fast"))
     answer_length = payload.get("answer_length", "standard")
     detail_level = payload.get("detail_level", "medium")
 
     options = payload.get("options", {})
     options.setdefault("answer_length", answer_length)
     options.setdefault("detail_level", detail_level)
+    if "local_model" in options:
+        options["ollama_model"] = to_internal_local_model(options.pop("local_model"))
 
     tool_instance = tool_class(user_input=user_input, provider=provider, options=options)
     result = tool_instance.run()
@@ -73,10 +76,10 @@ def chat(tool_id):
     payload = request.get_json(silent=True) or {}
     conv_id = payload.get("conversation_id")
     message = (payload.get("message") or "").strip()
-    provider = payload.get("provider", "groq")
+    provider = to_internal_provider(payload.get("provider", "fast"))
     answer_length = payload.get("answer_length", "standard")
     detail_level = payload.get("detail_level", "medium")
-    ollama_model = payload.get("ollama_model", "llama3.2:1b")
+    ollama_model = to_internal_local_model(payload.get("local_model", "quick"))
 
     if not message:
         return jsonify({"reply": "Please type a message."})

@@ -96,7 +96,7 @@
     <div class="hero-left">
         <div class="hero-badge">
             <span class="badge-dot"></span>
-            Free · Private · AI-Powered
+            Free · Private · Instant
         </div>
 
         <h1 class="hero-title">
@@ -189,8 +189,8 @@
                 <span class="step-icon">🧠</span>
                 <span class="step-num">2</span>
             </div>
-            <h3>AI Reads It</h3>
-            <p>Our AI identifies all medical terms, findings, and key observations.</p>
+            <h3>We Read It</h3>
+            <p>Every medical term, finding, and key observation is identified for you.</p>
         </div>
 
         <div class="how-connector">
@@ -283,19 +283,19 @@
                 <div class="form-field">
                     <label class="field-label">
                         <span class="field-step">Step 3</span>
-                        Choose AI Model
+                        Choose Processing Mode
                     </label>
 
                     <select name="provider" id="provider" class="provider-select">
-                        <option value="ollama" {% if provider == "ollama" %}selected{% endif %}>🖥️ Ollama — Local, fully private</option>
-                        <option value="groq" {% if provider == "groq" %}selected{% endif %}>⚡ Groq — Fast cloud AI</option>
-                        <option value="openai" {% if provider == "openai" %}selected{% endif %}>✨ OpenAI — Advanced explanation AI</option>
-                        <option value="gemini" {% if provider == "gemini" %}selected{% endif %}>💎 Gemini — Google cloud AI</option>
+                        <option value="local" {% if provider == "local" %}selected{% endif %}>🖥️ On-device — fully private</option>
+                        <option value="fast" {% if provider == "fast" %}selected{% endif %}>⚡ Fast — quickest results</option>
+                        <option value="enhanced" {% if provider == "enhanced" %}selected{% endif %}>🌐 Enhanced — most detailed</option>
+                        <option value="balanced" {% if provider == "balanced" %}selected{% endif %}>✨ Balanced — speed and depth</option>
                     </select>
 
                     <div class="provider-badges">
-                        <span class="provider-badge local">🖥️ Ollama = runs on your PC</span>
-                        <span class="provider-badge cloud">☁️ Groq, OpenAI & Gemini = needs API key</span>
+                        <span class="provider-badge local">🖥️ On-device = runs on your PC</span>
+                        <span class="provider-badge cloud">☁️ Fast, Balanced &amp; Enhanced = secure cloud</span>
                     </div>
                 </div>
 
@@ -395,7 +395,7 @@
    <div class="result-summary">
     <div class="result-summary-label">Plain-Language Summary</div>
 
-    <div class="ai-formatted-output">
+    <div class="report-explanation">
         {{ results.summary | safe }}
     </div>
 </div>

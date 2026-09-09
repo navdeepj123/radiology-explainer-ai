@@ -2,7 +2,15 @@ import json
 import os
 import re
 
-from services.embedding_retriever import embedding_search
+# The semantic fallback needs faiss/sentence-transformers (see
+# requirements.txt). If they aren't installed, degrade to regex-only
+# instead of crashing the whole app/benchmark at import time - the
+# call site below already treats a broken embedding_search as "skip".
+try:
+    from services.embedding_retriever import embedding_search
+except ImportError:
+    def embedding_search(*args, **kwargs):
+        raise RuntimeError("embedding_search unavailable (faiss/sentence-transformers not installed)")
 
 
 def is_negated(term, text):

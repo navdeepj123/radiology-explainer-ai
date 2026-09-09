@@ -1,7 +1,8 @@
 # Radiology Report Explanation Tool
 
 ## Objective
-This project aims to convert complex radiology reports into simple, patient-friendly explanations using AI.
+This project converts complex radiology reports into simple, patient-friendly
+explanations, so patients can understand their own results.
 
 ## Features (Planned)
 - Upload radiology report

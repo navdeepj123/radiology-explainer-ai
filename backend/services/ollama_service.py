@@ -20,15 +20,15 @@ Do not contradict the detected terms under any circumstances.\n\n"""
             timeout=timeout
         )
         if response.status_code != 200:
-            raise Exception(f"Ollama HTTP error: {response.status_code}")
+            raise Exception(f"On-device service HTTP error: {response.status_code}")
         data = response.json()
         if "response" not in data:
-            raise Exception(f"Unexpected Ollama response: {data}")
+            raise Exception(f"Unexpected on-device service response: {data}")
         return data["response"]
     except requests.exceptions.ConnectionError:
-        raise Exception("Ollama is not running. Start it with: ollama serve")
+        raise Exception("The on-device service is not running.")
     except requests.exceptions.Timeout:
-        raise Exception("Ollama timed out.")
+        raise Exception("The on-device service timed out.")
 
 
 def generate_with_ollama(prompt, model="llama3.2:1b"):

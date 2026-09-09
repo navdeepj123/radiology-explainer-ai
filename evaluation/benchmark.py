@@ -69,11 +69,16 @@ ALL_PROVIDERS = ["groq", "gemini", "openai", "ollama"]
 
 # Strings the app returns when a provider fails / falls back - used to detect
 # a "failed" call even though generate_with_provider() didn't raise.
+# NOTE: these must be kept in sync with the actual failure-message text in
+# services/llm_router.py and services/rag_service.py - if that wording
+# changes, update this list too, or reliability_pct will silently read 100%
+# even when every call actually failed.
 FAILURE_MARKERS = [
-    "AI Service Temporary Issue",
+    "Service Temporarily Unavailable",
+    "fallback was disabled",
+    "is not available right now",
     "is not responding right now",
-    "Ollama is not running",
-    "did not return a response",
+    "No explanation could be generated",
 ]
 
 # Signs a failure was a rate limit rather than a real problem - worth a
