@@ -1,5 +1,5 @@
 """
-Generic base class for all AI health tools.
+Generic base class for all health tools.
 """
 
 from abc import ABC, abstractmethod
@@ -54,7 +54,7 @@ class BaseHealthTool(ABC):
             return {
                 "success": False,
                 "tool": self.tool_id,
-                "errors": ["LLM call failed: " + str(e)]
+                "errors": ["Could not generate an explanation: " + str(e)]
             }
 
         result = self.postprocess(raw_output)

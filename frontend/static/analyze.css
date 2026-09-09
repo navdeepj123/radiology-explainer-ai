@@ -71,9 +71,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 .sb-sel:focus{border-color:var(--blue)}
 .sb-hint{font-size:.64rem;color:var(--muted);padding:.3rem 1rem .7rem;line-height:1.55;border-bottom:1px solid var(--border)}
 
-/* OLLAMA MODEL SELECTOR */
-.sb-ollama-wrap{display:none}
-.sb-ollama-hint{font-size:.64rem;color:var(--muted);padding:.2rem 1rem .6rem;line-height:1.5;border-bottom:1px solid var(--border)}
+/* ON-DEVICE MODEL SELECTOR */
+.sb-local-wrap{display:none}
+.sb-local-hint{font-size:.64rem;color:var(--muted);padding:.2rem 1rem .6rem;line-height:1.5;border-bottom:1px solid var(--border)}
 
 /* HISTORY */
 .sb-hist-sec{padding:.6rem 1rem .2rem;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);border-top:1px solid var(--border);margin-top:.5rem}
@@ -201,12 +201,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 .new-report-btn:hover{border-color:var(--blue);color:var(--text)}
 .analyzed-note{font-size:.7rem;color:var(--dim)}
 
-/* OLLAMA INLINE CHAT */
-.ollama-chat{background:var(--card);border:1px solid var(--border2);border-radius:3px 13px 13px 13px;max-width:720px;width:100%;overflow:hidden}
-.ollama-chat-head{padding:.5rem .8rem;border-bottom:1px solid var(--border2);font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--dim)}
-.ollama-chat-msgs{display:flex;flex-direction:column;gap:.5rem;padding:.6rem .8rem;max-height:280px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
-.ollama-chat-msgs::-webkit-scrollbar{width:3px}
-.ollama-chat-msgs::-webkit-scrollbar-thumb{background:var(--border)}
+/* ON-DEVICE INLINE CHAT */
+.device-chat{background:var(--card);border:1px solid var(--border2);border-radius:3px 13px 13px 13px;max-width:720px;width:100%;overflow:hidden}
+.device-chat-head{padding:.5rem .8rem;border-bottom:1px solid var(--border2);font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--dim)}
+.device-chat-msgs{display:flex;flex-direction:column;gap:.5rem;padding:.6rem .8rem;max-height:280px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.device-chat-msgs::-webkit-scrollbar{width:3px}
+.device-chat-msgs::-webkit-scrollbar-thumb{background:var(--border)}
 .oc-bubble{padding:.45rem .7rem;font-size:.8rem;line-height:1.6;border-radius:10px;max-width:90%;word-break:break-word}
 .oc-bubble.user{background:var(--blue);color:#fff;align-self:flex-end;border-radius:10px 10px 3px 10px}
 .oc-bubble.bot{background:var(--card2);border:1px solid var(--border2);color:var(--text);border-radius:3px 10px 10px 10px}
@@ -214,7 +214,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 .oc-typing span{width:5px;height:5px;border-radius:50%;background:var(--muted);animation:td 1.2s ease-in-out infinite}
 .oc-typing span:nth-child(2){animation-delay:.2s}
 .oc-typing span:nth-child(3){animation-delay:.4s}
-.ollama-chat-input{display:flex;gap:.4rem;align-items:flex-end;padding:.5rem .8rem;border-top:1px solid var(--border2)}
+.device-chat-input{display:flex;gap:.4rem;align-items:flex-end;padding:.5rem .8rem;border-top:1px solid var(--border2)}
 .oc-ta{flex:1;background:var(--input-bg);border:1px solid var(--border2);border-radius:8px;padding:.4rem .6rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.8rem;outline:none;resize:none;min-height:32px;max-height:80px;line-height:1.5}
 .oc-ta:focus{border-color:var(--blue)}
 .oc-ta::placeholder{color:var(--dim)}
@@ -360,7 +360,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 .term-popup-close{position:absolute;top:10px;right:14px;cursor:pointer;font-size:1.3rem;color:var(--muted);background:none;border:none}
 .term-popup-close:hover{color:var(--text)}
 
-/* Inline toolbar inside the input box (Claude-style pickers) */
+/* Inline toolbar inside the input box (inline pickers) */
 .input-toolbar{
   order:-2;
   flex-basis:100%;
@@ -418,7 +418,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 }
 #htTa::placeholder{color:var(--dim)}
 
-/* ── Claude-style model menu ── */
+/* ── Model menu ── */
 .model-menu-wrap{
   position:relative;
   display:inline-flex;

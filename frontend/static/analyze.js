@@ -25,8 +25,8 @@ document.getElementById('csMicBtn').innerHTML   = ClearScanVoice.micSvg;
 // ─────────────────────────────────────────
 // STATE
 // ─────────────────────────────────────────
-var provider           = 'groq';
-var ollamaModel        = 'llama3.2:1b';
+var provider           = 'fast';
+var localModel        = 'quick';
 var answerLength       = 'standard';
 var detailLevel        = 'medium';
 var selFile            = null;
@@ -39,15 +39,15 @@ var activeConversationId = null;
 var chatSearchQuery    = '';
 
 var provData = {
-  groq:   { tag:'⚡ GROQ',   shortTag:'GROQ',   hint:'Fast and free. Report sent to Groq servers.',   name:'Groq'   },
-  gemini: { tag:'✨ GEMINI', shortTag:'GEMINI', hint:'Free via OpenRouter. Report sent to Google.',   name:'Gemini' },
-  openai: { tag:'🤖 OPENAI', shortTag:'OPENAI', hint:'GPT-4o-mini. Requires paid API key.',           name:'OpenAI' },
-  ollama: { tag:'🖥️ LOCAL',  shortTag:'LOCAL',  hint:'Runs locally on your computer.',               name:'Ollama' }
+  fast:     { tag:'⚡ FAST',      shortTag:'FAST',      hint:'Quickest results. Your report is processed on our secure cloud service.', name:'Fast'      },
+  balanced: { tag:'✨ BALANCED',  shortTag:'BALANCED',  hint:'Balances speed and depth. Processed on our secure cloud service.',       name:'Balanced'  },
+  enhanced: { tag:'🌐 ENHANCED',  shortTag:'ENHANCED',  hint:'Most detailed explanations. Processed on our secure cloud service.',     name:'Enhanced'  },
+  local:    { tag:'🖥️ ON-DEVICE', shortTag:'ON-DEVICE', hint:'Runs entirely on your own computer. Nothing leaves your device.',       name:'On-device' }
 };
 
-var ollamaHints = {
-  'llama3.2:1b': '⚡ Fast responses, good for Q&A.',
-  'mistral':     '🧠 Better quality analysis, slower.'
+var deviceModeHints = {
+  'quick': '⚡ Fast responses, good for Q&A.',
+  'deep':  '🧠 Better quality analysis, slower.'
 };
 
 // ─────────────────────────────────────────
@@ -203,7 +203,7 @@ function deleteConversation(convId) {
 // ─────────────────────────────────────────
 function onProviderChange(val) {
   provider = val;
-  var d = provData[val] || provData['groq'];
+  var d = provData[val] || provData['fast'];
 
   function safeSetText(id, value) {
     var el = document.getElementById(id);
@@ -216,18 +216,18 @@ function onProviderChange(val) {
   safeSetText('csNoticeProv', d.name);
 
     var sidebar = document.getElementById('chatSidebar');
-    var ollamaSel = document.getElementById('ollamaModelSel');
-    if (ollamaSel) ollamaSel.style.display = (val === 'ollama') ? 'inline-block' : 'none';
+    var localSel = document.getElementById('localModelSel');
+    if (localSel) localSel.style.display = (val === 'local') ? 'inline-block' : 'none';
 
-  var ollamaSelHt = document.getElementById('ollamaModelSelHt');
-  if (ollamaSelHt) ollamaSelHt.style.display = (val === 'ollama') ? 'inline-block' : 'none';
+  var localSelHt = document.getElementById('localModelSelHt');
+  if (localSelHt) localSelHt.style.display = (val === 'local') ? 'inline-block' : 'none';
 
   var provSelHt = document.getElementById('provSelHt');
   if (provSelHt) provSelHt.value = val;
   var provSel = document.getElementById('provSel');
   if (provSel) provSel.value = val;
 
-  if (val === 'ollama') {
+  if (val === 'local') {
     if (sidebar) sidebar.classList.add('hidden');
     closeChatPanel();
   } else {
@@ -236,12 +236,12 @@ function onProviderChange(val) {
 }
 
 // ─────────────────────────────────────────
-// OLLAMA MODEL CHANGE
+// ON-DEVICE MODEL CHANGE
 // ─────────────────────────────────────────
-function onOllamaModelChange(val) {
-  ollamaModel = val;
-  var hintEl = document.getElementById('ollamaModelHint');
-  if (hintEl) hintEl.textContent = ollamaHints[val] || '';
+function onLocalModelChange(val) {
+  localModel = val;
+  var hintEl = document.getElementById('localModelHint');
+  if (hintEl) hintEl.textContent = deviceModeHints[val] || '';
 }
 
 // ─────────────────────────────────────────
@@ -274,7 +274,7 @@ function onHtGrow(el) {
   el.style.height = Math.min(el.scrollHeight, 150) + 'px';
 }
 
-/* ── Claude-style HT model menu ── */
+/* ── Health-tool mode menu ── */
 function toggleHtModelMenu(e) {
   e.stopPropagation();
   var menu = document.getElementById('htModelMenu');
@@ -311,12 +311,12 @@ function selectHtModelOption(el) {
 
 function updateHtModelMenuLabel() {
   var labels = {
-    groq: '⚡ Groq',
-    gemini: '✨ Gemini',
-    openai: '🤖 OpenAI',
-    ollama: '🖥️ Ollama'
+    fast: '⚡ Fast',
+    balanced: '✨ Balanced',
+    enhanced: '🌐 Enhanced',
+    local: '🖥️ On-device'
   };
-  var p = labels[provider] || '⚡ Groq';
+  var p = labels[provider] || '⚡ Fast';
   var l = (answerLength || 'standard');
   l = l.charAt(0).toUpperCase() + l.slice(1);
   var d = (detailLevel || 'medium');
@@ -332,7 +332,7 @@ document.addEventListener('click', function() {
   if (menu) menu.style.display = 'none';
 });
 
-/* ── Claude-style Radiology model menu ── */
+/* ── Radiology mode menu ── */
 function toggleRadModelMenu(e) {
   e.stopPropagation();
   var menu = document.getElementById('radModelMenu');
@@ -368,12 +368,12 @@ function selectRadModelOption(el) {
 
 function updateRadModelMenuLabel() {
   var labels = {
-    groq: '⚡ Groq',
-    gemini: '✨ Gemini',
-    openai: '🤖 OpenAI',
-    ollama: '🖥️ Ollama'
+    fast: '⚡ Fast',
+    balanced: '✨ Balanced',
+    enhanced: '🌐 Enhanced',
+    local: '🖥️ On-device'
   };
-  var p = labels[provider] || '⚡ Groq';
+  var p = labels[provider] || '⚡ Fast';
   var l = (answerLength || 'standard');
   l = l.charAt(0).toUpperCase() + l.slice(1);
   var d = (detailLevel || 'medium');
@@ -462,7 +462,7 @@ if (file) {
 } else {
     fd.append('source_type', 'text');
 }  fd.append('provider', provider);
-  if (provider === 'ollama') fd.append('ollama_model', ollamaModel);
+  if (provider === 'local') fd.append('local_model', localModel);
   fd.append('language', ClearScanControls.getLanguageName());
   fd.append('answer_length', answerLength);
   fd.append('detail_level', detailLevel);
@@ -475,7 +475,7 @@ if (file) {
         document.getElementById('statusPill').textContent = 'Error';
       } else {
         renderBotResult(data);
-        activateChatbot();
+        activateAssistant();
         activeConversationId = data.conversation_id;
         addToHistory(savedText, data.risk_level, provider, data.conversation_id);
         isAnalyzed = true;
@@ -516,8 +516,8 @@ function resetChatPanel() {
     '<div class="cs-notice" id="csNotice">'
     + '<div class="cs-notice-icon">🫁</div>'
     + '<p>Submit your radiology report first, then I\'ll be able to answer your questions about it.</p>'
-    + '<small>Powered by <span id="csNoticeProv">'
-    + (provData[provider]||provData['groq']).name
+    + '<small>Mode: <span id="csNoticeProv">'
+    + (provData[provider]||provData['fast']).name
     + '</span></small>'
     + '</div>';
   document.getElementById('csTa').disabled      = true;
@@ -554,8 +554,8 @@ function onNewReport() {
     '<div class="cs-notice" id="csNotice">'
     + '<div class="cs-notice-icon">🫁</div>'
     + '<p>Submit your radiology report first, then I\'ll be able to answer your questions about it.</p>'
-    + '<small>Powered by <span id="csNoticeProv">'
-    + (provData[provider]||provData['groq']).name
+    + '<small>Mode: <span id="csNoticeProv">'
+    + (provData[provider]||provData['fast']).name
     + '</span></small>'
     + '</div>';
   document.getElementById('csTa').disabled      = true;
@@ -576,7 +576,7 @@ function loadConversation(convId) {
 
       activeConversationId = convId;
       provider    = conv.provider;
-      ollamaModel = conv.ollama_model || ollamaModel;
+      localModel = conv.local_model || localModel;
       answerLength = conv.answer_length || 'standard';
       detailLevel  = conv.detail_level  || 'medium';
 
@@ -584,15 +584,15 @@ function loadConversation(convId) {
         '<div class="cs-notice" id="csNotice">'
         + '<div class="cs-notice-icon">🫁</div>'
         + '<p>Submit your radiology report first, then I\'ll be able to answer your questions about it.</p>'
-        + '<small>Powered by <span id="csNoticeProv"></span></small>'
+        + '<small>Mode: <span id="csNoticeProv"></span></small>'
         + '</div>';
 
       onProviderChange(provider);
 
       var provSel = document.getElementById('provSel');
       if (provSel) provSel.value = provider;
-      var ollamaSel = document.getElementById('ollamaModelSel');
-      if (ollamaSel) ollamaSel.value = ollamaModel;
+      var localSel = document.getElementById('localModelSel');
+      if (localSel) localSel.value = localModel;
       var lengthSel = document.getElementById('lengthSel');
       if (lengthSel) lengthSel.value = answerLength;
       var detailSel = document.getElementById('detailSel');
@@ -612,7 +612,7 @@ function loadConversation(convId) {
       }
       conv.results.report_text = conv.report_text;
       renderBotResult(conv.results);
-      activateChatbot();
+      activateAssistant();
 
       document.getElementById('csMsgs').innerHTML = '';
       conv.chat_messages.forEach(function(m) {
@@ -633,22 +633,22 @@ function loadConversation(convId) {
 }
 
 // ─────────────────────────────────────────
-// ACTIVATE CHATBOT
+// ACTIVATE ASSISTANT
 // ─────────────────────────────────────────
-function activateChatbot() {
-  if (provider === 'ollama') {
+function activateAssistant() {
+  if (provider === 'local') {
     var msgs = document.getElementById('msgs');
     var card = document.createElement('div');
     card.className = 'msg-row bot';
-    var modelLabel = ollamaModel === 'mistral' ? '🧠 mistral' : '⚡ llama3.2:1b';
+    var modelLabel = localModel === 'deep' ? '🧠 Detailed' : '⚡ Fast';
     card.innerHTML =
       '<div class="msg-meta">ClearScan Assistant · 🖥️ LOCAL · ' + modelLabel + '</div>'
-      + '<div class="ollama-chat">'
-        + '<div class="ollama-chat-head">🔒 Local Chat — Ask questions about your report</div>'
-        + '<div class="ollama-chat-msgs" id="ocMsgs">'
-          + '<div class="oc-bubble bot">Hi! I\'ve read your report. Ask me anything about it 😊 (Running locally via Ollama — fully private)</div>'
+      + '<div class="device-chat">'
+        + '<div class="device-chat-head">🔒 Local Chat — Ask questions about your report</div>'
+        + '<div class="device-chat-msgs" id="ocMsgs">'
+          + '<div class="oc-bubble bot">Hi! I\'ve read your report. Ask me anything about it 😊 (Running on your device — fully private)</div>'
         + '</div>'
-        + '<div class="ollama-chat-input">'
+        + '<div class="device-chat-input">'
           + '<textarea class="oc-ta" id="ocTa" rows="1" placeholder="Ask about your report…" onkeydown="onOcKey(event)" oninput="onOcGrow(this)"></textarea>'
           + '<button class="mic-btn" id="ocMicBtn" type="button" title="Speak" onclick="ClearScanVoice.toggleMic(\'ocTa\',\'ocMicBtn\',\'onOcGrow\')"></button>'
           + '<button class="oc-send" id="ocSendBtn" onclick="onOcSend()">'
@@ -687,7 +687,7 @@ function activateChatbot() {
 }
 
 // ─────────────────────────────────────────
-// OLLAMA INLINE CHAT
+// ON-DEVICE INLINE CHAT
 // ─────────────────────────────────────────
 function onOcGrow(el) {
   el.style.height = 'auto';
@@ -726,7 +726,7 @@ function onOcSend() {
       detail_level: detailLevel,
       conversation_id: activeConversationId,
       provider: provider,
-      ollama_model: ollamaModel
+      local_model: localModel
     })
   })
     .then(function(res){ return res.json(); })
@@ -828,9 +828,9 @@ function renderBotResult(d) {
   var msgs  = document.getElementById('msgs');
   var risk  = ((d.risk_level || 'unknown') + '').toLowerCase();
   var rLbl  = risk==='high' ? '🔴 HIGH' : risk==='medium' ? '🟡 MEDIUM' : risk==='low' ? '🟢 LOW' : '⚪ UNKNOWN';
-  var pTag  = (provData[provider] || provData['groq']).tag;
-  if (provider === 'ollama') {
-    pTag = ollamaModel === 'mistral' ? '🧠 MISTRAL' : '⚡ LLAMA3.2:1B';
+  var pTag  = (provData[provider] || provData['fast']).tag;
+  if (provider === 'local') {
+    pTag = localModel === 'deep' ? '🧠 DETAILED' : '⚡ FAST';
   }
   var verifyHtml = '';
   if (d.verification && d.verification.checked_count > 0) {
@@ -924,7 +924,7 @@ function onCopyResult(btn) {
 }
 
 // ─────────────────────────────────────────
-// CLOUD CHATBOT SIDEBAR (used by BOTH radiology and health tools)
+// ASSISTANT SIDEBAR (used by BOTH radiology and health tools)
 // ─────────────────────────────────────────
 function onCsGrow(el) {
   el.style.height = 'auto';
@@ -956,7 +956,7 @@ function onCsSend() {
         provider: provider,
         answer_length: answerLength,
         detail_level: detailLevel,
-        ollama_model: ollamaModel
+        local_model: localModel
       }
     : {
         message: msg,

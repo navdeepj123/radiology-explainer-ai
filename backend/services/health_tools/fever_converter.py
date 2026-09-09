@@ -1,6 +1,6 @@
 """
-Hybrid tool: does deterministic temperature conversion locally (no LLM needed
-for math), then calls LLM only to explain severity in plain language.
+Hybrid tool: does the temperature conversion deterministically in code, then
+only generates text to explain the severity in plain language.
 """
 
 from services.health_tools.base_tool import BaseHealthTool
@@ -73,7 +73,7 @@ class FeverConverterTool(BaseHealthTool):
             )
         except Exception as e:
             explanation = None
-            self.errors.append(f"LLM explanation failed: {str(e)}")
+            self.errors.append(f"Could not generate an explanation: {str(e)}")
 
         return {
             "success": True,

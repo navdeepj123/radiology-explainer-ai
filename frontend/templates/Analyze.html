@@ -62,7 +62,7 @@
   <a href="/" class="topbar-logo">ClearScan</a>
   <div class="topbar-r">
     <a href="/" class="tbtn">← Home</a>
-    <span class="tpill" id="provTag">⚡ GROQ</span>
+    <span class="tpill" id="provTag">⚡ FAST</span>
     <div id="ctrlSlot" style="display:flex;gap:.5rem;align-items:center;"></div>
     <button class="tbtn theme-btn" onclick="toggleTheme()" title="Toggle dark / light mode">
       <span id="themeIcon">🌙</span>
@@ -177,7 +177,7 @@
     </div>
 
     <!-- RADIOLOGY INPUT AREA -->
-    <!-- RADIOLOGY INPUT AREA (Claude-style) -->
+    <!-- RADIOLOGY INPUT AREA -->
     <div class="input-area" id="inputArea">
       <div class="err-bar" id="errBar" style="display:none"></div>
       <div class="input-box">
@@ -211,21 +211,21 @@
       <div class="input-meta">
         <span class="meta-note">🔒 Processed securely · Never stored</span>
 
-        <!-- Claude-style menu for Radiology -->
+        <!-- Mode menu for Radiology -->
         <div class="model-menu-wrap" id="radModelMenuWrap">
           <button type="button" class="model-menu-btn" id="radModelMenuBtn" onclick="toggleRadModelMenu(event)">
-            <span id="radModelMenuLabel">⚡ Groq · Standard · Medium</span>
+            <span id="radModelMenuLabel">⚡ Fast · Standard · Medium</span>
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
               <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
 
           <div class="model-menu" id="radModelMenu" style="display:none;">
-            <div class="mm-section-title">Model</div>
-            <div class="mm-item active" data-type="provider" data-value="groq" onclick="selectRadModelOption(this)">⚡ Groq</div>
-            <div class="mm-item" data-type="provider" data-value="gemini" onclick="selectRadModelOption(this)">✨ Gemini</div>
-            <div class="mm-item" data-type="provider" data-value="openai" onclick="selectRadModelOption(this)">🤖 OpenAI</div>
-            <div class="mm-item" data-type="provider" data-value="ollama" onclick="selectRadModelOption(this)">🖥️ Ollama</div>
+            <div class="mm-section-title">Processing Mode</div>
+            <div class="mm-item active" data-type="provider" data-value="fast" onclick="selectRadModelOption(this)">⚡ Fast</div>
+            <div class="mm-item" data-type="provider" data-value="balanced" onclick="selectRadModelOption(this)">✨ Balanced</div>
+            <div class="mm-item" data-type="provider" data-value="enhanced" onclick="selectRadModelOption(this)">🌐 Enhanced</div>
+            <div class="mm-item" data-type="provider" data-value="local" onclick="selectRadModelOption(this)">🖥️ On-device</div>
 
             <div class="mm-divider"></div>
 
@@ -270,18 +270,18 @@
 
     <div class="model-menu-wrap" id="htModelMenuWrap">
       <button type="button" class="model-menu-btn" id="htModelMenuBtn" onclick="toggleHtModelMenu(event)">
-        <span id="htModelMenuLabel">⚡ Groq · Standard · Medium</span>
+        <span id="htModelMenuLabel">⚡ Fast · Standard · Medium</span>
         <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
           <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
 
       <div class="model-menu" id="htModelMenu" style="display:none;">
-        <div class="mm-section-title">Model</div>
-        <div class="mm-item active" data-type="provider" data-value="groq" onclick="selectHtModelOption(this)">⚡ Groq</div>
-        <div class="mm-item" data-type="provider" data-value="gemini" onclick="selectHtModelOption(this)">✨ Gemini</div>
-        <div class="mm-item" data-type="provider" data-value="openai" onclick="selectHtModelOption(this)">🤖 OpenAI</div>
-        <div class="mm-item" data-type="provider" data-value="ollama" onclick="selectHtModelOption(this)">🖥️ Ollama</div>
+        <div class="mm-section-title">Processing Mode</div>
+        <div class="mm-item active" data-type="provider" data-value="fast" onclick="selectHtModelOption(this)">⚡ Fast</div>
+        <div class="mm-item" data-type="provider" data-value="balanced" onclick="selectHtModelOption(this)">✨ Balanced</div>
+        <div class="mm-item" data-type="provider" data-value="enhanced" onclick="selectHtModelOption(this)">🌐 Enhanced</div>
+        <div class="mm-item" data-type="provider" data-value="local" onclick="selectHtModelOption(this)">🖥️ On-device</div>
 
         <div class="mm-divider"></div>
 
@@ -328,14 +328,14 @@
           <div class="cs-status"><span class="cs-dot"></span>Online · Report-aware</div>
         </div>
       </div>
-      <span class="cs-provider-tag" id="csChatTag">GROQ</span>
+      <span class="cs-provider-tag" id="csChatTag">FAST</span>
       <button class="cs-close-btn" type="button" onclick="closeChatPanel()" title="Close">&times;</button>
     </div>
     <div class="cs-msgs" id="csMsgs">
       <div class="cs-notice" id="csNotice">
         <div class="cs-notice-icon">🫁</div>
         <p>Submit your radiology report first, then I'll be able to answer your questions about it.</p>
-        <small>Powered by <span id="csNoticeProv">Groq</span></small>
+        <small>Mode: <span id="csNoticeProv">Fast</span></small>
       </div>
     </div>
     <div class="cs-input-wrap">
@@ -553,7 +553,7 @@ function resetHtChat() {
   document.getElementById('csMsgs').innerHTML =
     '<div class="cs-notice" id="csNotice"><div class="cs-notice-icon">' + icon + '</div>'
     + '<p>Ask your first question in the main box, then I\'ll be able to continue the conversation here.</p>'
-    + '<small>Powered by <span id="csNoticeProv">' + (provData[provider]||provData['groq']).name + '</span></small></div>';
+    + '<small>Mode: <span id="csNoticeProv">' + (provData[provider]||provData['fast']).name + '</span></small></div>';
   document.getElementById('csTa').disabled = true;
   document.getElementById('csSendBtn').disabled = true;
 }
@@ -669,7 +669,7 @@ function onHtCopyResult(btn) {
   });
 }
 
-function htActivateChatbot() {
+function htActivateAssistant() {
   const notice = document.getElementById('csNotice');
   if (notice) notice.remove();
   const cfg = HT_CONFIG[HT_ACTIVE];
@@ -708,7 +708,7 @@ async function onHtSend() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message, conversation_id: htActiveConversationId,
-          provider, answer_length: answerLength, detail_level: detailLevel, ollama_model: ollamaModel
+          provider, answer_length: answerLength, detail_level: detailLevel, local_model: localModel
         })
       });
       const data = await res.json();
@@ -756,7 +756,7 @@ async function onHtSend() {
       htRenderResult(cfg, bodyText);
       htActiveConversationId = data.conversation_id || null;
       document.getElementById("statusPill").textContent = "Analysis complete";
-      htActivateChatbot();
+      htActivateAssistant();
       addToHtHistory(message, htActiveConversationId, cfg.name);
     }
   } catch (err) {
@@ -835,7 +835,7 @@ async function loadHtConversation(convId) {
     document.getElementById('csMsgs').innerHTML = '';
     (conv.chat_messages || []).forEach(m => csAppend(m.content, m.role === 'user' ? 'user' : 'bot'));
     if (!conv.chat_messages || !conv.chat_messages.length) {
-      htActivateChatbot();
+      htActivateAssistant();
       closeChatPanel();
     } else {
       document.getElementById('csTa').disabled = false;

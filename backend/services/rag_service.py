@@ -17,7 +17,7 @@ def _convert_to_html(text):
         return text.strip()
 
     lines  = text.split('\n')
-    output = ['<div class="ai-output">']
+    output = ['<div class="explain-output">']
     in_ul  = False
 
     heading_map = {
@@ -91,8 +91,8 @@ def _filter_terms_actually_in_report(report_text, retrieved_terms):
     """
     Keep only terms that are ACTUALLY present in report_text (the main
     term or a matched synonym). This prevents retriever false-positive
-    matches from being surfaced as a "confirmed finding" in the AI
-    summary or highlighting.
+    matches from being surfaced as a "confirmed finding" in the
+    generated summary or highlighting.
     """
     report_lower = report_text.lower()
     verified = []
@@ -107,7 +107,7 @@ def _filter_terms_actually_in_report(report_text, retrieved_terms):
 
 def _get_language_instruction(language):
     """
-    Give the AI a language instruction based on the selected language.
+    Build a language instruction based on the selected language.
     Hinglish is a special casual style, other languages are handled normally.
     """
     if not language or language.strip().lower() == "english":
@@ -186,7 +186,7 @@ def _translate_findings_and_terms(findings, retrieved_terms, language, provider,
     """
     Also translates the findings list and term meanings — these come
     straight from knowledge_base.json in English, so they need to be
-    translated separately via the AI.
+    translated separately at generation time.
     Returns: (translated_findings, translated_terms)
     """
     if not language or language.strip().lower() == "english":
@@ -341,7 +341,7 @@ Write a short explanation with these 4 sections using bullet points:
     else:
         if is_intensive:
             output_format = """
-<div class="ai-output">
+<div class="explain-output">
 
     <h3>Understanding Your Report</h3>
     <ul>
@@ -373,7 +373,7 @@ Write a short explanation with these 4 sections using bullet points:
 """
         else:
             output_format = """
-<div class="ai-output">
+<div class="explain-output">
 
     <h3>Simple Summary</h3>
     <ul>
@@ -435,9 +435,9 @@ Return ONLY this HTML, nothing else (but write the actual text content in the la
 
     if ai_summary is None:
         ai_summary = """
-<div class="ai-output">
+<div class="explain-output">
     <h3>Simple Summary</h3>
-    <ul><li>The AI provider did not return a response. Please try another provider.</li></ul>
+    <ul><li>No explanation could be generated right now. Please try another processing mode.</li></ul>
 </div>
 """
 
