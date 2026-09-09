@@ -220,6 +220,6 @@ __marimo__/
 
 # Node / OS
 node_modules/
-.DS_Store
+
 evaluation/benchmark_results.csv
 evaluation/benchmark_summary.csv
